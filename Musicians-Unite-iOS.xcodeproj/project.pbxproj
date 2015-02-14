@@ -26,6 +26,15 @@
 		9405B9731A8F505A00EEDE19 /* UserSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9721A8F505A00EEDE19 /* UserSettingsViewController.m */; };
 		9405B9771A8F51FF00EEDE19 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */; };
 		9405B97C1A8F59E300EEDE19 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */; };
+		9405B97E1A8F971200EEDE19 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B97D1A8F971200EEDE19 /* libicucore.dylib */; };
+		9405B9801A8F971C00EEDE19 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B97F1A8F971C00EEDE19 /* libc++.dylib */; };
+		9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9811A8F972400EEDE19 /* CFNetwork.framework */; };
+		9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9831A8F972D00EEDE19 /* Security.framework */; };
+		9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */; };
+		9405B9881A8F978B00EEDE19 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9871A8F978B00EEDE19 /* Firebase.framework */; };
+		9405B9901A8F991C00EEDE19 /* NewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B98F1A8F991C00EEDE19 /* NewGroupViewController.m */; };
+		9405B9941A8F996600EEDE19 /* GroupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9931A8F996600EEDE19 /* GroupSettingsViewController.m */; };
+		9405B9971A8F998700EEDE19 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9961A8F998700EEDE19 /* MemberManagementViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,20 +72,33 @@
 		9405B9531A8F08F900EEDE19 /* ECSlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECSlidingViewController.m; sourceTree = "<group>"; };
 		9405B9541A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ECSlidingViewController.h"; sourceTree = "<group>"; };
 		9405B9551A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ECSlidingViewController.m"; sourceTree = "<group>"; };
-		9405B95F1A8F135600EEDE19 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
-		9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
-		9405B9621A8F20C700EEDE19 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomeViewController.h; path = Classes/Users/Welcome/WelcomeViewController.h; sourceTree = "<group>"; };
-		9405B9631A8F20C700EEDE19 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomeViewController.m; path = Classes/Users/Welcome/WelcomeViewController.m; sourceTree = "<group>"; };
-		9405B9651A8F212100EEDE19 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = Classes/Users/Register/RegisterViewController.h; sourceTree = "<group>"; };
-		9405B9661A8F212100EEDE19 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = Classes/Users/Register/RegisterViewController.m; sourceTree = "<group>"; };
-		9405B9681A8F214500EEDE19 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Classes/Users/Login/LoginViewController.h; sourceTree = "<group>"; };
-		9405B9691A8F214500EEDE19 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Classes/Users/Login/LoginViewController.m; sourceTree = "<group>"; };
-		9405B9711A8F505A00EEDE19 /* UserSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserSettingsViewController.h; path = Classes/Users/Settings/UserSettingsViewController.h; sourceTree = "<group>"; };
-		9405B9721A8F505A00EEDE19 /* UserSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserSettingsViewController.m; path = Classes/Users/Settings/UserSettingsViewController.m; sourceTree = "<group>"; };
-		9405B9751A8F51FF00EEDE19 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangePasswordViewController.h; path = Classes/Users/Settings/ChangePasswordViewController.h; sourceTree = "<group>"; };
-		9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangePasswordViewController.m; path = Classes/Users/Settings/ChangePasswordViewController.m; sourceTree = "<group>"; };
-		9405B97A1A8F59E300EEDE19 /* NavigationDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NavigationDrawerViewController.h; path = Classes/Navigation/NavigationDrawerViewController.h; sourceTree = "<group>"; };
-		9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NavigationDrawerViewController.m; path = Classes/Navigation/NavigationDrawerViewController.m; sourceTree = "<group>"; };
+		9405B95F1A8F135600EEDE19 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupsTableViewController.h; path = ../Classes/Groups/Homepage/GroupsTableViewController.h; sourceTree = "<group>"; };
+		9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupsTableViewController.m; path = ../Classes/Groups/Homepage/GroupsTableViewController.m; sourceTree = "<group>"; };
+		9405B9621A8F20C700EEDE19 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomeViewController.h; path = ../Classes/Users/Welcome/WelcomeViewController.h; sourceTree = "<group>"; };
+		9405B9631A8F20C700EEDE19 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomeViewController.m; path = ../Classes/Users/Welcome/WelcomeViewController.m; sourceTree = "<group>"; };
+		9405B9651A8F212100EEDE19 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ../Classes/Users/Register/RegisterViewController.h; sourceTree = "<group>"; };
+		9405B9661A8F212100EEDE19 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = ../Classes/Users/Register/RegisterViewController.m; sourceTree = "<group>"; };
+		9405B9681A8F214500EEDE19 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ../Classes/Users/Login/LoginViewController.h; sourceTree = "<group>"; };
+		9405B9691A8F214500EEDE19 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = ../Classes/Users/Login/LoginViewController.m; sourceTree = "<group>"; };
+		9405B9711A8F505A00EEDE19 /* UserSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserSettingsViewController.h; path = ../Classes/Users/UserSettings/UserSettingsViewController.h; sourceTree = "<group>"; };
+		9405B9721A8F505A00EEDE19 /* UserSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserSettingsViewController.m; path = ../Classes/Users/UserSettings/UserSettingsViewController.m; sourceTree = "<group>"; };
+		9405B9751A8F51FF00EEDE19 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangePasswordViewController.h; path = ../Classes/Users/UserSettings/ChangePasswordViewController.h; sourceTree = "<group>"; };
+		9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangePasswordViewController.m; path = ../Classes/Users/UserSettings/ChangePasswordViewController.m; sourceTree = "<group>"; };
+		9405B97A1A8F59E300EEDE19 /* NavigationDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NavigationDrawerViewController.h; path = ../Classes/Navigation/NavigationDrawerViewController.h; sourceTree = "<group>"; };
+		9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NavigationDrawerViewController.m; path = ../Classes/Navigation/NavigationDrawerViewController.m; sourceTree = "<group>"; };
+		9405B97D1A8F971200EEDE19 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		9405B97F1A8F971C00EEDE19 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		9405B9811A8F972400EEDE19 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		9405B9831A8F972D00EEDE19 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9405B9871A8F978B00EEDE19 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "../../../CWRU/Classes/EECS 397/MusiciansUnite/Firebase.framework"; sourceTree = "<group>"; };
+		9405B98A1A8F97F700EEDE19 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		9405B98E1A8F991C00EEDE19 /* NewGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewGroupViewController.h; path = Classes/Groups/NewGroup/NewGroupViewController.h; sourceTree = SOURCE_ROOT; };
+		9405B98F1A8F991C00EEDE19 /* NewGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewGroupViewController.m; path = Classes/Groups/NewGroup/NewGroupViewController.m; sourceTree = SOURCE_ROOT; };
+		9405B9921A8F996600EEDE19 /* GroupSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupSettingsViewController.h; path = Classes/Groups/SocialTools/GroupSettings/GroupSettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		9405B9931A8F996600EEDE19 /* GroupSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupSettingsViewController.m; path = Classes/Groups/SocialTools/GroupSettings/GroupSettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		9405B9951A8F998700EEDE19 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberManagementViewController.h; path = Classes/Groups/MemberManagement/MemberManagementViewController.h; sourceTree = SOURCE_ROOT; };
+		9405B9961A8F998700EEDE19 /* MemberManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberManagementViewController.m; path = Classes/Groups/MemberManagement/MemberManagementViewController.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +106,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */,
+				9405B9881A8F978B00EEDE19 /* Firebase.framework in Frameworks */,
+				9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */,
+				9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */,
+				9405B9801A8F971C00EEDE19 /* libc++.dylib in Frameworks */,
+				9405B97E1A8F971200EEDE19 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +133,7 @@
 				9405B90D1A8EF7AC00EEDE19 /* Musicians-Unite-iOS */,
 				9405B9271A8EF7AC00EEDE19 /* Musicians-Unite-iOSTests */,
 				9405B90C1A8EF7AC00EEDE19 /* Products */,
+				9405B9891A8F97AA00EEDE19 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -120,6 +149,7 @@
 		9405B90D1A8EF7AC00EEDE19 /* Musicians-Unite-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				9405B98A1A8F97F700EEDE19 /* AppConstant.h */,
 				9405B9121A8EF7AC00EEDE19 /* AppDelegate.h */,
 				9405B9131A8EF7AC00EEDE19 /* AppDelegate.m */,
 				9405B9181A8EF7AC00EEDE19 /* Main.storyboard */,
@@ -190,7 +220,7 @@
 		9405B96C1A8F216300EEDE19 /* Users */ = {
 			isa = PBXGroup;
 			children = (
-				9405B9701A8F503900EEDE19 /* Settings */,
+				9405B9701A8F503900EEDE19 /* UserSettings */,
 				9405B96D1A8F216900EEDE19 /* Login */,
 				9405B96E1A8F217000EEDE19 /* Welcome */,
 				9405B96F1A8F217700EEDE19 /* Register */,
@@ -225,7 +255,7 @@
 			name = Register;
 			sourceTree = "<group>";
 		};
-		9405B9701A8F503900EEDE19 /* Settings */ = {
+		9405B9701A8F503900EEDE19 /* UserSettings */ = {
 			isa = PBXGroup;
 			children = (
 				9405B9711A8F505A00EEDE19 /* UserSettingsViewController.h */,
@@ -233,24 +263,26 @@
 				9405B9751A8F51FF00EEDE19 /* ChangePasswordViewController.h */,
 				9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */,
 			);
-			name = Settings;
+			name = UserSettings;
 			sourceTree = "<group>";
 		};
 		9405B9741A8F506D00EEDE19 /* Groups */ = {
 			isa = PBXGroup;
 			children = (
-				9405B9781A8F526000EEDE19 /* Social Tools */,
-				9405B95F1A8F135600EEDE19 /* GroupsTableViewController.h */,
-				9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */,
+				9405B98D1A8F98C400EEDE19 /* MemberManagement */,
+				9405B98C1A8F98BB00EEDE19 /* NewGroup */,
+				9405B98B1A8F98B000EEDE19 /* Homepage */,
+				9405B9781A8F526000EEDE19 /* SocialTools */,
 			);
 			name = Groups;
 			sourceTree = "<group>";
 		};
-		9405B9781A8F526000EEDE19 /* Social Tools */ = {
+		9405B9781A8F526000EEDE19 /* SocialTools */ = {
 			isa = PBXGroup;
 			children = (
+				9405B9911A8F992C00EEDE19 /* GroupSettings */,
 			);
-			name = "Social Tools";
+			name = SocialTools;
 			sourceTree = "<group>";
 		};
 		9405B9791A8F59B200EEDE19 /* Navigation */ = {
@@ -260,6 +292,55 @@
 				9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */,
 			);
 			name = Navigation;
+			sourceTree = "<group>";
+		};
+		9405B9891A8F97AA00EEDE19 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9405B9871A8F978B00EEDE19 /* Firebase.framework */,
+				9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */,
+				9405B9831A8F972D00EEDE19 /* Security.framework */,
+				9405B9811A8F972400EEDE19 /* CFNetwork.framework */,
+				9405B97F1A8F971C00EEDE19 /* libc++.dylib */,
+				9405B97D1A8F971200EEDE19 /* libicucore.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9405B98B1A8F98B000EEDE19 /* Homepage */ = {
+			isa = PBXGroup;
+			children = (
+				9405B95F1A8F135600EEDE19 /* GroupsTableViewController.h */,
+				9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */,
+			);
+			name = Homepage;
+			sourceTree = "<group>";
+		};
+		9405B98C1A8F98BB00EEDE19 /* NewGroup */ = {
+			isa = PBXGroup;
+			children = (
+				9405B98E1A8F991C00EEDE19 /* NewGroupViewController.h */,
+				9405B98F1A8F991C00EEDE19 /* NewGroupViewController.m */,
+			);
+			name = NewGroup;
+			sourceTree = "<group>";
+		};
+		9405B98D1A8F98C400EEDE19 /* MemberManagement */ = {
+			isa = PBXGroup;
+			children = (
+				9405B9951A8F998700EEDE19 /* MemberManagementViewController.h */,
+				9405B9961A8F998700EEDE19 /* MemberManagementViewController.m */,
+			);
+			name = MemberManagement;
+			sourceTree = "<group>";
+		};
+		9405B9911A8F992C00EEDE19 /* GroupSettings */ = {
+			isa = PBXGroup;
+			children = (
+				9405B9921A8F996600EEDE19 /* GroupSettingsViewController.h */,
+				9405B9931A8F996600EEDE19 /* GroupSettingsViewController.m */,
+			);
+			name = GroupSettings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,7 +443,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9405B9941A8F996600EEDE19 /* GroupSettingsViewController.m in Sources */,
 				9405B9671A8F212100EEDE19 /* RegisterViewController.m in Sources */,
+				9405B9971A8F998700EEDE19 /* MemberManagementViewController.m in Sources */,
 				9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
@@ -371,6 +454,7 @@
 				9405B9611A8F135600EEDE19 /* GroupsTableViewController.m in Sources */,
 				9405B9641A8F20C700EEDE19 /* WelcomeViewController.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
+				9405B9901A8F991C00EEDE19 /* NewGroupViewController.m in Sources */,
 				9405B96A1A8F214500EEDE19 /* LoginViewController.m in Sources */,
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
@@ -498,8 +582,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/nbudge/Google,
+					Drive/CWRU/Classes/EECS,
+					397/MusiciansUnite,
+				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -508,8 +599,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/nbudge/Google,
+					Drive/CWRU/Classes/EECS,
+					397/MusiciansUnite,
+				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -567,6 +665,7 @@
 				9405B9301A8EF7AC00EEDE19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9405B9311A8EF7AC00EEDE19 /* Build configuration list for PBXNativeTarget "Musicians-Unite-iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -575,6 +674,7 @@
 				9405B9331A8EF7AC00EEDE19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

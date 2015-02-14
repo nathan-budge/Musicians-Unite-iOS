@@ -772,7 +772,7 @@
         <!--New Group-->
         <scene sceneID="wVP-K4-Soa">
             <objects>
-                <viewController id="aUg-yG-wVb" sceneMemberID="viewController">
+                <viewController id="aUg-yG-wVb" customClass="NewGroupViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0G7-Yc-GSW"/>
                         <viewControllerLayoutGuide type="bottom" id="bMW-Je-AK8"/>
@@ -873,7 +873,7 @@
         <!--Members-->
         <scene sceneID="4ZG-WM-JNB">
             <objects>
-                <viewController id="LFx-he-epZ" sceneMemberID="viewController">
+                <viewController id="LFx-he-epZ" customClass="MemberManagementViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xuW-lg-fgH"/>
                         <viewControllerLayoutGuide type="bottom" id="JOc-DU-mHG"/>
@@ -967,7 +967,7 @@
         <!--Group Settings-->
         <scene sceneID="yyc-T9-cRq">
             <objects>
-                <viewController id="Zkw-Db-ACE" sceneMemberID="viewController">
+                <viewController id="Zkw-Db-ACE" customClass="GroupSettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hKm-yu-OaZ"/>
                         <viewControllerLayoutGuide type="bottom" id="sl9-fi-NYb"/>
@@ -1091,7 +1091,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="4L9-JE-SKZ"/>
         <segue reference="Y42-5M-sxd"/>
+        <segue reference="4L9-JE-SKZ"/>
     </inferredMetricsTieBreakers>
 </document>
