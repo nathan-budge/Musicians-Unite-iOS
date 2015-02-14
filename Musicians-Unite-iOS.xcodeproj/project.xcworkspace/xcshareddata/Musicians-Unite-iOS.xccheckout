@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F4D14197-A969-4890-84AA-4CA64CB4EDF9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Musicians-Unite-iOS</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>AAB6C79F3C15FBE54CF4E6D14F5C306DC88E17FD</key>
+		<string>https://github.com/nbudge11/Musicians-Unite-iOS.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Musicians-Unite-iOS.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>AAB6C79F3C15FBE54CF4E6D14F5C306DC88E17FD</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/nbudge11/Musicians-Unite-iOS.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>AAB6C79F3C15FBE54CF4E6D14F5C306DC88E17FD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>AAB6C79F3C15FBE54CF4E6D14F5C306DC88E17FD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Musicians-Unite-iOS</string>
+		</dict>
+	</array>
+</dict>
+</plist>
