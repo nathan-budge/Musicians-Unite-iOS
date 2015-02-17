@@ -7,17 +7,49 @@
 //
 
 #import "AppDelegate.h"
+#import <Firebase/Firebase.h>
+
+#import "AppConstant.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic) Firebase *ref;
 
 @end
 
 @implementation AppDelegate
 
+-(Firebase *)ref
+{
+    if (!_ref) {
+        _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
+    }
+    
+    return _ref;
+}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     
+    [self.ref unauth];
+    
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"Main" bundle:[NSBundle mainBundle]];
+    
+    if (!self.ref.authData) {
+        UIViewController *welcomeViewController = [storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
+        self.window.rootViewController = welcomeViewController;
+        
+    }
+    else {
+        UIViewController *groupsViewController = [storyboard instantiateViewControllerWithIdentifier:@"SlidingViewController"];
+        self.window.rootViewController = groupsViewController;
+        
+    }
+    
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

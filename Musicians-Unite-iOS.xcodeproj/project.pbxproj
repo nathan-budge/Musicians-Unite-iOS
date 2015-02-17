@@ -19,26 +19,26 @@
 		9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9511A8F08F900EEDE19 /* ECSlidingSegue.m */; };
 		9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9531A8F08F900EEDE19 /* ECSlidingViewController.m */; };
 		9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9551A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m */; };
-		9405B9611A8F135600EEDE19 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */; };
-		9405B9641A8F20C700EEDE19 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9631A8F20C700EEDE19 /* WelcomeViewController.m */; };
-		9405B9671A8F212100EEDE19 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9661A8F212100EEDE19 /* RegisterViewController.m */; };
-		9405B96A1A8F214500EEDE19 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9691A8F214500EEDE19 /* LoginViewController.m */; };
-		9405B9731A8F505A00EEDE19 /* UserSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9721A8F505A00EEDE19 /* UserSettingsViewController.m */; };
-		9405B9771A8F51FF00EEDE19 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */; };
-		9405B97C1A8F59E300EEDE19 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */; };
 		9405B97E1A8F971200EEDE19 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B97D1A8F971200EEDE19 /* libicucore.dylib */; };
 		9405B9801A8F971C00EEDE19 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B97F1A8F971C00EEDE19 /* libc++.dylib */; };
 		9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9811A8F972400EEDE19 /* CFNetwork.framework */; };
 		9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9831A8F972D00EEDE19 /* Security.framework */; };
 		9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */; };
-		9405B9881A8F978B00EEDE19 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9871A8F978B00EEDE19 /* Firebase.framework */; };
-		9405B9901A8F991C00EEDE19 /* NewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B98F1A8F991C00EEDE19 /* NewGroupViewController.m */; };
-		9405B9941A8F996600EEDE19 /* GroupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9931A8F996600EEDE19 /* GroupSettingsViewController.m */; };
-		9405B9971A8F998700EEDE19 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9961A8F998700EEDE19 /* MemberManagementViewController.m */; };
 		94A337271A93766B00E38E97 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A337221A93766B00E38E97 /* SVIndefiniteAnimatedView.m */; };
 		94A337281A93766B00E38E97 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94A337241A93766B00E38E97 /* SVProgressHUD.bundle */; };
 		94A337291A93766B00E38E97 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A337261A93766B00E38E97 /* SVProgressHUD.m */; };
 		94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94A3372A1A93768200E38E97 /* QuartzCore.framework */; };
+		94C6DE481A93D95700562CE9 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C6DE471A93D95700562CE9 /* Firebase.framework */; };
+		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
+		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
+		94C6DE6C1A93DDD800562CE9 /* NewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE531A93DDD800562CE9 /* NewGroupViewController.m */; };
+		94C6DE6D1A93DDD800562CE9 /* GroupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE571A93DDD800562CE9 /* GroupSettingsViewController.m */; };
+		94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */; };
+		94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5E1A93DDD800562CE9 /* LoginViewController.m */; };
+		94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE611A93DDD800562CE9 /* RegisterViewController.m */; };
+		94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */; };
+		94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */; };
+		94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,40 +76,40 @@
 		9405B9531A8F08F900EEDE19 /* ECSlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECSlidingViewController.m; sourceTree = "<group>"; };
 		9405B9541A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ECSlidingViewController.h"; sourceTree = "<group>"; };
 		9405B9551A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ECSlidingViewController.m"; sourceTree = "<group>"; };
-		9405B95F1A8F135600EEDE19 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupsTableViewController.h; path = ../Classes/Groups/Homepage/GroupsTableViewController.h; sourceTree = "<group>"; };
-		9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupsTableViewController.m; path = ../Classes/Groups/Homepage/GroupsTableViewController.m; sourceTree = "<group>"; };
-		9405B9621A8F20C700EEDE19 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomeViewController.h; path = ../Classes/Users/Welcome/WelcomeViewController.h; sourceTree = "<group>"; };
-		9405B9631A8F20C700EEDE19 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomeViewController.m; path = ../Classes/Users/Welcome/WelcomeViewController.m; sourceTree = "<group>"; };
-		9405B9651A8F212100EEDE19 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ../Classes/Users/Register/RegisterViewController.h; sourceTree = "<group>"; };
-		9405B9661A8F212100EEDE19 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = ../Classes/Users/Register/RegisterViewController.m; sourceTree = "<group>"; };
-		9405B9681A8F214500EEDE19 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ../Classes/Users/Login/LoginViewController.h; sourceTree = "<group>"; };
-		9405B9691A8F214500EEDE19 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = ../Classes/Users/Login/LoginViewController.m; sourceTree = "<group>"; };
-		9405B9711A8F505A00EEDE19 /* UserSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserSettingsViewController.h; path = ../Classes/Users/UserSettings/UserSettingsViewController.h; sourceTree = "<group>"; };
-		9405B9721A8F505A00EEDE19 /* UserSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserSettingsViewController.m; path = ../Classes/Users/UserSettings/UserSettingsViewController.m; sourceTree = "<group>"; };
-		9405B9751A8F51FF00EEDE19 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangePasswordViewController.h; path = ../Classes/Users/UserSettings/ChangePasswordViewController.h; sourceTree = "<group>"; };
-		9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangePasswordViewController.m; path = ../Classes/Users/UserSettings/ChangePasswordViewController.m; sourceTree = "<group>"; };
-		9405B97A1A8F59E300EEDE19 /* NavigationDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NavigationDrawerViewController.h; path = ../Classes/Navigation/NavigationDrawerViewController.h; sourceTree = "<group>"; };
-		9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NavigationDrawerViewController.m; path = ../Classes/Navigation/NavigationDrawerViewController.m; sourceTree = "<group>"; };
 		9405B97D1A8F971200EEDE19 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		9405B97F1A8F971C00EEDE19 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		9405B9811A8F972400EEDE19 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		9405B9831A8F972D00EEDE19 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		9405B9871A8F978B00EEDE19 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "../../../CWRU/Classes/EECS 397/MusiciansUnite/Firebase.framework"; sourceTree = "<group>"; };
 		9405B98A1A8F97F700EEDE19 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
-		9405B98E1A8F991C00EEDE19 /* NewGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewGroupViewController.h; path = Classes/Groups/NewGroup/NewGroupViewController.h; sourceTree = SOURCE_ROOT; };
-		9405B98F1A8F991C00EEDE19 /* NewGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewGroupViewController.m; path = Classes/Groups/NewGroup/NewGroupViewController.m; sourceTree = SOURCE_ROOT; };
-		9405B9921A8F996600EEDE19 /* GroupSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupSettingsViewController.h; path = Classes/Groups/SocialTools/GroupSettings/GroupSettingsViewController.h; sourceTree = SOURCE_ROOT; };
-		9405B9931A8F996600EEDE19 /* GroupSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupSettingsViewController.m; path = Classes/Groups/SocialTools/GroupSettings/GroupSettingsViewController.m; sourceTree = SOURCE_ROOT; };
-		9405B9951A8F998700EEDE19 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberManagementViewController.h; path = Classes/Groups/MemberManagement/MemberManagementViewController.h; sourceTree = SOURCE_ROOT; };
-		9405B9961A8F998700EEDE19 /* MemberManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberManagementViewController.m; path = Classes/Groups/MemberManagement/MemberManagementViewController.m; sourceTree = SOURCE_ROOT; };
-		94A337211A93766B00E38E97 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
-		94A337221A93766B00E38E97 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
-		94A337231A93766B00E38E97 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
-		94A337241A93766B00E38E97 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
-		94A337251A93766B00E38E97 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
-		94A337261A93766B00E38E97 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		94A337211A93766B00E38E97 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVIndefiniteAnimatedView.h; path = ../../SVProgressHUD/SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		94A337221A93766B00E38E97 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVIndefiniteAnimatedView.m; path = ../../SVProgressHUD/SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		94A337231A93766B00E38E97 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SVProgressHUD-Prefix.pch"; path = "../../SVProgressHUD/SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		94A337241A93766B00E38E97 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SVProgressHUD.bundle; path = ../../SVProgressHUD/SVProgressHUD.bundle; sourceTree = "<group>"; };
+		94A337251A93766B00E38E97 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = ../../SVProgressHUD/SVProgressHUD.h; sourceTree = "<group>"; };
+		94A337261A93766B00E38E97 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = ../../SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
 		94A3372A1A93768200E38E97 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		94C6DE471A93D95700562CE9 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
+		94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
+		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
+		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
+		94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberManagementViewController.m; sourceTree = "<group>"; };
+		94C6DE521A93DDD800562CE9 /* NewGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGroupViewController.h; sourceTree = "<group>"; };
+		94C6DE531A93DDD800562CE9 /* NewGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGroupViewController.m; sourceTree = "<group>"; };
+		94C6DE561A93DDD800562CE9 /* GroupSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingsViewController.h; sourceTree = "<group>"; };
+		94C6DE571A93DDD800562CE9 /* GroupSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingsViewController.m; sourceTree = "<group>"; };
+		94C6DE591A93DDD800562CE9 /* NavigationDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationDrawerViewController.h; sourceTree = "<group>"; };
+		94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationDrawerViewController.m; sourceTree = "<group>"; };
+		94C6DE5D1A93DDD800562CE9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		94C6DE5E1A93DDD800562CE9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		94C6DE601A93DDD800562CE9 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		94C6DE611A93DDD800562CE9 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		94C6DE631A93DDD800562CE9 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
+		94C6DE651A93DDD800562CE9 /* UserSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingsViewController.h; sourceTree = "<group>"; };
+		94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsViewController.m; sourceTree = "<group>"; };
+		94C6DE681A93DDD800562CE9 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
+		94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,9 +118,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */,
-				9405B9881A8F978B00EEDE19 /* Firebase.framework in Frameworks */,
 				9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */,
 				9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */,
+				94C6DE481A93D95700562CE9 /* Firebase.framework in Frameworks */,
 				9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */,
 				9405B9801A8F971C00EEDE19 /* libc++.dylib in Frameworks */,
 				9405B97E1A8F971200EEDE19 /* libicucore.dylib in Frameworks */,
@@ -140,7 +140,7 @@
 		9405B9021A8EF7AC00EEDE19 = {
 			isa = PBXGroup;
 			children = (
-				9405B96B1A8F215200EEDE19 /* Classes */,
+				94C6DE491A93DDD800562CE9 /* Classes */,
 				9405B9481A8F08F900EEDE19 /* ECSlidingViewController */,
 				94A337201A93766B00E38E97 /* SVProgressHUD */,
 				9405B90D1A8EF7AC00EEDE19 /* Musicians-Unite-iOS */,
@@ -219,99 +219,11 @@
 			path = ECSlidingViewController;
 			sourceTree = "<group>";
 		};
-		9405B96B1A8F215200EEDE19 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9791A8F59B200EEDE19 /* Navigation */,
-				9405B9741A8F506D00EEDE19 /* Groups */,
-				9405B96C1A8F216300EEDE19 /* Users */,
-			);
-			name = Classes;
-			path = "Musicians-Unite-iOS";
-			sourceTree = "<group>";
-		};
-		9405B96C1A8F216300EEDE19 /* Users */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9701A8F503900EEDE19 /* UserSettings */,
-				9405B96D1A8F216900EEDE19 /* Login */,
-				9405B96E1A8F217000EEDE19 /* Welcome */,
-				9405B96F1A8F217700EEDE19 /* Register */,
-			);
-			name = Users;
-			sourceTree = "<group>";
-		};
-		9405B96D1A8F216900EEDE19 /* Login */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9681A8F214500EEDE19 /* LoginViewController.h */,
-				9405B9691A8F214500EEDE19 /* LoginViewController.m */,
-			);
-			name = Login;
-			sourceTree = "<group>";
-		};
-		9405B96E1A8F217000EEDE19 /* Welcome */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9621A8F20C700EEDE19 /* WelcomeViewController.h */,
-				9405B9631A8F20C700EEDE19 /* WelcomeViewController.m */,
-			);
-			name = Welcome;
-			sourceTree = "<group>";
-		};
-		9405B96F1A8F217700EEDE19 /* Register */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9651A8F212100EEDE19 /* RegisterViewController.h */,
-				9405B9661A8F212100EEDE19 /* RegisterViewController.m */,
-			);
-			name = Register;
-			sourceTree = "<group>";
-		};
-		9405B9701A8F503900EEDE19 /* UserSettings */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9711A8F505A00EEDE19 /* UserSettingsViewController.h */,
-				9405B9721A8F505A00EEDE19 /* UserSettingsViewController.m */,
-				9405B9751A8F51FF00EEDE19 /* ChangePasswordViewController.h */,
-				9405B9761A8F51FF00EEDE19 /* ChangePasswordViewController.m */,
-			);
-			name = UserSettings;
-			sourceTree = "<group>";
-		};
-		9405B9741A8F506D00EEDE19 /* Groups */ = {
-			isa = PBXGroup;
-			children = (
-				9405B98D1A8F98C400EEDE19 /* MemberManagement */,
-				9405B98C1A8F98BB00EEDE19 /* NewGroup */,
-				9405B98B1A8F98B000EEDE19 /* Homepage */,
-				9405B9781A8F526000EEDE19 /* SocialTools */,
-			);
-			name = Groups;
-			sourceTree = "<group>";
-		};
-		9405B9781A8F526000EEDE19 /* SocialTools */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9911A8F992C00EEDE19 /* GroupSettings */,
-			);
-			name = SocialTools;
-			sourceTree = "<group>";
-		};
-		9405B9791A8F59B200EEDE19 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				9405B97A1A8F59E300EEDE19 /* NavigationDrawerViewController.h */,
-				9405B97B1A8F59E300EEDE19 /* NavigationDrawerViewController.m */,
-			);
-			name = Navigation;
-			sourceTree = "<group>";
-		};
 		9405B9891A8F97AA00EEDE19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94C6DE471A93D95700562CE9 /* Firebase.framework */,
 				94A3372A1A93768200E38E97 /* QuartzCore.framework */,
-				9405B9871A8F978B00EEDE19 /* Firebase.framework */,
 				9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */,
 				9405B9831A8F972D00EEDE19 /* Security.framework */,
 				9405B9811A8F972400EEDE19 /* CFNetwork.framework */,
@@ -319,42 +231,6 @@
 				9405B97D1A8F971200EEDE19 /* libicucore.dylib */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		9405B98B1A8F98B000EEDE19 /* Homepage */ = {
-			isa = PBXGroup;
-			children = (
-				9405B95F1A8F135600EEDE19 /* GroupsTableViewController.h */,
-				9405B9601A8F135600EEDE19 /* GroupsTableViewController.m */,
-			);
-			name = Homepage;
-			sourceTree = "<group>";
-		};
-		9405B98C1A8F98BB00EEDE19 /* NewGroup */ = {
-			isa = PBXGroup;
-			children = (
-				9405B98E1A8F991C00EEDE19 /* NewGroupViewController.h */,
-				9405B98F1A8F991C00EEDE19 /* NewGroupViewController.m */,
-			);
-			name = NewGroup;
-			sourceTree = "<group>";
-		};
-		9405B98D1A8F98C400EEDE19 /* MemberManagement */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9951A8F998700EEDE19 /* MemberManagementViewController.h */,
-				9405B9961A8F998700EEDE19 /* MemberManagementViewController.m */,
-			);
-			name = MemberManagement;
-			sourceTree = "<group>";
-		};
-		9405B9911A8F992C00EEDE19 /* GroupSettings */ = {
-			isa = PBXGroup;
-			children = (
-				9405B9921A8F996600EEDE19 /* GroupSettingsViewController.h */,
-				9405B9931A8F996600EEDE19 /* GroupSettingsViewController.m */,
-			);
-			name = GroupSettings;
 			sourceTree = "<group>";
 		};
 		94A337201A93766B00E38E97 /* SVProgressHUD */ = {
@@ -369,6 +245,129 @@
 			);
 			name = SVProgressHUD;
 			path = "Musicians-Unite-iOS/SVProgressHUD";
+			sourceTree = "<group>";
+		};
+		94C6DE491A93DDD800562CE9 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE4A1A93DDD800562CE9 /* Groups */,
+				94C6DE581A93DDD800562CE9 /* Navigation */,
+				94C6DE5B1A93DDD800562CE9 /* Users */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		94C6DE4A1A93DDD800562CE9 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE4B1A93DDD800562CE9 /* Homepage */,
+				94C6DE4E1A93DDD800562CE9 /* MemberManagement */,
+				94C6DE511A93DDD800562CE9 /* NewGroup */,
+				94C6DE541A93DDD800562CE9 /* SocialTools */,
+			);
+			path = Groups;
+			sourceTree = "<group>";
+		};
+		94C6DE4B1A93DDD800562CE9 /* Homepage */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */,
+				94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */,
+			);
+			path = Homepage;
+			sourceTree = "<group>";
+		};
+		94C6DE4E1A93DDD800562CE9 /* MemberManagement */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */,
+				94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */,
+			);
+			path = MemberManagement;
+			sourceTree = "<group>";
+		};
+		94C6DE511A93DDD800562CE9 /* NewGroup */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE521A93DDD800562CE9 /* NewGroupViewController.h */,
+				94C6DE531A93DDD800562CE9 /* NewGroupViewController.m */,
+			);
+			path = NewGroup;
+			sourceTree = "<group>";
+		};
+		94C6DE541A93DDD800562CE9 /* SocialTools */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE551A93DDD800562CE9 /* GroupSettings */,
+			);
+			path = SocialTools;
+			sourceTree = "<group>";
+		};
+		94C6DE551A93DDD800562CE9 /* GroupSettings */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE561A93DDD800562CE9 /* GroupSettingsViewController.h */,
+				94C6DE571A93DDD800562CE9 /* GroupSettingsViewController.m */,
+			);
+			path = GroupSettings;
+			sourceTree = "<group>";
+		};
+		94C6DE581A93DDD800562CE9 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE591A93DDD800562CE9 /* NavigationDrawerViewController.h */,
+				94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		94C6DE5B1A93DDD800562CE9 /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE5C1A93DDD800562CE9 /* Login */,
+				94C6DE5F1A93DDD800562CE9 /* Register */,
+				94C6DE621A93DDD800562CE9 /* UserSettings */,
+				94C6DE671A93DDD800562CE9 /* Welcome */,
+			);
+			path = Users;
+			sourceTree = "<group>";
+		};
+		94C6DE5C1A93DDD800562CE9 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE5D1A93DDD800562CE9 /* LoginViewController.h */,
+				94C6DE5E1A93DDD800562CE9 /* LoginViewController.m */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		94C6DE5F1A93DDD800562CE9 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE601A93DDD800562CE9 /* RegisterViewController.h */,
+				94C6DE611A93DDD800562CE9 /* RegisterViewController.m */,
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
+		94C6DE621A93DDD800562CE9 /* UserSettings */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE631A93DDD800562CE9 /* ChangePasswordViewController.h */,
+				94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */,
+				94C6DE651A93DDD800562CE9 /* UserSettingsViewController.h */,
+				94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */,
+			);
+			path = UserSettings;
+			sourceTree = "<group>";
+		};
+		94C6DE671A93DDD800562CE9 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				94C6DE681A93DDD800562CE9 /* WelcomeViewController.h */,
+				94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */,
+			);
+			path = Welcome;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -472,26 +471,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9405B9941A8F996600EEDE19 /* GroupSettingsViewController.m in Sources */,
-				9405B9671A8F212100EEDE19 /* RegisterViewController.m in Sources */,
 				94A337271A93766B00E38E97 /* SVIndefiniteAnimatedView.m in Sources */,
-				9405B9971A8F998700EEDE19 /* MemberManagementViewController.m in Sources */,
+				94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */,
 				9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */,
+				94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
+				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
-				9405B9771A8F51FF00EEDE19 /* ChangePasswordViewController.m in Sources */,
-				9405B9611A8F135600EEDE19 /* GroupsTableViewController.m in Sources */,
-				9405B9641A8F20C700EEDE19 /* WelcomeViewController.m in Sources */,
+				94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
-				9405B9901A8F991C00EEDE19 /* NewGroupViewController.m in Sources */,
-				9405B96A1A8F214500EEDE19 /* LoginViewController.m in Sources */,
+				94C6DE6D1A93DDD800562CE9 /* GroupSettingsViewController.m in Sources */,
+				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
+				94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */,
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
+				94C6DE6C1A93DDD800562CE9 /* NewGroupViewController.m in Sources */,
 				94A337291A93766B00E38E97 /* SVProgressHUD.m in Sources */,
-				9405B9731A8F505A00EEDE19 /* UserSettingsViewController.m in Sources */,
-				9405B97C1A8F59E300EEDE19 /* NavigationDrawerViewController.m in Sources */,
+				94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */,
+				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,6 +620,7 @@
 					/Users/nbudge/Google,
 					Drive/CWRU/Classes/EECS,
 					397/MusiciansUnite,
+					"$(PROJECT_DIR)/Musicians-Unite-iOS",
 				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -641,6 +641,7 @@
 					/Users/nbudge/Google,
 					Drive/CWRU/Classes/EECS,
 					397/MusiciansUnite,
+					"$(PROJECT_DIR)/Musicians-Unite-iOS",
 				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

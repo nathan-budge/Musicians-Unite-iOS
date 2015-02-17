@@ -8,8 +8,8 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
-#import "AppConstant.h"
 
+#import "AppConstant.h"
 #import "LoginViewController.h"
 
 
@@ -46,7 +46,6 @@
     
     //Add tap gesture for dismissing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
-    
 }
 
 
@@ -76,58 +75,43 @@
         if (error) {
             switch(error.code) {
                 case FAuthenticationErrorInvalidEmail:
-                    [SVProgressHUD showErrorWithStatus:@"Invalid email and/or password"];
-                    self.fieldPassword.text = @"";
+                    [SVProgressHUD showErrorWithStatus:@"Invalid email and/or password" maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorInvalidPassword:
-                    [SVProgressHUD showErrorWithStatus:@"Invalid email and/or password"];
-                    self.fieldPassword.text = @"";
+                    [SVProgressHUD showErrorWithStatus:@"Invalid email and/or password" maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorUserDoesNotExist:
-                    [SVProgressHUD showErrorWithStatus:@"User does not exist"];
-                    self.fieldPassword.text = @"";
+                    [SVProgressHUD showErrorWithStatus:@"User does not exist" maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorNetworkError:
-                    [SVProgressHUD showErrorWithStatus:@"Network Error"];
-                    self.fieldPassword.text = @"";
+                    [SVProgressHUD showErrorWithStatus:@"Network Error" maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 default:
-                    [SVProgressHUD showErrorWithStatus:error.description];
-                    self.fieldPassword.text = @"";
+                    [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                     break;
             }
-            
+            self.fieldPassword.text = @"";
         } else {
-            
             [self performSegueWithIdentifier:@"LoginToGroups" sender:sender];
         }
     }];
-    
 }
-
 
 - (IBAction)actionTogglePasswordVisibility:(id)sender{
     
-    if ([sender isSelected]) {
-        [sender setImage:[UIImage imageNamed:@"eye_inactive"] forState:UIControlStateNormal];
-        self.fieldPassword.secureTextEntry = YES;
-        [sender setSelected:NO];
-    } else {
-        [sender setImage:[UIImage imageNamed:@"eye_active"] forState:UIControlStateSelected];
-        self.fieldPassword.secureTextEntry = NO;
-        [sender setSelected:YES];
-    }
+    [sender isSelected] ? [sender setImage:[UIImage imageNamed:@"eye_inactive"] forState:UIControlStateNormal] : [sender setImage:[UIImage imageNamed:@"eye_active"] forState:UIControlStateSelected];
+    self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
+    [sender setSelected:![sender isSelected]];
 }
 
 
 - (IBAction)actionForgotPassword:(id)sender {
-    [self.fieldEmail resignFirstResponder];
-    [self.fieldPassword resignFirstResponder];
+
+    [self dismissKeyboard];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please enter an email address" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert show];
-    
 }
 
 
@@ -137,42 +121,28 @@
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {
-        if ([alertView textFieldAtIndex:0]) {
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        [self.ref resetPasswordForUser:textField.text withCompletionBlock:^(NSError *error) {
             
-            UITextField *textField = [alertView textFieldAtIndex:0];
-            
-            if (![textField.text isEqualToString:@""] || ![self validateEmail:textField.text])
-            {
-                [SVProgressHUD showErrorWithStatus:@"Invalid email"];
+            if (error) {
+                switch (error.code) {
+                    case FAuthenticationErrorInvalidEmail:
+                        [SVProgressHUD showErrorWithStatus:@"Email is invalid"];
+                        break;
+                    default:
+                        [SVProgressHUD showErrorWithStatus:error.description];
+                        break;
+                }
+                
+                self.fieldPassword.text = @"";
             }
             
             else {
-                
-                [self.ref resetPasswordForUser:textField.text withCompletionBlock:^(NSError *error) {
-                    
-                    if (error) {
-                        NSLog(@"%@", error.description);
-                    }
-                    
-                    else {
-                        [SVProgressHUD showSuccessWithStatus:@"Email sent!"];
-                        
-                    }
-                
-                }];
-            
+                [SVProgressHUD showSuccessWithStatus:@"Email sent!"];
             }
-        }
+        }];
     }
 }
-
-
-- (BOOL)validateEmail:(NSString *)emailStr {
-    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailTest evaluateWithObject:emailStr];
-}
-
 
 
 #pragma mark - Keyboard handling
@@ -194,17 +164,5 @@
     }
     return YES;
 }
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
