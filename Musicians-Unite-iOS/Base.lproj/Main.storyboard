@@ -282,7 +282,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="rrg-sU-QSc" kind="modal" modalTransitionStyle="crossDissolve" id="Y42-5M-sxd"/>
+                                            <action selector="actionLogin:" destination="145-rg-3nD" eventType="touchUpInside" id="Hxf-C7-JFP"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kBh-hQ-e4A">
@@ -295,11 +295,17 @@
                                         <rect key="frame" x="8" y="62" width="272" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="145-rg-3nD" id="1LS-7b-7nk"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bnQ-Jv-fFj">
                                         <rect key="frame" x="8" y="100" width="272" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="145-rg-3nD" id="B6w-iR-fpO"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s30-Ui-Xbs">
                                         <rect key="frame" x="65" y="138" width="159" height="30"/>
@@ -310,9 +316,12 @@
                                         <state key="normal" title="Forgot your password?">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="actionForgotPassword:" destination="145-rg-3nD" eventType="touchUpInside" id="Qd7-yU-RyJ"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Musicians Unite" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IOg-B7-JQA">
-                                        <rect key="frame" x="85" y="26" width="119" height="20"/>
+                                        <rect key="frame" x="85" y="26" width="118.5" height="19.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -325,6 +334,9 @@
                                         <state key="normal" title="Button" image="eye_inactive">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="actionTogglePasswordVisibility:" destination="145-rg-3nD" eventType="touchUpInside" id="UGa-PA-4OO"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -371,6 +383,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2DX-II-ZhD"/>
+                    <connections>
+                        <outlet property="fieldEmail" destination="VlD-Y6-RAY" id="cJk-mZ-9zU"/>
+                        <outlet property="fieldPassword" destination="bnQ-Jv-fFj" id="nui-hQ-jGL"/>
+                        <segue destination="rrg-sU-QSc" kind="modal" identifier="LoginToGroups" id="1ND-ac-1UZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eJM-4Y-Phx" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="3Gc-H6-7SG" userLabel="Exit" sceneMemberID="exit"/>
@@ -1091,7 +1108,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Y42-5M-sxd"/>
         <segue reference="4L9-JE-SKZ"/>
+        <segue reference="1ND-ac-1UZ"/>
     </inferredMetricsTieBreakers>
 </document>
