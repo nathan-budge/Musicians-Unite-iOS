@@ -44,16 +44,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //Add tap gesture for removing the keyboard
+    //Add tap gesture for dismissing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
     
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.fieldEmail becomeFirstResponder];
-}
 
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -72,7 +67,6 @@
 #pragma mark - Buttons
 
 - (IBAction)actionLogin:(id)sender {
-    
     
     [SVProgressHUD showWithStatus:@"Logging in..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
@@ -130,11 +124,12 @@
     [self.fieldEmail resignFirstResponder];
     [self.fieldPassword resignFirstResponder];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please enter an email address" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please enter an email address" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert show];
     
 }
+
 
 #pragma mark - Forgot Password Alert View
 
@@ -146,7 +141,7 @@
             
             UITextField *textField = [alertView textFieldAtIndex:0];
             
-            if (![textField.text isEqualToString:@""] && ![self validateEmail:textField.text])
+            if (![textField.text isEqualToString:@""] || ![self validateEmail:textField.text])
             {
                 [SVProgressHUD showErrorWithStatus:@"Invalid email"];
             }
