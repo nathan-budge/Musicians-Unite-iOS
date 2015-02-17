@@ -7,14 +7,38 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
-#import "NavigationDrawerViewController.h"
+#import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 
+#import "AppConstant.h"
+#import "NavigationDrawerViewController.h"
+
+
 @interface NavigationDrawerViewController ()
+
+//Firebase Reference
+@property (nonatomic) Firebase *ref;
+
 @property (nonatomic, strong) UINavigationController *transitionsNavigationController;
+
 @end
 
+
 @implementation NavigationDrawerViewController
+
+#pragma mark - Lazy instantiation
+
+- (Firebase *)ref
+{
+    if (!_ref) {
+        _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
+    }
+    
+    return _ref;
+}
+
+
+#pragma mark - View handling
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,34 +47,25 @@
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
+#pragma mark - Buttons
 
 - (IBAction)actionHome:(id)sender {
     self.slidingViewController.topViewController = self.transitionsNavigationController;
-    
     [self.slidingViewController resetTopViewAnimated:YES];
 }
-
 
 
 - (IBAction)actionUserSettings:(id)sender {
     self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserSettingsNavigationController"];
-    
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)actionLogout:(id)sender {
+    [self.ref unauth];
+    [self performSegueWithIdentifier:@"Logout" sender:sender];
 }
-*/
+
 
 @end

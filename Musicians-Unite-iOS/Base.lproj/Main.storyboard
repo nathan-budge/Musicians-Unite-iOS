@@ -151,6 +151,9 @@
                                                 <state key="normal" image="profile_logo">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="actionProfileImage:" destination="Xv2-pE-a6Z" eventType="touchUpInside" id="rsT-YQ-pNi"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -473,7 +476,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="91L-ZR-8WD" kind="unwind" unwindAction="unwindToWelcome:" id="aHX-j3-VbQ"/>
+                                    <action selector="actionLogout:" destination="kpE-2P-7MY" eventType="touchUpInside" id="le4-ER-rLj"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28E-SM-8vS">
@@ -522,11 +525,13 @@
                             <constraint firstItem="YNb-AP-REx" firstAttribute="leading" secondItem="VJO-xi-76Y" secondAttribute="leadingMargin" constant="-16" id="oQg-AR-qxl"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="modal" identifier="Logout" id="XmG-1B-asj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hre-NA-kQM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="91L-ZR-8WD" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1300" y="502"/>
+            <point key="canvasLocation" x="1310" y="526"/>
         </scene>
         <!--Sliding View Controller-->
         <scene sceneID="7GW-no-TRr">
@@ -548,7 +553,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="56Y-09-9Ni" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="828" y="496"/>
+            <point key="canvasLocation" x="738" y="526"/>
         </scene>
         <!--Groups-->
         <scene sceneID="c6Y-fl-p7i">
@@ -617,6 +622,9 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="q9J-Gu-GAw" id="4hM-BS-IAR"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OHt-yK-sCh">
                                 <rect key="frame" x="16" y="250" width="288" height="30"/>
@@ -625,6 +633,9 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="q9J-Gu-GAw" id="fpi-vq-3kB"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wA6-uT-YBs">
                                 <rect key="frame" x="143.5" y="288" width="35.5" height="17"/>
@@ -648,7 +659,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="lug-8C-083" kind="unwind" unwindAction="unwindToWelcome:" id="rhl-TT-Stl"/>
+                                    <action selector="actionDeleteAccount:" destination="q9J-Gu-GAw" eventType="touchUpInside" id="DDI-ro-Rb2"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9nT-HX-M8z">
@@ -716,11 +727,19 @@
                                 <action selector="actionDrawerToggle:" destination="q9J-Gu-GAw" id="cnk-c9-PM0"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="c0o-VS-dWt"/>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="c0o-VS-dWt">
+                            <connections>
+                                <action selector="actionSave:" destination="q9J-Gu-GAw" id="Zgu-8m-DhW"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="fieldFirstName" destination="CQH-jE-XYd" id="wpV-GS-WAY"/>
+                        <outlet property="fieldLastName" destination="OHt-yK-sCh" id="smp-4e-cfm"/>
+                        <outlet property="labelEmail" destination="wA6-uT-YBs" id="eiV-1f-Kop"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="URc-xZ-0nC" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="lug-8C-083" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2258" y="526"/>
         </scene>
@@ -787,25 +806,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kff-b3-54E">
-                                <rect key="frame" x="16" y="208" width="288" height="36"/>
-                                <color key="backgroundColor" red="0.1647058824" green="0.18039215689999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="kff-b3-54E" secondAttribute="height" multiplier="8:1" id="fKc-J7-lfJ"/>
-                                </constraints>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="1U1-60-hZJ" kind="unwind" unwindAction="unwindToUserSettings:" id="pjM-cu-HVZ"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -820,9 +820,6 @@
                             <constraint firstItem="KIK-74-qzO" firstAttribute="trailing" secondItem="TJe-fD-pV1" secondAttribute="trailingMargin" id="Zmg-LH-yAU"/>
                             <constraint firstItem="Z0I-BG-xFl" firstAttribute="trailing" secondItem="TJe-fD-pV1" secondAttribute="trailingMargin" id="Zyo-rZ-0je"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Nhc-tM-3Qb" secondAttribute="trailing" constant="8" id="cHA-DO-Iy4"/>
-                            <constraint firstItem="kff-b3-54E" firstAttribute="top" secondItem="Z0I-BG-xFl" secondAttribute="bottom" constant="16" id="cyO-ds-3i7"/>
-                            <constraint firstItem="kff-b3-54E" firstAttribute="trailing" secondItem="TJe-fD-pV1" secondAttribute="trailingMargin" id="dca-Pn-OOu"/>
-                            <constraint firstItem="kff-b3-54E" firstAttribute="leading" secondItem="TJe-fD-pV1" secondAttribute="leadingMargin" id="eNn-fy-7Me"/>
                             <constraint firstItem="wNC-n3-Wev" firstAttribute="top" secondItem="KIK-74-qzO" secondAttribute="bottom" constant="8" id="kP0-WT-GTx"/>
                             <constraint firstItem="Nhc-tM-3Qb" firstAttribute="centerX" secondItem="ib8-T7-1UZ" secondAttribute="centerX" id="mqp-Jc-ZcH"/>
                         </constraints>
@@ -1159,6 +1156,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="4L9-JE-SKZ"/>
-        <segue reference="1ND-ac-1UZ"/>
+        <segue reference="zaQ-AW-62G"/>
     </inferredMetricsTieBreakers>
 </document>

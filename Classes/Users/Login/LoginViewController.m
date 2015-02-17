@@ -92,6 +92,7 @@
             }
             self.fieldPassword.text = @"";
         } else {
+            [SVProgressHUD dismiss];
             [self performSegueWithIdentifier:@"LoginToGroups" sender:sender];
         }
     }];
@@ -127,10 +128,10 @@
             if (error) {
                 switch (error.code) {
                     case FAuthenticationErrorInvalidEmail:
-                        [SVProgressHUD showErrorWithStatus:@"Email is invalid"];
+                        [SVProgressHUD showErrorWithStatus:@"Email is invalid" maskType:SVProgressHUDMaskTypeBlack];
                         break;
                     default:
-                        [SVProgressHUD showErrorWithStatus:error.description];
+                        [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                         break;
                 }
                 

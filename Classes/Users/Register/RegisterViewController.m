@@ -85,6 +85,10 @@
 
 #pragma mark - Buttons
 
+- (IBAction)actionProfileImage:(id)sender {
+#warning TODO: Profile Image
+}
+
 - (IBAction)actionTogglePasswordVisibility:(id)sender {
     [sender isSelected] ? [sender setImage:[UIImage imageNamed:@"eye_inactive"] forState:UIControlStateNormal] : [sender setImage:[UIImage imageNamed:@"eye_active"] forState:UIControlStateSelected];
     self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
@@ -152,6 +156,7 @@
                 }
                 else {
                     
+#warning TODO: Upload profile image
                     NSDictionary *newUser = @{
                                               @"first_name":self.fieldFirstName.text,
                                               @"last_name":self.fieldLastName.text,
@@ -167,6 +172,7 @@
                         [self addGroups:tempUserID withAuthData:authData andNewUserRef:newUserRef];
                     }
                     else {
+                        [SVProgressHUD dismiss];
                         [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
                     }
                 }
@@ -191,6 +197,7 @@
         //Remove the temporary user once complete
         [[self.usersRef childByAppendingPath:tempUserID] removeValue];
         
+        [SVProgressHUD dismiss];
         [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
 
     } withCancelBlock:^(NSError *error) {

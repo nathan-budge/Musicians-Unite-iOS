@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserSettingsViewController : UIViewController
+@interface UserSettingsViewController : UIViewController <UITextFieldDelegate>
 
 - (IBAction)unwindToUserSettings:(UIStoryboardSegue *)segue;
 
