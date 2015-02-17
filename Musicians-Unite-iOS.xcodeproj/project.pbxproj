@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		9405B9111A8EF7AC00EEDE19 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9101A8EF7AC00EEDE19 /* main.m */; };
 		9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9131A8EF7AC00EEDE19 /* AppDelegate.m */; };
-		9405B91A1A8EF7AC00EEDE19 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
 		9405B91C1A8EF7AC00EEDE19 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91B1A8EF7AC00EEDE19 /* Images.xcassets */; };
-		9405B91F1A8EF7AC00EEDE19 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
 		9405B92B1A8EF7AC00EEDE19 /* Musicians_Unite_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B92A1A8EF7AC00EEDE19 /* Musicians_Unite_iOSTests.m */; };
 		9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B94A1A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m */; };
 		9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B94C1A8F08F900EEDE19 /* ECSlidingAnimationController.m */; };
@@ -24,11 +22,13 @@
 		9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9811A8F972400EEDE19 /* CFNetwork.framework */; };
 		9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9831A8F972D00EEDE19 /* Security.framework */; };
 		9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */; };
-		94A337271A93766B00E38E97 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A337221A93766B00E38E97 /* SVIndefiniteAnimatedView.m */; };
-		94A337281A93766B00E38E97 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94A337241A93766B00E38E97 /* SVProgressHUD.bundle */; };
-		94A337291A93766B00E38E97 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A337261A93766B00E38E97 /* SVProgressHUD.m */; };
+		9431B8911A93FDE60074818F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
+		9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
+		94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */; };
+		94833EEB1A94018A00CC2930 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94833EE71A94018A00CC2930 /* SVProgressHUD.bundle */; };
+		94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE91A94018A00CC2930 /* SVProgressHUD.m */; };
+		9491FB101A940346003FE08E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491FB0F1A940346003FE08E /* Firebase.framework */; };
 		94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94A3372A1A93768200E38E97 /* QuartzCore.framework */; };
-		94C6DE481A93D95700562CE9 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C6DE471A93D95700562CE9 /* Firebase.framework */; };
 		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
 		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
 		94C6DE6C1A93DDD800562CE9 /* NewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE531A93DDD800562CE9 /* NewGroupViewController.m */; };
@@ -82,14 +82,14 @@
 		9405B9831A8F972D00EEDE19 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9405B98A1A8F97F700EEDE19 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
-		94A337211A93766B00E38E97 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVIndefiniteAnimatedView.h; path = SVProgressHUD/SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
-		94A337221A93766B00E38E97 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVIndefiniteAnimatedView.m; path = SVProgressHUD/SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
-		94A337231A93766B00E38E97 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SVProgressHUD-Prefix.pch"; path = "SVProgressHUD/SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
-		94A337241A93766B00E38E97 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SVProgressHUD.bundle; path = SVProgressHUD/SVProgressHUD.bundle; sourceTree = "<group>"; };
-		94A337251A93766B00E38E97 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = "<group>"; };
-		94A337261A93766B00E38E97 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
+		94833EE41A94018A00CC2930 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		94833EE61A94018A00CC2930 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		94833EE71A94018A00CC2930 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		94833EE81A94018A00CC2930 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		94833EE91A94018A00CC2930 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		9491FB0F1A940346003FE08E /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
 		94A3372A1A93768200E38E97 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		94C6DE471A93D95700562CE9 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
 		94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 				94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */,
 				9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */,
 				9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */,
-				94C6DE481A93D95700562CE9 /* Firebase.framework in Frameworks */,
+				9491FB101A940346003FE08E /* Firebase.framework in Frameworks */,
 				9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */,
 				9405B9801A8F971C00EEDE19 /* libc++.dylib in Frameworks */,
 				9405B97E1A8F971200EEDE19 /* libicucore.dylib in Frameworks */,
@@ -141,8 +141,8 @@
 			isa = PBXGroup;
 			children = (
 				94C6DE491A93DDD800562CE9 /* Classes */,
+				94833EE31A94018A00CC2930 /* SVProgressHUD */,
 				9405B9481A8F08F900EEDE19 /* ECSlidingViewController */,
-				94A337201A93766B00E38E97 /* SVProgressHUD */,
 				9405B90D1A8EF7AC00EEDE19 /* Musicians-Unite-iOS */,
 				9405B9271A8EF7AC00EEDE19 /* Musicians-Unite-iOSTests */,
 				9405B90C1A8EF7AC00EEDE19 /* Products */,
@@ -222,7 +222,7 @@
 		9405B9891A8F97AA00EEDE19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				94C6DE471A93D95700562CE9 /* Firebase.framework */,
+				9491FB0F1A940346003FE08E /* Firebase.framework */,
 				94A3372A1A93768200E38E97 /* QuartzCore.framework */,
 				9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */,
 				9405B9831A8F972D00EEDE19 /* Security.framework */,
@@ -233,19 +233,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		94A337201A93766B00E38E97 /* SVProgressHUD */ = {
+		94833EE31A94018A00CC2930 /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				94A337211A93766B00E38E97 /* SVIndefiniteAnimatedView.h */,
-				94A337221A93766B00E38E97 /* SVIndefiniteAnimatedView.m */,
-				94A337231A93766B00E38E97 /* SVProgressHUD-Prefix.pch */,
-				94A337241A93766B00E38E97 /* SVProgressHUD.bundle */,
-				94A337251A93766B00E38E97 /* SVProgressHUD.h */,
-				94A337261A93766B00E38E97 /* SVProgressHUD.m */,
+				94833EE41A94018A00CC2930 /* SVIndefiniteAnimatedView.h */,
+				94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */,
+				94833EE61A94018A00CC2930 /* SVProgressHUD-Prefix.pch */,
+				94833EE71A94018A00CC2930 /* SVProgressHUD.bundle */,
+				94833EE81A94018A00CC2930 /* SVProgressHUD.h */,
+				94833EE91A94018A00CC2930 /* SVProgressHUD.m */,
 			);
-			name = SVProgressHUD;
-			path = "Musicians-Unite-iOS/SVProgressHUD";
-			sourceTree = "<group>";
+			path = SVProgressHUD;
+			sourceTree = SOURCE_ROOT;
 		};
 		94C6DE491A93DDD800562CE9 /* Classes */ = {
 			isa = PBXGroup;
@@ -450,10 +449,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9405B91A1A8EF7AC00EEDE19 /* Main.storyboard in Resources */,
-				9405B91F1A8EF7AC00EEDE19 /* LaunchScreen.xib in Resources */,
+				9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */,
+				9431B8911A93FDE60074818F /* Main.storyboard in Resources */,
 				9405B91C1A8EF7AC00EEDE19 /* Images.xcassets in Resources */,
-				94A337281A93766B00E38E97 /* SVProgressHUD.bundle in Resources */,
+				94833EEB1A94018A00CC2930 /* SVProgressHUD.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,9 +470,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94A337271A93766B00E38E97 /* SVIndefiniteAnimatedView.m in Sources */,
 				94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */,
 				9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */,
+				94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */,
 				94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
 				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
@@ -488,7 +487,7 @@
 				94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */,
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				94C6DE6C1A93DDD800562CE9 /* NewGroupViewController.m in Sources */,
-				94A337291A93766B00E38E97 /* SVProgressHUD.m in Sources */,
+				94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */,
 				94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
 			);
@@ -614,12 +613,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/nbudge/Google,
-					Drive/CWRU/Classes/EECS,
-					397/MusiciansUnite,
-					/Users/nbudge/Google,
-					Drive/CWRU/Classes/EECS,
-					397/MusiciansUnite,
 					"$(PROJECT_DIR)/Musicians-Unite-iOS",
 				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
@@ -635,12 +628,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/nbudge/Google,
-					Drive/CWRU/Classes/EECS,
-					397/MusiciansUnite,
-					/Users/nbudge/Google,
-					Drive/CWRU/Classes/EECS,
-					397/MusiciansUnite,
 					"$(PROJECT_DIR)/Musicians-Unite-iOS",
 				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";

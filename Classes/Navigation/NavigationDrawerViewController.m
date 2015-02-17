@@ -9,6 +9,7 @@
 
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
+#import "SVProgressHUD.h"
 
 #import "AppConstant.h"
 #import "NavigationDrawerViewController.h"
@@ -63,7 +64,10 @@
 
 
 - (IBAction)actionLogout:(id)sender {
+    [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
+    
     [self.ref unauth];
+    [SVProgressHUD dismiss];
     [self performSegueWithIdentifier:@"Logout" sender:sender];
 }
 
