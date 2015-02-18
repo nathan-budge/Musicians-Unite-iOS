@@ -39,6 +39,7 @@
 		94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */; };
 		94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */; };
 		94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */; };
+		94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EE0B141A944ECD000F0F19 /* Utilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,8 @@
 		94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsViewController.m; sourceTree = "<group>"; };
 		94C6DE681A93DDD800562CE9 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		94EE0B141A944ECD000F0F19 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		94EE0B161A944EE3000F0F19 /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +172,8 @@
 				9405B91B1A8EF7AC00EEDE19 /* Images.xcassets */,
 				9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */,
 				9405B90E1A8EF7AC00EEDE19 /* Supporting Files */,
+				94EE0B141A944ECD000F0F19 /* Utilities.m */,
+				94EE0B161A944EE3000F0F19 /* Utilities.h */,
 			);
 			path = "Musicians-Unite-iOS";
 			sourceTree = "<group>";
@@ -482,6 +487,7 @@
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
 				94C6DE6D1A93DDD800562CE9 /* GroupSettingsViewController.m in Sources */,
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
+				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
 				94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */,

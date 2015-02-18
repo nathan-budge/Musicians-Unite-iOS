@@ -10,6 +10,7 @@
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
+#import "Utilities.h"
 #import "LoginViewController.h"
 
 
@@ -98,11 +99,9 @@
     }];
 }
 
-- (IBAction)actionTogglePasswordVisibility:(id)sender{
-    
-    [sender isSelected] ? [sender setImage:[UIImage imageNamed:@"eye_inactive"] forState:UIControlStateNormal] : [sender setImage:[UIImage imageNamed:@"eye_active"] forState:UIControlStateSelected];
+- (IBAction)actionTogglePasswordVisibility:(id)sender {
+    [Utilities toggleEyeball:sender];
     self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
-    [sender setSelected:![sender isSelected]];
 }
 
 
