@@ -138,7 +138,7 @@
             }
             
             else {
-                [SVProgressHUD showSuccessWithStatus:@"Email sent!"];
+                [SVProgressHUD showSuccessWithStatus:@"Email sent!" ];
             }
         }];
     }

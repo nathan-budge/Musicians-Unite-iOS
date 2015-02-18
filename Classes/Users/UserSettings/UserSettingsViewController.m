@@ -100,6 +100,7 @@
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 
+
 - (IBAction)actionSave:(id)sender {
     
     [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
@@ -120,6 +121,7 @@
     }
 }
 
+
 - (IBAction)actionDeleteAccount:(id)sender {
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please enter your password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
@@ -127,6 +129,7 @@
     [alert show];
     
 }
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {

@@ -6,32 +6,99 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
+#import <Firebase/Firebase.h>
+#import "SVProgressHUD.h"
+
+#import "AppConstant.h"
+#import "Utilities.h"
 #import "ChangePasswordViewController.h"
 
 @interface ChangePasswordViewController ()
+
+//Firebase reference
+@property (nonatomic) Firebase *ref;
+
+@property (weak, nonatomic) IBOutlet UITextField *fieldOldPassword;
+@property (weak, nonatomic) IBOutlet UITextField *fieldNewPassword;
 
 @end
 
 @implementation ChangePasswordViewController
 
+#pragma mark - Lazy instatination
+
+-(Firebase *)ref
+{
+    if (!_ref) {
+        _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
+    }
+    
+    return _ref;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    //Add tap gesture for removing the keyboard
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
+    
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+#pragma mark - Buttons
+
+- (IBAction)actionSave:(id)sender {
+    
+    [SVProgressHUD showWithStatus:@"Changing Password..." maskType:SVProgressHUDMaskTypeBlack];
+    
+    [self.ref changePasswordForUser:self.ref.authData.providerData[@"email"] fromOld:self.fieldOldPassword.text toNew:self.fieldNewPassword.text withCompletionBlock:^(NSError *error) {
+        if (error) {
+            switch (error.code) {
+                case FAuthenticationErrorInvalidPassword:
+                    [SVProgressHUD showErrorWithStatus:@"Invalid password" maskType:SVProgressHUDMaskTypeBlack];
+                    break;
+                default:
+                    [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
+                    break;
+            }
+            self.fieldOldPassword.text = @"";
+            self.fieldNewPassword.text = @"";
+        } else {
+            [SVProgressHUD showSuccessWithStatus:@"Password Changed!" maskType:SVProgressHUDMaskTypeBlack];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)actionTogglePasswordVisibility:(id)sender {
+    [Utilities toggleEyeball:sender];
+    self.fieldNewPassword.secureTextEntry = !self.fieldNewPassword.secureTextEntry;
 }
-*/
+
+
+#pragma mark - Keyboard handling
+
+-(void)dismissKeyboard
+{
+    [self.view endEditing:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == self.fieldOldPassword)
+    {
+        [self.fieldNewPassword becomeFirstResponder];
+    }
+    
+    if (textField == self.fieldNewPassword)
+    {
+        [self dismissKeyboard];
+    }
+    
+    return YES;
+}
+
+
 
 @end
