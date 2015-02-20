@@ -11,5 +11,6 @@
 @interface MemberManagementViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property NSString *groupName;
+@property NSString *groupID;
 
 @end

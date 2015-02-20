@@ -82,6 +82,9 @@
     if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
         MemberManagementViewController *destViewController = segue.destinationViewController;
         destViewController.groupName = self.fieldGroupName.text;
+        if (self.groupID) {
+            destViewController.groupID = self.groupID;
+        }
     }
 }
 

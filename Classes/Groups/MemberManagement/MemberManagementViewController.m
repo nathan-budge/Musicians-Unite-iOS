@@ -57,10 +57,42 @@
     
     NSLog(@"%@", self.groupName);
     
-    if ([self.groupName isEqualToString:@""]) {
-        [self.buttonConfirm setTitle:@"Save" forState:UIControlStateNormal];
-    } else {
+    if ([self.groupID isEqualToString:@""]) {
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
+    } else {
+        [self.buttonConfirm setTitle:@"Save" forState:UIControlStateNormal];
+        
+        
+        //Read in group data
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+            
+            NSDictionary *group = snapshot.value;
+            
+            for (NSString *member in group[@"members"]) {
+                
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", member]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                    
+                    NSDictionary *user = snapshot.value;
+                    
+                     NSMutableDictionary *memberData = [[NSMutableDictionary alloc] init];
+                    if (![user[@"email"] isEqualToString:self.ref.authData.providerData[@"email"]]) {
+                        
+                        if ([user[@"completed_registration"] isEqual:@YES]) {
+                            NSString *name = [NSString stringWithFormat:@"%@ %@", user[@"first_name"], user[@"last_name"]];
+                            [memberData setObject:name forKey:@"user_name"];
+                        } else {
+                            [memberData setObject:user[@"email"] forKey:@"user_email"];
+                        }
+                        
+                        [memberData setObject:snapshot.key forKey:@"user_id"];
+                        [memberData setObject:user[@"completed_registration"] forKey:@"completed_registration"];
+                        [self.members addObject:memberData];
+                    }
+                    
+                    [self.memberTableView reloadData];
+                }];
+            }
+        }];
     }
     
     //Add tap gesture for dismissing the keyboard
@@ -82,10 +114,7 @@
         
         [SVProgressHUD showErrorWithStatus:@"Invalid email" maskType:SVProgressHUDMaskTypeBlack];
         
-    }
-
-    else{
-        
+    } else{
         Firebase *userRef = [self.ref childByAppendingPath:@"users"];
         
         [[[userRef queryOrderedByChild:@"email"] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -108,8 +137,6 @@
                 [memberData setObject:userID forKey:@"user_id"];
                 [memberData setObject:snapshot.value[userID][@"completed_registration"] forKey:@"completed_registration"];
                 
-                NSLog(@"%@", memberData);
-                
                 [self.members addObject:memberData];
                 
             } else {
@@ -127,6 +154,7 @@
     }
 }
 
+
 - (BOOL)validateEmail:(NSString *)emailStr {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
@@ -135,15 +163,14 @@
 
 
 - (IBAction)actionConfirm:(id)sender {
-    if (!self.groupName) {
-        //Group Settings Save
-    } else {
+    Firebase *userRef = [self.ref childByAppendingPath:@"users"];
+    
+    if ([self.groupID isEqualToString:@""]) {  //Create New Group
         
         [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
         
         Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
-        Firebase *userRef = [self.ref childByAppendingPath:@"users"];
-        
+    
         //Add New Group
         [groupRef setValue:@{@"name":self.groupName}];
         
@@ -157,6 +184,30 @@
         [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
         
         [self.navigationController popToRootViewControllerAnimated:YES];
+        
+    } else {  //Edit Existing Group
+        
+        Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.groupID]];
+        
+        [[oldGroup childByAppendingPath:@"members"] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+            
+            for (NSString *member in snapshot.value) {
+                
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.user_id=%@", member];
+                NSArray *memberList = [self.members filteredArrayUsingPredicate:predicate];
+                
+                if ([memberList count] > 0) { //if user found
+                    [self.members removeObject:[memberList objectAtIndex:0]];
+                } else if (![member isEqualToString:self.ref.authData.uid]) {
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.groupID, member]] removeValue];
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", member, self.groupID]] removeValue];
+                }
+            }
+            
+            if ([self.members count] > 0) { //Add new members to group
+                [self addGroupMembers:self.members withUserRef:userRef andGroupRef:oldGroup];
+            }
+        }];
     }
 }
 
@@ -216,10 +267,12 @@
     return 1;
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     return [self.members count];
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -252,9 +305,5 @@
     
     return cell;
 }
-
-
-
-
 
 @end
