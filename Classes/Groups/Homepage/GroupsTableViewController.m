@@ -12,6 +12,8 @@
 
 #import "AppConstant.h"
 #import "GroupsTableViewController.h"
+#import "GroupTabBarController.h"
+#import "GroupDetailViewController.h"
 
 
 @interface GroupsTableViewController ()
@@ -26,6 +28,8 @@
 
 //Pan gesture for navigation drawer
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
+
+@property (nonatomic) NSString *selectedGroupID;
 
 @end
 
@@ -83,7 +87,7 @@
             
             NSMutableDictionary *newGroup = [[NSMutableDictionary alloc] init];
             [newGroup setObject:snapshot.value forKey:@"groupInfo"];
-            [newGroup setObject:snapshot.key forKey:@"groupID"];
+            [newGroup setObject:groupID forKey:@"groupID"];
             
             [self.groups addObject:newGroup];
             [self.tableView reloadData];
@@ -132,6 +136,16 @@
 }
 
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"showGroupTabs"]) {
+        GroupTabBarController *destViewController = segue.destinationViewController;
+        destViewController.groupID = self.selectedGroupID;
+    } else if ([segue.identifier isEqualToString:@"newGroup"]) {
+        GroupDetailViewController *destViewController = segue.destinationViewController;
+        destViewController.groupID = @"";
+    }
+}
+
 
 #pragma mark - Table view data source
 
@@ -159,6 +173,15 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableDictionary *group = [self.groups objectAtIndex:indexPath.row];
+    
+    self.selectedGroupID = group[@"groupID"];
+    
+    [self performSegueWithIdentifier:@"showGroupTabs" sender:nil];
 }
 
 @end

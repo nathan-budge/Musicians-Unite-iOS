@@ -83,7 +83,7 @@
         [SVProgressHUD showErrorWithStatus:@"Invalid email" maskType:SVProgressHUDMaskTypeBlack];
         
     }
-    
+
     else{
         
         Firebase *userRef = [self.ref childByAppendingPath:@"users"];
