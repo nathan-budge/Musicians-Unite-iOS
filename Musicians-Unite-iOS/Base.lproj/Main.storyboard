@@ -275,7 +275,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.1647058824" green="0.18039215689999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="ngo-lm-bg4" firstAttribute="width" secondItem="q43-0V-Qnr" secondAttribute="width" id="09D-DS-vUh"/>
                             <constraint firstItem="q43-0V-Qnr" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="5BF-v8-wgb"/>
@@ -594,7 +594,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="9fW-6N-g6X">
                             <connections>
-                                <segue destination="aUg-yG-wVb" kind="push" id="flm-Lz-WM4"/>
+                                <segue destination="aUg-yG-wVb" kind="push" id="XYD-D0-xNC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -939,7 +939,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="JPQ-rm-57c" kind="unwind" unwindAction="unwindToGroups:" id="57C-rD-3kG"/>
+                                    <action selector="actionCreateGroup:" destination="aUg-yG-wVb" eventType="touchUpInside" id="cmj-6C-iCT"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -963,11 +963,13 @@
                     <navigationItem key="navigationItem" title="New Group" id="3LI-cm-6ok">
                         <barButtonItem key="backBarButtonItem" title="Cancel" id="OHw-Wa-mNP"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="fieldGroupName" destination="BuV-71-JkP" id="n5i-rD-Id7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7oy-3C-jJm" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="JPQ-rm-57c" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2721" y="-533"/>
+            <point key="canvasLocation" x="2999" y="-721"/>
         </scene>
         <!--Members-->
         <scene sceneID="4ZG-WM-JNB">
@@ -1042,7 +1044,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ngv-hS-Mac" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bd3-3F-ZO8" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4434" y="-913"/>
+            <point key="canvasLocation" x="5048" y="-861"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="8uB-Re-Epc">
@@ -1061,7 +1063,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FA1-8v-uyz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3832" y="-182"/>
+            <point key="canvasLocation" x="3852" y="50"/>
         </scene>
         <!--Group Settings-->
         <scene sceneID="yyc-T9-cRq">
@@ -1124,7 +1126,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vwv-TU-Tvl" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="atk-aD-zxe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4988" y="-176"/>
+            <point key="canvasLocation" x="5048" y="50"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1Uf-1k-tXH">
@@ -1177,7 +1179,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eLr-61-pE3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4434" y="-176"/>
+            <point key="canvasLocation" x="4458" y="50"/>
         </scene>
     </scenes>
     <resources>
@@ -1190,8 +1192,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="4L9-JE-SKZ"/>
         <segue reference="qHY-cC-UY9"/>
-        <segue reference="1ND-ac-1UZ"/>
+        <segue reference="zaQ-AW-62G"/>
+        <segue reference="31o-Vw-zHQ"/>
     </inferredMetricsTieBreakers>
 </document>

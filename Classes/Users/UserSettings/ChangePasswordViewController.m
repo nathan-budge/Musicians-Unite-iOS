@@ -51,6 +51,7 @@
 - (IBAction)actionSave:(id)sender {
     
     [SVProgressHUD showWithStatus:@"Changing Password..." maskType:SVProgressHUDMaskTypeBlack];
+    [self dismissKeyboard];
     
     [self.ref changePasswordForUser:self.ref.authData.providerData[@"email"] fromOld:self.fieldOldPassword.text toNew:self.fieldNewPassword.text withCompletionBlock:^(NSError *error) {
         if (error) {

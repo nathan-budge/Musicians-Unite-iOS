@@ -78,7 +78,7 @@
     //Notifications for keyboard
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+                                                 name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
@@ -104,6 +104,7 @@
 - (IBAction)actionSave:(id)sender {
     
     [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
+    [self dismissKeyboard];
     
     if (self.fieldFirstName.text.length > 0) {
         
