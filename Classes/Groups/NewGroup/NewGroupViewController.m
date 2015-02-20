@@ -11,7 +11,7 @@
 
 #import "AppConstant.h"
 #import "NewGroupViewController.h"
-#import "GroupsTableViewController.h"
+#import "MemberManagementViewController.h"
 
 @interface NewGroupViewController ()
 
@@ -51,6 +51,20 @@
     [self dismissKeyboard];
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
+        MemberManagementViewController *destViewController = segue.destinationViewController;
+        destViewController.groupName = self.fieldGroupName.text;
+    }
+}
+
+- (IBAction)actionMemberManagement:(id)sender {
+    if ([self.fieldGroupName.text isEqualToString:@""]) {
+        [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
+    } else {
+        [self performSegueWithIdentifier:@"newGroupToMemberManagement" sender:self];
+    }
+}
 
 - (IBAction)actionCreateGroup:(id)sender {
     
