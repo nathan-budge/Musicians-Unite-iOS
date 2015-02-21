@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "User.h"
+
 @interface NavigationDrawerViewController : UIViewController
+
+@property (nonatomic) User *user;
 
 @end

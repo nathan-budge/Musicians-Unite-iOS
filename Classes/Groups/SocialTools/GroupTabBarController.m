@@ -18,7 +18,7 @@
     NSArray *viewControllers = self.viewControllers;
     
     GroupDetailViewController *newGroupViewController = [viewControllers objectAtIndex:1];
-    newGroupViewController.groupID = self.groupID;
+    newGroupViewController.group = self.group;
     
 }
 

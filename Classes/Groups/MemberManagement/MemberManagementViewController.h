@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Group.h"
 
 @interface MemberManagementViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property NSString *groupName;
-@property NSString *groupID;
+@property (nonatomic) Group *group;
 
 @end

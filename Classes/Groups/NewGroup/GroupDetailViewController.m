@@ -11,6 +11,7 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+
 #import "GroupDetailViewController.h"
 #import "MemberManagementViewController.h"
 
@@ -46,23 +47,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if ([self.groupID isEqualToString:@""]) {
-        
-        [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
-        [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
-        
-    } else {
+    if (self.group) {
         
         self.tabBarController.title = @"Settings";
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveGroup)];
         
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-            NSDictionary *group = snapshot.value;
-            self.fieldGroupName.text = group[@"name"];
-        }];
+        self.fieldGroupName.text = self.group.name;
         
         [self.buttonConfirm setTitle:@"Leave Group" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
+        
+    } else {
+        
+        [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
+        [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
+        
     }
     
     //Add tap gesture for dismissing the keyboard
@@ -77,16 +76,18 @@
     [self dismissKeyboard];
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
         MemberManagementViewController *destViewController = segue.destinationViewController;
-        destViewController.groupName = self.fieldGroupName.text;
-        if (self.groupID) {
-            destViewController.groupID = self.groupID;
+        if (self.group) {
+            destViewController.group = self.group;
+        } else {
+            destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text];
         }
     }
 }
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 - (IBAction)actionMemberManagement:(id)sender {
     
@@ -98,12 +99,7 @@
 }
 
 - (IBAction)actionCreateOrLeaveGroup:(id)sender {
-    
-    if ([self.groupID isEqualToString:@""]) {
-        [self createGroup];
-    } else {
-        [self leaveGroup];
-    }
+    self.group ? [self leaveGroup] : [self createGroup];
 }
 
 
@@ -136,12 +132,12 @@
 -(void)leaveGroup
 {
     //Remove group for user's groups
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", self.ref.authData.uid, self.groupID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", self.ref.authData.uid, self.group.groupID]] removeValue];
     
     //Remove user from group's members
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.groupID, self.ref.authData.uid]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, self.ref.authData.uid]] removeValue];
     
-    [Utilities removeEmptyGroups:self.groupID withRef:self.ref];
+    [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -149,9 +145,8 @@
 //Save a group
 -(void)saveGroup
 {
-    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.groupID]];
+    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
     
-    //Update group name
     [oldGroup updateChildValues:@{@"name":self.fieldGroupName.text}];
 }
 

@@ -6,10 +6,11 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
-@interface Utilities : NSObject 
+@interface Utilities : NSObject
 
 +(void)removeEmptyGroups:(NSString *) groupID withRef:(Firebase *) ref;
 +(void)toggleEyeball:(id) sender;
++(BOOL)validateEmail:(NSString *)emailStr;
 
 @end
 

@@ -5,7 +5,7 @@
 //  Created by Nathan Budge on 2/14/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
-//  Navigation drawer methods adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
+//  Navigation drawer adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
 //
 //  keyboardWasShown and keyboardWillBeHidden adapted from https://developer.apple.com/library/prerelease/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
 
@@ -15,6 +15,7 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+
 #import "UserSettingsViewController.h"
 
 
@@ -62,6 +63,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.fieldFirstName = self.ref.authData.providerData[@"first_name"];
+    self.fieldLastName = self.ref.authData.providerData[@"last_name"];
+    self.fieldLastName = self.ref.authData.providerData[@"email"];
     
     //Pre populate fields with user information
     [self.currentUserRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
