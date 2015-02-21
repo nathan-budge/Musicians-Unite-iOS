@@ -11,6 +11,7 @@
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
+#import "Utilities.h"
 #import "RegisterViewController.h"
 
 
@@ -28,8 +29,6 @@
 
 //Scroll view
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
-@property (weak, nonatomic) UITextField *activeField;
 
 @end
 
@@ -61,7 +60,7 @@
     //Notifications for keyboard
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+                                                 name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
@@ -90,9 +89,8 @@
 }
 
 - (IBAction)actionTogglePasswordVisibility:(id)sender {
-    [sender isSelected] ? [sender setImage:[UIImage imageNamed:@"eye_inactive"] forState:UIControlStateNormal] : [sender setImage:[UIImage imageNamed:@"eye_active"] forState:UIControlStateSelected];
+    [Utilities toggleEyeball:sender];
     self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
-    [sender setSelected:![sender isSelected]];
 }
 
 

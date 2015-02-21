@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NewGroupViewController : UIViewController
+@interface GroupDetailViewController : UIViewController
+
+@property (nonatomic) NSString *groupID;
 
 @end

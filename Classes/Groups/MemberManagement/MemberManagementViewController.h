@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MemberManagementViewController : UIViewController
+@interface MemberManagementViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property NSString *groupName;
+@property NSString *groupID;
 
 @end
