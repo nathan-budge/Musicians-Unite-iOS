@@ -76,7 +76,7 @@
     [self dismissKeyboard];
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
         MemberManagementViewController *destViewController = segue.destinationViewController;
@@ -87,7 +87,7 @@
         }
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////
+
 
 - (IBAction)actionMemberManagement:(id)sender {
     

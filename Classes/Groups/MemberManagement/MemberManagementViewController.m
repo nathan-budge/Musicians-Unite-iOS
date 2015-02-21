@@ -69,8 +69,7 @@
                 [self.members addObject:member];
             }
         }
-        
-        [self.memberTableView reloadData];
+
     } else {
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
     }
@@ -152,13 +151,11 @@
             if ([foundMember count] > 0) { //if user found
                 [self.members removeObject:[foundMember objectAtIndex:0]];
             } else if (![member.userID isEqualToString:self.ref.authData.uid]) {
-                NSLog(@"Remove member");
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", member.userID, self.group.groupID]] removeValue];
             }
             
             if ([self.members count] > 0) { //Add new members to group
-                NSLog(@"Add member");
                 Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
                 [self addGroupMembers:self.members withUserRef:userRef andGroupRef:oldGroup];
             }

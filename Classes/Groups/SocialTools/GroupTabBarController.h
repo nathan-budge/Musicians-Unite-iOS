@@ -13,6 +13,4 @@
 
 @property (nonatomic) Group *group;
 
-@property (nonatomic) NSString *groupID;
-
 @end
