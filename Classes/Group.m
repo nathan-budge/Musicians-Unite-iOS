@@ -34,4 +34,9 @@
     [self.members addObject:member];
 }
 
+-(void)removeMember:(User *)member
+{
+    [self.members removeObject:member];
+}
+
 @end

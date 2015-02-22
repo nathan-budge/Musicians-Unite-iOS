@@ -207,7 +207,6 @@
             [tempMemberRef setValue:newTempMember];
             [[tempMemberRef childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
             [[groupRef childByAppendingPath:@"members"] updateChildValues:@{tempMemberRef.key:@YES}];
-            
         }
     }
 }

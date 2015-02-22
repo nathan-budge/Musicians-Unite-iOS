@@ -7,6 +7,7 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 //  Navigation Drawer adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
+//
 
 #import "UIViewController+ECSlidingViewController.h"
 #import <Firebase/Firebase.h>
@@ -21,24 +22,23 @@
 #import "User.h"
 
 
+
 @interface GroupsTableViewController ()
 
-//Firebase references
 @property (nonatomic) Firebase *ref;
 
-//Array of user's groups
 @property (nonatomic) NSMutableArray *groups;
 
-//Object for current user
 @property (nonatomic) User *user;
 
-//Pan gesture for navigation drawer
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
 
-//GroupID for tab bar controller
 @property (nonatomic) Group *selectedGroup;
 
+@property (nonatomic) BOOL initialLoad;
+
 @end
+
 
 
 @implementation GroupsTableViewController
@@ -54,6 +54,7 @@
     return _ref;
 }
 
+
 -(NSMutableArray *)groups
 {
     if (!_groups) {
@@ -62,6 +63,7 @@
     
     return _groups;
 }
+
 
 -(User *)user
 {
@@ -76,208 +78,169 @@
 
 #pragma mark - View Handling
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     //Set up navigation drawer
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
-    [self updateGroups];
-    //[self updateUser];
+    //Load data from Firebase
+    self.initialLoad = YES;
+    [self loadGroups];
+    [self loadUser];
 }
 
 
-#pragma mark - Firebase observer for user groups
 
-- (void)updateGroups
+#pragma mark - Load Groups
+
+- (void)loadGroups
 {
     Firebase *userGroupsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups", self.ref.authData.uid]];
     
-    //New groups and initial load
+    [self attachListenerForAddedGroupsToUser:userGroupsRef]; //Also used for loading groups initially
+    
+    [self attachListenerForRemovedGroupsToUser:userGroupsRef];
+    
+}
+
+
+-(void)attachListenerForAddedGroupsToUser:(Firebase *)userGroupsRef
+{
     [userGroupsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         
         NSString *groupID = snapshot.key;
         
         Firebase *groupRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]];
         
-        [groupRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-            
-            NSDictionary *groupData = snapshot.value;
-            
-            Group *newGroup = [[Group alloc] init];
-            
-            for (NSString *memberID in groupData[@"members"]) {
-            
-                Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", memberID]];
-                
-                [memberRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                    
-                    User *newMember = [[User alloc] init];
-                    
-                    NSDictionary *memberData = snapshot.value;
-                    
-                    newMember.userID = snapshot.key;
-                    newMember.firstName = memberData[@"first_name"];
-                    newMember.lastName = memberData[@"last_name"];
-                    newMember.email = memberData[@"email"];
-                    
-                    if ([memberData[@"completed_registration"] isEqual:@YES]) {
-                        newMember.completedRegistration = YES;
-                    } else {
-                        newMember.completedRegistration = NO;
-                    }
-                
-                    [newGroup addMember:newMember];
-                }];
-            }
-            
-            newGroup.groupID = groupID;
-            newGroup.name = groupData[@"name"];
-            
-            [self.groups addObject:newGroup];
-            [self.tableView reloadData];
-        }];
+        Group *newGroup = [[Group alloc] init];
         
-        //Edit this...only deal with data that was added
-        [[groupRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-            
-            NSLog(@"%@", snapshot);
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
-            NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
-            
-            if ([group count] > 0) {
-            
-                Group *changedGroup = [group objectAtIndex:0];
-                
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                    
-                    NSDictionary *groupData = snapshot.value;
-                    
-                    [changedGroup.members removeAllObjects];
-                    for (NSString *memberID in groupData[@"members"]) {
-                        
-                        Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", memberID]];
-                        
-                        [memberRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                            
-                            NSDictionary *memberData = snapshot.value;
-                            
-                            User *newMember = [[User alloc] init];
-                            
-                            newMember.userID = snapshot.key;
-                            newMember.email = memberData[@"email"];
-                            
-                            if ([memberData[@"completed_registration"] isEqual:@YES]) {
-                                newMember.completedRegistration = YES;
-                                newMember.firstName = memberData[@"first_name"];
-                                newMember.lastName = memberData[@"last_name"];
-                            }else {
-                                newMember.completedRegistration = NO;
-                            }
-                            
-                            [changedGroup addMember:newMember];
-                            NSLog(@"%lu", (unsigned long)[changedGroup.members count]);
-                            
-                        }];
-                    }
-                    
-                    [self.tableView reloadData];
-                    
-                }];
-            }
-            
-        }];
-        
-        //Edit this...only change with data that was removed
-        [[groupRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
-            
-            NSLog(@"Member Removed");
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
-            NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
-            
-            if ([group count] > 0) {
-            
-                Group *changedGroup = [group objectAtIndex:0];
-                
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                    
-                    NSDictionary *groupData = snapshot.value;
-                    
-                    NSMutableArray *newMembers = [[NSMutableArray alloc] init];
-                    
-                    [changedGroup.members removeAllObjects];
-                    for (NSString *memberID in groupData[@"members"]) {
-                        
-                        Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", memberID]];
-                        
-                        [memberRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                            
-                            NSDictionary *memberData = snapshot.value;
-                            
-                            User *newMember = [[User alloc] init];
-                            
-                            newMember.userID = snapshot.key;
-                            newMember.email = memberData[@"email"];
-                            
-                            if ([memberData[@"completed_registration"] isEqual:@YES]) {
-                                newMember.completedRegistration = YES;
-                                newMember.firstName = memberData[@"first_name"];
-                                newMember.lastName = memberData[@"last_name"];
-                            }else {
-                                newMember.completedRegistration = NO;
-                            }
-                            
-                            [changedGroup addMember:newMember];
-                            
-                            NSLog(@"ROUND");
-                            for (User *user in newMembers) {
-                                NSLog(@"%@", user.email);
-                            }
-                            
-                        }];
-                    }
-                    
-                    [self.tableView reloadData];
-                    
-                }];
-            }
-        }];
-        
-        
-        
-        //Edit this...only deal with changed named
-        [groupRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
-        
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
-            NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
-            
-            if ([group count] > 0) {
-                Group *changedGroup = [group objectAtIndex:0];
-                
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                    
-                    NSDictionary *groupData = snapshot.value;
-                    
-                    changedGroup.name = groupData[@"name"];
-                    
-                    [self.tableView reloadData];
-                    
-                }];
-            }
-        }];
+        [self loadGroupData:groupRef withGroupID:groupID intoGroup:newGroup];
+        [self attachListenerForAddedMembersToGroup:groupRef withGroupID:groupID andNewGroup:newGroup];
+        [self attachListenerForRemovedMembersToGroup:groupRef withGroupID:groupID];
+        [self attachListenerForChangesToNameOrPictureToGroup:groupRef withGroupID:groupID];
     }];
-    
-    
-    //Listen for group removal
-    [userGroupsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+}
+
+
+-(void)loadGroupData:(Firebase *)groupRef withGroupID:(NSString *)groupID intoGroup:(Group *)newGroup
+{
+    [groupRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", snapshot.key];
+        NSDictionary *groupData = snapshot.value;
+    
+        newGroup.groupID = groupID;
+        newGroup.name = groupData[@"name"];
+        
+        [self.groups addObject:newGroup];
+        
+        [self.tableView reloadData];
+        
+        self.initialLoad = NO;
+    }];
+}
+
+
+-(void)attachListenerForAddedMembersToGroup:(Firebase *)groupRef withGroupID:(NSString *)groupID andNewGroup:(Group *)newGroup
+{
+    [[groupRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        Group *changedGroup;
+        NSString *newMemberID = snapshot.key;
+        
+        if (self.initialLoad) {
+            
+            changedGroup = newGroup;
+            
+        } else {
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
+            NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
+            changedGroup = [group objectAtIndex:0];
+        }
+        
+        Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
+        
+        [self addMember:memberRef toGroup:changedGroup];
+        [self.tableView reloadData];
+    }];
+}
+
+
+-(void)addMember:(Firebase *)memberRef toGroup:(Group *)group
+{
+    [memberRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSDictionary *memberData = snapshot.value;
+        
+        User *newMember = [[User alloc] init];
+        
+        newMember.userID = snapshot.key;
+        newMember.email = memberData[@"email"];
+        
+        if ([memberData[@"completed_registration"] isEqual:@YES]) {
+            newMember.completedRegistration = YES;
+            newMember.firstName = memberData[@"first_name"];
+            newMember.lastName = memberData[@"last_name"];
+        }else {
+            newMember.completedRegistration = NO;
+        }
+        
+        [group addMember:newMember];
+    }];
+}
+
+
+-(void)attachListenerForRemovedMembersToGroup:(Firebase *)groupRef withGroupID:(NSString *)groupID
+{
+    [[groupRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
         NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
         
-        NSLog(@"Child Removed");
+        if ([group count] > 0) {
+            Group *changedGroup = [group objectAtIndex:0];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", snapshot.key];
+            NSArray *member = [changedGroup.members filteredArrayUsingPredicate:predicate];
+            
+            [changedGroup removeMember:[member objectAtIndex:0]];
+
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+
+-(void)attachListenerForChangesToNameOrPictureToGroup:(Firebase *)groupRef withGroupID:(NSString *)groupID
+{
+    [groupRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
+        NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
+        
+        if ([snapshot.key isEqualToString:@"name"]) {
+        
+            Group *changedGroup = [group objectAtIndex:0];
+            
+            NSString *newName = snapshot.value;
+            changedGroup.name = newName;
+            
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+
+-(void)attachListenerForRemovedGroupsToUser:(Firebase *)userGroupsRef
+{
+    [userGroupsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *groupID = snapshot.key;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
+        NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
         
         [self.groups removeObject:[group objectAtIndex:0]];
         [self.tableView reloadData];
@@ -285,7 +248,11 @@
     }];
 }
 
--(void)updateUser
+
+
+#pragma mark - Load User
+
+-(void)loadUser
 {
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
@@ -299,42 +266,51 @@
 }
 
 
+
 #pragma mark - Navigation Drawer
 
-- (IBAction)actionDrawerToggle:(id)sender {
+- (IBAction)actionDrawerToggle:(id)sender
+{
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 
 
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+#pragma mark - Prepare for segue
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     if ([segue.identifier isEqualToString:@"showGroupTabs"]) {
+        
         GroupTabBarController *destViewController = segue.destinationViewController;
         destViewController.group = self.selectedGroup;
+        
     } else if ([segue.identifier isEqualToString:@"newGroup"]) {
+        
         GroupDetailViewController *destViewController = segue.destinationViewController;
         destViewController.group = nil;
+        
     }
 }
 
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return [self.groups count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil)
-    {
+    
+    if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     
@@ -352,5 +328,7 @@
     
     [self performSegueWithIdentifier:@"showGroupTabs" sender:nil];
 }
+
+
 
 @end

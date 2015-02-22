@@ -17,5 +17,6 @@
 
 - (id)initWithName: (NSString *)name;
 - (void)addMember: (User *)member;
+-(void)removeMember:(User *)member;
 
 @end
