@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
+
+@class User;
 
 @interface Group : NSObject
 

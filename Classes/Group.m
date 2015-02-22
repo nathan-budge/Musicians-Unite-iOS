@@ -7,6 +7,7 @@
 //
 
 #import "Group.h"
+#import "User.h"
 
 @implementation Group
 

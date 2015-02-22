@@ -14,6 +14,10 @@
 #import "AppConstant.h"
 
 #import "NavigationDrawerViewController.h"
+#import "UserSettingsViewController.h"
+#import "GroupsTableViewController.h"
+
+#import "User.h"
 
 
 @interface NavigationDrawerViewController ()
@@ -47,6 +51,7 @@
     [super viewDidLoad];
  
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
+       
 }
 
 

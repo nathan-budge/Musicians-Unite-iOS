@@ -7,15 +7,27 @@
 //
 
 #import "User.h"
+#import "Group.h"
 
 @implementation User
 
 - (id)init
 {
     if (self = [super init]) {
+        self.groups = [[NSMutableArray alloc] init];
         return self;
     }
     return nil;
+}
+
+- (void)addGroup: (Group *)group
+{
+    [self.groups addObject:group];
+}
+
+-(void)removeGroup:(Group *)group
+{
+    [self.groups removeObject:group];
 }
 
 @end

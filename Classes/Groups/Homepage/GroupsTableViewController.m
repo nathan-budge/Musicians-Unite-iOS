@@ -17,6 +17,7 @@
 #import "GroupsTableViewController.h"
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
+#import "NavigationDrawerViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -27,8 +28,6 @@
 @property (nonatomic) Firebase *ref;
 
 @property (nonatomic) NSMutableArray *groups;
-
-@property (nonatomic) User *user;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
 
@@ -99,7 +98,6 @@
     [self attachListenerForAddedGroupsToUser:userGroupsRef]; //Also used for loading groups initially
     
     [self attachListenerForRemovedGroupsToUser:userGroupsRef];
-    
 }
 
 
@@ -131,10 +129,9 @@
         newGroup.name = groupData[@"name"];
         
         [self.groups addObject:newGroup];
+        [self.user addGroup:newGroup];
         
         [self.tableView reloadData];
-        
-        self.initialLoad = NO;
     }];
 }
 
@@ -246,7 +243,20 @@
 
 -(void)loadUser
 {
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+    Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
+    
+    [self loadUserData:userRef];
+    
+    [self attachListenerForChangesToUser:userRef];
+    
+    NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
+    navigationDrawerViewController.user = self.user;
+}
+
+
+-(void)loadUserData:(Firebase *)userRef
+{
+    [userRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         NSDictionary *userData = snapshot.value;
         
@@ -255,8 +265,30 @@
         self.user.lastName = userData[@"last_name"];
         self.user.email = self.ref.authData.providerData[@"email"];
     }];
+    
 }
 
+
+-(void)attachListenerForChangesToUser:(Firebase *)userRef
+{
+    [userRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+        
+        if ([snapshot.key isEqualToString:@"first_name"]) {
+            
+            NSString *newFirstName = snapshot.value;
+            self.user.firstName = newFirstName;
+            
+            [self.tableView reloadData];
+        } else if ([snapshot.key isEqualToString:@"last_name"]) {
+            NSString *newLastName = snapshot.value;
+            self.user.firstName = newLastName;
+            
+            [self.tableView reloadData];
+        }
+        
+        self.initialLoad = NO;
+    }];
+}
 
 
 #pragma mark - Navigation Drawer
@@ -264,6 +296,7 @@
 - (IBAction)actionDrawerToggle:(id)sender
 {
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
+    
 }
 
 
