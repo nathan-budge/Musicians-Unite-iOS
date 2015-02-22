@@ -89,8 +89,13 @@
 
 #pragma mark - Buttons
 
-- (IBAction)actionProfileImage:(id)sender {
-#warning TODO: Profile Image
+- (IBAction)didPressProfileImageButton:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
+    [actionSheet showInView:self.view];
 }
 
 - (IBAction)actionTogglePasswordVisibility:(id)sender {
@@ -263,15 +268,6 @@
     }
     
     return YES;
-}
-
-- (IBAction)didPressProfileImageButton:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
-    [actionSheet showInView:self.view];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {

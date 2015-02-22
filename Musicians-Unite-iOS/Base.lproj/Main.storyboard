@@ -143,7 +143,7 @@
                                                     <segue destination="Lt3-Z7-C32" kind="unwind" unwindAction="unwindToWelcome:" id="lWg-FH-dOP"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDx-l7-GVC">
+                                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDx-l7-GVC" customClass="CircularButton">
                                                 <rect key="frame" x="88" y="52" width="114" height="114"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="114" id="M1L-4T-cAp"/>
@@ -152,8 +152,12 @@
                                                 <state key="normal" image="profile_logo">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="style">
+                                                        <integer key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="actionProfileImage:" destination="Xv2-pE-a6Z" eventType="touchUpInside" id="rsT-YQ-pNi"/>
                                                     <action selector="didPressProfileImageButton:" destination="Xv2-pE-a6Z" eventType="touchUpInside" id="TEM-rq-Dwf"/>
                                                 </connections>
                                             </button>

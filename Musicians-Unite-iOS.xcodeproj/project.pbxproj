@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04E6E4EF1A99661800254638 /* CircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6E4EE1A99661800254638 /* CircularButton.m */; };
 		9405B9111A8EF7AC00EEDE19 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9101A8EF7AC00EEDE19 /* main.m */; };
 		9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9405B9131A8EF7AC00EEDE19 /* AppDelegate.m */; };
 		9405B91C1A8EF7AC00EEDE19 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91B1A8EF7AC00EEDE19 /* Images.xcassets */; };
@@ -53,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04E6E4ED1A99661700254638 /* CircularButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularButton.h; sourceTree = "<group>"; };
+		04E6E4EE1A99661800254638 /* CircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularButton.m; sourceTree = "<group>"; };
 		9405B90B1A8EF7AC00EEDE19 /* Musicians-Unite-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Musicians-Unite-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9405B90F1A8EF7AC00EEDE19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9405B9101A8EF7AC00EEDE19 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -166,6 +169,8 @@
 			isa = PBXGroup;
 			children = (
 				9405B98A1A8F97F700EEDE19 /* AppConstant.h */,
+				04E6E4ED1A99661700254638 /* CircularButton.h */,
+				04E6E4EE1A99661800254638 /* CircularButton.m */,
 				9405B9121A8EF7AC00EEDE19 /* AppDelegate.h */,
 				9405B9131A8EF7AC00EEDE19 /* AppDelegate.m */,
 				9405B9181A8EF7AC00EEDE19 /* Main.storyboard */,
@@ -473,6 +478,7 @@
 				94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */,
 				945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */,
 				94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */,
+				04E6E4EF1A99661800254638 /* CircularButton.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
 				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
