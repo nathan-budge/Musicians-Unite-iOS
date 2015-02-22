@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MemberManagementViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@class Group;
 
-@property NSString *groupName;
-@property NSString *groupID;
+@interface MemberManagementViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic) Group *group;
 
 @end

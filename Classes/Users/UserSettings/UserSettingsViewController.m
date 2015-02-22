@@ -5,7 +5,7 @@
 //  Created by Nathan Budge on 2/14/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
-//  Navigation drawer methods adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
+//  Navigation drawer adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
 //
 //  keyboardWasShown and keyboardWillBeHidden adapted from https://developer.apple.com/library/prerelease/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
 
@@ -15,7 +15,12 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+
 #import "UserSettingsViewController.h"
+#import "NavigationDrawerViewController.h"
+
+#import "User.h"
+#import "Group.h"
 
 
 @interface UserSettingsViewController ()
@@ -60,22 +65,19 @@
 
 #pragma mark - View handling
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    //Pre populate fields with user information
-    [self.currentUserRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        NSDictionary *values = snapshot.value;
-        
-        self.fieldFirstName.text = values[@"first_name"];
-        self.fieldLastName.text = values[@"last_name"];
-        self.labelEmail.text = values[@"email"];
-    }];
+    NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
+    self.user = navigationDrawerViewController.user;
     
-    //Add tap gesture for removing the keyboard
+    self.fieldFirstName.text = self.user.firstName;
+    self.fieldLastName.text = self.user.lastName;
+    self.labelEmail.text = self.user.email;
+    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
     
-    //Notifications for keyboard
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardWillShowNotification object:nil];
@@ -88,27 +90,23 @@
 }
 
 
-#pragma mark - Unwinding method
-
-- (IBAction)unwindToUserSettings:(UIStoryboardSegue *)segue {
-}
-
 
 #pragma mark - Buttons
 
-- (IBAction)actionDrawerToggle:(id)sender {
+- (IBAction)actionDrawerToggle:(id)sender
+{
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 
 
-- (IBAction)actionSave:(id)sender {
+- (IBAction)actionSave:(id)sender
+{
     
     [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
     if (self.fieldFirstName.text.length > 0) {
         
-#warning TODO:Update profile image
         NSDictionary *updatedValues = @{
                                         @"first_name":self.fieldFirstName.text,
                                         @"last_name":self.fieldLastName.text,
@@ -123,12 +121,12 @@
 }
 
 
-- (IBAction)actionDeleteAccount:(id)sender {
+- (IBAction)actionDeleteAccount:(id)sender
+{
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please enter your password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
     [alert show];
-    
 }
 
 
@@ -145,6 +143,7 @@
         [self.ref removeUser:self.ref.authData.providerData[@"email"] password:textField.text withCompletionBlock:^(NSError *error) {
             
             if (error) {
+                
                 switch(error.code) {
                     case FAuthenticationErrorInvalidPassword:
                         [SVProgressHUD showErrorWithStatus:@"Your password is invalid." maskType:SVProgressHUDMaskTypeBlack];
@@ -153,22 +152,13 @@
                         [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                         break;
                 }
+                
             } else {
                 
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups", uid]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                    
-                    if (![snapshot.value isEqual:[NSNull null]]) {
-                        
-                        NSDictionary *groups = snapshot.value;
-                        for (NSString *groupID in [groups allKeys]) {
-                            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", groupID, uid]] removeValue];
-                            [Utilities removeEmptyGroups:groupID withRef:self.ref];
-                        }
-                        
-                    }
-                } withCancelBlock:^(NSError *error) {
-                    [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
-                }];
+                for (Group *group in self.user.groups) {
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", group.groupID, uid]] removeValue];
+                    [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
+                }
                 
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", uid]] removeValue];
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"todo/%@", uid]] removeValue];
@@ -187,7 +177,6 @@
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     

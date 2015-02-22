@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class User;
+
 @interface GroupsTableViewController : UITableViewController
+
+@property (nonatomic) User *user;
 
 @end

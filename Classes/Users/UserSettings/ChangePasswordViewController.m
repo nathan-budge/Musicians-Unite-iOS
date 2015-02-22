@@ -36,7 +36,8 @@
     return _ref;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     //Add tap gesture for removing the keyboard
@@ -48,7 +49,8 @@
 
 #pragma mark - Buttons
 
-- (IBAction)actionSave:(id)sender {
+- (IBAction)actionSave:(id)sender
+{
     
     [SVProgressHUD showWithStatus:@"Changing Password..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
@@ -72,7 +74,8 @@
     }];
 }
 
-- (IBAction)actionTogglePasswordVisibility:(id)sender {
+- (IBAction)actionTogglePasswordVisibility:(id)sender
+{
     [Utilities toggleEyeball:sender];
     self.fieldNewPassword.secureTextEntry = !self.fieldNewPassword.secureTextEntry;
 }

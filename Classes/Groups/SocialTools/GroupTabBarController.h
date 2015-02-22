@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Group.h"
 
 @interface GroupTabBarController : UITabBarController
 
-@property (nonatomic) NSString *groupID;
+@property (nonatomic) Group *group;
 
 @end

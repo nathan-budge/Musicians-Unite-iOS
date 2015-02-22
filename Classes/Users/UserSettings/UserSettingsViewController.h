@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class User;
+
 @interface UserSettingsViewController : UIViewController <UITextFieldDelegate>
 
-- (IBAction)unwindToUserSettings:(UIStoryboardSegue *)segue;
+@property (nonatomic) User *user;
 
 @end
