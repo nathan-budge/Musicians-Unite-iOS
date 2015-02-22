@@ -188,6 +188,10 @@
             [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
             [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", member.userID, self.group.groupID]] removeValue];
             
+            if (!member.completedRegistration) {
+                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+            }
+            
         }
         
         if ([self.members count] > 0) {

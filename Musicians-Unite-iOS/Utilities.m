@@ -71,6 +71,21 @@
     }];
 }
 
++(void)removeEmptyTempUsers:(NSString *) userID withRef:(Firebase *) ref
+{
+    //Check if a group has any members left
+    [[ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups", userID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
+        if ([snapshot.value isEqual:[NSNull null]]) {
+            
+            [[ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", userID]] removeValue];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
+    }];
+}
+
 
 
 @end
