@@ -54,7 +54,7 @@
     
     if (self.group) {
         self.tabBarController.title = @"Settings";
-        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(actionSaveGroup)];
+        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
         
         self.fieldGroupName.text = self.group.name;
         

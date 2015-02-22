@@ -23,9 +23,20 @@
 		9405B9821A8F972400EEDE19 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9811A8F972400EEDE19 /* CFNetwork.framework */; };
 		9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9831A8F972D00EEDE19 /* Security.framework */; };
 		9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */; };
+		9428E3811A9A634000A36900 /* MessagingTableViewComtroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 9428E3801A9A634000A36900 /* MessagingTableViewComtroller.m */; };
 		9431B8911A93FDE60074818F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
 		9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
 		945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945958F31A97B000002CF4EF /* GroupTabBarController.m */; };
+		9479A2951A9A693A00C668D0 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2841A9A693A00C668D0 /* SLKTextView+SLKAdditions.m */; };
+		9479A2961A9A693A00C668D0 /* UIScrollView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2871A9A693A00C668D0 /* UIScrollView+SLKAdditions.m */; };
+		9479A2971A9A693A00C668D0 /* UIView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2891A9A693A00C668D0 /* UIView+SLKAdditions.m */; };
+		9479A2981A9A693A00C668D0 /* SLKInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A28C1A9A693A00C668D0 /* SLKInputAccessoryView.m */; };
+		9479A2991A9A693A00C668D0 /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A28E1A9A693A00C668D0 /* SLKTextInputbar.m */; };
+		9479A29A1A9A693A00C668D0 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2901A9A693A00C668D0 /* SLKTextView.m */; };
+		9479A29B1A9A693A00C668D0 /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2921A9A693A00C668D0 /* SLKTextViewController.m */; };
+		9479A29C1A9A693A00C668D0 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2941A9A693A00C668D0 /* SLKTypingIndicatorView.m */; };
+		9479A29F1A9A6D7400C668D0 /* NewMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A29E1A9A6D7400C668D0 /* NewMessageTableViewController.m */; };
+		9479A2A21A9A6DF800C668D0 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2A11A9A6DF800C668D0 /* MessageViewController.m */; };
 		94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */; };
 		94833EEB1A94018A00CC2930 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94833EE71A94018A00CC2930 /* SVProgressHUD.bundle */; };
 		94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE91A94018A00CC2930 /* SVProgressHUD.m */; };
@@ -88,8 +99,31 @@
 		9405B9831A8F972D00EEDE19 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9405B98A1A8F97F700EEDE19 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		9428E37F1A9A634000A36900 /* MessagingTableViewComtroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagingTableViewComtroller.h; path = Messaging/MessagingTableViewComtroller.h; sourceTree = "<group>"; };
+		9428E3801A9A634000A36900 /* MessagingTableViewComtroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagingTableViewComtroller.m; path = Messaging/MessagingTableViewComtroller.m; sourceTree = "<group>"; };
 		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupTabBarController.h; sourceTree = "<group>"; };
 		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupTabBarController.m; sourceTree = "<group>"; };
+		9479A2831A9A693A00C668D0 /* SLKTextView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+SLKAdditions.h"; sourceTree = "<group>"; };
+		9479A2841A9A693A00C668D0 /* SLKTextView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+SLKAdditions.m"; sourceTree = "<group>"; };
+		9479A2851A9A693A00C668D0 /* SLKUIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKUIConstants.h; sourceTree = "<group>"; };
+		9479A2861A9A693A00C668D0 /* UIScrollView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SLKAdditions.h"; sourceTree = "<group>"; };
+		9479A2871A9A693A00C668D0 /* UIScrollView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SLKAdditions.m"; sourceTree = "<group>"; };
+		9479A2881A9A693A00C668D0 /* UIView+SLKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SLKAdditions.h"; sourceTree = "<group>"; };
+		9479A2891A9A693A00C668D0 /* UIView+SLKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SLKAdditions.m"; sourceTree = "<group>"; };
+		9479A28B1A9A693A00C668D0 /* SLKInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKInputAccessoryView.h; sourceTree = "<group>"; };
+		9479A28C1A9A693A00C668D0 /* SLKInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKInputAccessoryView.m; sourceTree = "<group>"; };
+		9479A28D1A9A693A00C668D0 /* SLKTextInputbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextInputbar.h; sourceTree = "<group>"; };
+		9479A28E1A9A693A00C668D0 /* SLKTextInputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextInputbar.m; sourceTree = "<group>"; };
+		9479A28F1A9A693A00C668D0 /* SLKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextView.h; sourceTree = "<group>"; };
+		9479A2901A9A693A00C668D0 /* SLKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextView.m; sourceTree = "<group>"; };
+		9479A2911A9A693A00C668D0 /* SLKTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTextViewController.h; sourceTree = "<group>"; };
+		9479A2921A9A693A00C668D0 /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
+		9479A2931A9A693A00C668D0 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
+		9479A2941A9A693A00C668D0 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
+		9479A29D1A9A6D7400C668D0 /* NewMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewMessageTableViewController.h; path = Messaging/NewMessageTableViewController.h; sourceTree = "<group>"; };
+		9479A29E1A9A6D7400C668D0 /* NewMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewMessageTableViewController.m; path = Messaging/NewMessageTableViewController.m; sourceTree = "<group>"; };
+		9479A2A01A9A6DF800C668D0 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageViewController.h; path = Messaging/MessageViewController.h; sourceTree = "<group>"; };
+		9479A2A11A9A6DF800C668D0 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageViewController.m; path = Messaging/MessageViewController.m; sourceTree = "<group>"; };
 		94833EE41A94018A00CC2930 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		94833EE61A94018A00CC2930 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -152,6 +186,7 @@
 		9405B9021A8EF7AC00EEDE19 = {
 			isa = PBXGroup;
 			children = (
+				9479A2811A9A693A00C668D0 /* SlackTextViewController */,
 				94C6DE491A93DDD800562CE9 /* Classes */,
 				94833EE31A94018A00CC2930 /* SVProgressHUD */,
 				9405B9481A8F08F900EEDE19 /* ECSlidingViewController */,
@@ -249,6 +284,59 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9428E37E1A9A5F1000A36900 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				9428E37F1A9A634000A36900 /* MessagingTableViewComtroller.h */,
+				9428E3801A9A634000A36900 /* MessagingTableViewComtroller.m */,
+				9479A29D1A9A6D7400C668D0 /* NewMessageTableViewController.h */,
+				9479A29E1A9A6D7400C668D0 /* NewMessageTableViewController.m */,
+				9479A2A01A9A6DF800C668D0 /* MessageViewController.h */,
+				9479A2A11A9A6DF800C668D0 /* MessageViewController.m */,
+			);
+			name = Messaging;
+			sourceTree = "<group>";
+		};
+		9479A2811A9A693A00C668D0 /* SlackTextViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9479A2821A9A693A00C668D0 /* Additions */,
+				9479A28A1A9A693A00C668D0 /* Classes */,
+			);
+			path = SlackTextViewController;
+			sourceTree = "<group>";
+		};
+		9479A2821A9A693A00C668D0 /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				9479A2831A9A693A00C668D0 /* SLKTextView+SLKAdditions.h */,
+				9479A2841A9A693A00C668D0 /* SLKTextView+SLKAdditions.m */,
+				9479A2851A9A693A00C668D0 /* SLKUIConstants.h */,
+				9479A2861A9A693A00C668D0 /* UIScrollView+SLKAdditions.h */,
+				9479A2871A9A693A00C668D0 /* UIScrollView+SLKAdditions.m */,
+				9479A2881A9A693A00C668D0 /* UIView+SLKAdditions.h */,
+				9479A2891A9A693A00C668D0 /* UIView+SLKAdditions.m */,
+			);
+			path = Additions;
+			sourceTree = "<group>";
+		};
+		9479A28A1A9A693A00C668D0 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				9479A28B1A9A693A00C668D0 /* SLKInputAccessoryView.h */,
+				9479A28C1A9A693A00C668D0 /* SLKInputAccessoryView.m */,
+				9479A28D1A9A693A00C668D0 /* SLKTextInputbar.h */,
+				9479A28E1A9A693A00C668D0 /* SLKTextInputbar.m */,
+				9479A28F1A9A693A00C668D0 /* SLKTextView.h */,
+				9479A2901A9A693A00C668D0 /* SLKTextView.m */,
+				9479A2911A9A693A00C668D0 /* SLKTextViewController.h */,
+				9479A2921A9A693A00C668D0 /* SLKTextViewController.m */,
+				9479A2931A9A693A00C668D0 /* SLKTypingIndicatorView.h */,
+				9479A2941A9A693A00C668D0 /* SLKTypingIndicatorView.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		94833EE31A94018A00CC2930 /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +406,7 @@
 		94C6DE541A93DDD800562CE9 /* SocialTools */ = {
 			isa = PBXGroup;
 			children = (
+				9428E37E1A9A5F1000A36900 /* Messaging */,
 				945958F21A97B000002CF4EF /* GroupTabBarController.h */,
 				945958F31A97B000002CF4EF /* GroupTabBarController.m */,
 			);
@@ -483,20 +572,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9479A29B1A9A693A00C668D0 /* SLKTextViewController.m in Sources */,
+				9479A2961A9A693A00C668D0 /* UIScrollView+SLKAdditions.m in Sources */,
+				9479A29F1A9A6D7400C668D0 /* NewMessageTableViewController.m in Sources */,
 				94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */,
 				9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */,
 				94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */,
+				9479A2A21A9A6DF800C668D0 /* MessageViewController.m in Sources */,
+				9479A2991A9A693A00C668D0 /* SLKTextInputbar.m in Sources */,
 				945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */,
 				94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */,
 				04E6E4EF1A99661800254638 /* CircularButton.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
 				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
+				9479A2971A9A693A00C668D0 /* UIView+SLKAdditions.m in Sources */,
+				9428E3811A9A634000A36900 /* MessagingTableViewComtroller.m in Sources */,
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
 				94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
+				9479A2981A9A693A00C668D0 /* SLKInputAccessoryView.m in Sources */,
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
@@ -505,8 +602,11 @@
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				94C6DE6C1A93DDD800562CE9 /* GroupDetailViewController.m in Sources */,
 				94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */,
+				9479A29A1A9A693A00C668D0 /* SLKTextView.m in Sources */,
+				9479A29C1A9A693A00C668D0 /* SLKTypingIndicatorView.m in Sources */,
 				94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
+				9479A2951A9A693A00C668D0 /* SLKTextView+SLKAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

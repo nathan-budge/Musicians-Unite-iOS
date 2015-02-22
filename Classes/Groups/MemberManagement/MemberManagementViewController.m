@@ -48,6 +48,15 @@
     return _ref;
 }
 
+-(Firebase *)userRef
+{
+    if (!_userRef) {
+        _userRef = [self.ref childByAppendingPath:@"users"];
+    }
+    
+    return _userRef;
+}
+
 -(NSMutableArray *)members
 {
     if (!_members) {
@@ -66,7 +75,10 @@
     [super viewDidLoad];
     
     if(self.group.groupID) {
-        [self.buttonConfirm setTitle:@"Save" forState:UIControlStateNormal];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
+        
+        self.buttonConfirm.hidden = YES;
         
         for (User *member in self.group.members) {
             if (![member.userID isEqualToString:self.ref.authData.uid]) {
@@ -156,15 +168,31 @@
         [self.memberTableView reloadData];
         
         [SVProgressHUD showSuccessWithStatus:@"Member Added" maskType:SVProgressHUDMaskTypeBlack];
+        
+    } withCancelBlock:^(NSError *error) {
+        
+        NSLog(@"%@", error.description);
+        
     }];
 }
 
 
-- (IBAction)actionConfirm:(id)sender {
+- (IBAction)actionCreateGroup:(id)sender {
     
-    self.userRef = [self.ref childByAppendingPath:@"users"];
+    [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
     
-    self.group.groupID ? [self actionSaveGroup] : [self actionCreateGroup];
+    Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
+    
+    [groupRef setValue:@{@"name":self.group.name}];
+    
+    [[[self.userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
+    [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
+    
+    [self addGroupMembers:self.members withUserRef:self.userRef andGroupRef:groupRef];
+    
+    [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
     
     [self dismissKeyboard];
 }
@@ -203,25 +231,8 @@
         
         [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
     }
-}
-
-
--(void)actionCreateGroup
-{
-    [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
     
-    Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
-    
-    [groupRef setValue:@{@"name":self.group.name}];
-    
-    [[[self.userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
-    [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
-    
-    [self addGroupMembers:self.members withUserRef:self.userRef andGroupRef:groupRef];
-    
-    [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self dismissKeyboard];
 }
 
 
