@@ -1,5 +1,5 @@
 //
-//  NewGroupViewController.h
+//  GroupDetailViewController.h
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/14/15.
@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Group.h"
 
-@interface GroupDetailViewController : UIViewController
+@class Group;
+
+@interface GroupDetailViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic) Group *group;
 

@@ -1,5 +1,5 @@
 //
-//  NewGroupViewController.m
+//  GroupDetailViewController.m
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/14/15.
@@ -15,15 +15,15 @@
 #import "GroupDetailViewController.h"
 #import "MemberManagementViewController.h"
 
+#import "Group.h"
+
+
 @interface GroupDetailViewController ()
 
-//Firebase reference
 @property (nonatomic) Firebase *ref;
 
-//Group name field
 @property (nonatomic) IBOutlet UITextField *fieldGroupName;
 
-//Create/ Leave Group button
 @property (nonatomic) IBOutlet UIButton *buttonConfirm;
 
 @end
@@ -43,51 +43,39 @@
 }
 
 
-#pragma mark - View handling
-- (void)viewDidLoad {
+
+#pragma mark - View Handling
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     if (self.group) {
-        
         self.tabBarController.title = @"Settings";
-        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveGroup)];
+        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(actionSaveGroup)];
         
         self.fieldGroupName.text = self.group.name;
         
         [self.buttonConfirm setTitle:@"Leave Group" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
-        
     } else {
-        
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
-        
     }
     
-    //Add tap gesture for dismissing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
-
 
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self dismissKeyboard];
+    [Utilities dismissKeyboard:self.view];
 }
 
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
-        MemberManagementViewController *destViewController = segue.destinationViewController;
-        if (self.group) {
-            destViewController.group = self.group;
-        } else {
-            destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text];
-        }
-    }
-}
 
+#pragma mark - Buttons
 
 - (IBAction)actionMemberManagement:(id)sender {
     
@@ -98,13 +86,13 @@
     }
 }
 
+
 - (IBAction)actionCreateOrLeaveGroup:(id)sender {
-    self.group ? [self leaveGroup] : [self createGroup];
+    self.group ? [self actionLeaveGroup] : [self actionCreateGroup];
 }
 
 
-//Create a group
--(void)createGroup
+-(void)actionCreateGroup
 {
     [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
     
@@ -115,45 +103,73 @@
         [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
     }
     else {
-        //Add New Group
         [groupRef setValue:@{@"name":self.fieldGroupName.text}];
         
-        //Add group creator to member lists
         [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
         [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
         
         [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
         
+        [Utilities dismissKeyboard:self.view];
+        
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 
-//Leave a Group
--(void)leaveGroup
+
+-(void)actionLeaveGroup
 {
-    //Remove group for user's groups
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", self.ref.authData.uid, self.group.groupID]] removeValue];
     
-    //Remove user from group's members
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, self.ref.authData.uid]] removeValue];
     
     [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
     
+    [Utilities dismissKeyboard:self.view];
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-//Save a group
--(void)saveGroup
+
+-(void)actionSaveGroup
 {
-    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
+    [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
     
+    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
     [oldGroup updateChildValues:@{@"name":self.fieldGroupName.text}];
+    
+    [Utilities dismissKeyboard:self.view];
+    
+    [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
 }
 
 
--(void)dismissKeyboard
+
+#pragma mark - Keyboard Handling
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self.view endEditing:YES];
+    [Utilities dismissKeyboard:self.view];
+    
+    return YES;
+}
+
+
+
+#pragma mark - Prepare For Segue
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
+        
+        MemberManagementViewController *destViewController = segue.destinationViewController;
+        
+        if (self.group) {
+            destViewController.group = self.group;
+        } else {
+            destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text];
+        }
+    }
 }
 
 @end

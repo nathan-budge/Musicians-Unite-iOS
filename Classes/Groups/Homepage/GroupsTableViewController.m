@@ -22,7 +22,6 @@
 #import "User.h"
 
 
-
 @interface GroupsTableViewController ()
 
 @property (nonatomic) Firebase *ref;
@@ -38,7 +37,6 @@
 @property (nonatomic) BOOL initialLoad;
 
 @end
-
 
 
 @implementation GroupsTableViewController
@@ -151,11 +149,8 @@
         NSString *newMemberID = snapshot.key;
         
         if (self.initialLoad) {
-            
             changedGroup = newGroup;
-            
         } else {
-            
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
             NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
             changedGroup = [group objectAtIndex:0];
@@ -222,7 +217,6 @@
         NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
         
         if ([snapshot.key isEqualToString:@"name"]) {
-        
             Group *changedGroup = [group objectAtIndex:0];
             
             NSString *newName = snapshot.value;
@@ -281,15 +275,11 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showGroupTabs"]) {
-        
         GroupTabBarController *destViewController = segue.destinationViewController;
         destViewController.group = self.selectedGroup;
-        
     } else if ([segue.identifier isEqualToString:@"newGroup"]) {
-        
         GroupDetailViewController *destViewController = segue.destinationViewController;
         destViewController.group = nil;
-        
     }
 }
 
@@ -301,10 +291,12 @@
     return 1;
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.groups count];
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -322,13 +314,12 @@
     return cell;
 }
 
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedGroup = [self.groups objectAtIndex:indexPath.row];
     
     [self performSegueWithIdentifier:@"showGroupTabs" sender:nil];
 }
-
-
 
 @end

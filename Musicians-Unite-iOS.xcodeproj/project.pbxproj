@@ -178,8 +178,8 @@
 				9405B91B1A8EF7AC00EEDE19 /* Images.xcassets */,
 				9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */,
 				9405B90E1A8EF7AC00EEDE19 /* Supporting Files */,
-				94EE0B141A944ECD000F0F19 /* Utilities.m */,
 				94EE0B161A944EE3000F0F19 /* Utilities.h */,
+				94EE0B141A944ECD000F0F19 /* Utilities.m */,
 			);
 			path = "Musicians-Unite-iOS";
 			sourceTree = "<group>";
