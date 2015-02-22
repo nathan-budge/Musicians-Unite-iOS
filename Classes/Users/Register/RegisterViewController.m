@@ -91,12 +91,17 @@
 
 #pragma mark - Buttons
 
-- (IBAction)didPressProfileImageButton:(id)sender {
+- (IBAction)didPressProfileImageButton:(id)sender
+{
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
+                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", @"Remove Photo", nil];
+    
+    
+    
     [actionSheet showInView:self.view];
 }
 
@@ -286,6 +291,9 @@
         case 1:
             [self selectPhoto];
             break;
+        case 2:
+            [self removePhoto];
+            break;
         default:
             break;
     }
@@ -320,6 +328,11 @@
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
     [self presentViewController:picker animated:YES completion:nil];
+}
+
+-(void)removePhoto
+{
+    [self.profileImageButton setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {

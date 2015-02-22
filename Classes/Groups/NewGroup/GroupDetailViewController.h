@@ -10,7 +10,7 @@
 
 @class Group;
 
-@interface GroupDetailViewController : UIViewController <UITextFieldDelegate>
+@interface GroupDetailViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) Group *group;
 

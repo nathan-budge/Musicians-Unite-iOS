@@ -127,6 +127,7 @@
     
         newGroup.groupID = groupID;
         newGroup.name = groupData[@"name"];
+        newGroup.profileImage = groupData[@"profile_image"];
         
         [self.groups addObject:newGroup];
         [self.user addGroup:newGroup];
@@ -216,6 +217,13 @@
             
             NSString *newName = snapshot.value;
             changedGroup.name = newName;
+            
+            [self.tableView reloadData];
+        } else if ([snapshot.key isEqualToString:@"profile_image"]) {
+            Group *changedGroup = [group objectAtIndex:0];
+            
+            NSString *newProfileImage = snapshot.value;
+            changedGroup.profileImage = newProfileImage;
             
             [self.tableView reloadData];
         }

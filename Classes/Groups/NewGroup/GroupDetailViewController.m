@@ -26,6 +26,8 @@
 
 @property (nonatomic) IBOutlet UIButton *buttonConfirm;
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonProfileImage;
+
 @end
 
 
@@ -56,6 +58,9 @@
         
         self.fieldGroupName.text = self.group.name;
         
+        UIImage *profileImage = [Utilities decodeBase64ToImage:self.group.profileImage];
+        [self.buttonProfileImage setImage:profileImage forState:UIControlStateNormal];
+        
         [self.buttonConfirm setTitle:@"Leave Group" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
     } else {
@@ -77,6 +82,20 @@
 
 #pragma mark - Buttons
 
+- (IBAction)actionProfileImage:(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                              delegate:self
+                                     cancelButtonTitle:@"Cancel"
+                                destructiveButtonTitle:nil
+                                     otherButtonTitles:@"Take Photo", @"Choose From Library", @"Remove Photo", nil];
+
+    
+    
+    [actionSheet showInView:self.view];
+}
+
+
 - (IBAction)actionMemberManagement:(id)sender {
     
     if ([self.fieldGroupName.text isEqualToString:@""]) {
@@ -89,31 +108,6 @@
 
 - (IBAction)actionCreateOrLeaveGroup:(id)sender {
     self.group ? [self actionLeaveGroup] : [self actionCreateGroup];
-}
-
-
--(void)actionCreateGroup
-{
-    [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
-    
-    Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
-    Firebase *userRef = [self.ref childByAppendingPath:@"users"];
-    
-    if ([self.fieldGroupName.text isEqualToString:@""]) {
-        [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
-    }
-    else {
-        [groupRef setValue:@{@"name":self.fieldGroupName.text}];
-        
-        [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
-        [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
-        
-        [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
-        
-        [self dismissKeyboard];
-        
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }
 }
 
 
@@ -131,12 +125,53 @@
 }
 
 
+-(void)actionCreateGroup
+{
+    [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
+    
+    if ([self.fieldGroupName.text isEqualToString:@""]) {
+        [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else {
+        
+        Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
+        Firebase *userRef = [self.ref childByAppendingPath:@"users"];
+        
+        NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
+        
+        NSDictionary *newGroup = @{
+                                   @"name":self.fieldGroupName.text,
+                                   @"profile_image":profileImageString,
+                                   };
+        
+        [groupRef setValue:newGroup];
+        
+        [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
+        [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
+        
+        [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
+        
+        [self dismissKeyboard];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+
 -(void)actionSaveGroup
 {
     [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
     
     Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
-    [oldGroup updateChildValues:@{@"name":self.fieldGroupName.text}];
+    
+    NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
+    
+    NSDictionary *updatedValues = @{
+                                    @"name":self.fieldGroupName.text,
+                                    @"profile_image":profileImageString,
+                                    };
+    
+    [oldGroup updateChildValues:updatedValues];
     
     [self dismissKeyboard];
     
@@ -176,6 +211,76 @@
             destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text];
         }
     }
+}
+
+
+
+#pragma mark - Profile Image Handling
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            [self takePhoto];
+            break;
+        case 1:
+            [self selectPhoto];
+            break;
+        case 2:
+            [self removePhoto];
+        default:
+            break;
+    }
+}
+
+
+//Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
+-(void)takePhoto
+{
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                              message:@"Device has no camera"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        
+        [myAlertView show];
+    } else {
+        NSLog(@"Take Photo Called");
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [self presentViewController:picker animated:YES completion:nil];
+    }
+}
+
+-(void)selectPhoto
+{
+    NSLog(@"Select Photo Called");
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+-(void)removePhoto
+{
+    [self.buttonProfileImage setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = info[UIImagePickerControllerEditedImage];
+    [self.buttonProfileImage setImage:image forState:UIControlStateNormal];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

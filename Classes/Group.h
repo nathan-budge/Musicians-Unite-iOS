@@ -14,6 +14,7 @@
 
 @property (nonatomic) NSString *groupID;
 @property (nonatomic) NSString *name;
+@property (nonatomic) NSString *profileImage;
 @property (nonatomic) NSMutableArray *members;
 
 - (id)initWithName: (NSString *)name;

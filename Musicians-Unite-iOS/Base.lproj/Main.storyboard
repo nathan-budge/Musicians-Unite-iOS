@@ -920,7 +920,7 @@
                                     <action selector="actionMemberManagement:" destination="aUg-yG-wVb" eventType="touchUpInside" id="LO6-Vx-rLF"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OTZ-YJ-uqb">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OTZ-YJ-uqb" customClass="CircularButton">
                                 <rect key="frame" x="104" y="79" width="112" height="112"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="112" id="0aZ-kQ-Kg3"/>
@@ -929,6 +929,9 @@
                                 <state key="normal" image="profile_logo">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="actionProfileImage:" destination="aUg-yG-wVb" eventType="touchUpInside" id="j0F-lf-ngy"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to edit your profile picture" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7We-GO-ylN">
                                 <rect key="frame" x="77" y="190" width="167" height="15"/>
@@ -979,6 +982,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="buttonConfirm" destination="Xip-LM-WhQ" id="ead-9E-DFK"/>
+                        <outlet property="buttonProfileImage" destination="OTZ-YJ-uqb" id="xTo-yp-Qsn"/>
                         <outlet property="fieldGroupName" destination="BuV-71-JkP" id="n5i-rD-Id7"/>
                         <segue destination="LFx-he-epZ" kind="push" identifier="newGroupToMemberManagement" id="EWH-kh-XIg"/>
                     </connections>
@@ -1098,70 +1102,6 @@
             </objects>
             <point key="canvasLocation" x="3750" y="-182"/>
         </scene>
-        <!--Group Settings-->
-        <scene sceneID="yyc-T9-cRq">
-            <objects>
-                <viewController id="Zkw-Db-ACE" customClass="GroupSettingsViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="hKm-yu-OaZ"/>
-                        <viewControllerLayoutGuide type="bottom" id="sl9-fi-NYb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ufh-ya-akx">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fIt-K1-lrR">
-                                <rect key="frame" x="104" y="72" width="112" height="112"/>
-                                <state key="normal" image="profile_logo">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap to edit your profile picture" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2M-cK-fFY">
-                                <rect key="frame" x="77" y="184" width="167" height="21"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Group Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YCe-fi-EfZ">
-                                <rect key="frame" x="16" y="213" width="288" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfP-aR-Acg">
-                                <rect key="frame" x="16" y="259" width="288" height="36"/>
-                                <color key="backgroundColor" red="0.1647058824" green="0.18039215689999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Member Management">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="LFx-he-epZ" kind="push" id="4L9-JE-SKZ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zF-Wp-6bt">
-                                <rect key="frame" x="16" y="311" width="288" height="36"/>
-                                <color key="backgroundColor" red="0.94901960780000005" green="0.14901960780000001" blue="0.074509803920000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Leave Group">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="atk-aD-zxe" kind="unwind" unwindAction="unwindToGroups:" id="nCA-Fg-RFd"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" systemItem="more" id="Hhc-Mo-viL"/>
-                    <navigationItem key="navigationItem" title="Group Settings" id="EM0-SU-eVv">
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="uHX-x8-guj"/>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vwv-TU-Tvl" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="atk-aD-zxe" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="4482" y="-182"/>
-        </scene>
         <!--Table View Controller-->
         <scene sceneID="JBr-Oe-N0p">
             <objects>
@@ -1188,7 +1128,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="emZ-in-ceZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4482" y="539"/>
+            <point key="canvasLocation" x="4378" y="-182"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1Uf-1k-tXH">
@@ -1238,6 +1178,5 @@
         <segue reference="qHY-cC-UY9"/>
         <segue reference="zaQ-AW-62G"/>
         <segue reference="XYD-D0-xNC"/>
-        <segue reference="4L9-JE-SKZ"/>
     </inferredMetricsTieBreakers>
 </document>

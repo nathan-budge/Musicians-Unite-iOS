@@ -137,6 +137,9 @@
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:nil
                                                     otherButtonTitles:@"Take Photo", @"Choose From Library", @"Remove Photo", nil];
+    
+    
+    
     [actionSheet showInView:self.view];
 }
 
