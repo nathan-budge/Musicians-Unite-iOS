@@ -10,8 +10,12 @@
 
 +(void)toggleEyeball:(id) sender;
 +(BOOL)validateEmail:(NSString *)emailStr;
+
 +(void)removeEmptyGroups:(NSString *) groupID withRef:(Firebase *) ref;
 +(void)removeEmptyTempUsers:(NSString *) userID withRef:(Firebase *) ref;
+
++(NSString *)encodeImageToBase64:(UIImage *) image;
++(UIImage *)decodeBase64ToImage:(NSString *)strEncodeData;
 
 
 @end

@@ -10,7 +10,7 @@
 
 @class User;
 
-@interface UserSettingsViewController : UIViewController <UITextFieldDelegate>
+@interface UserSettingsViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) User *user;
 

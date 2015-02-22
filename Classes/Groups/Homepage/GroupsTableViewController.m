@@ -264,6 +264,7 @@
         self.user.firstName = userData[@"first_name"];
         self.user.lastName = userData[@"last_name"];
         self.user.email = self.ref.authData.providerData[@"email"];
+        self.user.profileImage = userData[@"profile_image"];
     }];
     
 }
@@ -282,6 +283,11 @@
         } else if ([snapshot.key isEqualToString:@"last_name"]) {
             NSString *newLastName = snapshot.value;
             self.user.firstName = newLastName;
+            
+            [self.tableView reloadData];
+        } else if ([snapshot.key isEqualToString:@"profile_image"]) {
+            NSString *newProfileImageString = snapshot.value;
+            self.user.profileImage = newProfileImageString;
             
             [self.tableView reloadData];
         }

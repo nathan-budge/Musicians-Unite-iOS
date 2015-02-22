@@ -16,6 +16,7 @@
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
 @property (nonatomic) NSString *email;
+@property (nonatomic) NSString *profileImage;
 @property (nonatomic) BOOL completedRegistration;
 @property (nonatomic) NSMutableArray *groups;
 

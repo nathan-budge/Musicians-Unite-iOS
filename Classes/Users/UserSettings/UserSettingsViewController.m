@@ -36,6 +36,10 @@
 
 //Scroll view
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+//Buttons
+@property (weak, nonatomic) IBOutlet UIButton *buttonProfileImage;
+
 @end
 
 
@@ -76,6 +80,10 @@
     self.fieldLastName.text = self.user.lastName;
     self.labelEmail.text = self.user.email;
     
+    UIImage *profileImage = [Utilities decodeBase64ToImage:self.user.profileImage];
+    [self.buttonProfileImage setImage:profileImage forState:UIControlStateNormal];
+    
+    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -101,15 +109,17 @@
 
 - (IBAction)actionSave:(id)sender
 {
-    
     [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
     if (self.fieldFirstName.text.length > 0) {
         
+        NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
+        
         NSDictionary *updatedValues = @{
                                         @"first_name":self.fieldFirstName.text,
                                         @"last_name":self.fieldLastName.text,
+                                        @"profile_image":profileImageString,
                                         };
         
         [self.currentUserRef updateChildValues:updatedValues];
@@ -120,6 +130,15 @@
     }
 }
 
+- (IBAction)actionProfileImage:(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", @"Remove Photo", nil];
+    [actionSheet showInView:self.view];
+}
 
 - (IBAction)actionDeleteAccount:(id)sender
 {
@@ -208,6 +227,76 @@
 {
     [self dismissKeyboard];
     return YES;
+}
+
+
+
+#pragma mark - Profile Image Handling
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            [self takePhoto];
+            break;
+        case 1:
+            [self selectPhoto];
+            break;
+        case 2:
+            [self removePhoto];
+        default:
+            break;
+    }
+}
+
+
+//Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
+-(void)takePhoto
+{
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                              message:@"Device has no camera"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        
+        [myAlertView show];
+    } else {
+        NSLog(@"Take Photo Called");
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        [self presentViewController:picker animated:YES completion:nil];
+    }
+}
+
+-(void)selectPhoto
+{
+    NSLog(@"Select Photo Called");
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+-(void)removePhoto
+{
+    [self.buttonProfileImage setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = info[UIImagePickerControllerEditedImage];
+    [self.buttonProfileImage setImage:image forState:UIControlStateNormal];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

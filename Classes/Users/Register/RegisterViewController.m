@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 //  keyboardWasShown and keyboardWillBeHidden adapted from https://developer.apple.com/library/prerelease/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
+//
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
@@ -54,7 +55,8 @@
 #pragma mark - View handling
 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     //Add tap gesture for dismissing the keyboard
@@ -164,12 +166,14 @@
                 }
                 else {
                     
-#warning TODO: Upload profile image
+                    NSString * profileImageString = [Utilities encodeImageToBase64:self.profileImageButton.imageView.image];
+                    
                     NSDictionary *newUser = @{
                                               @"first_name":self.fieldFirstName.text,
                                               @"last_name":self.fieldLastName.text,
                                               @"email":authData.providerData[@"email"],
                                               @"completed_registration":@YES,
+                                              @"profile_image":profileImageString,
                                               };
                     
                     Firebase *newUserRef = [self.usersRef childByAppendingPath:authData.uid];
@@ -269,6 +273,10 @@
     
     return YES;
 }
+
+
+
+#pragma mark - Profile Image Handling
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     switch (buttonIndex) {
