@@ -81,15 +81,16 @@
         self.buttonConfirm.hidden = YES;
         
         for (User *member in self.group.members) {
-            if (![member.userID isEqualToString:self.ref.authData.uid]) {
-                [self.members addObject:member];
-            }
+            [self.members addObject:member];
         }
+        
     } else {
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
     }
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
+    
+    self.memberTableView.contentInset = UIEdgeInsetsMake(-35.0f, 0.0f, 0.0f, 0.0f);
 }
 
 
@@ -149,6 +150,7 @@
                 newMember.completedRegistration = YES;
                 newMember.firstName = userData[userID][@"first_name"];
                 newMember.lastName = userData[userID][@"last_name"];
+                newMember.profileImage = userData[userID][@"profile_image"];
             }
             else {
                 newMember.completedRegistration = NO;
@@ -183,7 +185,12 @@
     
     Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
     
-    [groupRef setValue:@{@"name":self.group.name}];
+    NSDictionary *newGroup = @{
+                               @"name":self.group.name,
+                               @"profile_image":self.group.profileImage,
+                               };
+    
+    [groupRef setValue:newGroup];
     
     [[[self.userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
     [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
@@ -202,35 +209,42 @@
 {
     [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
     
-    for (User *member in self.group.members) {
+    
+    if ([self.group.members count] > 0) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
-        NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
-        
-        if ([foundMember count] > 0) {
+        for (User *member in self.group.members) {
             
-            [self.members removeObject:[foundMember objectAtIndex:0]];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
+            NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
             
-        } else if (![member.userID isEqualToString:self.ref.authData.uid]) {
-            
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", member.userID, self.group.groupID]] removeValue];
-            
-            if (!member.completedRegistration) {
-                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+            if ([foundMember count] > 0) {
+                
+                [self.members removeObject:[foundMember objectAtIndex:0]];
+                
+            } else {
+                
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", member.userID, self.group.groupID]] removeValue];
+                
+                if (!member.completedRegistration) {
+                    [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+                }
+                
             }
-            
         }
         
-        if ([self.members count] > 0) {
-            Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
-            [self addGroupMembers:self.members withUserRef:self.userRef andGroupRef:oldGroup];
-        }
-        
-        [self.memberTableView reloadData];
-        
-        [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
     }
+    
+    if ([self.members count] > 0) {
+        Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
+        [self addGroupMembers:self.members withUserRef:self.userRef andGroupRef:oldGroup];
+    }
+    
+    [self.memberTableView reloadData];
+    
+    [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
+    
+    
     
     [self dismissKeyboard];
 }
@@ -302,10 +316,13 @@
     return [self.members count];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.0f;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     if (cell == nil)
@@ -316,6 +333,10 @@
     User *member = [self.members objectAtIndex:indexPath.row];
     
     if (member.completedRegistration) {
+        #warning TODO - Make Profile Image Round
+        UIImage *profileImage = [Utilities decodeBase64ToImage:member.profileImage];
+        cell.imageView.image = profileImage;
+        
         cell.textLabel.textColor = [UIColor blackColor];
         cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
     } else {

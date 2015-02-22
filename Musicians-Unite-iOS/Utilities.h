@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
+@class Firebase;
+
 @interface Utilities : NSObject
 
 +(void)toggleEyeball:(id) sender;

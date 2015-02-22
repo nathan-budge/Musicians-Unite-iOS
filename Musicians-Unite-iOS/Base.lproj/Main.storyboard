@@ -1038,9 +1038,9 @@
                                     <action selector="actionAddMember:" destination="LFx-he-epZ" eventType="touchUpInside" id="Ni9-hQ-PXB"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="RSK-hM-vYv">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="RSK-hM-vYv">
                                 <rect key="frame" x="0.0" y="162" width="320" height="284"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="LFx-he-epZ" id="ahC-ug-DZr"/>
                                     <outlet property="delegate" destination="LFx-he-epZ" id="gFf-O6-Myq"/>
@@ -1097,10 +1097,10 @@
             </objects>
             <point key="canvasLocation" x="3750" y="-182"/>
         </scene>
-        <!--Messaging Table View Comtroller-->
+        <!--Messaging Table View Controller-->
         <scene sceneID="JBr-Oe-N0p">
             <objects>
-                <tableViewController id="Vb0-j3-dKk" customClass="MessagingTableViewComtroller" sceneMemberID="viewController">
+                <tableViewController id="Vb0-j3-dKk" customClass="MessagingTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ytU-3b-T1b">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1119,15 +1119,10 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="J6x-FY-1jC"/>
-                    <navigationItem key="navigationItem" id="ecC-IC-23P">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="1Cu-Ny-JZ7">
-                            <connections>
-                                <segue destination="pLo-1N-97l" kind="push" id="5MN-8a-BuB"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="ecC-IC-23P"/>
                     <connections>
                         <segue destination="VXd-zR-ED3" kind="push" id="wCq-dc-BQa"/>
+                        <segue destination="pLo-1N-97l" kind="push" identifier="newMessage" id="4Mg-gH-GZ7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="emZ-in-ceZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1138,10 +1133,10 @@
         <scene sceneID="guE-02-iMk">
             <objects>
                 <tableViewController id="pLo-1N-97l" customClass="NewMessageTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9Ev-Jr-wpK">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9Ev-Jr-wpK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ibW-jA-NjH">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -1156,7 +1151,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="aUD-2P-fCA">
-                        <barButtonItem key="rightBarButtonItem" title="Create" id="Lk6-U4-fAk"/>
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="Lk6-U4-fAk">
+                            <connections>
+                                <action selector="actionCreateChat:" destination="pLo-1N-97l" id="eK0-7j-55T"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="92E-Ue-fBo" userLabel="First Responder" sceneMemberID="firstResponder"/>

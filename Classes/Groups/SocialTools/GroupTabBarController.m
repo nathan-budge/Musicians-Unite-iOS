@@ -8,6 +8,7 @@
 
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
+#import "MessagingTableViewController.h"
 
 
 @implementation GroupTabBarController
@@ -18,8 +19,11 @@
     
     NSArray *viewControllers = self.viewControllers;
     
-    GroupDetailViewController *newGroupViewController = [viewControllers objectAtIndex:1];
-    newGroupViewController.group = self.group;
+    MessagingTableViewController *messagingTableViewController = [viewControllers objectAtIndex:0];
+    messagingTableViewController.group = self.group;
+    
+    GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:1];
+    groupDetailViewController.group = self.group;
 }
 
 @end

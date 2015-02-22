@@ -17,8 +17,8 @@
 @property (nonatomic) NSString *profileImage;
 @property (nonatomic) NSMutableArray *members;
 
-- (id)initWithName: (NSString *)name;
+- (id)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
 - (void)addMember: (User *)member;
--(void)removeMember:(User *)member;
+- (void)removeMember:(User *)member;
 
 @end

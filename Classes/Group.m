@@ -20,11 +20,12 @@
     return nil;
 }
 
-- (id)initWithName: (NSString *)name
+- (id)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString
 {
     if (self = [super init]) {
         self.members = [[NSMutableArray alloc] init];
         self.name = name;
+        self.profileImage = profileImageString;
         return self;
     }
     return nil;

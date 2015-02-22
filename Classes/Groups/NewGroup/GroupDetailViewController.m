@@ -53,9 +53,6 @@
     [super viewDidLoad];
     
     if (self.group) {
-        self.tabBarController.title = @"Settings";
-        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
-        
         self.fieldGroupName.text = self.group.name;
         
         UIImage *profileImage = [Utilities decodeBase64ToImage:self.group.profileImage];
@@ -71,6 +68,15 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.group) {
+        self.tabBarController.title = @"Settings";
+        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
+    }
+}
 
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -208,7 +214,8 @@
         if (self.group) {
             destViewController.group = self.group;
         } else {
-            destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text];
+            NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
+            destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text andProfileImageString:profileImageString];
         }
     }
 }

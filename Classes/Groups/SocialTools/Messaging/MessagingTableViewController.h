@@ -1,5 +1,5 @@
 //
-//  MessagingTableViewComtroller.h
+//  MessagingTableViewController.h
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/22/15.
@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MessagingTableViewComtroller : UITableViewController
+@class Group;
+
+@interface MessagingTableViewController : UITableViewController
+
+@property (nonatomic) Group *group;
 
 @end

@@ -154,7 +154,10 @@
         
         Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
         
-        [self addMember:memberRef toGroup:changedGroup];
+        if (![newMemberID isEqualToString:self.ref.authData.uid]) {
+             [self addMember:memberRef toGroup:changedGroup];
+        }
+        
         [self.tableView reloadData];
     }];
 }
@@ -175,6 +178,7 @@
             newMember.completedRegistration = YES;
             newMember.firstName = memberData[@"first_name"];
             newMember.lastName = memberData[@"last_name"];
+            newMember.profileImage = memberData[@"profile_image"];
         }else {
             newMember.completedRegistration = NO;
         }

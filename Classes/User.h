@@ -18,6 +18,7 @@
 @property (nonatomic) NSString *email;
 @property (nonatomic) NSString *profileImage;
 @property (nonatomic) BOOL completedRegistration;
+@property (nonatomic) BOOL selected; //For creating new chats
 @property (nonatomic) NSMutableArray *groups;
 
 - (void)addGroup: (Group *)group;

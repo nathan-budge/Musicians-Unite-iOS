@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class Group;
+
 @interface NewMessageTableViewController : UITableViewController
+
+@property (nonatomic) Group *group;
 
 @end
