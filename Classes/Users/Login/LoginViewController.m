@@ -102,6 +102,10 @@
 - (IBAction)actionTogglePasswordVisibility:(id)sender {
     [Utilities toggleEyeball:sender];
     self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
+    //Reset the cursor.
+    NSString *tmpString = self.fieldPassword.text;
+    self.fieldPassword.text = @"";
+    self.fieldPassword.text = tmpString;
 }
 
 

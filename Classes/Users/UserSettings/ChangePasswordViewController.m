@@ -78,6 +78,11 @@
 {
     [Utilities toggleEyeball:sender];
     self.fieldNewPassword.secureTextEntry = !self.fieldNewPassword.secureTextEntry;
+    
+    //Reset the cursor.
+    NSString *tmpString = self.fieldNewPassword.text;
+    self.fieldNewPassword.text = @"";
+    self.fieldNewPassword.text = tmpString;
 }
 
 
