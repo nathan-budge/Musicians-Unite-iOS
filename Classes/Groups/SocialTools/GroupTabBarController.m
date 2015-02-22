@@ -9,6 +9,7 @@
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
 
+
 @implementation GroupTabBarController
 
 -(void)viewDidLoad
@@ -19,7 +20,6 @@
     
     GroupDetailViewController *newGroupViewController = [viewControllers objectAtIndex:1];
     newGroupViewController.group = self.group;
-    
 }
 
 @end

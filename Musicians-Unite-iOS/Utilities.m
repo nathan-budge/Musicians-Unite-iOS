@@ -20,11 +20,6 @@
 
 @implementation Utilities
 
-+(void)dismissKeyboard:(UIView *)view
-{
-    [view endEditing:YES];
-}
-
 
 +(void)toggleEyeball:(id) sender
 {

@@ -11,7 +11,6 @@
 +(void)removeEmptyGroups:(NSString *) groupID withRef:(Firebase *) ref;
 +(void)toggleEyeball:(id) sender;
 +(BOOL)validateEmail:(NSString *)emailStr;
-+(void)dismissKeyboard:(UIView *)view;
 
 @end
 

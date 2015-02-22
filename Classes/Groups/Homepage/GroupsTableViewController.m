@@ -18,8 +18,8 @@
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
 
-#import "Group.h"
 #import "User.h"
+#import "Group.h"
 
 
 @interface GroupsTableViewController ()
@@ -80,11 +80,9 @@
 {
     [super viewDidLoad];
 
-    //Set up navigation drawer
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
-    //Load data from Firebase
     self.initialLoad = YES;
     [self loadGroups];
     [self loadUser];

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Group.h"
 
-@interface MemberManagementViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@class Group;
+
+@interface MemberManagementViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic) Group *group;
 

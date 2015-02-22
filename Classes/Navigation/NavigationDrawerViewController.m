@@ -12,12 +12,12 @@
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
+
 #import "NavigationDrawerViewController.h"
 
 
 @interface NavigationDrawerViewController ()
 
-//Firebase Reference
 @property (nonatomic) Firebase *ref;
 
 @property (nonatomic, strong) UINavigationController *transitionsNavigationController;
@@ -39,37 +39,42 @@
 }
 
 
-#pragma mark - View handling
 
-- (void)viewDidLoad {
+#pragma mark - View Handling
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
+ 
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
 }
 
 
+
 #pragma mark - Buttons
 
-- (IBAction)actionHome:(id)sender {
+- (IBAction)actionHome:(id)sender
+{
     self.slidingViewController.topViewController = self.transitionsNavigationController;
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
 
-- (IBAction)actionUserSettings:(id)sender {
+- (IBAction)actionUserSettings:(id)sender
+{
     self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserSettingsNavigationController"];
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
 
-- (IBAction)actionLogout:(id)sender {
+- (IBAction)actionLogout:(id)sender
+{
     [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
     
     [self.ref unauth];
-    [SVProgressHUD dismiss];
+    
     [self performSegueWithIdentifier:@"Logout" sender:sender];
+    [SVProgressHUD dismiss];
 }
-
 
 @end

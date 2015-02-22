@@ -70,7 +70,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [Utilities dismissKeyboard:self.view];
+    [self dismissKeyboard];
 }
 
 
@@ -110,7 +110,7 @@
         
         [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
         
-        [Utilities dismissKeyboard:self.view];
+        [self dismissKeyboard];
         
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
@@ -125,7 +125,7 @@
     
     [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
     
-    [Utilities dismissKeyboard:self.view];
+    [self dismissKeyboard];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -138,7 +138,7 @@
     Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
     [oldGroup updateChildValues:@{@"name":self.fieldGroupName.text}];
     
-    [Utilities dismissKeyboard:self.view];
+    [self dismissKeyboard];
     
     [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
 }
@@ -147,9 +147,15 @@
 
 #pragma mark - Keyboard Handling
 
+-(void)dismissKeyboard
+{
+    [self.view endEditing:YES];
+}
+
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [Utilities dismissKeyboard:self.view];
+    [self dismissKeyboard];
     
     return YES;
 }
