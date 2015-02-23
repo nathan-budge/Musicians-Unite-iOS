@@ -55,7 +55,11 @@
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads", self.group.groupID]] updateChildValues:@{newMessageThread.key:@YES}];
     
     for (User *member in self.group.members) {
-        [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
+        
+        if (member.selected) {
+             [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
+        }
+        
     }
 
     [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
@@ -109,6 +113,7 @@
     } else {
         cell.textLabel.textColor = [UIColor grayColor];
         cell.textLabel.text = member.email;
+        cell.imageView.image = [UIImage imageNamed:@"profile_logo"];
     }
     
     

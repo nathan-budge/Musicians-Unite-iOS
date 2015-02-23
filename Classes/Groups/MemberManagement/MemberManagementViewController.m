@@ -342,6 +342,7 @@
     } else {
         cell.textLabel.textColor = [UIColor grayColor];
         cell.textLabel.text = member.email;
+        cell.imageView.image = [UIImage imageNamed:@"profile_logo"];
     }
     
     UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];

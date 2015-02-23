@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class User;
+@class MessageThread;
 
 @interface Group : NSObject
 
@@ -16,9 +17,14 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *profileImage;
 @property (nonatomic) NSMutableArray *members;
+@property (nonatomic) NSMutableArray *messageThreads;
 
 - (id)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
+
 - (void)addMember: (User *)member;
 - (void)removeMember:(User *)member;
+
+- (void)addMessageThread: (MessageThread *)messageThread;
+- (void)removeMessageThread:(MessageThread *)messageThread;
 
 @end

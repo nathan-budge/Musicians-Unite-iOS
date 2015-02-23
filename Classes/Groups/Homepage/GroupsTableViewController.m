@@ -21,6 +21,7 @@
 
 #import "User.h"
 #import "Group.h"
+#import "MessageThread.h"
 
 
 @interface GroupsTableViewController ()
@@ -71,6 +72,16 @@
     return _user;
 }
 
+-(NSMutableArray *)childObservers
+{
+    if (!_childObservers) {
+        _childObservers = [[NSMutableArray alloc] init];
+    }
+    
+    return _childObservers;
+    
+}
+
 
 
 #pragma mark - View Handling
@@ -94,6 +105,7 @@
 - (void)loadGroups
 {
     Firebase *userGroupsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups", self.ref.authData.uid]];
+    [self.childObservers addObject:userGroupsRef];
     
     [self attachListenerForAddedGroupsToUser:userGroupsRef]; //Also used for loading groups initially
     
@@ -108,12 +120,17 @@
         NSString *groupID = snapshot.key;
         
         Firebase *groupRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]];
+        [self.childObservers addObject:groupRef];
         
         Group *newGroup = [[Group alloc] init];
         
         [self loadGroupData:groupRef withGroupID:groupID intoGroup:newGroup];
+        
         [self attachListenerForAddedMembersToGroup:groupRef withGroupID:groupID andNewGroup:newGroup];
         [self attachListenerForRemovedMembersToGroup:groupRef withGroupID:groupID];
+        
+        [self attachListenerForAddedMessageThreadsToGroup:groupRef withGroupID:groupID andNewGroup:newGroup];
+        
         [self attachListenerForChangesToNameOrPictureToGroup:groupRef withGroupID:groupID];
     }];
 }
@@ -139,7 +156,10 @@
 
 -(void)attachListenerForAddedMembersToGroup:(Firebase *)groupRef withGroupID:(NSString *)groupID andNewGroup:(Group *)newGroup
 {
-    [[groupRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+    Firebase *groupMembersRef = [groupRef childByAppendingPath:@"members"];
+    [self.childObservers addObject:groupMembersRef];
+    
+    [groupMembersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         
         Group *changedGroup;
         NSString *newMemberID = snapshot.key;
@@ -153,12 +173,11 @@
         }
         
         Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
+        [self.childObservers addObject:memberRef];
         
         if (![newMemberID isEqualToString:self.ref.authData.uid]) {
              [self addMember:memberRef toGroup:changedGroup];
         }
-        
-        [self.tableView reloadData];
     }];
 }
 
@@ -188,9 +207,87 @@
 }
 
 
+-(void)attachListenerForAddedMessageThreadsToGroup:(Firebase *)groupRef withGroupID:(NSString *)groupID andNewGroup:(Group *)newGroup
+{
+    Firebase *groupMessageThreadsRef = [groupRef childByAppendingPath:@"message_threads"];
+    [self.childObservers addObject:groupMessageThreadsRef];
+    
+    [groupMessageThreadsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        Group *changedGroup;
+        NSString *newMessageThreadID = snapshot.key;
+        
+        if (self.initialLoad) {
+            changedGroup = newGroup;
+        } else {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
+            NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
+            changedGroup = [group objectAtIndex:0];
+        }
+        
+        Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", newMessageThreadID]];
+        [self.childObservers addObject:messageThreadRef];
+        
+        [messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+            
+            NSDictionary *messageThreadData = snapshot.value;
+            
+            if ([[messageThreadData[@"members"] allKeys] containsObject:self.ref.authData.uid]) {
+                
+                MessageThread *newMessageThread = [[MessageThread alloc] init];
+                
+                newMessageThread.messageThreadID = snapshot.key;
+                [changedGroup addMessageThread:newMessageThread];
+                
+                [self attachListenerForAddedMembersToThread:messageThreadRef withThreadID:newMessageThread.messageThreadID andGroupID:changedGroup.groupID andNewGroup:newGroup];
+            }
+        }];
+    }];
+}
+
+
+-(void)attachListenerForAddedMembersToThread:(Firebase *)messageThreadRef withThreadID:(NSString *)threadID andGroupID:(NSString *)groupID andNewGroup:(Group *)newGroup
+{
+    Firebase *messageMembersRef = [messageThreadRef childByAppendingPath:@"members"];
+    [self.childObservers addObject:messageMembersRef];
+    
+    [messageMembersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *memberID = snapshot.key;
+        if (![memberID isEqualToString:self.ref.authData.uid]) {
+            
+            Group *changedGroup;
+            
+            if (self.initialLoad) {
+                changedGroup = newGroup;
+            } else {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
+                NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
+                changedGroup = [group objectAtIndex:0];
+            }
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.messageThreadID=%@", threadID];
+            NSArray *messageThread = [changedGroup.messageThreads filteredArrayUsingPredicate:predicate];
+            MessageThread *aMessageThread = [messageThread objectAtIndex:0];
+            
+            predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
+            NSArray *member= [changedGroup.members filteredArrayUsingPredicate:predicate];
+            User *aMember = [member objectAtIndex:0];
+            
+            [aMessageThread addMember:aMember];
+        }
+    
+    }];
+    
+}
+
+
 -(void)attachListenerForRemovedMembersToGroup:(Firebase *)groupRef withGroupID:(NSString *)groupID
 {
-    [[groupRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+    Firebase *groupMembersRef = [groupRef childByAppendingPath:@"members"];
+    [self.childObservers addObject:groupMembersRef];
+    
+    [groupMembersRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
         NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
@@ -256,6 +353,7 @@
 -(void)loadUser
 {
     Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
+    [self.childObservers addObject:userRef];
     
     [self loadUserData:userRef];
     
@@ -263,6 +361,7 @@
     
     NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
     navigationDrawerViewController.user = self.user;
+    navigationDrawerViewController.childObservers = self.childObservers;
 }
 
 
@@ -369,6 +468,15 @@
     self.selectedGroup = [self.groups objectAtIndex:indexPath.row];
     
     [self performSegueWithIdentifier:@"showGroupTabs" sender:nil];
+}
+
+
+#pragma mark - Remove all observers before logging out
+-(void)logout
+{
+    for (Firebase *ref in self.childObservers) {
+        [ref removeAllObservers];
+    }
 }
 
 @end

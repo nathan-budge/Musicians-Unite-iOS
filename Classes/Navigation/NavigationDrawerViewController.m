@@ -18,6 +18,7 @@
 #import "GroupsTableViewController.h"
 
 #import "User.h"
+#import "Group.h"
 
 
 @interface NavigationDrawerViewController ()
@@ -25,6 +26,8 @@
 @property (nonatomic) Firebase *ref;
 
 @property (nonatomic, strong) UINavigationController *transitionsNavigationController;
+
+@property (nonatomic) GroupsTableViewController *groupTableViewController;
 
 @end
 
@@ -51,7 +54,7 @@
     [super viewDidLoad];
  
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
-       
+    self.groupTableViewController = [self.transitionsNavigationController.viewControllers objectAtIndex:0];
 }
 
 
@@ -61,6 +64,7 @@
 - (IBAction)actionHome:(id)sender
 {
     self.slidingViewController.topViewController = self.transitionsNavigationController;
+    
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
@@ -76,8 +80,9 @@
 {
     [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
     
+    [self.groupTableViewController logout];
     [self.ref unauth];
-    
+
     [self performSegueWithIdentifier:@"Logout" sender:sender];
     [SVProgressHUD dismiss];
 }
