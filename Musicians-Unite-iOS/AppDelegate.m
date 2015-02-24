@@ -36,16 +36,15 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
                                 @"Main" bundle:[NSBundle mainBundle]];
     
-    if (!self.ref.authData) {
-        UIViewController *welcomeViewController = [storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
-        self.window.rootViewController = welcomeViewController;
-        
+    UIViewController *rootViewController = [[UIViewController alloc] init];
+    
+    if (self.ref.authData) {
+        rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SlidingViewController"];
+    } else {
+        rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
     }
-    else {
-        UIViewController *groupsViewController = [storyboard instantiateViewControllerWithIdentifier:@"SlidingViewController"];
-        self.window.rootViewController = groupsViewController;
-        
-    }
+    
+    self.window.rootViewController = rootViewController;
     
     [self.window makeKeyAndVisible];
     return YES;

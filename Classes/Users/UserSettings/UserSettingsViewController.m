@@ -130,13 +130,14 @@
     }
 }
 
+
 - (IBAction)actionProfileImage:(id)sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", @"Remove Photo", nil];
+                                               destructiveButtonTitle:@"Remove Photo"
+                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
     
     
     
@@ -239,16 +240,18 @@
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     switch (buttonIndex) {
         case 0:
-            [self takePhoto];
+            [self removePhoto];
             break;
         case 1:
-            [self selectPhoto];
+            [self takePhoto];
             break;
         case 2:
-            [self removePhoto];
+            [self selectPhoto];
+            break;
         default:
             break;
     }
+    
 }
 
 

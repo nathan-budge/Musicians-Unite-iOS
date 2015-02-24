@@ -393,7 +393,7 @@
             [self.tableView reloadData];
         } else if ([snapshot.key isEqualToString:@"last_name"]) {
             NSString *newLastName = snapshot.value;
-            self.user.firstName = newLastName;
+            self.user.lastName = newLastName;
             
             [self.tableView reloadData];
         } else if ([snapshot.key isEqualToString:@"profile_image"]) {
