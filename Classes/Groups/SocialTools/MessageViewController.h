@@ -8,6 +8,10 @@
 
 #import "SLKTextViewController.h"
 
+@class MessageThread;
+
 @interface MessageViewController : SLKTextViewController
+
+@property (nonatomic) MessageThread *messageThread;
 
 @end

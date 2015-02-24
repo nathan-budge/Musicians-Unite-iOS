@@ -6,15 +6,25 @@
 //  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
+#import <Firebase/Firebase.h>
+
+#import "AppConstant.h"
+
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
 #import "MessageTextView.h"
+
 #import "Message.h"
+#import "MessageThread.h"
+#import "Group.h"
 
 static NSString *MessengerCellIdentifier = @"MessengerCell";
 static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @interface MessageViewController ()
+
+@property (nonatomic) Firebase *ref;
+@property (nonatomic) Firebase *messageThreadRef;
 
 @property (nonatomic, strong) NSMutableArray *messages;
 
@@ -27,6 +37,24 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 @end
 
 @implementation MessageViewController
+
+-(Firebase *)ref
+{
+    if (!_ref) {
+        _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
+    }
+    
+    return _ref;
+}
+
+-(Firebase *)messageThreadRef
+{
+    if (!_messageThreadRef) {
+        _messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages", self.messageThread.messageThreadID]];
+    }
+    
+    return _messageThreadRef;
+}
 
 -(NSMutableArray *)messages
 {
@@ -68,10 +96,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.users = @[@"Allen", @"Anna", @"Alicia", @"Arnold", @"Armando", @"Antonio", @"Brad", @"Catalaya", @"Christoph", @"Emerson", @"Eric", @"Everyone", @"Steve"];
-    self.channels = @[@"General", @"Random", @"iOS", @"Bugs", @"Sports", @"Android", @"UI", @"SSB"];
-    self.emojis = @[@"m", @"man", @"machine", @"block-a", @"block-b", @"bowtie", @"boar", @"boat", @"book", @"bookmark", @"neckbeard", @"metal", @"fu", @"feelsgood"];
 
     self.bounces = YES;
     self.shakeToClearEnabled = YES;
@@ -170,6 +194,17 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     Message *message = [Message new];
     message.username = @"Nathan";
     message.text = [self.textView.text copy];
+    
+    Firebase *newMessage = [[self.ref childByAppendingPath:@"messages"] childByAutoId];
+    
+    NSDictionary *messageData = @{
+                                  @"username":message.username,
+                                  @"text":message.text,
+                                  };
+    
+    [newMessage setValue:messageData];
+    
+    [self.messageThreadRef updateChildValues:@{newMessage.key:@YES}];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
