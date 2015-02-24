@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface Message : NSObject
 
-@property (nonatomic) NSString *content;
+@property (nonatomic) NSString *username;
+@property (nonatomic) NSString *text;
+@property (nonatomic) UIImage *attachment;
 
 @end

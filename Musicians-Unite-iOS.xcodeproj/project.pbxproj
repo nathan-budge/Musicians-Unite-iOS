@@ -34,7 +34,6 @@
 		9479A29A1A9A693A00C668D0 /* SLKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2901A9A693A00C668D0 /* SLKTextView.m */; };
 		9479A29B1A9A693A00C668D0 /* SLKTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2921A9A693A00C668D0 /* SLKTextViewController.m */; };
 		9479A29C1A9A693A00C668D0 /* SLKTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2941A9A693A00C668D0 /* SLKTypingIndicatorView.m */; };
-		9479A2A51A9A727900C668D0 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2A41A9A727900C668D0 /* MessageViewController.m */; };
 		9479A2A81A9A72C000C668D0 /* MessagingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */; };
 		9479A2AB1A9A72D100C668D0 /* NewMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */; };
 		9479A2B11A9B68A400C668D0 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2B01A9B68A400C668D0 /* Message.m */; };
@@ -43,6 +42,9 @@
 		94833EEB1A94018A00CC2930 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94833EE71A94018A00CC2930 /* SVProgressHUD.bundle */; };
 		94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE91A94018A00CC2930 /* SVProgressHUD.m */; };
 		9491FB101A940346003FE08E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491FB0F1A940346003FE08E /* Firebase.framework */; };
+		949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */; };
+		949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04271A9D0EB10029B4E3 /* MessageTextView.m */; };
+		949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04291A9D0EB10029B4E3 /* MessageViewController.m */; };
 		94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94A3372A1A93768200E38E97 /* QuartzCore.framework */; };
 		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
 		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
@@ -120,8 +122,6 @@
 		9479A2921A9A693A00C668D0 /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
 		9479A2931A9A693A00C668D0 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
 		9479A2941A9A693A00C668D0 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
-		9479A2A31A9A727900C668D0 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageViewController.h; path = Messaging/MessageViewController.h; sourceTree = "<group>"; };
-		9479A2A41A9A727900C668D0 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageViewController.m; path = Messaging/MessageViewController.m; sourceTree = "<group>"; };
 		9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagingTableViewController.h; path = Messaging/MessagingTableViewController.h; sourceTree = "<group>"; };
 		9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagingTableViewController.m; path = Messaging/MessagingTableViewController.m; sourceTree = "<group>"; };
 		9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewMessageTableViewController.h; path = Messaging/NewMessageTableViewController.h; sourceTree = "<group>"; };
@@ -137,6 +137,12 @@
 		94833EE81A94018A00CC2930 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		94833EE91A94018A00CC2930 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		9491FB0F1A940346003FE08E /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
+		949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
+		949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
+		949B04261A9D0EB10029B4E3 /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
+		949B04271A9D0EB10029B4E3 /* MessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTextView.m; sourceTree = "<group>"; };
+		949B04281A9D0EB10029B4E3 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		949B04291A9D0EB10029B4E3 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		94A3372A1A93768200E38E97 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
@@ -293,8 +299,12 @@
 		9428E37E1A9A5F1000A36900 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
-				9479A2A31A9A727900C668D0 /* MessageViewController.h */,
-				9479A2A41A9A727900C668D0 /* MessageViewController.m */,
+				949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */,
+				949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */,
+				949B04261A9D0EB10029B4E3 /* MessageTextView.h */,
+				949B04271A9D0EB10029B4E3 /* MessageTextView.m */,
+				949B04281A9D0EB10029B4E3 /* MessageViewController.h */,
+				949B04291A9D0EB10029B4E3 /* MessageViewController.m */,
 				9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */,
 				9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */,
 				9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */,
@@ -597,11 +607,12 @@
 				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
 				9479A2B41A9B68C000C668D0 /* MessageThread.m in Sources */,
 				9479A2971A9A693A00C668D0 /* UIView+SLKAdditions.m in Sources */,
-				9479A2A51A9A727900C668D0 /* MessageViewController.m in Sources */,
+				949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */,
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
 				94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
+				949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */,
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
 				9479A2981A9A693A00C668D0 /* SLKInputAccessoryView.m in Sources */,
@@ -611,6 +622,7 @@
 				9479A2B11A9B68A400C668D0 /* Message.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
 				94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */,
+				949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */,
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				94C6DE6C1A93DDD800562CE9 /* GroupDetailViewController.m in Sources */,
 				94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */,

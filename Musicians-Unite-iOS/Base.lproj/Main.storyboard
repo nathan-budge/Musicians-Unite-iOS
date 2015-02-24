@@ -1091,6 +1091,7 @@
                     <connections>
                         <segue destination="Vb0-j3-dKk" kind="relationship" relationship="viewControllers" id="Xgu-lb-w1a"/>
                         <segue destination="aUg-yG-wVb" kind="relationship" relationship="viewControllers" id="HFf-E4-FSZ"/>
+                        <segue destination="VXd-zR-ED3" kind="relationship" relationship="viewControllers" id="nKq-dU-lji"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FA1-8v-uyz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1162,7 +1163,7 @@
             </objects>
             <point key="canvasLocation" x="5015" y="-517"/>
         </scene>
-        <!--Message View Controller-->
+        <!--Item-->
         <scene sceneID="HcQ-Oz-X5D">
             <objects>
                 <viewController id="VXd-zR-ED3" customClass="MessageViewController" sceneMemberID="viewController">
@@ -1175,11 +1176,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="emd-io-Fug"/>
                     <navigationItem key="navigationItem" id="bwF-VH-QUS"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lvt-q2-Lwa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5015" y="219"/>
+            <point key="canvasLocation" x="4378" y="657"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1Uf-1k-tXH">
@@ -1226,8 +1228,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="HFf-E4-FSZ"/>
+        <segue reference="nKq-dU-lji"/>
         <segue reference="qHY-cC-UY9"/>
         <segue reference="zaQ-AW-62G"/>
-        <segue reference="XYD-D0-xNC"/>
     </inferredMetricsTieBreakers>
 </document>
