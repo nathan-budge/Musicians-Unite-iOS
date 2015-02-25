@@ -22,6 +22,7 @@
 #import "User.h"
 #import "Group.h"
 #import "MessageThread.h"
+#import "Message.h"
 
 
 @interface GroupsTableViewController ()
@@ -240,6 +241,7 @@
                 [changedGroup addMessageThread:newMessageThread];
                 
                 [self attachListenerForAddedMembersToThread:messageThreadRef withThreadID:newMessageThread.messageThreadID andGroupID:changedGroup.groupID andNewGroup:newGroup];
+                [self attachListenerForAddedMessagesToThread:messageThreadRef withThreadID:newMessageThread.messageThreadID andGroupID:changedGroup.groupID andNewGroup:newGroup];
             }
         }];
     }];
@@ -278,7 +280,45 @@
         }
     
     }];
+}
+
+
+-(void)attachListenerForAddedMessagesToThread:(Firebase *)messageThreadRef withThreadID:(NSString *)threadID andGroupID:(NSString *)groupID andNewGroup:(Group *)newGroup
+{
+    Firebase *threadMessagesRef = [messageThreadRef childByAppendingPath:@"messages"];
+    [self.childObservers addObject:threadMessagesRef];
     
+    [threadMessagesRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *messageID = snapshot.key;
+        
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", messageID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+           
+            NSDictionary *messageData = snapshot.value;
+            
+            Message *newMessage = [[Message alloc] init];
+            
+            newMessage.username = messageData[@"username"];
+            newMessage.text = messageData[@"text"];
+            
+            Group *changedGroup;
+            
+            if (self.initialLoad) {
+                changedGroup = newGroup;
+            } else {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
+                NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
+                changedGroup = [group objectAtIndex:0];
+            }
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.messageThreadID=%@", threadID];
+            NSArray *messageThread = [changedGroup.messageThreads filteredArrayUsingPredicate:predicate];
+            MessageThread *aMessageThread = [messageThread objectAtIndex:0];
+            
+            [aMessageThread addMessage:newMessage];
+            
+        }];
+    }];
 }
 
 

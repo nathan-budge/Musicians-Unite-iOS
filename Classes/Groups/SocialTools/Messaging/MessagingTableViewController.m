@@ -8,12 +8,15 @@
 
 #import "MessagingTableViewController.h"
 #import "NewMessageTableViewController.h"
+#import "MessageViewController.h"
 
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
 
 @interface MessagingTableViewController ()
+
+@property (nonatomic) MessageThread *selectedMessageThread;
 
 @end
 
@@ -109,7 +112,12 @@
     return cell;
 }
 
-
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.selectedMessageThread = [self.group.messageThreads objectAtIndex:indexPath.row];
+    
+    [self performSegueWithIdentifier:@"viewThread" sender:nil];
+}
 
 
 
@@ -121,6 +129,9 @@
     if ([segue.identifier isEqualToString:@"newMessage"]) {
         NewMessageTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
+    } else if ([segue.identifier isEqualToString:@"viewThread"]) {
+        MessageViewController *destViewController = segue.destinationViewController;
+        destViewController.messageThread = self.selectedMessageThread;
     }
 }
 

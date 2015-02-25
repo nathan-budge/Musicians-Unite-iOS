@@ -1091,7 +1091,6 @@
                     <connections>
                         <segue destination="Vb0-j3-dKk" kind="relationship" relationship="viewControllers" id="Xgu-lb-w1a"/>
                         <segue destination="aUg-yG-wVb" kind="relationship" relationship="viewControllers" id="HFf-E4-FSZ"/>
-                        <segue destination="VXd-zR-ED3" kind="relationship" relationship="viewControllers" id="nKq-dU-lji"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FA1-8v-uyz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1122,7 +1121,7 @@
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="J6x-FY-1jC"/>
                     <navigationItem key="navigationItem" id="ecC-IC-23P"/>
                     <connections>
-                        <segue destination="VXd-zR-ED3" kind="push" id="wCq-dc-BQa"/>
+                        <segue destination="VXd-zR-ED3" kind="push" identifier="viewThread" id="wCq-dc-BQa"/>
                         <segue destination="pLo-1N-97l" kind="push" identifier="newMessage" id="4Mg-gH-GZ7"/>
                     </connections>
                 </tableViewController>
@@ -1181,7 +1180,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lvt-q2-Lwa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4378" y="657"/>
+            <point key="canvasLocation" x="5015" y="188"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1Uf-1k-tXH">
@@ -1228,9 +1227,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="HFf-E4-FSZ"/>
-        <segue reference="nKq-dU-lji"/>
         <segue reference="qHY-cC-UY9"/>
         <segue reference="zaQ-AW-62G"/>
+        <segue reference="HFf-E4-FSZ"/>
     </inferredMetricsTieBreakers>
 </document>

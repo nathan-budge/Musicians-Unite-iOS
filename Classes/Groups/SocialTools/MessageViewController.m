@@ -97,6 +97,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [super viewDidLoad];
 
+    NSLog(@"%lu", (unsigned long)self.messageThread.messages.count);
+    
+    
+    
+    
     self.bounces = YES;
     self.shakeToClearEnabled = YES;
     self.keyboardPanningEnabled = YES;
@@ -125,6 +130,29 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
 }
 
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    for (Message *message in self.messageThread.messages) {
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
+        UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
+        
+        [self.tableView beginUpdates];
+        [self.messages insertObject:message atIndex:0];
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
+        [self.tableView endUpdates];
+        
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
+        
+        // Fixes the cell from blinking (because of the transform, when using translucent cells)
+        // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    
+    [super viewWillAppear:animated];
+}
 
 #pragma mark - Action Methods
 

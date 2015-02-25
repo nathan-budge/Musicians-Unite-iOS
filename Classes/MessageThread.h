@@ -18,5 +18,6 @@
 @property (nonatomic) NSMutableArray *messages;
 
 - (void)addMember: (User *)member;
+- (void)addMessage: (Message *)message;
 
 @end
