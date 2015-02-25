@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 @class Firebase;
 
 @interface Utilities : NSObject

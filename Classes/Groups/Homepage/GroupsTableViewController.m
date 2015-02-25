@@ -13,6 +13,7 @@
 #import <Firebase/Firebase.h>
 
 #import "AppConstant.h"
+#import "Utilities.h"
 
 #import "GroupsTableViewController.h"
 #import "GroupTabBarController.h"
@@ -300,6 +301,8 @@
             
             newMessage.username = messageData[@"username"];
             newMessage.text = messageData[@"text"];
+            UIImage *profileImage = [Utilities decodeBase64ToImage:messageData[@"profile_image"]];
+            newMessage.profileImage = profileImage;
             
             Group *changedGroup;
             
@@ -465,6 +468,7 @@
     if ([segue.identifier isEqualToString:@"showGroupTabs"]) {
         GroupTabBarController *destViewController = segue.destinationViewController;
         destViewController.group = self.selectedGroup;
+        destViewController.user = self.user;
     } else if ([segue.identifier isEqualToString:@"newGroup"]) {
         GroupDetailViewController *destViewController = segue.destinationViewController;
         destViewController.group = nil;

@@ -9,6 +9,7 @@
 #import <Firebase/Firebase.h>
 
 #import "AppConstant.h"
+#import "Utilities.h"
 
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
@@ -17,6 +18,7 @@
 #import "Message.h"
 #import "MessageThread.h"
 #import "Group.h"
+#import "User.h"
 
 static NSString *MessengerCellIdentifier = @"MessengerCell";
 static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
@@ -223,11 +225,15 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     message.username = @"Nathan";
     message.text = [self.textView.text copy];
     
+    UIImage *profileImage = [Utilities decodeBase64ToImage:self.user.profileImage];
+    message.profileImage =profileImage;
+    
     Firebase *newMessage = [[self.ref childByAppendingPath:@"messages"] childByAutoId];
     
     NSDictionary *messageData = @{
                                   @"username":message.username,
                                   @"text":message.text,
+                                  @"profile_image":self.user.profileImage,
                                   };
     
     [newMessage setValue:messageData];
@@ -412,6 +418,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         cell.attachmentView.layer.shouldRasterize = YES;
         cell.attachmentView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     }
+    
+    cell.tumbnailView.image = message.profileImage;
+    cell.tumbnailView.layer.shouldRasterize = YES;
+    cell.tumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
     cell.indexPath = indexPath;
     cell.usedForMessage = YES;

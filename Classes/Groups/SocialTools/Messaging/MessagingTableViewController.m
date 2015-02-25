@@ -13,6 +13,7 @@
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
+#import "User.h"
 
 @interface MessagingTableViewController ()
 
@@ -132,6 +133,7 @@
     } else if ([segue.identifier isEqualToString:@"viewThread"]) {
         MessageViewController *destViewController = segue.destinationViewController;
         destViewController.messageThread = self.selectedMessageThread;
+        destViewController.user = self.user;
     }
 }
 

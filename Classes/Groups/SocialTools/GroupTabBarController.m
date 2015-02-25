@@ -22,6 +22,7 @@
     
     MessagingTableViewController *messagingTableViewController = [viewControllers objectAtIndex:0];
     messagingTableViewController.group = self.group;
+    messagingTableViewController.user = self.user;
     
     GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:1];
     groupDetailViewController.group = self.group;
