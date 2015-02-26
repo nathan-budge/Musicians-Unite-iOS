@@ -7,6 +7,7 @@
 //
 
 #import <Firebase/Firebase.h>
+#import "SVProgressHUD.h"
 
 #import "NewMessageTableViewController.h"
 
@@ -15,6 +16,7 @@
 
 #import "Group.h"
 #import "User.h"
+#import "MessageThread.h"
 
 @interface NewMessageTableViewController ()
 
@@ -63,20 +65,45 @@
 - (IBAction)actionCreateChat:(id)sender
 {
     //Deal with case when no members are selected
-    //Deal with case when all members are selected
     
-    Firebase* newMessageThread = [[self.ref childByAppendingPath:@"message_threads"] childByAutoId];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads", self.group.groupID]] updateChildValues:@{newMessageThread.key:@YES}];
-    
+    NSMutableArray *newThreadMembers = [[NSMutableArray alloc] init];
     for (User *member in self.registeredMembers) {
-        
         if (member.selected) {
-             [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
+            [newThreadMembers addObject:member];
+            
+        }
+    }
+    
+    BOOL matchingGroup = NO;
+    for (MessageThread *messageThread in self.group.messageThreads) {
+        if (messageThread.members.count == newThreadMembers.count) {
+            for (User *member in newThreadMembers) {
+                if ([messageThread.members containsObject:member]) {
+                    matchingGroup = YES;
+                } else {
+                    matchingGroup = NO;
+                }
+            }
+        }
+    }
+    
+    if (matchingGroup) {
+        [SVProgressHUD showErrorWithStatus:@"Thread already exists" maskType:SVProgressHUDMaskTypeBlack];
+    } else if (newThreadMembers.count == 0){
+        [SVProgressHUD showErrorWithStatus:@"No members selected" maskType:SVProgressHUDMaskTypeBlack];
+    } else {
+        Firebase* newMessageThread = [[self.ref childByAppendingPath:@"message_threads"] childByAutoId];
+        
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads", self.group.groupID]] updateChildValues:@{newMessageThread.key:@YES}];
+        
+        for (User *member in newThreadMembers) {
+            [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
         }
         
+        [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
+        
+        [SVProgressHUD showSuccessWithStatus:@"Thread created" maskType:SVProgressHUDMaskTypeBlack];
     }
-
-    [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
 }
 
 

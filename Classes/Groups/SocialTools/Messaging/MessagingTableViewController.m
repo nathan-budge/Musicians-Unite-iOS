@@ -27,6 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -123,9 +124,6 @@
     } else {
         cell.detailTextLabel.text = @"";
     }
-   
-    
-    
     
     return cell;
 }
