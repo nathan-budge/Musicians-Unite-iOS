@@ -168,7 +168,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
                                                    destructiveButtonTitle:@"Delete"
-                                                        otherButtonTitles:@"Edit", nil];
+                                                        otherButtonTitles: nil];
         
         MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
         actionSheet.tag = cell.indexPath.row;

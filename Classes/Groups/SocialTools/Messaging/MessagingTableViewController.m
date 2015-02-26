@@ -13,6 +13,7 @@
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
+#import "Message.h"
 #import "User.h"
 
 @interface MessagingTableViewController ()
@@ -109,6 +110,16 @@
     }
     
     cell.textLabel.text = title;
+    
+    
+    Message *mostRecentMessage = [messageThread.messages lastObject];
+    if ([mostRecentMessage.sender isEqual:self.user]) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];
+    } else {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@: %@", mostRecentMessage.sender.firstName, mostRecentMessage.sender.lastName, mostRecentMessage.text];
+    }
+    
+    
     
     return cell;
 }

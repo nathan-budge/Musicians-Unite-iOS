@@ -302,28 +302,33 @@
             
             NSString *memberID = messageData[@"sender"];
             
-            Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", memberID]];
+            if ([memberID isEqualToString:self.ref.authData.uid]) {
+                newMessage.sender = self.user;
+            } else {
+                Firebase *memberRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", memberID]];
+                
+                [memberRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                    
+                    NSDictionary *memberData = snapshot.value;
+                    
+                    User *newMember = [[User alloc] init];
+                    
+                    newMember.userID = snapshot.key;
+                    newMember.email = memberData[@"email"];
+                    
+                    if ([memberData[@"completed_registration"] isEqual:@YES]) {
+                        newMember.completedRegistration = YES;
+                        newMember.firstName = memberData[@"first_name"];
+                        newMember.lastName = memberData[@"last_name"];
+                        newMember.profileImage = memberData[@"profile_image"];
+                    }else {
+                        newMember.completedRegistration = NO;
+                    }
+                    
+                    newMessage.sender = newMember;
+                }];
+            }
             
-            [memberRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                
-                NSDictionary *memberData = snapshot.value;
-                
-                User *newMember = [[User alloc] init];
-                
-                newMember.userID = snapshot.key;
-                newMember.email = memberData[@"email"];
-                
-                if ([memberData[@"completed_registration"] isEqual:@YES]) {
-                    newMember.completedRegistration = YES;
-                    newMember.firstName = memberData[@"first_name"];
-                    newMember.lastName = memberData[@"last_name"];
-                    newMember.profileImage = memberData[@"profile_image"];
-                }else {
-                    newMember.completedRegistration = NO;
-                }
-                
-                newMessage.sender = newMember;
-            }];
             
             newMessage.text = messageData[@"text"];
             newMessage.messageID = messageID;
