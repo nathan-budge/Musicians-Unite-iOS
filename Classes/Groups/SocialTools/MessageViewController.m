@@ -98,11 +98,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    NSLog(@"%lu", (unsigned long)self.messageThread.messages.count);
-    
-    
-    
     
     self.bounces = YES;
     self.shakeToClearEnabled = YES;
@@ -127,9 +122,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
     
     self.typingIndicatorView.canResignByTouch = YES;
-    
-    [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
-    [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":"]];
 }
 
 
@@ -169,21 +161,21 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-- (void)editLastMessage:(id)sender
+- (void)editOrDeleteMessage:(UIGestureRecognizer *)gesture
 {
-    if (self.textView.text.length > 0) {
-        return;
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:@"Delete"
+                                                        otherButtonTitles:@"Edit", nil];
+        
+        MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
+        actionSheet.tag = cell.indexPath.row;
+        [actionSheet showInView:gesture.view];
     }
-    
-    NSInteger lastSectionIndex = [self.tableView numberOfSections]-1;
-    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:lastSectionIndex]-1;
-    
-    Message *lastMessage = [self.messages objectAtIndex:lastRowIndex];
-
-    [self editText:lastMessage.text];
-    
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
+
 
 
 #pragma mark - Overriden Methods
@@ -209,8 +201,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)didPressLeftButton:(id)sender
 {
-    // Notifies the view controller when the left button's action has been triggered, manually.
-    
     [super didPressLeftButton:sender];
 }
 
@@ -222,18 +212,14 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.textView refreshFirstResponder];
     
     Message *message = [Message new];
-    message.username = @"Nathan";
+    message.sender = self.user;
     message.text = [self.textView.text copy];
-    
-    UIImage *profileImage = [Utilities decodeBase64ToImage:self.user.profileImage];
-    message.profileImage =profileImage;
     
     Firebase *newMessage = [[self.ref childByAppendingPath:@"messages"] childByAutoId];
     
     NSDictionary *messageData = @{
-                                  @"username":message.username,
+                                  @"sender":self.user.userID,
                                   @"text":message.text,
-                                  @"profile_image":self.user.profileImage,
                                   };
     
     [newMessage setValue:messageData];
@@ -258,51 +244,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super didPressRightButton:sender];
 }
 
-- (void)didPressArrowKey:(id)sender
-{
-    [super didPressArrowKey:sender];
-    
-    UIKeyCommand *keyCommand = (UIKeyCommand *)sender;
-    
-    if ([keyCommand.input isEqualToString:UIKeyInputUpArrow]) {
-        [self editLastMessage:nil];
-    }
-}
 
 - (NSString *)keyForTextCaching
 {
     return [[NSBundle mainBundle] bundleIdentifier];
 }
 
-- (void)didPasteMediaContent:(NSDictionary *)userInfo
-{
-    // Notifies the view controller when the user has pasted a media (image, video, etc) inside of the text view.
-    
-    SLKPastableMediaType mediaType = [userInfo[SLKTextViewPastedItemMediaType] integerValue];
-    NSString *contentType = userInfo[SLKTextViewPastedItemContentType];
-    NSData *contentData = userInfo[SLKTextViewPastedItemData];
-    
-    NSLog(@"%s : %@",__FUNCTION__, contentType);
-    
-    if ((mediaType & SLKPastableMediaTypePNG) || (mediaType & SLKPastableMediaTypeJPEG)) {
-        
-        Message *message = [Message new];
-        message.username = @"Nathan";
-        message.text = @"Attachment";
-        message.attachment = [UIImage imageWithData:contentData scale:[UIScreen mainScreen].scale];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
-        UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
-        
-        [self.tableView beginUpdates];
-        [self.messages insertObject:message atIndex:0];
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
-        [self.tableView endUpdates];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-    }
-}
 
 - (void)willRequestUndo
 {
@@ -311,65 +258,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super willRequestUndo];
 }
 
-- (void)didCommitTextEditing:(id)sender
-{
-    // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
-    
-    Message *message = [Message new];
-    message.username = @"Nathan";
-    message.text = [self.textView.text copy];
-    
-    [self.messages removeObjectAtIndex:0];
-    [self.messages insertObject:message atIndex:0];
-    [self.tableView reloadData];
-    
-    [super didCommitTextEditing:sender];
-}
-
-- (void)didCancelTextEditing:(id)sender
-{
-    // Notifies the view controller when tapped on the left "Cancel" button
-
-    [super didCancelTextEditing:sender];
-}
-
 - (BOOL)canPressRightButton
 {
     return [super canPressRightButton];
 }
 
-- (BOOL)canShowAutoCompletion
-{
-    NSArray *array = nil;
-    NSString *prefix = self.foundPrefix;
-    NSString *word = self.foundWord;
-    
-    self.searchResult = nil;
-    
-    if ([prefix isEqualToString:@"@"] && word.length > 0) {
-        array = [self.users filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@ AND self !=[c] %@", word, word]];
-    }
-    else if ([prefix isEqualToString:@"#"] && word.length > 0) {
-        array = [self.channels filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
-    }
-    else if ([prefix isEqualToString:@":"] && word.length > 0) {
-        array = [self.emojis filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH[c] %@", word]];
-    }
-    
-    if (array.count > 0) {
-        array = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    }
-    
-    self.searchResult = [[NSMutableArray alloc] initWithArray:array];
-    
-    return self.searchResult.count > 0;
-}
-
-- (CGFloat)heightForAutoCompletionView
-{
-    CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    return cellHeight*self.searchResult.count;
-}
 
 
 #pragma mark - UITableViewDataSource Methods
@@ -381,45 +274,31 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([tableView isEqual:self.tableView]) {
-        return self.messages.count;
-    }
-    else {
-        return self.searchResult.count;
-    }
+    return self.messages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([tableView isEqual:self.tableView]) {
-        return [self messageCellForRowAtIndexPath:indexPath];
-    }
-    else {
-        return [self autoCompletionCellForRowAtIndexPath:indexPath];
-    }
+    return [self messageCellForRowAtIndexPath:indexPath];
 }
 
 - (MessageTableViewCell *)messageCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
     
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editOrDeleteMessage:)];
+    [cell addGestureRecognizer:longPress];
+    
     if (!cell.textLabel.text) {
-        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editCellMessage:)];
-        [cell addGestureRecognizer:longPress];
+        
     }
     
     Message *message = self.messages[indexPath.row];
     
-    cell.titleLabel.text = message.username;
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", message.sender.firstName, message.sender.lastName];
     cell.bodyLabel.text = message.text;
     
-    if (message.attachment) {
-        cell.attachmentView.image = message.attachment;
-        cell.attachmentView.layer.shouldRasterize = YES;
-        cell.attachmentView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    }
-    
-    cell.tumbnailView.image = message.profileImage;
+    cell.tumbnailView.image = [Utilities decodeBase64ToImage:message.sender.profileImage];
     cell.tumbnailView.layer.shouldRasterize = YES;
     cell.tumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
@@ -433,26 +312,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return cell;
 }
 
-- (MessageTableViewCell *)autoCompletionCellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    MessageTableViewCell *cell = (MessageTableViewCell *)[self.autoCompletionView dequeueReusableCellWithIdentifier:AutoCompletionCellIdentifier];
-    cell.indexPath = indexPath;
-
-    NSString *item = self.searchResult[indexPath.row];
-    
-    if ([self.foundPrefix isEqualToString:@"#"]) {
-        item = [NSString stringWithFormat:@"# %@", item];
-    }
-    else if ([self.foundPrefix isEqualToString:@":"]) {
-        item = [NSString stringWithFormat:@":%@:", item];
-    }
-    
-    cell.titleLabel.text = item;
-    cell.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-    
-    return cell;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -469,7 +328,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         CGFloat width = CGRectGetWidth(tableView.frame)-kAvatarSize;
         width -= 25.0;
         
-        CGRect titleBounds = [message.username boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
+        CGRect titleBounds = [message.sender.firstName boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         CGRect bodyBounds = [message.text boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
         if (message.text.length == 0) {
@@ -513,24 +372,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-#pragma mark - UITableViewDelegate Methods
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        
-        NSMutableString *item = [self.searchResult[indexPath.row] mutableCopy];
-        
-        if ([self.foundPrefix isEqualToString:@"@"] || [self.foundPrefix isEqualToString:@":"]) {
-            [item appendString:@":"];
-        }
-        
-        [item appendString:@" "];
-        
-        [self acceptAutoCompletionWithString:item keepPrefix:YES];
-    }
-}
-
 
 #pragma mark - UIScrollViewDelegate Methods
 
@@ -553,5 +394,35 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [super textViewDidChangeSelection:textView];
 }
+
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            [self removeMessage:actionSheet.tag];
+            break;
+        case 1:
+            //[self editCellMessage:];
+            break;
+        default:
+            break;
+    }
+    
+}
+
+- (void)removeMessage:(NSInteger)row
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    
+    Message *removedMessage = [self.messages objectAtIndex:row];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", self.messageThread.messageThreadID, removedMessage.messageID]] removeValue];
+    
+    [self.messages removeObjectAtIndex:row];
+    [self.messageThread.messages removeObject:removedMessage];
+    
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 
 @end

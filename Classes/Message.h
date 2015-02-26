@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "User.h"
 
 @interface Message : NSObject
 
-@property (nonatomic) NSString *username;
+@property (nonatomic) NSString *messageID;
+@property (nonatomic) User *sender;
 @property (nonatomic) NSString *text;
 @property (nonatomic) UIImage *attachment;
-@property (nonatomic) UIImage *profileImage;
 
 @end

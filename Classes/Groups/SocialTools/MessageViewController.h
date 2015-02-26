@@ -11,7 +11,7 @@
 @class MessageThread;
 @class User;
 
-@interface MessageViewController : SLKTextViewController
+@interface MessageViewController : SLKTextViewController <UIActionSheetDelegate>
 
 @property (nonatomic) MessageThread *messageThread;
 @property (nonatomic) User *user;
