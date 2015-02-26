@@ -113,11 +113,17 @@
     
     
     Message *mostRecentMessage = [messageThread.messages lastObject];
-    if ([mostRecentMessage.sender isEqual:self.user]) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];
+    
+    if (mostRecentMessage) {
+        if ([mostRecentMessage.sender isEqual:self.user]) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];
+        } else {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@: %@", mostRecentMessage.sender.firstName, mostRecentMessage.sender.lastName, mostRecentMessage.text];
+        }
     } else {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@: %@", mostRecentMessage.sender.firstName, mostRecentMessage.sender.lastName, mostRecentMessage.text];
+        cell.detailTextLabel.text = @"";
     }
+   
     
     
     

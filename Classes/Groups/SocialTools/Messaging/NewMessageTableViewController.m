@@ -20,6 +20,8 @@
 
 @property (nonatomic) Firebase *ref;
 
+@property (nonatomic) NSMutableArray *registeredMembers;
+
 @end
 
 @implementation NewMessageTableViewController
@@ -33,12 +35,24 @@
     return _ref;
 }
 
+-(NSMutableArray *)registeredMembers
+{
+    if (!_registeredMembers) {
+        _registeredMembers = [[NSMutableArray alloc] init];
+    }
+    
+    return _registeredMembers;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     for (User *member in self.group.members) {
-        member.selected = NO;
+        if (member.completedRegistration) {
+            member.selected = NO;
+            [self.registeredMembers addObject:member];
+        }
     }
 }
 
@@ -54,7 +68,7 @@
     Firebase* newMessageThread = [[self.ref childByAppendingPath:@"message_threads"] childByAutoId];
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads", self.group.groupID]] updateChildValues:@{newMessageThread.key:@YES}];
     
-    for (User *member in self.group.members) {
+    for (User *member in self.registeredMembers) {
         
         if (member.selected) {
              [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
@@ -77,7 +91,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {    
-    return [self.group.members count];
+    return [self.registeredMembers count];
 }
 
 
@@ -87,7 +101,7 @@
         return @"Select Members";
     }
     
-    return @"No Members";
+    return @"No Registered Members";
 }
 
 
@@ -100,22 +114,14 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     
-    User *member = [self.group.members objectAtIndex:indexPath.row];
+    User *member = [self.registeredMembers objectAtIndex:indexPath.row];
     
-    if (member.completedRegistration) {
-        
-        #warning TODO - Make Profile Image Round
-        UIImage *profileImage = [Utilities decodeBase64ToImage:member.profileImage];
-        cell.imageView.image = profileImage;
-        
-        cell.textLabel.textColor = [UIColor blackColor];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
-    } else {
-        cell.textLabel.textColor = [UIColor grayColor];
-        cell.textLabel.text = member.email;
-        cell.imageView.image = [UIImage imageNamed:@"profile_logo"];
-    }
+    #warning TODO - Make Profile Image Round
+    UIImage *profileImage = [Utilities decodeBase64ToImage:member.profileImage];
+    cell.imageView.image = profileImage;
     
+    cell.textLabel.textColor = [UIColor blackColor];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
     
     if (member.selected) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -131,7 +137,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    User *selectedUser = [self.group.members objectAtIndex:indexPath.row];
+    User *selectedUser = [self.registeredMembers objectAtIndex:indexPath.row];
     selectedUser.selected = !selectedUser.selected;
     
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -140,7 +146,6 @@
 
 
 #pragma mark - Navigation
-
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
