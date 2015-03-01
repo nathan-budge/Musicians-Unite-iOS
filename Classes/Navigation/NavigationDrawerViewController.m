@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
+#import "SharedData.h"
 
 #import "NavigationDrawerViewController.h"
 #import "UserSettingsViewController.h"
@@ -27,7 +28,8 @@
 
 @property (nonatomic, strong) UINavigationController *transitionsNavigationController;
 
-@property (nonatomic) GroupsTableViewController *groupTableViewController;
+@property (weak, nonatomic) IBOutlet UIButton *buttonHome;
+@property (weak, nonatomic) IBOutlet UIButton *buttonUserSettings;
 
 @end
 
@@ -46,17 +48,14 @@
 }
 
 
-
-#pragma mark - View Handling
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
  
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
-    self.groupTableViewController = [self.transitionsNavigationController.viewControllers objectAtIndex:0];
 }
-
 
 
 #pragma mark - Buttons
@@ -64,10 +63,8 @@
 - (IBAction)actionHome:(id)sender
 {
     self.slidingViewController.topViewController = self.transitionsNavigationController;
-    
     [self.slidingViewController resetTopViewAnimated:YES];
 }
-
 
 - (IBAction)actionUserSettings:(id)sender
 {
@@ -75,12 +72,16 @@
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
-
 - (IBAction)actionLogout:(id)sender
 {
     [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
     
-    [self.groupTableViewController logout];
+    SharedData *childObservers = [SharedData sharedInstance];
+    
+    for (Firebase *ref in childObservers.childObservers) {
+        [ref removeAllObservers];
+    }
+    
     [self.ref unauth];
 
     [self performSegueWithIdentifier:@"Logout" sender:sender];

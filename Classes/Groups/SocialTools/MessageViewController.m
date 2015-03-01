@@ -298,7 +298,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", message.sender.firstName, message.sender.lastName];
     cell.bodyLabel.text = message.text;
     
-    cell.tumbnailView.image = [Utilities decodeBase64ToImage:message.sender.profileImage];
+    cell.tumbnailView.image = message.sender.profileImage;
     cell.tumbnailView.layer.shouldRasterize = YES;
     cell.tumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     

@@ -18,6 +18,7 @@
 #import "User.h"
 #import "MessageThread.h"
 
+
 @interface NewMessageTableViewController ()
 
 @property (nonatomic) Firebase *ref;
@@ -26,7 +27,10 @@
 
 @end
 
+
 @implementation NewMessageTableViewController
+
+#pragma mark - Lazy instantiation
 
 -(Firebase *)ref
 {
@@ -47,6 +51,8 @@
 }
 
 
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -59,13 +65,10 @@
 }
 
 
-
 #pragma mark - Buttons
 
 - (IBAction)actionCreateChat:(id)sender
 {
-    //Deal with case when no members are selected
-    
     NSMutableArray *newThreadMembers = [[NSMutableArray alloc] init];
     for (User *member in self.registeredMembers) {
         if (member.selected) {
@@ -89,8 +92,10 @@
     
     if (matchingGroup) {
         [SVProgressHUD showErrorWithStatus:@"Thread already exists" maskType:SVProgressHUDMaskTypeBlack];
+        
     } else if (newThreadMembers.count == 0){
         [SVProgressHUD showErrorWithStatus:@"No members selected" maskType:SVProgressHUDMaskTypeBlack];
+        
     } else {
         Firebase* newMessageThread = [[self.ref childByAppendingPath:@"message_threads"] childByAutoId];
         
@@ -107,6 +112,12 @@
 }
 
 
+#pragma mark - Prepare for Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+}
+
 
 #pragma mark - Table view data source
 
@@ -115,40 +126,37 @@
     return 1;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {    
     return [self.registeredMembers count];
 }
 
-
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if ([self.group.members count] > 0) {
+    if (self.registeredMembers.count > 0) {
         return @"Select Members";
     }
     
     return @"No Registered Members";
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
     
     User *member = [self.registeredMembers objectAtIndex:indexPath.row];
     
-    #warning TODO - Make Profile Image Round
-    UIImage *profileImage = [Utilities decodeBase64ToImage:member.profileImage];
-    cell.imageView.image = profileImage;
+    UIImageView *profileImageView = (UIImageView *)[cell viewWithTag:1];
+    profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
+    profileImageView.layer.masksToBounds = YES;
+    [profileImageView.layer setBorderColor: [[UIColor whiteColor] CGColor]];
+    [profileImageView.layer setBorderWidth: 1.0];
     
-    cell.textLabel.textColor = [UIColor blackColor];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
+    UILabel *userName = (UILabel *)[cell viewWithTag:2];
+    
+    profileImageView.image = member.profileImage;
+    
+    userName.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
     
     if (member.selected) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -159,7 +167,6 @@
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -169,14 +176,5 @@
     
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
-
-
-
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-}
-
 
 @end

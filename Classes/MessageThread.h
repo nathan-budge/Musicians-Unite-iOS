@@ -10,12 +10,16 @@
 
 @class Message;
 @class User;
+@class Firebase;
+@class Group;
 
 @interface MessageThread : NSObject
 
 @property (nonatomic) NSString *messageThreadID;
 @property (nonatomic) NSMutableArray *members;
 @property (nonatomic) NSMutableArray *messages;
+
+- (MessageThread *)initWithRef: (Firebase *)messageThreadRef;
 
 - (void)addMember: (User *)member;
 - (void)addMessage: (Message *)message;

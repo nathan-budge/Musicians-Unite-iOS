@@ -7,19 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class User;
 @class MessageThread;
+@class Firebase;
 
 @interface Group : NSObject
 
 @property (nonatomic) NSString *groupID;
 @property (nonatomic) NSString *name;
-@property (nonatomic) NSString *profileImage;
+@property (nonatomic) UIImage *profileImage;
 @property (nonatomic) NSMutableArray *members;
 @property (nonatomic) NSMutableArray *messageThreads;
 
-- (id)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
+
+- (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
+- (Group *)initWithRef: (Firebase *)groupRef;
 
 - (void)addMember: (User *)member;
 - (void)removeMember:(User *)member;

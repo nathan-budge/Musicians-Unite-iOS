@@ -11,6 +11,7 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+#import "SharedData.h"
 
 #import "MemberManagementViewController.h"
 
@@ -21,16 +22,15 @@
 @interface MemberManagementViewController ()
 
 @property (nonatomic) Firebase *ref;
-
 @property (nonatomic) Firebase *userRef;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonConfirm;
-
 @property (weak, nonatomic) IBOutlet UITextField *fieldEmail;
-
 @property (weak, nonatomic) IBOutlet UITableView *memberTableView;
 
 @property (nonatomic) NSMutableArray *members;
+
+@property (nonatomic) SharedData *sharedData;
 
 @end
 
@@ -66,16 +66,22 @@
     return _members;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
 
 
-#pragma mark - View Handling
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     if(self.group.groupID) {
-        
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
         
         self.buttonConfirm.hidden = YES;
@@ -101,7 +107,6 @@
 }
 
 
-
 #pragma mark - Buttons
 
 - (IBAction)actionAddMember:(id)sender
@@ -112,29 +117,24 @@
     NSArray *existingMember = [self.members filteredArrayUsingPredicate:predicate];
     
     if ([existingMember count] > 0) {
-        
         self.fieldEmail.text = @"";
-        
         [SVProgressHUD showErrorWithStatus:@"Member already exists" maskType:SVProgressHUDMaskTypeBlack];
         
     } else if (![Utilities validateEmail:self.fieldEmail.text]|| [self.fieldEmail.text isEqualToString:self.ref.authData.providerData[@"email"]]){
-        
         self.fieldEmail.text = @"";
-        
         [SVProgressHUD showErrorWithStatus:@"Invalid email" maskType:SVProgressHUDMaskTypeBlack];
         
     } else{
-        [self addMember];
+        [self addMemberToList];
         [self dismissKeyboard];
     }
 }
 
-
--(void)addMember
+-(void)addMemberToList
 {
-    Firebase *userRef = [self.ref childByAppendingPath:@"users"];
+    self.userRef = [self.ref childByAppendingPath:@"users"];
     
-    [[[userRef queryOrderedByChild:@"email"] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+    [[[self.userRef queryOrderedByChild:@"email"] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         User *newMember = [[User alloc] init];
         
@@ -150,15 +150,14 @@
                 newMember.completedRegistration = YES;
                 newMember.firstName = userData[userID][@"first_name"];
                 newMember.lastName = userData[userID][@"last_name"];
-                newMember.profileImage = userData[userID][@"profile_image"];
-            }
-            else {
+                newMember.profileImage = [Utilities decodeBase64ToImage:userData[userID][@"profile_image"]];
+                
+            }else {
                 newMember.completedRegistration = NO;
                 newMember.email = self.fieldEmail.text;
             }
             
         } else {
-            
             newMember.email = self.fieldEmail.text;
             newMember.completedRegistration = NO;
             
@@ -178,7 +177,6 @@
     }];
 }
 
-
 - (IBAction)actionCreateGroup:(id)sender {
     
     [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
@@ -187,15 +185,15 @@
     
     NSDictionary *newGroup = @{
                                @"name":self.group.name,
-                               @"profile_image":self.group.profileImage,
+                               @"profile_image":[Utilities encodeImageToBase64:self.group.profileImage],
                                };
     
     [groupRef setValue:newGroup];
     
-    [[[self.userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
+    [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups", self.ref.authData.uid]] updateChildValues:@{groupRef.key:@YES}];
     [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
     
-    [self addGroupMembers:self.members withUserRef:self.userRef andGroupRef:groupRef];
+    [self addMembers:self.members toGroup:groupRef];
     
     [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
     
@@ -204,27 +202,46 @@
     [self dismissKeyboard];
 }
 
+- (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef
+{
+    for (User *member in members) {
+        
+        if (member.userID) {
+            [[groupRef childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
+            [[[self.userRef childByAppendingPath:member.userID] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
+
+        } else {
+            NSDictionary *newTempMember = @{
+                                            @"email":member.email,
+                                            @"completed_registration":@NO
+                                            };
+            
+            Firebase *tempMemberRef = [self.userRef childByAutoId];
+            
+            [tempMemberRef setValue:newTempMember];
+            [[tempMemberRef childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
+            [[groupRef childByAppendingPath:@"members"] updateChildValues:@{tempMemberRef.key:@YES}];
+        }
+    }
+}
 
 -(void)actionSaveGroup
 {
     [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
     
-    
     if ([self.group.members count] > 0) {
         
         for (User *member in self.group.members) {
-            
+        
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
             NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
             
             if ([foundMember count] > 0) {
-                
                 [self.members removeObject:[foundMember objectAtIndex:0]];
                 
             } else {
-                
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", member.userID, self.group.groupID]] removeValue];
+                [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups/%@", member.userID, self.group.groupID]] removeValue];
                 
                 if (!member.completedRegistration) {
                     [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
@@ -237,44 +254,14 @@
     
     if ([self.members count] > 0) {
         Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
-        [self addGroupMembers:self.members withUserRef:self.userRef andGroupRef:oldGroup];
+        [self addMembers:self.members toGroup:oldGroup];
     }
-    
-    [self.memberTableView reloadData];
     
     [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
     
     
-    
     [self dismissKeyboard];
 }
-
-
-- (void) addGroupMembers: (NSMutableArray *)members withUserRef:(Firebase *)userRef andGroupRef:(Firebase *)groupRef
-{
-    for (User *member in members) {
-        
-        if (member.userID) {
-            
-            [[groupRef childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
-            [[[userRef childByAppendingPath:member.userID] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
-
-        } else {
-            
-            NSDictionary *newTempMember = @{
-                                            @"email":member.email,
-                                            @"completed_registration":@NO
-                                            };
-            
-            Firebase *tempMemberRef = [userRef childByAutoId];
-            
-            [tempMemberRef setValue:newTempMember];
-            [[tempMemberRef childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
-            [[groupRef childByAppendingPath:@"members"] updateChildValues:@{tempMemberRef.key:@YES}];
-        }
-    }
-}
-
 
 -(void)actionDeleteMember:(id)sender
 {
@@ -302,14 +289,12 @@
 }
 
 
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -323,35 +308,34 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
     
     User *member = [self.members objectAtIndex:indexPath.row];
     
+    //Get subviews
+    UIImageView *profileImageView = (UIImageView *)[cell viewWithTag:1];
+    profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
+    profileImageView.layer.masksToBounds = YES;
+    [profileImageView.layer setBorderColor: [[UIColor whiteColor] CGColor]];
+    [profileImageView.layer setBorderWidth: 1.0];
+    
+    UILabel *userName = (UILabel *)[cell viewWithTag:2];
+    
+    //Set subviews
     if (member.completedRegistration) {
-        #warning TODO - Make Profile Image Round
-        UIImage *profileImage = [Utilities decodeBase64ToImage:member.profileImage];
-        cell.imageView.image = profileImage;
-        
-        cell.textLabel.textColor = [UIColor blackColor];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
+        profileImageView.image = member.profileImage;
+        userName.textColor = [UIColor blackColor];
+        userName.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
+
     } else {
-        cell.textLabel.textColor = [UIColor grayColor];
-        cell.textLabel.text = member.email;
-        cell.imageView.image = [UIImage imageNamed:@"profile_logo"];
+        profileImageView.image = [UIImage imageNamed:@"profile_logo"];
+        userName.textColor = [UIColor grayColor];
+        userName.text = member.email;
     }
     
-    UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    deleteButton.frame = CGRectMake(325, 20, 20, 20);
-    [deleteButton setTitle:@"X" forState:UIControlStateNormal];
+    UIButton *deleteButton = (UIButton *)[cell viewWithTag:3];
     [deleteButton setTag:indexPath.row];
     [deleteButton addTarget:self action:@selector(actionDeleteMember:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [cell addSubview:deleteButton];
     
     return cell;
 }

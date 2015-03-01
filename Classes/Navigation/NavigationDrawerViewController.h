@@ -14,8 +14,5 @@
 @interface NavigationDrawerViewController : UIViewController
 
 @property (nonatomic) User *user;
-@property (nonatomic) Group *groups;
-
-@property (nonatomic) NSMutableArray *childObservers;
 
 @end

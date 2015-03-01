@@ -121,9 +121,4 @@
     return _attachmentView;
 }
 
-- (BOOL)needsPlaceholder
-{
-    return self.tumbnailView.image ? NO : YES;
-}
-
 @end

@@ -40,7 +40,7 @@
 }
 
 
-#pragma mark - View handling
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,7 +48,6 @@
     //Add tap gesture for dismissing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
-
 
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -107,7 +106,6 @@
     self.fieldPassword.text = @"";
     self.fieldPassword.text = tmpString;
 }
-
 
 - (IBAction)actionForgotPassword:(id)sender {
 

@@ -16,6 +16,7 @@
 #import "Message.h"
 #import "User.h"
 
+
 @interface MessagingTableViewController ()
 
 @property (nonatomic) MessageThread *selectedMessageThread;
@@ -24,6 +25,8 @@
 
 
 @implementation MessagingTableViewController
+
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,7 +43,6 @@
 }
 
 
-
 #pragma mark - Buttons
 
 -(void)actionNewGroup
@@ -48,6 +50,20 @@
     [self performSegueWithIdentifier:@"newMessage" sender:self];
 }
 
+
+#pragma mark - Prepare for Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"newMessage"]) {
+        NewMessageTableViewController *destViewController = segue.destinationViewController;
+        destViewController.group = self.group;
+    } else if ([segue.identifier isEqualToString:@"viewThread"]) {
+        MessageViewController *destViewController = segue.destinationViewController;
+        destViewController.messageThread = self.selectedMessageThread;
+        destViewController.user = self.user;
+    }
+}
 
 
 #pragma mark - Table view data source
@@ -76,51 +92,52 @@
    
     NSMutableString *title = [[NSMutableString alloc] init];
     if ([messageThread.members count] == 1) {
-        
-        [title appendString:@"You and "];
-        
         User *member = [messageThread.members objectAtIndex:0];
+        [title appendString:[NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName]];
         
-        if (member.completedRegistration) {
-            [title appendString:[NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName]];
-        } else {
-            [title appendString:[NSString stringWithFormat:@"%@",member.email]];
-        }
-    } else {
-        
-        [title appendString:@"You, "];
-        
+    } else if ([messageThread.members count] == 2){
         for (int i = 0; i < [messageThread.members count]; i++) {
             
             User *member = [messageThread.members objectAtIndex:i];
             
             if (i == ([messageThread.members count] - 1)) {
-                if (member.completedRegistration) {
-                    [title appendString:[NSString stringWithFormat:@"and %@ %@", member.firstName, member.lastName]];
-                } else {
-                    [title appendString:[NSString stringWithFormat:@"and %@",member.email]];
-                }
+                [title appendString:[NSString stringWithFormat:@"and %@ %@", member.firstName, member.lastName]];
+            
             } else {
-                if (member.completedRegistration) {
-                    [title appendString:[NSString stringWithFormat:@"%@ %@, ", member.firstName, member.lastName]];
-                } else {
-                    [title appendString:[NSString stringWithFormat:@"%@, ",member.email]];
-                }
+                [title appendString:[NSString stringWithFormat:@"%@ %@ ", member.firstName, member.lastName]];
+    
             }
         }
+        
+    } else {
+        for (int i = 0; i < [messageThread.members count]; i++) {
+            
+            User *member = [messageThread.members objectAtIndex:i];
+            
+            if (i == ([messageThread.members count] - 1)) {
+                [title appendString:[NSString stringWithFormat:@"and %@ %@", member.firstName, member.lastName]];
+                
+            } else {
+                [title appendString:[NSString stringWithFormat:@"%@ %@, ", member.firstName, member.lastName]];
+                
+            }
+        }
+        
     }
     
     cell.textLabel.text = title;
-    
     
     Message *mostRecentMessage = [messageThread.messages lastObject];
     
     if (mostRecentMessage) {
         if ([mostRecentMessage.sender isEqual:self.user]) {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];
+            
         } else {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@: %@", mostRecentMessage.sender.firstName, mostRecentMessage.sender.lastName, mostRecentMessage.text];
+            
         }
+        
     } else {
         cell.detailTextLabel.text = @"";
     }
@@ -134,23 +151,5 @@
     
     [self performSegueWithIdentifier:@"viewThread" sender:nil];
 }
-
-
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"newMessage"]) {
-        NewMessageTableViewController *destViewController = segue.destinationViewController;
-        destViewController.group = self.group;
-    } else if ([segue.identifier isEqualToString:@"viewThread"]) {
-        MessageViewController *destViewController = segue.destinationViewController;
-        destViewController.messageThread = self.selectedMessageThread;
-        destViewController.user = self.user;
-    }
-}
-
 
 @end

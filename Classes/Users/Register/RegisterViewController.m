@@ -52,8 +52,7 @@
 }
 
 
-#pragma mark - View handling
-
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
@@ -73,7 +72,6 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
     
 }
-
 
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -114,7 +112,6 @@
     self.fieldPassword.text = tmpString;
 }
 
-
 - (IBAction)actionRegisterUser:(id)sender {
     
     [SVProgressHUD showWithStatus:@"Registering..." maskType:SVProgressHUDMaskTypeBlack];
@@ -142,7 +139,6 @@
         self.fieldPassword.text = @"";
     }
 }
-
 
 - (void)createUser: (NSDictionary *)tempUser
 {
@@ -202,7 +198,6 @@
     }];
 }
 
-
 - (void)addGroups: (NSString *)tempUserID withAuthData: (FAuthData *)authData andNewUserRef: (Firebase *)newUserRef
 {
     [[self.usersRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups", tempUserID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -225,7 +220,6 @@
         [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
     }];
 }
-
 
 
 #pragma mark - Keyboard Handling
@@ -282,7 +276,6 @@
     
     return YES;
 }
-
 
 
 #pragma mark - Profile Image Handling

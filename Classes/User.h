@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class Group;
+@class Firebase;
 
 @interface User : NSObject
 
@@ -16,10 +18,12 @@
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
 @property (nonatomic) NSString *email;
-@property (nonatomic) NSString *profileImage;
+@property (nonatomic) UIImage *profileImage;
 @property (nonatomic) BOOL completedRegistration;
-@property (nonatomic) BOOL selected; //For creating new chats
+@property (nonatomic) BOOL selected;
 @property (nonatomic) NSMutableArray *groups;
+
+- (User *)initWithRef: (Firebase *)userRef;
 
 - (void)addGroup: (Group *)group;
 - (void)removeGroup:(Group *)group;

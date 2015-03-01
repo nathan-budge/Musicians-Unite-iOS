@@ -22,10 +22,8 @@
 
 @property (nonatomic) Firebase *ref;
 
-@property (nonatomic) IBOutlet UITextField *fieldGroupName;
-
-@property (nonatomic) IBOutlet UIButton *buttonConfirm;
-
+@property (weak, nonatomic) IBOutlet UITextField *fieldGroupName;
+@property (weak, nonatomic) IBOutlet UIButton *buttonConfirm;
 @property (weak, nonatomic) IBOutlet UIButton *buttonProfileImage;
 
 @end
@@ -45,8 +43,7 @@
 }
 
 
-
-#pragma mark - View Handling
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
@@ -55,11 +52,11 @@
     if (self.group) {
         self.fieldGroupName.text = self.group.name;
         
-        UIImage *profileImage = [Utilities decodeBase64ToImage:self.group.profileImage];
-        [self.buttonProfileImage setImage:profileImage forState:UIControlStateNormal];
+        [self.buttonProfileImage setImage:self.group.profileImage forState:UIControlStateNormal];
         
         [self.buttonConfirm setTitle:@"Leave Group" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
+        
     } else {
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
@@ -68,10 +65,10 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     if (self.group) {
         self.tabBarController.title = @"Settings";
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
@@ -85,7 +82,6 @@
 }
 
 
-
 #pragma mark - Buttons
 
 - (IBAction)actionProfileImage:(id)sender
@@ -96,11 +92,8 @@
                                 destructiveButtonTitle:@"Remove Photo"
                                      otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
 
-    
-    
     [actionSheet showInView:self.view];
 }
-
 
 - (IBAction)actionMemberManagement:(id)sender {
     
@@ -111,11 +104,9 @@
     }
 }
 
-
 - (IBAction)actionCreateOrLeaveGroup:(id)sender {
     self.group ? [self actionLeaveGroup] : [self actionCreateGroup];
 }
-
 
 -(void)actionLeaveGroup
 {
@@ -130,24 +121,20 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-
 -(void)actionCreateGroup
 {
     [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
     
     if ([self.fieldGroupName.text isEqualToString:@""]) {
         [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
-    }
-    else {
         
+    } else {
         Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
         Firebase *userRef = [self.ref childByAppendingPath:@"users"];
         
-        NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
-        
         NSDictionary *newGroup = @{
                                    @"name":self.fieldGroupName.text,
-                                   @"profile_image":profileImageString,
+                                   @"profile_image":[Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image],
                                    };
         
         [groupRef setValue:newGroup];
@@ -162,7 +149,6 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
-
 
 -(void)actionSaveGroup
 {
@@ -185,14 +171,12 @@
 }
 
 
-
 #pragma mark - Keyboard Handling
 
 -(void)dismissKeyboard
 {
     [self.view endEditing:YES];
 }
-
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -202,13 +186,11 @@
 }
 
 
-
 #pragma mark - Prepare For Segue
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
-        
         MemberManagementViewController *destViewController = segue.destinationViewController;
         
         if (self.group) {
@@ -219,7 +201,6 @@
         }
     }
 }
-
 
 
 #pragma mark - Profile Image Handling

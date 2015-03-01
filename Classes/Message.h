@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "User.h"
+
+@class User;
+@class Group;
 
 @interface Message : NSObject
 
@@ -16,5 +18,7 @@
 @property (nonatomic) User *sender;
 @property (nonatomic) NSString *text;
 @property (nonatomic) UIImage *attachment;
+
+- (Message *)initWithRef: (Firebase *)messageRef;
 
 @end

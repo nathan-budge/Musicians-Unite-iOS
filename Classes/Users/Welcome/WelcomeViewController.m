@@ -14,6 +14,8 @@
 
 @implementation WelcomeViewController
 
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -28,8 +30,14 @@
     self.navigationController.view.backgroundColor = [UIColor clearColor];
 }
 
+
+#pragma mark - Unwind for Delete Account
+
 - (IBAction)unwindToWelcome:(UIStoryboardSegue *)segue {
 }
+
+
+#pragma mark - Status bar color
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;

@@ -36,14 +36,13 @@
     return _ref;
 }
 
+
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    //Add tap gesture for removing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
-    
-    
 }
 
 
@@ -51,7 +50,6 @@
 
 - (IBAction)actionSave:(id)sender
 {
-    
     [SVProgressHUD showWithStatus:@"Changing Password..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
@@ -107,7 +105,5 @@
     
     return YES;
 }
-
-
 
 @end

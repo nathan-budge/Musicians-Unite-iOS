@@ -13,8 +13,5 @@
 @interface GroupsTableViewController : UITableViewController
 
 @property (nonatomic) User *user;
-@property (nonatomic) NSMutableArray *childObservers;
-
--(void)logout;
 
 @end

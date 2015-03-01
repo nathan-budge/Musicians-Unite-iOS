@@ -67,7 +67,7 @@
 }
 
 
-#pragma mark - View handling
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad
 {
@@ -80,7 +80,7 @@
     self.fieldLastName.text = self.user.lastName;
     self.labelEmail.text = self.user.email;
     
-    UIImage *profileImage = [Utilities decodeBase64ToImage:self.user.profileImage];
+    UIImage *profileImage = self.user.profileImage;
     [self.buttonProfileImage setImage:profileImage forState:UIControlStateNormal];
     
     
@@ -98,14 +98,12 @@
 }
 
 
-
 #pragma mark - Buttons
 
 - (IBAction)actionDrawerToggle:(id)sender
 {
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
-
 
 - (IBAction)actionSave:(id)sender
 {
@@ -130,7 +128,6 @@
     }
 }
 
-
 - (IBAction)actionProfileImage:(id)sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
@@ -151,7 +148,6 @@
     alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
     [alert show];
 }
-
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -232,7 +228,6 @@
     [self dismissKeyboard];
     return YES;
 }
-
 
 
 #pragma mark - Profile Image Handling
