@@ -514,8 +514,27 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iH9-HL-fpN">
+                                <rect key="frame" x="54" y="111" width="93" height="30"/>
+                                <state key="normal" title="User Settings">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionUserSettings:" destination="kpE-2P-7MY" eventType="touchUpInside" id="qFg-IT-QMK"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UTR-25-Ukg">
+                                <rect key="frame" x="16" y="63" width="26" height="30"/>
+                                <state key="normal" image="home">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionHome:" destination="kpE-2P-7MY" eventType="touchUpInside" id="aQo-4M-WXv"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LUR-4k-18N">
-                                <rect key="frame" x="116" y="63" width="46" height="30"/>
+                                <rect key="frame" x="54" y="63" width="46" height="30"/>
                                 <state key="normal" title="Home">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -524,14 +543,13 @@
                                     <action selector="actionHome:" destination="kpE-2P-7MY" eventType="touchUpInside" id="dnM-zJ-bFP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iH9-HL-fpN">
-                                <rect key="frame" x="88" y="101" width="93" height="30"/>
-                                <state key="normal" title="User Settings">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bYT-GR-rpW">
+                                <rect key="frame" x="13" y="111" width="33" height="30"/>
+                                <state key="normal" image="settings">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="actionUserSettings:" destination="kpE-2P-7MY" eventType="touchUpInside" id="qFg-IT-QMK"/>
+                                    <action selector="actionUserSettings:" destination="kpE-2P-7MY" eventType="touchUpInside" id="dPV-71-K2I"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1295,8 +1313,10 @@
     <resources>
         <image name="eye_inactive" width="46" height="28"/>
         <image name="hamburger" width="26" height="20"/>
+        <image name="home" width="44" height="55"/>
         <image name="logo" width="218" height="218"/>
         <image name="profile_logo" width="204" height="205"/>
+        <image name="settings" width="52" height="45"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -1305,7 +1325,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="XYD-D0-xNC"/>
-        <segue reference="qHY-cC-UY9"/>
+        <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
     </inferredMetricsTieBreakers>
 </document>
