@@ -122,6 +122,44 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
     
     self.typingIndicatorView.canResignByTouch = YES;
+    
+    NSMutableString *title = [[NSMutableString alloc] init];
+    if ([self.messageThread.members count] == 1) {
+        User *member = [self.messageThread.members objectAtIndex:0];
+        [title appendString:[NSString stringWithFormat:@"%@", member.firstName]];
+        
+    } else if ([self.messageThread.members count] == 2){
+        for (int i = 0; i < [self.messageThread.members count]; i++) {
+            
+            User *member = [self.messageThread.members objectAtIndex:i];
+            
+            if (i == ([self.messageThread.members count] - 1)) {
+                [title appendString:[NSString stringWithFormat:@"and %@", member.firstName]];
+                
+            } else {
+                [title appendString:[NSString stringWithFormat:@"%@ ", member.firstName]];
+                
+            }
+        }
+        
+    } else {
+        for (int i = 0; i < [self.messageThread.members count]; i++) {
+            
+            User *member = [self.messageThread.members objectAtIndex:i];
+            
+            if (i == ([self.messageThread.members count] - 1)) {
+                [title appendString:[NSString stringWithFormat:@"and %@", member.firstName]];
+                
+            } else {
+                [title appendString:[NSString stringWithFormat:@"%@, ", member.firstName]];
+                
+            }
+        }
+        
+    }
+    
+    self.navigationItem.title = title;
+    
 }
 
 

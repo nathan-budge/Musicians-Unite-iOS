@@ -1255,7 +1255,7 @@
             </objects>
             <point key="canvasLocation" x="5015" y="-517"/>
         </scene>
-        <!--Item-->
+        <!--Message View Controller-->
         <scene sceneID="HcQ-Oz-X5D">
             <objects>
                 <viewController id="VXd-zR-ED3" customClass="MessageViewController" sceneMemberID="viewController">
@@ -1268,7 +1268,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="emd-io-Fug"/>
                     <navigationItem key="navigationItem" id="bwF-VH-QUS"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lvt-q2-Lwa" userLabel="First Responder" sceneMemberID="firstResponder"/>
