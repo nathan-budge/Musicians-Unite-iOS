@@ -1013,7 +1013,7 @@
                             <constraint firstItem="Xip-LM-WhQ" firstAttribute="leading" secondItem="Z6g-bx-Yhi" secondAttribute="leadingMargin" id="j7A-cK-szM"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="Q9O-E6-kzw"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="tab_settings" id="Q9O-E6-kzw"/>
                     <navigationItem key="navigationItem" title="New Group" id="3LI-cm-6ok">
                         <barButtonItem key="backBarButtonItem" title="Cancel" id="OHw-Wa-mNP"/>
                     </navigationItem>
@@ -1200,7 +1200,7 @@
                             <outlet property="delegate" destination="Vb0-j3-dKk" id="TSC-2x-7ci"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Messaging" id="J6x-FY-1jC"/>
+                    <tabBarItem key="tabBarItem" title="Messaging" image="chat_bubble" id="J6x-FY-1jC"/>
                     <navigationItem key="navigationItem" id="ecC-IC-23P"/>
                     <connections>
                         <segue destination="VXd-zR-ED3" kind="push" identifier="viewThread" id="wCq-dc-BQa"/>
@@ -1311,12 +1311,14 @@
         </scene>
     </scenes>
     <resources>
+        <image name="chat_bubble" width="34" height="34"/>
         <image name="eye_inactive" width="46" height="28"/>
         <image name="hamburger" width="26" height="20"/>
         <image name="home" width="44" height="55"/>
         <image name="logo" width="218" height="218"/>
         <image name="profile_logo" width="204" height="205"/>
         <image name="settings" width="52" height="45"/>
+        <image name="tab_settings" width="35" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -1324,7 +1326,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="XYD-D0-xNC"/>
+        <segue reference="HFf-E4-FSZ"/>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
     </inferredMetricsTieBreakers>
