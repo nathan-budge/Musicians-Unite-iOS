@@ -33,6 +33,7 @@
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *userRef;
 @property (nonatomic) Firebase *userGroupsRef;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
 
 @property (nonatomic) SharedData *sharedData;
 
@@ -81,6 +82,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //[self.buttonMenu setImage:[UIImage imageNamed:@"hamburger"]];
 
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];

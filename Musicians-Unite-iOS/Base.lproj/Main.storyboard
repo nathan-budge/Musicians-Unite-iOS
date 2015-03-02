@@ -608,17 +608,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Groups" id="O2P-Z8-1Ef">
-                        <barButtonItem key="leftBarButtonItem" title="Item" style="plain" id="gFD-AM-rWb">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mZs-Pm-U48">
-                                <rect key="frame" x="-23" y="-15" width="71" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Menu">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="actionDrawerToggle:" destination="f1v-bp-hIe" eventType="touchUpInside" id="yYG-d8-aPK"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="leftBarButtonItem" image="hamburger" id="nY1-Jt-XMr">
+                            <connections>
+                                <action selector="actionDrawerToggle:" destination="f1v-bp-hIe" id="K92-OK-tW0"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="9fW-6N-g6X">
                             <connections>
@@ -627,6 +620,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="buttonMenu" destination="nY1-Jt-XMr" id="4fj-yZ-jjR"/>
                         <segue destination="35D-ZR-R4b" kind="push" identifier="showGroupTabs" id="mFO-yM-cYg"/>
                     </connections>
                 </tableViewController>
@@ -794,7 +788,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="User Settings" id="Omh-Pb-i5I">
                         <barButtonItem key="backBarButtonItem" title="Cancel" id="PXZ-Dj-w32"/>
-                        <barButtonItem key="leftBarButtonItem" title="Menu" id="VL2-Ym-Qbv">
+                        <barButtonItem key="leftBarButtonItem" image="hamburger" id="VL2-Ym-Qbv">
                             <connections>
                                 <action selector="actionDrawerToggle:" destination="q9J-Gu-GAw" id="cnk-c9-PM0"/>
                             </connections>
@@ -1300,6 +1294,7 @@
     </scenes>
     <resources>
         <image name="eye_inactive" width="46" height="28"/>
+        <image name="hamburger" width="26" height="20"/>
         <image name="logo" width="218" height="218"/>
         <image name="profile_logo" width="204" height="205"/>
     </resources>
