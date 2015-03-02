@@ -73,8 +73,9 @@
         }else {
             self.completedRegistration = NO;
         }
-
+        
         [self.sharedData addUser:self];
+        
     }];
 }
 

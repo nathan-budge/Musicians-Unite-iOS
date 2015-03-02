@@ -38,7 +38,10 @@
     [super viewWillAppear:animated];
     self.tabBarController.title = @"Messages";
     self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionNewGroup)];
-    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
     [self.tableView reloadData];
 }
 
@@ -58,6 +61,7 @@
     if ([segue.identifier isEqualToString:@"newMessage"]) {
         NewMessageTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
+        destViewController.user = self.user;
     } else if ([segue.identifier isEqualToString:@"viewThread"]) {
         MessageViewController *destViewController = segue.destinationViewController;
         destViewController.messageThread = self.selectedMessageThread;

@@ -10,6 +10,8 @@
 #import "SVProgressHUD.h"
 
 #import "NewMessageTableViewController.h"
+#import "MessageViewController.h"
+#import "MessagingTableViewController.h"
 
 #import "Utilities.h"
 #import "AppConstant.h"
@@ -62,6 +64,24 @@
             [self.registeredMembers addObject:member];
         }
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Thread Loaded"
+                                               object:nil];
+}
+
+
+#pragma mark - Notification Center
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Thread Loaded"]) {
+        [SVProgressHUD showSuccessWithStatus:@"Thread Created" maskType:SVProgressHUDMaskTypeBlack];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        
+    }
 }
 
 
@@ -79,14 +99,26 @@
     
     BOOL matchingGroup = NO;
     for (MessageThread *messageThread in self.group.messageThreads) {
+        
         if (messageThread.members.count == newThreadMembers.count) {
+            
             for (User *member in newThreadMembers) {
-                if ([messageThread.members containsObject:member]) {
+                
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
+                NSArray *user = [messageThread.members filteredArrayUsingPredicate:predicate];
+                
+                if (user.count > 0) {
                     matchingGroup = YES;
                 } else {
                     matchingGroup = NO;
+        
                 }
+            
             }
+        }
+        
+        if (matchingGroup) {
+            break;
         }
     }
     
@@ -107,7 +139,9 @@
         
         [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
         
-        [SVProgressHUD showSuccessWithStatus:@"Thread created" maskType:SVProgressHUDMaskTypeBlack];
+        //[self performSegueWithIdentifier:@"viewNewThread" sender:nil];
+        
+        [SVProgressHUD showWithStatus:@"Creating Thread" maskType:SVProgressHUDMaskTypeBlack];
     }
 }
 

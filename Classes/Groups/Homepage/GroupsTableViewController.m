@@ -11,6 +11,7 @@
 
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
+#import "SVProgressHUD.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -89,6 +90,11 @@
                                                  name:@"Data Loaded"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Finished Loading"
+                                               object:nil];
+    
     self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", self.ref.authData.uid];
@@ -99,8 +105,9 @@
         NSLog(@"%@ already exists", self.user.email);
     } else {
         self.user = [[User alloc] initWithRef:self.userRef];
-        
     }
+    
+    [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
     
     [self loadUser];
     [self loadGroups];
@@ -123,8 +130,7 @@
     self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
     [self.sharedData addChildObserver:self.userGroupsRef];
     
-    [self attachListenerForAddedGroupsToUser]; //Also used for loading groups initially
-    
+    [self attachListenerForAddedGroupsToUser]; 
     [self attachListenerForRemovedGroupsToUser];
 }
 
@@ -140,6 +146,13 @@
         
         [self.groups addObject:newGroup];
         [self.user addGroup:newGroup];
+        
+        NSNotification *myNotification =
+        [NSNotification notificationWithName:@"Finished Loading" object:nil];
+        
+        [[NSNotificationQueue defaultQueue]
+         enqueueNotification:myNotification
+         postingStyle:NSPostWhenIdle];
         
     }];
 }
@@ -166,6 +179,10 @@
 {
     if ([[notification name] isEqualToString:@"Data Loaded"]) {
         [self.tableView reloadData];
+        
+    } else if ([[notification name] isEqualToString:@"Finished Loading"]) {
+        [SVProgressHUD showSuccessWithStatus:@"Data Loaded" maskType:SVProgressHUDMaskTypeBlack];
+        
     }
 }
 

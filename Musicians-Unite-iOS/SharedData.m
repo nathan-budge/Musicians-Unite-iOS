@@ -48,15 +48,11 @@
 - (void) addUser:(User *)user
 {
     [self.users addObject:user];
-    NSLog(@"%@", user.email);
-    NSLog(@"%lu", (unsigned long)self.users.count);
 }
 
 - (void) removeUser:(User *)user
 {
     [self.users removeObject:user];
-    NSLog(@"%lu", (unsigned long)self.users.count);
 }
-
 
 @end

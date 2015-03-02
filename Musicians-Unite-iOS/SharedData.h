@@ -15,7 +15,6 @@
 @property (nonatomic, retain) NSMutableArray *childObservers;
 @property (nonatomic, retain) NSMutableArray *users;
 
-
 + (SharedData *)sharedInstance;
 
 - (void) addChildObserver:(Firebase *)childObserver;
