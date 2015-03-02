@@ -39,6 +39,7 @@
     UIViewController *rootViewController = [[UIViewController alloc] init];
     
     if (self.ref.authData) {
+        NSLog(@"%@", self.ref.authData);
         rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SlidingViewController"];
     } else {
         rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];

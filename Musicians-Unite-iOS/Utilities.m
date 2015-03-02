@@ -62,13 +62,37 @@
         
         if ([snapshot.value isEqual:[NSNull null]]) {
             
-            [[ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] removeValue];
-            
-            [[ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                if (![snapshot.value isEqual:[NSNull null]]) {
-                    [[ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", groupID]] removeValue];
+            [[ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                
+                NSDictionary *groupData = snapshot.value;
+                
+                if (![groupData[@"message_threads"] isEqual:[NSNull null]]) {
+                    
+                    for (NSString *messageThreadID in [groupData[@"message_threads"] allKeys]) {
+                        
+                        [[ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", messageThreadID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                            
+                            NSDictionary *messageThreadData = snapshot.value;
+                            
+                            if (![messageThreadData[@"messages"] isEqual:[NSNull null]]) {
+                                
+                                for (NSString *messageID in [messageThreadData[@"messages"] allKeys]) {
+                                    
+                                    [[ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", messageID]] removeValue];
+                                    
+                                }
+                            }
+                            
+                            [[ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", messageThreadID]] removeValue];
+                            
+                        }];
+                    }
                 }
+                
+                [[ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] removeValue];
+                
             }];
+            
 
             [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
                 if (![snapshot.value isEqual:[NSNull null]]) {

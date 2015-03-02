@@ -133,6 +133,13 @@
     self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
     [self.sharedData addChildObserver:self.userGroupsRef];
     
+    [self.userGroupsRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
+        if ([snapshot.value isEqual:[NSNull null]]) {
+            [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
+        }
+    }];
+    
     [self attachListenerForAddedGroupsToUser]; 
     [self attachListenerForRemovedGroupsToUser];
 }
@@ -184,7 +191,7 @@
         [self.tableView reloadData];
         
     } else if ([[notification name] isEqualToString:@"Finished Loading"]) {
-        [SVProgressHUD showSuccessWithStatus:@"Data Loaded" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
         
     }
 }
