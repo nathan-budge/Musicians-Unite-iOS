@@ -11,7 +11,11 @@
 #import "SharedData.h"
 
 #import "User.h"
+#import "Group.h"
 
+@interface SharedData ()
+
+@end
 
 @implementation SharedData
 
@@ -32,11 +36,11 @@
     if (self = [super init]) {
         self.childObservers = [[NSMutableArray alloc] init];
         self.users = [[NSMutableArray alloc] init];
+        self.downloadGroup = dispatch_group_create();
         return self;
     }
     return nil;
 }
-
 
 #pragma mark - Array handling
 
@@ -45,14 +49,22 @@
     [self.childObservers addObject:childObserver];
 }
 
+
 - (void) addUser:(User *)user
 {
     [self.users addObject:user];
+    dispatch_group_leave(self.downloadGroup);
 }
 
 - (void) removeUser:(User *)user
 {
     [self.users removeObject:user];
 }
+
+- (void) addGroup:(Group *)group
+{
+    [self.groups addObject:group];
+}
+
 
 @end

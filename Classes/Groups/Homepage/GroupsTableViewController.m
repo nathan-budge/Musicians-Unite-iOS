@@ -35,7 +35,7 @@
 @property (nonatomic) Firebase *userGroupsRef;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
 
-@property (nonatomic) SharedData *sharedData;
+@property (nonatomic, weak) SharedData *sharedData;
 
 @property (nonatomic) Group *selectedGroup;
 @property (nonatomic) NSMutableArray *groups;
@@ -83,8 +83,8 @@
 {
     [super viewDidLoad];
     
-    //[self.buttonMenu setImage:[UIImage imageNamed:@"hamburger"]];
-
+    self.tableView.hidden = YES;
+    
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
@@ -100,20 +100,15 @@
     
     self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", self.ref.authData.uid];
-    NSArray *user = [self.sharedData.users filteredArrayUsingPredicate:predicate];
-    
-    if (user.count > 0) {
-        self.user = [user objectAtIndex:0];
-        NSLog(@"%@ already exists", self.user.email);
-    } else {
-        self.user = [[User alloc] initWithRef:self.userRef];
-    }
-    
     [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
     
     [self loadUser];
     [self loadGroups];
+    
+    dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+        self.tableView.hidden = NO;
+        [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
+    });
 }
 
 
@@ -121,6 +116,8 @@
 
 -(void)loadUser
 {
+    self.user = [[User alloc] initWithRef:self.userRef];
+    
     NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
     navigationDrawerViewController.user = self.user;
 }
@@ -131,6 +128,7 @@
 - (void)loadGroups
 {
     self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
+    
     [self.sharedData addChildObserver:self.userGroupsRef];
     
     [self.userGroupsRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -157,13 +155,6 @@
         [self.groups addObject:newGroup];
         [self.user addGroup:newGroup];
         
-        NSNotification *myNotification =
-        [NSNotification notificationWithName:@"Finished Loading" object:nil];
-        
-        [[NSNotificationQueue defaultQueue]
-         enqueueNotification:myNotification
-         postingStyle:NSPostWhenIdle];
-        
     }];
 }
 
@@ -189,10 +180,7 @@
 {
     if ([[notification name] isEqualToString:@"Data Loaded"]) {
         [self.tableView reloadData];
-        
-    } else if ([[notification name] isEqualToString:@"Finished Loading"]) {
-        [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
-        
+
     }
 }
 

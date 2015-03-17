@@ -24,14 +24,18 @@
 @property (nonatomic) Firebase *threadMembersRef;
 @property (nonatomic) Firebase *threadMessagesRef;
 
-@property (nonatomic) SharedData *childObservers;
+@property (weak, nonatomic) SharedData *sharedData;
 
 @end
 
 
 @implementation MessageThread
 
+
+//*****************************************************************************/
 #pragma mark - Lazy instantiation
+//*****************************************************************************/
+
 -(Firebase *)ref
 {
     if (!_ref) {
@@ -40,14 +44,38 @@
     return _ref;
 }
 
+-(NSMutableArray *)members
+{
+    if (!_members) {
+        _members = [[NSMutableArray alloc] init];
+    }
+    return _members;
+}
 
+-(NSMutableArray *)messages
+{
+    if (!_messages) {
+        _messages = [[NSMutableArray alloc] init];
+    }
+    return _messages;
+}
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
+
+//*****************************************************************************/
 #pragma mark - Instantiation
+//*****************************************************************************/
 
 - (MessageThread *)init
 {
     if (self = [super init]) {
-        self.members = [[NSMutableArray alloc] init];
-        self.messages = [[NSMutableArray alloc] init];
         return self;
     }
     return nil;
@@ -57,16 +85,13 @@
 - (MessageThread *)initWithRef: (Firebase *)messageThreadRef
 {
     if (self = [super init]) {
-        self.members = [[NSMutableArray alloc] init];
-        self.messages = [[NSMutableArray alloc] init];
         self.messageThreadRef = messageThreadRef;
         self.threadMembersRef = [self.messageThreadRef childByAppendingPath:@"members"];
         self.threadMessagesRef = [self.messageThreadRef childByAppendingPath:@"messages"];
         
-        self.childObservers = [SharedData sharedInstance];
-        [self.childObservers addChildObserver:self.messageThreadRef];
-        [self.childObservers addChildObserver:self.threadMembersRef];
-        [self.childObservers addChildObserver:self.threadMessagesRef];
+        [self.sharedData addChildObserver:self.messageThreadRef];
+        [self.sharedData addChildObserver:self.threadMembersRef];
+        [self.sharedData addChildObserver:self.threadMessagesRef];
         
         [self loadMessageThreadData];
         [self attachListenerForAddedMembers];
@@ -79,19 +104,27 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Load message thread data
+//*****************************************************************************/
 
 - (void)loadMessageThreadData
 {
+    dispatch_group_enter(self.sharedData.downloadGroup);
+    
     [self.messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         self.messageThreadID = snapshot.key;
+        
+        dispatch_group_leave(self.sharedData.downloadGroup);
 
     }];
 }
 
 
+//*****************************************************************************/
 #pragma mark - Firebase observers
+//*****************************************************************************/
 
 -(void)attachListenerForAddedMembers
 {
@@ -101,12 +134,18 @@
         
         if (![memberID isEqualToString:self.ref.authData.uid]) {
             
+            dispatch_group_enter(self.sharedData.downloadGroup);
+            
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
-            NSArray *member= [self.childObservers.users filteredArrayUsingPredicate:predicate];
+            NSArray *member= [self.sharedData.users filteredArrayUsingPredicate:predicate];
             User *aMember = [member objectAtIndex:0];
             
             [self addMember:aMember];
+            
+            dispatch_group_leave(self.sharedData.downloadGroup);
         }
+        
+        
     }];
 }
 
@@ -123,8 +162,10 @@
     }];
 }
 
-
+//*****************************************************************************/
 #pragma mark - Array handling
+//*****************************************************************************/
+
 - (void)addMember: (User *)member
 {
     [self.members addObject:member];

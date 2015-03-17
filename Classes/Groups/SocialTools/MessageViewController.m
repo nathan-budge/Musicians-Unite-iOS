@@ -122,6 +122,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
     
     self.typingIndicatorView.canResignByTouch = YES;
+
     
     NSMutableString *title = [[NSMutableString alloc] init];
     if ([self.messageThread.members count] == 1) {

@@ -20,14 +20,28 @@
 
 @property (nonatomic) Firebase *messageRef;
 
-@property (nonatomic) SharedData *childObservers;
+@property (weak, nonatomic) SharedData *sharedData;
 
 @end
 
 
 @implementation Message
 
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
+//*****************************************************************************/
 #pragma mark - Instantiation
+//*****************************************************************************/
 
 - (Message *)init
 {
@@ -42,8 +56,21 @@
     if (self = [super init]) {
         self.messageRef = messageRef;
         
-        self.childObservers = [SharedData sharedInstance];
-        [self.childObservers addChildObserver:messageRef];
+        [self.sharedData addChildObserver:messageRef];
+        
+        [self loadMessageData];
+        
+        return self;
+    }
+    return nil;
+}
+
+- (Message *)initWithRef: (Firebase *)messageRef andQueue:(dispatch_group_t)downloadGroup
+{
+    if (self = [super init]) {
+        self.messageRef = messageRef;
+        
+        [self.sharedData addChildObserver:messageRef];
         
         [self loadMessageData];
         
@@ -53,10 +80,14 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Load message data
+//*****************************************************************************/
 
 - (void)loadMessageData
 {
+    dispatch_group_enter(self.sharedData.downloadGroup);
+    
     [self.messageRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         NSDictionary *messageData = snapshot.value;
@@ -66,10 +97,12 @@
         
         NSString *senderID = messageData[@"sender"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", senderID];
-        NSArray *member= [self.childObservers.users filteredArrayUsingPredicate:predicate];
+        NSArray *member= [self.sharedData.users filteredArrayUsingPredicate:predicate];
         User *aMember = [member objectAtIndex:0];
         
         self.sender = aMember;
+        
+        dispatch_group_leave(self.sharedData.downloadGroup);
         
     }];
 }

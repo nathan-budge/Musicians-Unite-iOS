@@ -19,18 +19,40 @@
 
 @property (nonatomic) Firebase *userRef;
 
-@property (nonatomic) SharedData *sharedData;
+@property (weak, nonatomic) SharedData *sharedData;
 
 @end
 
 @implementation User
 
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
+
+-(NSMutableArray *)groups
+{
+    if (!_groups) {
+        _groups = [[NSMutableArray alloc] init];
+    }
+    return _groups;
+}
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
+
+//*****************************************************************************/
 #pragma mark - Instantiation
+//*****************************************************************************/
 
 - (User *)init
 {
     if (self = [super init]) {
-        self.groups = [[NSMutableArray alloc] init];
         return self;
     }
     return nil;
@@ -39,10 +61,8 @@
 - (User *)initWithRef: (Firebase *)userRef
 {
     if (self = [super init]) {
-        self.groups = [[NSMutableArray alloc] init];
         self.userRef = userRef;
         
-        self.sharedData = [SharedData sharedInstance];
         [self.sharedData addChildObserver:self.userRef];
         
         [self loadUserData];
@@ -54,10 +74,14 @@
 }
 
 
+//*****************************************************************************/
 # pragma mark - Load user data
+//*****************************************************************************/
 
 - (void)loadUserData
 {
+    dispatch_group_enter(self.sharedData.downloadGroup);
+    
     [self.userRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         NSDictionary *memberData = snapshot.value;
@@ -75,38 +99,38 @@
         }
         
         [self.sharedData addUser:self];
-        
+
     }];
 }
 
 
+//*****************************************************************************/
 #pragma mark - Firebase observers
+//*****************************************************************************/
 
 - (void)attachListenerForChanges
 {
     [self.userRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
         if ([snapshot.key isEqualToString:@"first_name"]) {
-            
             self.firstName = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+            NSLog(@"%@ Name %@", self, self.firstName);
             
         } else if ([snapshot.key isEqualToString:@"last_name"]) {
-
             self.lastName = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
             
         } else if ([snapshot.key isEqualToString:@"profile_image"]) {
-            
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+        
         }
         
     }];
 }
 
 
+//*****************************************************************************/
 #pragma mark - Array handling
+//*****************************************************************************/
 
 - (void)addGroup: (Group *)group
 {

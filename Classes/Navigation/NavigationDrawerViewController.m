@@ -82,6 +82,8 @@
         [ref removeAllObservers];
     }
     
+    [childObservers.users removeAllObjects];
+    
     [self.ref unauth];
 
     [self performSegueWithIdentifier:@"Logout" sender:sender];

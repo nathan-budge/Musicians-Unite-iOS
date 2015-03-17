@@ -13,7 +13,10 @@
 @interface SharedData : NSObject
 
 @property (nonatomic, retain) NSMutableArray *childObservers;
-@property (nonatomic, retain) NSMutableArray *users;
+@property (nonatomic) NSMutableArray *users;
+@property (nonatomic, retain) NSMutableArray *groups;
+@property (nonatomic) dispatch_group_t downloadGroup;
+
 
 + (SharedData *)sharedInstance;
 

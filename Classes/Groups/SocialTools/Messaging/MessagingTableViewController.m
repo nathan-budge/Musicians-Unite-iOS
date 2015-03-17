@@ -30,6 +30,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSLog(@"%lu", (unsigned long)self.group.messageThreads.count);
+    
     [self.tableView reloadData];
 }
 
@@ -81,7 +84,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.group.messageThreads count];
+    return self.group.messageThreads.count;
 }
 
 

@@ -30,7 +30,7 @@
 
 @property (nonatomic) NSMutableArray *members;
 
-@property (nonatomic) SharedData *sharedData;
+@property (nonatomic, weak) SharedData *sharedData;
 
 @end
 
@@ -195,11 +195,13 @@
     
     [self addMembers:self.members toGroup:groupRef];
     
-    [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
+    dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+        [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self dismissKeyboard];
+    });
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [self dismissKeyboard];
 }
 
 - (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef

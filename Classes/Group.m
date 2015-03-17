@@ -23,34 +23,57 @@
 @property (nonatomic) Firebase *groupMembersRef;
 @property (nonatomic) Firebase *groupMessageThreadsRef;
 
-@property (nonatomic) SharedData *sharedData;
-
-@property (nonatomic) BOOL memberAdded;
+@property (weak, nonatomic) SharedData *sharedData;
 
 @end
 
 
 @implementation Group
 
+//*****************************************************************************/
 #pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 -(Firebase *)ref
 {
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
+-(NSMutableArray *)members
+{
+    if (!_members) {
+        _members = [[NSMutableArray alloc] init];
+    }
+    return _members;
+}
 
+-(NSMutableArray *)messageThreads
+{
+    if(!_messageThreads){
+        _messageThreads = [[NSMutableArray alloc] init];
+    }
+    return _messageThreads;
+}
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
+
+//*****************************************************************************/
 #pragma mark - Instantiation
+//*****************************************************************************/
 
 - (Group *)init
 {
     if (self = [super init]) {
-        self.members = [[NSMutableArray alloc] init];
-        self.messageThreads = [[NSMutableArray alloc] init];
         return self;
     }
     return nil;
@@ -59,8 +82,6 @@
 - (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString
 {
     if (self = [super init]) {
-        self.members = [[NSMutableArray alloc] init];
-        self.messageThreads = [[NSMutableArray alloc] init];
         self.name = name;
         self.profileImage = [Utilities decodeBase64ToImage:profileImageString];
         return self;
@@ -71,20 +92,16 @@
 - (Group *)initWithRef: (Firebase *)groupRef
 {
     if (self = [super init]) {
-        self.members = [[NSMutableArray alloc] init];
-        self.messageThreads = [[NSMutableArray alloc] init];
-        self.memberAdded = YES;
-        
         self.groupRef = groupRef;
         self.groupMembersRef = [self.groupRef childByAppendingPath:@"members"];
         self.groupMessageThreadsRef = [self.groupRef childByAppendingPath:@"message_threads"];
         
-        self.sharedData = [SharedData sharedInstance];
         [self.sharedData addChildObserver:self.groupRef];
         [self.sharedData addChildObserver:self.groupMembersRef];
         [self.sharedData addChildObserver:self.groupMessageThreadsRef];
         
         [self loadGroupData];
+        
         [self attachListenerForAddedMembers];
         [self attachListenerForRemovedMembers];
         [self attachListenerForChanges];
@@ -97,10 +114,14 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Load group data
+//*****************************************************************************/
 
 - (void)loadGroupData
 {
+    dispatch_group_enter(self.sharedData.downloadGroup);
+    
     [self.groupRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         NSDictionary *groupData = snapshot.value;
@@ -111,11 +132,14 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
         
+        dispatch_group_leave(self.sharedData.downloadGroup);
+        
     }];
 }
 
-
+//*****************************************************************************/
 #pragma mark - Firebase observers
+//*****************************************************************************/
 
 - (void)attachListenerForAddedMembers
 {
@@ -124,28 +148,29 @@
         NSString *newMemberID = snapshot.key;
         
         if (![newMemberID isEqualToString:self.ref.authData.uid]) {
-            
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", newMemberID];
-            NSArray *user = [self.sharedData.users filteredArrayUsingPredicate:predicate];
+            NSArray *userArray = [self.sharedData.users filteredArrayUsingPredicate:predicate];
             
-            if (user.count > 0) {
-                User *aUser = [user objectAtIndex:0];
+            if (userArray.count > 0) {
+                User *aUser = [userArray objectAtIndex:0];
                 [aUser addGroup:self];
-                NSLog(@"%@ already exists", aUser.email);
                 [self addMember:aUser];
+                
+                //NSLog(@"%@ already exists", aUser.email);
                 
             } else {
                 Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
+                
                 User *newUser = [[User alloc] initWithRef:userRef];
                 [newUser addGroup:self];
                 [self addMember:newUser];
                 
+                //NSLog(@"User Created %@", userRef.key);
             }
+            
         }
     }];
 }
-
-
 
 - (void)attachListenerForRemovedMembers
 {
@@ -213,7 +238,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Array handling
+//*****************************************************************************/
 
 - (void)addMember: (User *)member
 {
