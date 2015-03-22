@@ -14,10 +14,13 @@
 
 #import "User.h"
 #import "Group.h"
+#import "Task.h"
 
 @interface User ()
 
+@property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *userRef;
+@property (nonatomic) Firebase *userTasksRef;
 
 @property (weak, nonatomic) SharedData *sharedData;
 
@@ -29,12 +32,28 @@
 #pragma mark - Lazy Instantiation
 //*****************************************************************************/
 
+-(Firebase *)ref
+{
+    if (!_ref) {
+        _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
+    }
+    return _ref;
+}
+
 -(NSMutableArray *)groups
 {
     if (!_groups) {
         _groups = [[NSMutableArray alloc] init];
     }
     return _groups;
+}
+
+-(NSMutableArray *)tasks
+{
+    if (!_tasks) {
+        _tasks = [[NSMutableArray alloc] init];
+    }
+    return _tasks;
 }
 
 -(SharedData *)sharedData
@@ -62,10 +81,13 @@
 {
     if (self = [super init]) {
         self.userRef = userRef;
+        self.userTasksRef = [self.userRef childByAppendingPath:@"tasks"];
         
         [self.sharedData addChildObserver:self.userRef];
+        [self.sharedData addChildObserver:self.userTasksRef];
         
         [self loadUserData];
+        
         [self attachListenerForChanges];
         
         return self;
@@ -98,8 +120,14 @@
             self.completedRegistration = NO;
         }
         
+        if ([self.userID isEqualToString:self.ref.authData.uid]) {
+            [self attachListenerForAddedTasks];
+        }
+        
         [self.sharedData addUser:self];
-
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
@@ -108,8 +136,27 @@
 #pragma mark - Firebase observers
 //*****************************************************************************/
 
+- (void)attachListenerForAddedTasks
+{
+    [self.userTasksRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newTaskID = snapshot.key;
+        
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
+        
+        Task *newTask = [[Task alloc] initWithRef:taskRef];
+        
+        [self addTask:newTask];
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+    
+}
+
 - (void)attachListenerForChanges
 {
+    
     [self.userRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
         if ([snapshot.key isEqualToString:@"first_name"]) {
@@ -121,9 +168,11 @@
             
         } else if ([snapshot.key isEqualToString:@"profile_image"]) {
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
-        
+            
         }
         
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
@@ -137,9 +186,19 @@
     [self.groups addObject:group];
 }
 
--(void)removeGroup:(Group *)group
+- (void)removeGroup:(Group *)group
 {
     [self.groups removeObject:group];
+}
+
+- (void)addTask: (Task *)task
+{
+    [self.tasks addObject:task];
+}
+
+- (void)removeTask: (Task *)task
+{
+    [self.tasks removeObject:task];
 }
 
 @end

@@ -43,7 +43,7 @@
 }
 
 
-#pragma mark - View Lifecycle
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {

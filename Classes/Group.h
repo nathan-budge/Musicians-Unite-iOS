@@ -20,7 +20,7 @@
 @property (nonatomic) UIImage *profileImage;
 @property (nonatomic) NSMutableArray *members;
 @property (nonatomic) NSMutableArray *messageThreads;
-
+@property (nonatomic) NSMutableArray *tasks;
 
 - (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
 - (Group *)initWithRef: (Firebase *)groupRef;

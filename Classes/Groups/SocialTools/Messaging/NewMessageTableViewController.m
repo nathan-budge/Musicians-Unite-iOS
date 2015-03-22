@@ -53,9 +53,10 @@
 }
 
 
-#pragma mark - View Lifecycle
+#pragma mark - View lifecycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     for (User *member in self.group.members) {
@@ -79,7 +80,6 @@
     if ([[notification name] isEqualToString:@"Thread Loaded"]) {
         [SVProgressHUD showSuccessWithStatus:@"Thread Created" maskType:SVProgressHUDMaskTypeBlack];
         [self.navigationController popViewControllerAnimated:YES];
-        
         
     }
 }
@@ -143,13 +143,6 @@
         
         [SVProgressHUD showWithStatus:@"Creating Thread" maskType:SVProgressHUDMaskTypeBlack];
     }
-}
-
-
-#pragma mark - Prepare for Segue
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
 }
 
 

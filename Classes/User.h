@@ -22,6 +22,7 @@
 @property (nonatomic) BOOL completedRegistration;
 @property (nonatomic) BOOL selected;
 @property (nonatomic) NSMutableArray *groups;
+@property (nonatomic) NSMutableArray *tasks;
 
 - (User *)initWithRef: (Firebase *)userRef;
 

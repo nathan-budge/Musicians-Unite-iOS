@@ -56,6 +56,7 @@
     }];
 }
 
+//UPDATE THIS
 +(void)removeEmptyGroups:(NSString *) groupID withRef:(Firebase *) ref
 {
     [[ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {

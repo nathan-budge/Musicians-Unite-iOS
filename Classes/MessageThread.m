@@ -113,11 +113,12 @@
     dispatch_group_enter(self.sharedData.downloadGroup);
     
     [self.messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        
         self.messageThreadID = snapshot.key;
         
         dispatch_group_leave(self.sharedData.downloadGroup);
-
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
@@ -145,7 +146,8 @@
             dispatch_group_leave(self.sharedData.downloadGroup);
         }
         
-        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
@@ -159,6 +161,8 @@
         Message *newMessage = [[Message alloc] initWithRef:messageRef];
         [self addMessage:newMessage];
         
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 

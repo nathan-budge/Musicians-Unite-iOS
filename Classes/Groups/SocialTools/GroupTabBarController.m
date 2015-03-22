@@ -9,7 +9,6 @@
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
 #import "MessagingTableViewController.h"
-#import "MessageViewController.h"
 
 
 @implementation GroupTabBarController
@@ -24,7 +23,7 @@
     messagingTableViewController.group = self.group;
     messagingTableViewController.user = self.user;
     
-    GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:1];
+    GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:2];
     groupDetailViewController.group = self.group;
 }
 

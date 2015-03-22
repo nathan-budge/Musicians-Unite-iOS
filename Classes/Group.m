@@ -15,6 +15,7 @@
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
+#import "Task.h"
 
 @interface Group ()
 
@@ -22,6 +23,7 @@
 @property (nonatomic) Firebase *groupRef;
 @property (nonatomic) Firebase *groupMembersRef;
 @property (nonatomic) Firebase *groupMessageThreadsRef;
+@property (nonatomic) Firebase *groupTasksRef;
 
 @property (weak, nonatomic) SharedData *sharedData;
 
@@ -56,6 +58,14 @@
         _messageThreads = [[NSMutableArray alloc] init];
     }
     return _messageThreads;
+}
+
+-(NSMutableArray *)tasks
+{
+    if (!_tasks) {
+        _tasks = [[NSMutableArray alloc] init];
+    }
+    return _tasks;
 }
 
 -(SharedData *)sharedData
@@ -95,10 +105,12 @@
         self.groupRef = groupRef;
         self.groupMembersRef = [self.groupRef childByAppendingPath:@"members"];
         self.groupMessageThreadsRef = [self.groupRef childByAppendingPath:@"message_threads"];
+        self.groupTasksRef = [self.groupRef childByAppendingPath:@"tasks"];
         
         [self.sharedData addChildObserver:self.groupRef];
         [self.sharedData addChildObserver:self.groupMembersRef];
         [self.sharedData addChildObserver:self.groupMessageThreadsRef];
+        [self.sharedData addChildObserver:self.groupTasksRef];
         
         [self loadGroupData];
         
@@ -106,6 +118,7 @@
         [self attachListenerForRemovedMembers];
         [self attachListenerForChanges];
         [self attachListenerForAddedMessageThreads];
+        //[self attachListenerForAddedTasks];
         
         return self;
     }
@@ -123,7 +136,7 @@
     dispatch_group_enter(self.sharedData.downloadGroup);
     
     [self.groupRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        
+       
         NSDictionary *groupData = snapshot.value;
         
         self.groupID = snapshot.key;
@@ -134,6 +147,8 @@
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"%@", error);
     }];
 }
 
@@ -167,8 +182,10 @@
                 
                 //NSLog(@"User Created %@", userRef.key);
             }
-            
         }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"%@", error);
     }];
 }
 
@@ -187,11 +204,62 @@
             
             if (removedMember.groups.count == 0) {
                 [self.sharedData removeUser:removedMember];
-                NSLog(@"%lu", (unsigned long)self.sharedData.users.count);
             }
             
         }
         
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
+-(void)attachListenerForAddedMessageThreads
+{
+    [self.groupMessageThreadsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newMessageThreadID = snapshot.key;
+        
+        Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", newMessageThreadID]];
+        
+        
+        [messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+           
+            NSDictionary *messageThreadData = snapshot.value;
+            
+            if ([[messageThreadData[@"members"] allKeys] containsObject:self.ref.authData.uid]) {
+                
+                MessageThread *newMessageThread = [[MessageThread alloc] initWithRef:messageThreadRef];
+                
+                [self addMessageThread:newMessageThread];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Loaded" object:self];
+            }
+            
+        } withCancelBlock:^(NSError *error) {
+            NSLog(@"%@", error);
+        }];
+       
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
+-(void)attachListenerForAddedTasks
+{
+    [self.groupTasksRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newTaskID = snapshot.key;
+        
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
+        
+        Task *newTask = [[Task alloc] initWithRef:taskRef];
+        
+        [self addTask:newTask];
+        
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
@@ -210,36 +278,15 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
             
         }
-    }];
-}
-
--(void)attachListenerForAddedMessageThreads
-{
-    [self.groupMessageThreadsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-
-        NSString *newMessageThreadID = snapshot.key;
         
-        Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", newMessageThreadID]];
-        
-        [messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-            
-            NSDictionary *messageThreadData = snapshot.value;
-            
-            if ([[messageThreadData[@"members"] allKeys] containsObject:self.ref.authData.uid]) {
-                
-                MessageThread *newMessageThread = [[MessageThread alloc] initWithRef:messageThreadRef];
-                
-                [self addMessageThread:newMessageThread];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Loaded" object:self];
-            }
-        }];
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
 
 //*****************************************************************************/
-#pragma mark - Array handling
+#pragma mark - Array Handling
 //*****************************************************************************/
 
 - (void)addMember: (User *)member
@@ -260,6 +307,16 @@
 - (void)removeMessageThread:(MessageThread *)messageThread
 {
     [self.messageThreads removeObject:messageThread];
+}
+
+- (void) addTask: (Task *)task
+{
+    [self.tasks addObject:task];
+}
+
+- (void) removeTask: (Task *)task
+{
+    [self.tasks removeObject:task];
 }
 
 @end

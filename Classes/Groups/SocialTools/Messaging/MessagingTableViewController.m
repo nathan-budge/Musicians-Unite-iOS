@@ -26,12 +26,12 @@
 
 @implementation MessagingTableViewController
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSLog(@"%lu", (unsigned long)self.group.messageThreads.count);
     
     [self.tableView reloadData];
 }
@@ -51,7 +51,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
 -(void)actionNewGroup
 {
@@ -59,7 +61,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Prepare for Segue
+//*****************************************************************************/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -75,7 +79,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Table view data source
+//*****************************************************************************/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

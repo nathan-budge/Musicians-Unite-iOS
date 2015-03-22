@@ -3,9 +3,9 @@
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/14/15.
-//  Adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
+//  Adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
 
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
@@ -30,13 +30,17 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonHome;
 @property (weak, nonatomic) IBOutlet UIButton *buttonUserSettings;
+@property (weak, nonatomic) IBOutlet UIButton *buttonMusicTools;
+@property (weak, nonatomic) IBOutlet UIButton *buttonPracticeList;
 
 @end
 
 
 @implementation NavigationDrawerViewController
 
+//*****************************************************************************/
 #pragma mark - Lazy instantiation
+//*****************************************************************************/
 
 - (Firebase *)ref
 {
@@ -48,7 +52,9 @@
 }
 
 
-#pragma mark - View Lifecycle
+//*****************************************************************************/
+#pragma mark - View lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad
 {
@@ -58,7 +64,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
 - (IBAction)actionHome:(id)sender
 {
@@ -69,6 +77,18 @@
 - (IBAction)actionUserSettings:(id)sender
 {
     self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserSettingsNavigationController"];
+    [self.slidingViewController resetTopViewAnimated:YES];
+}
+
+-(IBAction)actionMusicTools:(id)sender
+{
+    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MusicToolsNavigationController"];
+    [self.slidingViewController resetTopViewAnimated:YES];
+}
+
+- (IBAction)actionPracticeList:(id)sender
+{
+    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PracticeListNavigationController"];
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 

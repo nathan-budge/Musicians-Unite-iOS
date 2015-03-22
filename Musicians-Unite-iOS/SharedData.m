@@ -13,13 +13,11 @@
 #import "User.h"
 #import "Group.h"
 
-@interface SharedData ()
-
-@end
-
 @implementation SharedData
 
+//*****************************************************************************/
 #pragma mark - Instantiation
+//*****************************************************************************/
 
 + (SharedData *)sharedInstance
 {
@@ -42,13 +40,20 @@
     return nil;
 }
 
+
+//*****************************************************************************/
 #pragma mark - Array handling
+//*****************************************************************************/
 
 - (void) addChildObserver:(Firebase *)childObserver
 {
     [self.childObservers addObject:childObserver];
 }
 
+- (void) removeChildObserver:(Firebase *)childObserver
+{
+    [self.childObservers removeObject:childObserver];
+}
 
 - (void) addUser:(User *)user
 {
@@ -64,6 +69,11 @@
 - (void) addGroup:(Group *)group
 {
     [self.groups addObject:group];
+}
+
+- (void) removeGroup:(Group *)group
+{
+    [self.groups removeObject:group];
 }
 
 

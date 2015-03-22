@@ -56,22 +56,6 @@
     if (self = [super init]) {
         self.messageRef = messageRef;
         
-        [self.sharedData addChildObserver:messageRef];
-        
-        [self loadMessageData];
-        
-        return self;
-    }
-    return nil;
-}
-
-- (Message *)initWithRef: (Firebase *)messageRef andQueue:(dispatch_group_t)downloadGroup
-{
-    if (self = [super init]) {
-        self.messageRef = messageRef;
-        
-        [self.sharedData addChildObserver:messageRef];
-        
         [self loadMessageData];
         
         return self;
@@ -89,7 +73,6 @@
     dispatch_group_enter(self.sharedData.downloadGroup);
     
     [self.messageRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        
         NSDictionary *messageData = snapshot.value;
         
         self.messageID = snapshot.key;
@@ -104,6 +87,8 @@
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
