@@ -118,7 +118,7 @@
         [self attachListenerForRemovedMembers];
         [self attachListenerForChanges];
         [self attachListenerForAddedMessageThreads];
-        //[self attachListenerForAddedTasks];
+        [self attachListenerForAddedTasks];
         
         return self;
     }
@@ -151,6 +151,7 @@
         NSLog(@"%@", error);
     }];
 }
+
 
 //*****************************************************************************/
 #pragma mark - Firebase observers
@@ -256,7 +257,6 @@
         Task *newTask = [[Task alloc] initWithRef:taskRef];
         
         [self addTask:newTask];
-        
         
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error);

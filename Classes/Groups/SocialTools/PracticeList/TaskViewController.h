@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class User;
+@class Group;
 @class Task;
 
 @interface TaskViewController : UIViewController <UITextFieldDelegate>
 
-@property (nonatomic) User *user;
+@property (nonatomic) Group *group;
 @property (nonatomic) Task *task;
 
 @end

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class Group;
+
 @interface TasksTableViewController : UITableViewController
+
+@property (nonatomic) Group *group;
+
+@property (nonatomic) BOOL inset;
 
 @end

@@ -9,6 +9,7 @@
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
 #import "MessagingTableViewController.h"
+#import "TasksTableViewController.h"
 
 
 @implementation GroupTabBarController
@@ -23,8 +24,13 @@
     messagingTableViewController.group = self.group;
     messagingTableViewController.user = self.user;
     
-    GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:2];
+    GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:1];
     groupDetailViewController.group = self.group;
+    
+    //UINavigationController *taskNavigationController = [viewControllers objectAtIndex:2];
+    //TasksTableViewController *tasksTableViewController = [taskNavigationController.viewControllers objectAtIndex:0];
+    TasksTableViewController *tasksTableViewController = [viewControllers objectAtIndex:2];
+    tasksTableViewController.group = self.group;
 }
 
 @end

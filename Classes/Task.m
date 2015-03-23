@@ -62,7 +62,7 @@
 
 - (void) loadTaskData
 {
-    //dispatch_group_enter(self.sharedData.downloadGroup);
+    dispatch_group_enter(self.sharedData.downloadGroup);
     
     [self.taskRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
@@ -83,7 +83,7 @@
         
         NSLog(@"Task Created");
         
-        //dispatch_group_leave(self.sharedData.downloadGroup);
+        dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error);

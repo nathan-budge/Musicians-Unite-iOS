@@ -163,7 +163,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedMessageThread = [self.group.messageThreads objectAtIndex:indexPath.row];
-    
     [self performSegueWithIdentifier:@"viewThread" sender:nil];
 }
 

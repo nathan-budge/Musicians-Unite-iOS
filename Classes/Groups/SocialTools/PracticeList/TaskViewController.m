@@ -11,10 +11,13 @@
 #import "SVProgressHUD.h"
 
 #import "TaskViewController.h"
+#import "TasksTableViewController.h"
+#import "GroupTabBarController.h"
 
 #import "AppConstant.h"
 
 #import "User.h"
+#import "Group.h"
 #import "Task.h"
 
 
@@ -25,6 +28,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *fieldTitle;
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
 @property (weak, nonatomic) IBOutlet UITextView *fieldNotes;
+
+@property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrSave;
 
 @end
 
@@ -56,34 +61,90 @@
         self.fieldTitle.text = self.task.title;
         self.fieldTempo.text = self.task.tempo;
         self.fieldNotes.text = self.task.notes;
+        
+        [self.buttonCreateOrSave setTitle:@"Save" forState:UIControlStateNormal];
+        
+    } else {
+        [self.buttonCreateOrSave setTitle:@"Create" forState:UIControlStateNormal];
+        
     }
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (self.group) {
+        GroupTabBarController *groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 1)];
+        TasksTableViewController *tasksTableViewController = [groupTabBarController.viewControllers objectAtIndex:2];
+        tasksTableViewController.inset = YES;
+    }
+}
 
 //*****************************************************************************/
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionCreate:(id)sender
+- (IBAction)actionCreateOrSave:(id)sender
+{
+    
+    if (self.task) {
+        [self actionSave];
+    } else {
+        [self actionCreate];
+    }
+}
+
+- (void)actionCreate
 {
     if ([self.fieldTitle.text isEqualToString:@""]) {
         [SVProgressHUD showErrorWithStatus:@"Title required" maskType:SVProgressHUDMaskTypeBlack];
         
     } else {
         Firebase *taskRef = [[self.ref childByAppendingPath:@"tasks"] childByAutoId];
-        Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
+        
+        Firebase *ownerRef;
+        
+        if (self.group) {
+            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/tasks", self.group.groupID]];
+        } else {
+            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/tasks", self.ref.authData.uid]];
+        }
         
         NSDictionary *newTask = @{
-                                   @"title":self.fieldTitle.text,
-                                   @"tempo":self.fieldTempo.text,
-                                   @"notes":self.fieldNotes.text,
-                                   };
+                                  @"title":self.fieldTitle.text,
+                                  @"tempo":self.fieldTempo.text,
+                                  @"notes":self.fieldNotes.text,
+                                  @"completed":@NO,
+                                  };
         
         [taskRef setValue:newTask];
         
-        [[userRef childByAppendingPath:@"tasks"]updateChildValues:@{taskRef.key:@YES}];
+        [ownerRef updateChildValues:@{taskRef.key:@YES}];
+        
+        [SVProgressHUD showSuccessWithStatus:@"Task created" maskType:SVProgressHUDMaskTypeBlack];
+        
+        [self dismissKeyboard];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+- (void)actionSave
+{
+    if ([self.fieldTitle.text isEqualToString:@""]) {
+        [SVProgressHUD showErrorWithStatus:@"Title required" maskType:SVProgressHUDMaskTypeBlack];
+        
+    } else {
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", self.task.taskID]];
+        
+        NSDictionary *updatedTask = @{
+                                  @"title":self.fieldTitle.text,
+                                  @"tempo":self.fieldTempo.text,
+                                  @"notes":self.fieldNotes.text,
+                                  };
+        
+        [taskRef updateChildValues:updatedTask];
         
         [SVProgressHUD showSuccessWithStatus:@"Task created" maskType:SVProgressHUDMaskTypeBlack];
         
@@ -92,7 +153,6 @@
         //[self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
-
 
 //*****************************************************************************/
 #pragma mark - Keyboard handling
@@ -108,17 +168,5 @@
     [self dismissKeyboard];
     return YES;
 }
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
