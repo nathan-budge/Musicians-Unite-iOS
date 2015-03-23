@@ -161,7 +161,6 @@
         
         if ([snapshot.key isEqualToString:@"first_name"]) {
             self.firstName = snapshot.value;
-            NSLog(@"%@ Name %@", self, self.firstName);
             
         } else if ([snapshot.key isEqualToString:@"last_name"]) {
             self.lastName = snapshot.value;

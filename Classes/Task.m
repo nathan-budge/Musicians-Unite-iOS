@@ -101,12 +101,15 @@
         
         if ([snapshot.key isEqualToString:@"title"]) {
             self.title = snapshot.value;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
             
         } else if ([snapshot.key isEqualToString:@"tempo"]) {
             self.tempo = snapshot.value;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
             
         } else if ([snapshot.key isEqualToString:@"notes"]) {
             self.notes = snapshot.value;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
             
         } else if ([snapshot.key isEqualToString:@"completed"]) {
             
@@ -117,6 +120,7 @@
                 self.completed = NO;
                 
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {

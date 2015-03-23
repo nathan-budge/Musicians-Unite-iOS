@@ -66,6 +66,11 @@
         NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
         self.user = navigationDrawerViewController.user;
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Task Data Updated"
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -153,6 +158,19 @@
 
 
 //*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Task Data Updated"]) {
+        [self.tableView reloadData];
+        
+    }
+}
+
+
+//*****************************************************************************/
 #pragma mark - Table view data source
 //*****************************************************************************/
 
@@ -213,6 +231,7 @@
     }
 }
 
+/*
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return YES;
@@ -233,6 +252,7 @@
         self.user.tasks = [NSMutableArray arrayWithArray:self.tasks];
     }
 }
+*/
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
