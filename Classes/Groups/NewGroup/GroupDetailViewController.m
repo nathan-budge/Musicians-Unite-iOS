@@ -71,6 +71,7 @@
     
     if (self.group) {
         self.tabBarController.title = @"Settings";
+        self.tabBarController.navigationItem.rightBarButtonItems = nil;
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
     }
 }

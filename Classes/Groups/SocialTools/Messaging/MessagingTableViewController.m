@@ -42,6 +42,7 @@
     [self.tableView reloadData];
     
     self.tabBarController.title = @"Messages";
+    self.tabBarController.navigationItem.rightBarButtonItems = nil;
     self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionNewGroup)];
 }
 
