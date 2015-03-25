@@ -25,6 +25,7 @@
 		9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */; };
 		940CDBBD1AC33AD40006F099 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBBC1AC33AD40006F099 /* Recording.m */; };
 		940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC01AC348CE0006F099 /* RecorderViewController.m */; };
+		940CDBC41AC352BD0006F099 /* MusicToolsTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */; };
 		9431B8911A93FDE60074818F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
 		9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
 		945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945958F31A97B000002CF4EF /* GroupTabBarController.m */; };
@@ -115,6 +116,8 @@
 		940CDBBC1AC33AD40006F099 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recording.m; sourceTree = "<group>"; };
 		940CDBBF1AC348CE0006F099 /* RecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecorderViewController.h; path = MusicTools/AudioRecorder/RecorderViewController.h; sourceTree = "<group>"; };
 		940CDBC01AC348CE0006F099 /* RecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecorderViewController.m; path = MusicTools/AudioRecorder/RecorderViewController.m; sourceTree = "<group>"; };
+		940CDBC21AC352BD0006F099 /* MusicToolsTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicToolsTabBarController.h; path = MusicTools/MusicToolsTabBarController.h; sourceTree = "<group>"; };
+		940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MusicToolsTabBarController.m; path = MusicTools/MusicToolsTabBarController.m; sourceTree = "<group>"; };
 		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupTabBarController.h; sourceTree = "<group>"; };
 		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupTabBarController.m; sourceTree = "<group>"; };
 		947429B61ABF1B88002D81E7 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TasksTableViewController.h; path = PracticeList/TasksTableViewController.h; sourceTree = "<group>"; };
@@ -394,6 +397,8 @@
 			children = (
 				940CDBBE1AC3484C0006F099 /* Audio Recorder */,
 				947A47221ABB3FFA007B3878 /* Drones */,
+				940CDBC21AC352BD0006F099 /* MusicToolsTabBarController.h */,
+				940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */,
 			);
 			name = MusicTools;
 			sourceTree = "<group>";
@@ -689,6 +694,7 @@
 				94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
 				949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */,
+				940CDBC41AC352BD0006F099 /* MusicToolsTabBarController.m in Sources */,
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
 				9479A2981A9A693A00C668D0 /* SLKInputAccessoryView.m in Sources */,

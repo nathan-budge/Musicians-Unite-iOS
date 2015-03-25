@@ -10,6 +10,7 @@
 #import "GroupDetailViewController.h"
 #import "MessagingTableViewController.h"
 #import "TasksTableViewController.h"
+#import "RecorderViewController.h"
 
 
 @implementation GroupTabBarController
@@ -27,10 +28,11 @@
     GroupDetailViewController *groupDetailViewController = [viewControllers objectAtIndex:1];
     groupDetailViewController.group = self.group;
     
-    //UINavigationController *taskNavigationController = [viewControllers objectAtIndex:2];
-    //TasksTableViewController *tasksTableViewController = [taskNavigationController.viewControllers objectAtIndex:0];
     TasksTableViewController *tasksTableViewController = [viewControllers objectAtIndex:2];
     tasksTableViewController.group = self.group;
+    
+    RecorderViewController *recorderViewController = [viewControllers objectAtIndex:3];
+    recorderViewController.group = self.group;
 }
 
 @end
