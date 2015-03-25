@@ -15,12 +15,14 @@
 #import "User.h"
 #import "Group.h"
 #import "Task.h"
+#import "Recording.h"
 
 @interface User ()
 
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *userRef;
 @property (nonatomic) Firebase *userTasksRef;
+@property (nonatomic) Firebase *userRecordingsRef;
 
 @property (weak, nonatomic) SharedData *sharedData;
 
@@ -56,6 +58,14 @@
     return _tasks;
 }
 
+-(NSMutableArray *)recordings
+{
+    if (!_recordings) {
+        _recordings = [[NSMutableArray alloc] init];
+    }
+    return _recordings;
+}
+
 -(SharedData *)sharedData
 {
     if (!_sharedData) {
@@ -82,9 +92,11 @@
     if (self = [super init]) {
         self.userRef = userRef;
         self.userTasksRef = [self.userRef childByAppendingPath:@"tasks"];
+        self.userRecordingsRef = [self.userRef childByAppendingPath:@"recordings"];
         
         [self.sharedData addChildObserver:self.userRef];
         [self.sharedData addChildObserver:self.userTasksRef];
+        [self.sharedData addChildObserver:self.userRecordingsRef];
         
         [self loadUserData];
         
@@ -122,6 +134,9 @@
         
         if ([self.userID isEqualToString:self.ref.authData.uid]) {
             [self attachListenerForAddedTasks];
+            [self attachListenerForRemovedTasks];
+            [self attachListenerForAddedRecordings];
+            [self attachListenerForRemovedTasks];
         }
         
         [self.sharedData addUser:self];
@@ -135,24 +150,6 @@
 //*****************************************************************************/
 #pragma mark - Firebase observers
 //*****************************************************************************/
-
-- (void)attachListenerForAddedTasks
-{
-    [self.userTasksRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        
-        NSString *newTaskID = snapshot.key;
-        
-        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
-        
-        Task *newTask = [[Task alloc] initWithRef:taskRef];
-        
-        [self addTask:newTask];
-        
-    } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
-    }];
-    
-}
 
 - (void)attachListenerForChanges
 {
@@ -173,6 +170,75 @@
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error);
     }];
+}
+
+- (void)attachListenerForAddedTasks
+{
+    [self.userTasksRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newTaskID = snapshot.key;
+        
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
+        
+        Task *newTask = [[Task alloc] initWithRef:taskRef];
+        
+        [self addTask:newTask];
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
+- (void)attachListenerForRemovedTasks
+{
+    [self.userTasksRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.taskID=%@", snapshot.key];
+        NSArray *task = [self.tasks filteredArrayUsingPredicate:predicate];
+        
+        if (task.count > 0) {
+            Task *removedTask = [task objectAtIndex:0];
+            [self removeTask:removedTask];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
+- (void)attachListenerForAddedRecordings
+{
+    [self.userRecordingsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newRecordingID = snapshot.key;
+        
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", newRecordingID]];
+        
+        Recording *newRecording = [[Recording alloc] initWithRef:recordingRef];
+        
+        [self addRecording:newRecording];
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
+- (void)attachListenerForRemovedRecordings
+{
+    [self.userRecordingsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", snapshot.key];
+        NSArray *recording = [self.recordings filteredArrayUsingPredicate:predicate];
+        
+        if (recording.count > 0) {
+            Recording *removedRecording = [recording objectAtIndex:0];
+            [self removeRecording:removedRecording];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+    
 }
 
 
@@ -199,5 +265,16 @@
 {
     [self.tasks removeObject:task];
 }
+
+- (void)addRecording: (Recording *)recording
+{
+    [self.recordings addObject:recording];
+}
+
+- (void)removeRecording: (Recording *)recording
+{
+    [self.recordings removeObject:recording];
+}
+
 
 @end

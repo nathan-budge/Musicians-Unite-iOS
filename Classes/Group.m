@@ -16,6 +16,7 @@
 #import "User.h"
 #import "MessageThread.h"
 #import "Task.h"
+#import "Recording.h"
 
 @interface Group ()
 
@@ -24,6 +25,7 @@
 @property (nonatomic) Firebase *groupMembersRef;
 @property (nonatomic) Firebase *groupMessageThreadsRef;
 @property (nonatomic) Firebase *groupTasksRef;
+@property (nonatomic) Firebase *groupRecordingsRef;
 
 @property (weak, nonatomic) SharedData *sharedData;
 
@@ -68,6 +70,14 @@
     return _tasks;
 }
 
+-(NSMutableArray *)recordings
+{
+    if (!_recordings) {
+        _recordings = [[NSMutableArray alloc] init];
+    }
+    return _recordings;
+}
+
 -(SharedData *)sharedData
 {
     if (!_sharedData) {
@@ -106,19 +116,24 @@
         self.groupMembersRef = [self.groupRef childByAppendingPath:@"members"];
         self.groupMessageThreadsRef = [self.groupRef childByAppendingPath:@"message_threads"];
         self.groupTasksRef = [self.groupRef childByAppendingPath:@"tasks"];
+        self.groupRecordingsRef = [self.groupRef childByAppendingPath:@"recordings"];
         
         [self.sharedData addChildObserver:self.groupRef];
         [self.sharedData addChildObserver:self.groupMembersRef];
         [self.sharedData addChildObserver:self.groupMessageThreadsRef];
         [self.sharedData addChildObserver:self.groupTasksRef];
+        [self.sharedData addChildObserver:self.groupRecordingsRef];
         
         [self loadGroupData];
         
+        [self attachListenerForChanges];
         [self attachListenerForAddedMembers];
         [self attachListenerForRemovedMembers];
-        [self attachListenerForChanges];
         [self attachListenerForAddedMessageThreads];
         [self attachListenerForAddedTasks];
+        [self attachListenerForRemovedTasks];
+        //[self attachListenerForAddedRecordings];
+        //[self attachListenerForRemovedRecordings];
         
         return self;
     }
@@ -157,6 +172,27 @@
 #pragma mark - Firebase observers
 //*****************************************************************************/
 
+- (void)attachListenerForChanges
+{
+    [self.groupRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+        
+        if ([snapshot.key isEqualToString:@"name"]) {
+            
+            self.name = snapshot.value;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+            
+        } else if ([snapshot.key isEqualToString:@"profile_image"]) {
+            
+            self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+            
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
 - (void)attachListenerForAddedMembers
 {
     [self.groupMembersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
@@ -172,16 +208,13 @@
                 [aUser addGroup:self];
                 [self addMember:aUser];
                 
-                //NSLog(@"%@ already exists", aUser.email);
-                
             } else {
                 Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
                 
                 User *newUser = [[User alloc] initWithRef:userRef];
                 [newUser addGroup:self];
                 [self addMember:newUser];
-                
-                //NSLog(@"User Created %@", userRef.key);
+
             }
         }
         
@@ -214,7 +247,7 @@
     }];
 }
 
--(void)attachListenerForAddedMessageThreads
+- (void)attachListenerForAddedMessageThreads
 {
     [self.groupMessageThreadsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         
@@ -246,7 +279,7 @@
     }];
 }
 
--(void)attachListenerForAddedTasks
+- (void)attachListenerForAddedTasks
 {
     [self.groupTasksRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         
@@ -263,20 +296,50 @@
     }];
 }
 
-- (void)attachListenerForChanges
+- (void)attachListenerForRemovedTasks
 {
-    [self.groupRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+    [self.groupTasksRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"name"]) {
-            
-            self.name = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
-            
-        } else if ([snapshot.key isEqualToString:@"profile_image"]) {
-            
-            self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
-            
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.taskID=%@", snapshot.key];
+        NSArray *task = [self.tasks filteredArrayUsingPredicate:predicate];
+        
+        if (task.count > 0) {
+            Task *removedTask = [task objectAtIndex:0];
+            [self removeTask:removedTask];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
+- (void)attachListenerForAddedRecordings
+{
+    [self.groupRecordingsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newRecordingID = snapshot.key;
+        
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", newRecordingID]];
+        
+        Recording *newRecording = [[Recording alloc] initWithRef:recordingRef];
+        
+        [self addRecording:newRecording];
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
+- (void)attachListenerForRemovedRecordings
+{
+    [self.groupRecordingsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", snapshot.key];
+        NSArray *recording = [self.recordings filteredArrayUsingPredicate:predicate];
+        
+        if (recording.count > 0) {
+            Recording *removedRecording = [recording objectAtIndex:0];
+            [self removeRecording:removedRecording];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -309,14 +372,24 @@
     [self.messageThreads removeObject:messageThread];
 }
 
-- (void) addTask: (Task *)task
+- (void)addTask: (Task *)task
 {
     [self.tasks addObject:task];
 }
 
-- (void) removeTask: (Task *)task
+- (void)removeTask: (Task *)task
 {
     [self.tasks removeObject:task];
+}
+
+- (void)addRecording: (Recording *)recording
+{
+    [self.recordings addObject:recording];
+}
+
+- (void)removeRecording: (Recording *)recording
+{
+    [self.recordings removeObject:recording];
 }
 
 @end
