@@ -132,8 +132,8 @@
         [self attachListenerForAddedMessageThreads];
         [self attachListenerForAddedTasks];
         [self attachListenerForRemovedTasks];
-        //[self attachListenerForAddedRecordings];
-        //[self attachListenerForRemovedRecordings];
+        [self attachListenerForAddedRecordings];
+        [self attachListenerForRemovedRecordings];
         
         return self;
     }

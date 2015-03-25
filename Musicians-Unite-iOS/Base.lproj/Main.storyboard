@@ -940,7 +940,7 @@
         <!--Audio Recorder-->
         <scene sceneID="fmE-UJ-60o">
             <objects>
-                <viewController id="iCj-CN-0wJ" sceneMemberID="viewController">
+                <viewController id="iCj-CN-0wJ" customClass="RecorderViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="r9F-FY-ClG"/>
                         <viewControllerLayoutGuide type="bottom" id="SqQ-sp-yyC"/>
@@ -948,9 +948,52 @@
                     <view key="view" contentMode="scaleToFill" id="OsZ-4X-5iI">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TME-7Z-RiF">
+                                <rect key="frame" x="135" y="147" width="50" height="30"/>
+                                <state key="normal" title="Record">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionRecord:" destination="iCj-CN-0wJ" eventType="touchUpInside" id="W7b-9b-Nwj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bkh-Pe-ZpN">
+                                <rect key="frame" x="145" y="212" width="30" height="30"/>
+                                <state key="normal" title="Play">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionPlay:" destination="iCj-CN-0wJ" eventType="touchUpInside" id="ZH2-qR-oD1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D0K-6b-t0C">
+                                <rect key="frame" x="143" y="274" width="34" height="30"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionSave:" destination="iCj-CN-0wJ" eventType="touchUpInside" id="G3R-HD-6jO"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NvJ-SZ-Spf">
+                                <rect key="frame" x="121" y="334" width="78" height="30"/>
+                                <state key="normal" title="Recordings">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionRecordings:" destination="iCj-CN-0wJ" eventType="touchUpInside" id="4aj-Ms-wXO"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Audio Recorder" id="Iqb-xI-AOG"/>
+                    <connections>
+                        <outlet property="buttonPlay" destination="Bkh-Pe-ZpN" id="N8f-Kh-WHZ"/>
+                        <outlet property="buttonRecord" destination="TME-7Z-RiF" id="ld3-7H-zoj"/>
+                        <outlet property="buttonSave" destination="D0K-6b-t0C" id="jDx-pA-wfj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ACX-WZ-Gz0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

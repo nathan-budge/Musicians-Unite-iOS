@@ -13,8 +13,8 @@
 @interface Recording : NSObject
 
 @property (nonatomic) NSString *recordingID;
-@property (nonatomic) NSString *title;
-@property (nonatomic) NSData *recording;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSData *data;
 
 - (Recording *)initWithRef: (Firebase *)recordingRef;
 

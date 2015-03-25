@@ -24,6 +24,7 @@
 		9405B9841A8F972D00EEDE19 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9831A8F972D00EEDE19 /* Security.framework */; };
 		9405B9861A8F973700EEDE19 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */; };
 		940CDBBD1AC33AD40006F099 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBBC1AC33AD40006F099 /* Recording.m */; };
+		940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC01AC348CE0006F099 /* RecorderViewController.m */; };
 		9431B8911A93FDE60074818F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
 		9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
 		945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945958F31A97B000002CF4EF /* GroupTabBarController.m */; };
@@ -112,6 +113,8 @@
 		9405B98A1A8F97F700EEDE19 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
 		940CDBBB1AC33AD40006F099 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recording.h; sourceTree = "<group>"; };
 		940CDBBC1AC33AD40006F099 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recording.m; sourceTree = "<group>"; };
+		940CDBBF1AC348CE0006F099 /* RecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecorderViewController.h; path = MusicTools/AudioRecorder/RecorderViewController.h; sourceTree = "<group>"; };
+		940CDBC01AC348CE0006F099 /* RecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecorderViewController.m; path = MusicTools/AudioRecorder/RecorderViewController.m; sourceTree = "<group>"; };
 		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupTabBarController.h; sourceTree = "<group>"; };
 		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupTabBarController.m; sourceTree = "<group>"; };
 		947429B61ABF1B88002D81E7 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TasksTableViewController.h; path = PracticeList/TasksTableViewController.h; sourceTree = "<group>"; };
@@ -320,6 +323,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		940CDBBE1AC3484C0006F099 /* Audio Recorder */ = {
+			isa = PBXGroup;
+			children = (
+				940CDBBF1AC348CE0006F099 /* RecorderViewController.h */,
+				940CDBC01AC348CE0006F099 /* RecorderViewController.m */,
+			);
+			name = "Audio Recorder";
+			sourceTree = "<group>";
+		};
 		9428E37E1A9A5F1000A36900 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,6 +392,7 @@
 		947A47211ABB3FF0007B3878 /* MusicTools */ = {
 			isa = PBXGroup;
 			children = (
+				940CDBBE1AC3484C0006F099 /* Audio Recorder */,
 				947A47221ABB3FFA007B3878 /* Drones */,
 			);
 			name = MusicTools;
@@ -427,16 +440,16 @@
 				94C6DE5B1A93DDD800562CE9 /* Users */,
 				94F882131A97E2D6008F4AD8 /* Group.h */,
 				94F882141A97E2D6008F4AD8 /* Group.m */,
-				940CDBBB1AC33AD40006F099 /* Recording.h */,
-				940CDBBC1AC33AD40006F099 /* Recording.m */,
 				94F882161A97E39E008F4AD8 /* User.h */,
 				94F882171A97E39E008F4AD8 /* User.m */,
-				947A47281ABDF62E007B3878 /* Task.h */,
-				947A47291ABDF62E007B3878 /* Task.m */,
-				9479A2AF1A9B68A400C668D0 /* Message.h */,
-				9479A2B01A9B68A400C668D0 /* Message.m */,
 				9479A2B21A9B68C000C668D0 /* MessageThread.h */,
 				9479A2B31A9B68C000C668D0 /* MessageThread.m */,
+				9479A2AF1A9B68A400C668D0 /* Message.h */,
+				9479A2B01A9B68A400C668D0 /* Message.m */,
+				947A47281ABDF62E007B3878 /* Task.h */,
+				947A47291ABDF62E007B3878 /* Task.m */,
+				940CDBBB1AC33AD40006F099 /* Recording.h */,
+				940CDBBC1AC33AD40006F099 /* Recording.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -679,6 +692,7 @@
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
 				9479A2981A9A693A00C668D0 /* SLKInputAccessoryView.m in Sources */,
+				940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */,
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
 				947A472A1ABDF62E007B3878 /* Task.m in Sources */,

@@ -70,8 +70,8 @@
         NSDictionary *recordingData = snapshot.value;
         
         self.recordingID = snapshot.key;
-        self.title = recordingData[@"title"];
-        self.recording = [[NSData alloc] initWithBase64EncodedString:recordingData[@"recording"] options:0];
+        self.name = recordingData[@"name"];
+        self.data = [[NSData alloc] initWithBase64EncodedString:recordingData[@"data"] options:0];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
@@ -89,8 +89,8 @@
 {
     [self.recordingRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"title"]) {
-            self.title = snapshot.value;
+        if ([snapshot.key isEqualToString:@"name"]) {
+            self.name = snapshot.value;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
         }
         

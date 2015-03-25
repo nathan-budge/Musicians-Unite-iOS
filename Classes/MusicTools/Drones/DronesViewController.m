@@ -117,8 +117,6 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState)
         AudioOutputUnitStart(_toneUnit);
         
     }
-    
-    
 }
 
 -(void)stop

@@ -7,7 +7,6 @@
 //
 
 #import <Firebase/Firebase.h>
-#import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
 
 #import "TaskViewController.h"
@@ -146,7 +145,7 @@
         
         [taskRef updateChildValues:updatedTask];
         
-        [SVProgressHUD showSuccessWithStatus:@"Task created" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showSuccessWithStatus:@"Task saved" maskType:SVProgressHUDMaskTypeBlack];
         
         [self dismissKeyboard];
         
