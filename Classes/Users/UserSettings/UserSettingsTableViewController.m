@@ -1,13 +1,10 @@
 //
-//  UserSettingsViewController.m
+//  UserSettingsTableViewController.m
 //  Musicians-Unite-iOS
 //
-//  Created by Nathan Budge on 2/14/15.
+//  Created by Nathan Budge on 3/26/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
-//  Navigation drawer adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
-//
-//  keyboardWasShown and keyboardWillBeHidden adapted from https://developer.apple.com/library/prerelease/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
 
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
@@ -16,58 +13,45 @@
 #import "AppConstant.h"
 #import "Utilities.h"
 
-#import "UserSettingsViewController.h"
+#import "UserSettingsTableViewController.h"
 #import "NavigationDrawerViewController.h"
 
 #import "User.h"
 #import "Group.h"
 
 
-@interface UserSettingsViewController ()
+@interface UserSettingsTableViewController ()
 
-//Firebase reference
 @property (nonatomic) Firebase *ref;
-@property (nonatomic) Firebase *currentUserRef;
 
-//User information
 @property (weak, nonatomic) IBOutlet UITextField *fieldFirstName;
 @property (weak, nonatomic) IBOutlet UITextField *fieldLastName;
 @property (weak, nonatomic) IBOutlet UILabel *labelEmail;
-
-//Scroll view
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
-//Buttons
 @property (weak, nonatomic) IBOutlet UIButton *buttonProfileImage;
+
+@property (nonatomic) User *user;
 
 @end
 
 
-@implementation UserSettingsViewController
+@implementation UserSettingsTableViewController
 
-#pragma mark - Lazy instatination
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
-- (Firebase *)ref
+-(Firebase *)ref
 {
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
 
--(Firebase *)currentUserRef
-{
-    if (!_currentUserRef) {
-        _currentUserRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
-    }
-    
-    return _currentUserRef;
-}
-
-
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad
 {
@@ -83,22 +67,13 @@
     UIImage *profileImage = self.user.profileImage;
     [self.buttonProfileImage setImage:profileImage forState:UIControlStateNormal];
     
-    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
 - (IBAction)actionDrawerToggle:(id)sender
 {
@@ -112,6 +87,8 @@
     
     if (self.fieldFirstName.text.length > 0) {
         
+        Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.user.userID]];
+        
         NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
         
         NSDictionary *updatedValues = @{
@@ -120,7 +97,7 @@
                                         @"profile_image":profileImageString,
                                         };
         
-        [self.currentUserRef updateChildValues:updatedValues];
+        [userRef updateChildValues:updatedValues];
         [SVProgressHUD showSuccessWithStatus:@"Saved" maskType:SVProgressHUDMaskTypeBlack];
     }
     else {
@@ -141,9 +118,13 @@
     [actionSheet showInView:self.view];
 }
 
+- (IBAction)actionChangePassword:(id)sender
+{
+    [self performSegueWithIdentifier:@"changePassword" sender:self];
+}
+
 - (IBAction)actionDeleteAccount:(id)sender
 {
-    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please enter your password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
     [alert show];
@@ -157,9 +138,7 @@
         
         UITextField *textField = [alertView textFieldAtIndex:0];
         
-        __block NSString *uid = self.ref.authData.uid;
-        
-        [self.ref removeUser:self.ref.authData.providerData[@"email"] password:textField.text withCompletionBlock:^(NSError *error) {
+        [self.ref removeUser:self.user.email password:textField.text withCompletionBlock:^(NSError *error) {
             
             if (error) {
                 
@@ -175,48 +154,24 @@
             } else {
                 
                 for (Group *group in self.user.groups) {
-                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", group.groupID, uid]] removeValue];
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", group.groupID, self.user.userID]] removeValue];
                     [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
                 }
-                
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", uid]] removeValue];
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"todo/%@", uid]] removeValue];
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", uid]] removeValue];
+            
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.user.userID]] removeValue];
                 
                 [self.ref unauth];
                 [SVProgressHUD dismiss];
-                [self performSegueWithIdentifier:@"DeleteAccount" sender:nil];
+                [self performSegueWithIdentifier:@"deleteAccount" sender:nil];
             }
         }];
     }
 }
 
 
-#pragma mark - Keyboard handling
-
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-    CGRect aRect = self.view.frame;
-    aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, self.fieldLastName.frame.origin) ) {
-        [self.scrollView scrollRectToVisible:self.fieldLastName.frame animated:YES];
-    }
-}
-
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-}
+//*****************************************************************************/
+#pragma mark - Keyboard Handling
+//*****************************************************************************/
 
 -(void)dismissKeyboard
 {
@@ -230,7 +185,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Profile Image Handling
+//*****************************************************************************/
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     switch (buttonIndex) {
@@ -248,7 +205,6 @@
     }
     
 }
-
 
 //Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
 -(void)takePhoto

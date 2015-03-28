@@ -5,34 +5,29 @@
 //  Created by Nathan Budge on 2/14/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
-//  keyboardWasShown and keyboardWillBeHidden adapted from https://developer.apple.com/library/prerelease/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
-//
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
+
 #import "RegisterViewController.h"
 
 
 @interface RegisterViewController ()
 
-//Firebase references
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *usersRef;
 
-//Text fields
 @property (weak, nonatomic) IBOutlet UITextField *fieldFirstName;
 @property (weak, nonatomic) IBOutlet UITextField *fieldLastName;
 @property (weak, nonatomic) IBOutlet UITextField *fieldEmail;
 @property (weak, nonatomic) IBOutlet UITextField *fieldPassword;
 
-//Scroll view
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
-//Buttons
-- (IBAction)didPressProfileImageButton:(id)sender;
+- (IBAction)actionProfileImage:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
 @end
@@ -40,19 +35,22 @@
 
 @implementation RegisterViewController
 
-#pragma mark - Lazy instantiation
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 - (Firebase *)ref
 {
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad
 {
@@ -80,40 +78,44 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Status Bar Color
+//*****************************************************************************/
 
--(UIStatusBarStyle)preferredStatusBarStyle{
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
     return UIStatusBarStyleLightContent;
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
-- (IBAction)didPressProfileImageButton:(id)sender
+- (IBAction)actionProfileImage:(id)sender
 {
-    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
                                                destructiveButtonTitle:@"Remove Photo"
                                                     otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
     
-    
-    
     [actionSheet showInView:self.view];
 }
 
-- (IBAction)actionTogglePasswordVisibility:(id)sender {
+- (IBAction)actionTogglePasswordVisibility:(id)sender
+{
     [Utilities toggleEyeball:sender];
     self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
+    
     //Reset the cursor.
     NSString *tmpString = self.fieldPassword.text;
     self.fieldPassword.text = @"";
     self.fieldPassword.text = tmpString;
 }
 
-- (IBAction)actionRegisterUser:(id)sender {
-    
+- (IBAction)actionRegisterUser:(id)sender
+{
     [SVProgressHUD showWithStatus:@"Registering..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
@@ -133,10 +135,11 @@
         } withCancelBlock:^(NSError *error) {
             [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
         }];
-    }
-    else {
+        
+    } else {
         [SVProgressHUD showErrorWithStatus:@"First name is required" maskType:SVProgressHUDMaskTypeBlack];
         self.fieldPassword.text = @"";
+        
     }
 }
 
@@ -159,20 +162,18 @@
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                     break;
             }
-            
             self.fieldPassword.text = @"";
-        }
-        else {
             
+        } else {
             [self.ref authUser:self.fieldEmail.text password:self.fieldPassword.text withCompletionBlock:^(NSError *error, FAuthData *authData) {
                 
                 if (error) {
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
-                }
-                else {
+                    
+                } else {
+                    Firebase *newUserRef = [self.usersRef childByAppendingPath:authData.uid];
                     
                     NSString * profileImageString = [Utilities encodeImageToBase64:self.profileImageButton.imageView.image];
-                    
                     NSDictionary *newUser = @{
                                               @"first_name":self.fieldFirstName.text,
                                               @"last_name":self.fieldLastName.text,
@@ -181,16 +182,16 @@
                                               @"profile_image":profileImageString,
                                               };
                     
-                    Firebase *newUserRef = [self.usersRef childByAppendingPath:authData.uid];
                     [newUserRef setValue:newUser];
                     
                     if (tempUser != nil) {
                         NSString *tempUserID = [tempUser allKeys][0];
                         [self addGroups:tempUserID withAuthData:authData andNewUserRef:newUserRef];
-                    }
-                    else {
+                        
+                    } else {
                         [SVProgressHUD dismiss];
                         [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
+                        
                     }
                 }
             }];
@@ -222,11 +223,15 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Keyboard Handling
+
+// keyboardWasShown and keyboardWillBeHidden adapted from https://developer.apple.com/library/prerelease/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
+//*****************************************************************************/
+
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
@@ -257,30 +262,30 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == self.fieldFirstName)
-    {
+    if (textField == self.fieldFirstName){
         [self.fieldLastName becomeFirstResponder];
-    }
     
-    if (textField == self.fieldLastName) {
+    } else if (textField == self.fieldLastName) {
         [self.fieldEmail becomeFirstResponder];
-    }
-    
-    if (textField == self.fieldEmail) {
+        
+    } else if (textField == self.fieldEmail) {
         [self.fieldPassword becomeFirstResponder];
-    }
     
-    if (textField == self.fieldPassword) {
+    } else if (textField == self.fieldPassword) {
         [self dismissKeyboard];
+        
     }
     
     return YES;
 }
 
 
+//*****************************************************************************/
 #pragma mark - Profile Image Handling
+//*****************************************************************************/
 
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     switch (buttonIndex) {
         case 0:
             [self removePhoto];
@@ -297,7 +302,8 @@
 }
 
 //Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
--(void)takePhoto {
+-(void)takePhoto
+{
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
                                                               message:@"Device has no camera"
@@ -306,8 +312,8 @@
                                                     otherButtonTitles: nil];
         
         [myAlertView show];
+        
     } else {
-        NSLog(@"Take Photo Called");
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
@@ -317,8 +323,8 @@
     }
 }
 
--(void)selectPhoto {
-    NSLog(@"Select Photo Called");
+-(void)selectPhoto
+{
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
@@ -332,13 +338,15 @@
     [self.profileImageButton setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
 }
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
     UIImage *image = info[UIImagePickerControllerEditedImage];
     [self.profileImageButton setImage:image forState:UIControlStateNormal];
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 

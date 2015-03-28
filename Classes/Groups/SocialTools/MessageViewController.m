@@ -1,9 +1,11 @@
 //
 //  MessageViewController.m
-//  Messenger
+//  Musicians-Unite-iOS
 //
-//  Created by Ignacio Romero Zurbuchen on 8/15/14.
-//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
+//  Created by Nathan Budge on 2/22/15.
+//  Copyright (c) 2015 CWRU. All rights reserved.
+//
+//  Adapted from https://github.com/slackhq/SlackTextViewController/blob/master/Examples/Messenger/Messenger-Shared/MessageViewController.m
 //
 
 #import <Firebase/Firebase.h>

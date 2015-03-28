@@ -5,7 +5,6 @@
 //  Created by Nathan Budge on 2/14/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
-//  Adapted from https://github.com/ECSlidingViewController/ECSlidingViewController/tree/master/Examples/TransitionFun
 
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
@@ -15,8 +14,6 @@
 #import "SharedData.h"
 
 #import "NavigationDrawerViewController.h"
-#import "UserSettingsViewController.h"
-#import "GroupsTableViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -39,7 +36,7 @@
 @implementation NavigationDrawerViewController
 
 //*****************************************************************************/
-#pragma mark - Lazy instantiation
+#pragma mark - Lazy Instantiation
 //*****************************************************************************/
 
 - (Firebase *)ref
@@ -53,13 +50,12 @@
 
 
 //*****************************************************************************/
-#pragma mark - View lifecycle
+#pragma mark - View Lifecycle
 //*****************************************************************************/
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
 }
 
@@ -71,12 +67,6 @@
 - (IBAction)actionHome:(id)sender
 {
     self.slidingViewController.topViewController = self.transitionsNavigationController;
-    [self.slidingViewController resetTopViewAnimated:YES];
-}
-
-- (IBAction)actionUserSettings:(id)sender
-{
-    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserSettingsNavigationController"];
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
@@ -92,13 +82,19 @@
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
+- (IBAction)actionUserSettings:(id)sender
+{
+    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserSettingsNavigationController"];
+    [self.slidingViewController resetTopViewAnimated:YES];
+}
+
 - (IBAction)actionLogout:(id)sender
 {
     [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
     
     SharedData *childObservers = [SharedData sharedInstance];
     
-    for (Firebase *ref in childObservers.childObservers) {
+    for (Firebase *ref in childObservers.childObservers){
         [ref removeAllObservers];
     }
     

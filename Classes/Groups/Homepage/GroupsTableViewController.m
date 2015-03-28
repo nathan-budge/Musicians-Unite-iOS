@@ -7,8 +7,6 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
@@ -33,7 +31,6 @@
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *userRef;
 @property (nonatomic) Firebase *userGroupsRef;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
 
 @property (nonatomic, weak) SharedData *sharedData;
 
@@ -42,19 +39,22 @@
 
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
+
 @end
 
 
 @implementation GroupsTableViewController
 
+//*****************************************************************************/
 #pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 -(Firebase *)ref
 {
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -72,12 +72,13 @@
     if (!_groups) {
         _groups = [[NSMutableArray alloc] init];
     }
-    
     return _groups;
 }
 
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad
 {
@@ -91,11 +92,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
                                                  name:@"Data Loaded"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Finished Loading"
                                                object:nil];
     
     self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
@@ -112,7 +108,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Load User
+//*****************************************************************************/
 
 -(void)loadUser
 {
@@ -123,7 +121,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Load Groups
+//*****************************************************************************/
 
 - (void)loadGroups
 {
@@ -136,9 +136,12 @@
         if ([snapshot.value isEqual:[NSNull null]]) {
             [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
         }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"%@", error.description);
     }];
     
-    [self attachListenerForAddedGroupsToUser]; 
+    [self attachListenerForAddedGroupsToUser];
     [self attachListenerForRemovedGroupsToUser];
 }
 
@@ -174,7 +177,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Notification Center
+//*****************************************************************************/
 
 - (void)receivedNotification: (NSNotification *)notification
 {
@@ -185,7 +190,9 @@
 }
 
 
-#pragma mark - Navigation Drawer
+//*****************************************************************************/
+#pragma mark - Buttons
+//*****************************************************************************/
 
 - (IBAction)actionDrawerToggle:(id)sender
 {
@@ -193,7 +200,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Prepare for segue
+//*****************************************************************************/
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -201,6 +210,7 @@
         GroupTabBarController *destViewController = segue.destinationViewController;
         destViewController.group = self.selectedGroup;
         destViewController.user = self.user;
+        
     } else if ([segue.identifier isEqualToString:@"newGroup"]) {
         GroupDetailViewController *destViewController = segue.destinationViewController;
         destViewController.group = nil;
@@ -208,7 +218,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Table view data source
+//*****************************************************************************/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -226,7 +238,6 @@
     
     Group *group = [self.groups objectAtIndex:indexPath.row];
     
-    //Get subviews
     UIImageView *profileImageView = (UIImageView *)[cell viewWithTag:1];
     profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
     profileImageView.layer.masksToBounds = YES;

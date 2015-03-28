@@ -14,11 +14,12 @@
 
 @implementation WelcomeViewController
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setBackBarButtonItem:backButton];
@@ -31,15 +32,12 @@
 }
 
 
-#pragma mark - Unwind for Delete Account
+//*****************************************************************************/
+#pragma mark - Status Bar Color
+//*****************************************************************************/
 
-- (IBAction)unwindToWelcome:(UIStoryboardSegue *)segue {
-}
-
-
-#pragma mark - Status bar color
-
--(UIStatusBarStyle)preferredStatusBarStyle{
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
     return UIStatusBarStyleLightContent;
 }
 

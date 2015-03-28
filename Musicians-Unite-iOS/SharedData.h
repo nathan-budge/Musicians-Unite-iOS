@@ -21,6 +21,7 @@
 + (SharedData *)sharedInstance;
 
 - (void) addChildObserver:(Firebase *)childObserver;
+- (void) removeChildObserver:(Firebase *)childObserver;
 - (void) addUser:(User *)user;
 - (void) removeUser:(User *)user;
 

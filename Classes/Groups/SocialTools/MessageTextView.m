@@ -1,9 +1,11 @@
 //
 //  MessageTextView.m
-//  Messenger
+//  Musicians-Unite-iOS
 //
-//  Created by Ignacio Romero Z. on 1/20/15.
-//  Copyright (c) 2015 Slack Technologies, Inc. All rights reserved.
+//  Created by Nathan Budge on 2/22/15.
+//  Copyright (c) 2015 CWRU. All rights reserved.
+//
+//  Adapted from https://github.com/slackhq/SlackTextViewController/blob/master/Examples/Messenger/Messenger-Shared/MessageTextView.m
 //
 
 #import "MessageTextView.h"

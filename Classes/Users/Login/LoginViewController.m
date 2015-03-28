@@ -11,15 +11,14 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+
 #import "LoginViewController.h"
 
 
 @interface LoginViewController ()
 
-//Firebase Reference
 @property (nonatomic) Firebase *ref;
 
-//Text Fields
 @property (weak, nonatomic) IBOutlet UITextField *fieldEmail;
 @property (weak, nonatomic) IBOutlet UITextField *fieldPassword;
 
@@ -28,7 +27,9 @@
 
 @implementation LoginViewController
 
-#pragma mark - Lazy instantiation
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 - (Firebase *)ref
 {
@@ -40,12 +41,13 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    
-    //Add tap gesture for dismissing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
@@ -56,17 +58,22 @@
 }
 
 
-#pragma mark - Status bar color
+//*****************************************************************************/
+#pragma mark - Status Bar Color
+//*****************************************************************************/
 
--(UIStatusBarStyle)preferredStatusBarStyle{
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
     return UIStatusBarStyleLightContent;
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
-- (IBAction)actionLogin:(id)sender {
-    
+- (IBAction)actionLogin:(id)sender
+{
     [SVProgressHUD showWithStatus:@"Logging in..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
@@ -91,6 +98,7 @@
                     break;
             }
             self.fieldPassword.text = @"";
+            
         } else {
             [SVProgressHUD dismiss];
             [self performSegueWithIdentifier:@"LoginToGroups" sender:sender];
@@ -98,32 +106,31 @@
     }];
 }
 
-- (IBAction)actionTogglePasswordVisibility:(id)sender {
+- (IBAction)actionTogglePasswordVisibility:(id)sender
+{
     [Utilities toggleEyeball:sender];
     self.fieldPassword.secureTextEntry = !self.fieldPassword.secureTextEntry;
-    //Reset the cursor.
+    
+    //Reset the cursor
     NSString *tmpString = self.fieldPassword.text;
     self.fieldPassword.text = @"";
     self.fieldPassword.text = tmpString;
 }
 
-- (IBAction)actionForgotPassword:(id)sender {
-
+- (IBAction)actionForgotPassword:(id)sender
+{
     [self dismissKeyboard];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please enter an email address" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please enter your email address" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert show];
 }
 
-
-#pragma mark - Forgot Password Alert View
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
+    if (buttonIndex != alertView.cancelButtonIndex) {
         UITextField *textField = [alertView textFieldAtIndex:0];
+        
         [self.ref resetPasswordForUser:textField.text withCompletionBlock:^(NSError *error) {
             
             if (error) {
@@ -135,19 +142,19 @@
                         [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                         break;
                 }
-                
                 self.fieldPassword.text = @"";
-            }
-            
-            else {
-                [SVProgressHUD showSuccessWithStatus:@"Email sent!" ];
+                
+            } else {
+                [SVProgressHUD showSuccessWithStatus:@"Password reset email sent!" ];
             }
         }];
     }
 }
 
 
-#pragma mark - Keyboard handling
+//*****************************************************************************/
+#pragma mark - Keyboard Handling
+//*****************************************************************************/
 
 -(void)dismissKeyboard
 {
@@ -156,14 +163,14 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == self.fieldEmail)
-    {
+    if (textField == self.fieldEmail) {
         [self.fieldPassword becomeFirstResponder];
-    }
-    if (textField == self.fieldPassword)
-    {
+        
+    } else if (textField == self.fieldPassword) {
         [self dismissKeyboard];
+        
     }
+
     return YES;
 }
 

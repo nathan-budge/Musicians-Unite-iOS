@@ -1,59 +1,74 @@
 //
-//  ChangePasswordViewController.m
+//  ChangePasswordTableViewController.m
 //  Musicians-Unite-iOS
 //
-//  Created by Nathan Budge on 2/14/15.
+//  Created by Nathan Budge on 3/26/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
 #import <Firebase/Firebase.h>
+#import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
-#import "ChangePasswordViewController.h"
 
-@interface ChangePasswordViewController ()
+#import "ChangePasswordTableViewController.h"
+#import "NavigationDrawerViewController.h"
 
-//Firebase reference
+#import "User.h"
+
+
+@interface ChangePasswordTableViewController ()
+
 @property (nonatomic) Firebase *ref;
 
-@property (weak, nonatomic) IBOutlet UITextField *fieldOldPassword;
-@property (weak, nonatomic) IBOutlet UITextField *fieldNewPassword;
+@property (nonatomic) User *user;
 
+@property (weak, nonatomic) IBOutlet UITextField *fieldCurrentPassword;
+@property (weak, nonatomic) IBOutlet UITextField *fieldNewPassword;
 @end
 
-@implementation ChangePasswordViewController
 
-#pragma mark - Lazy instatination
+@implementation ChangePasswordTableViewController
+
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 -(Firebase *)ref
 {
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
+    self.user = navigationDrawerViewController.user;
+    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
 - (IBAction)actionSave:(id)sender
 {
     [SVProgressHUD showWithStatus:@"Changing Password..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
-    [self.ref changePasswordForUser:self.ref.authData.providerData[@"email"] fromOld:self.fieldOldPassword.text toNew:self.fieldNewPassword.text withCompletionBlock:^(NSError *error) {
+    [self.ref changePasswordForUser:self.user.email fromOld:self.fieldCurrentPassword.text toNew:self.fieldNewPassword.text withCompletionBlock:^(NSError *error) {
         if (error) {
             switch (error.code) {
                 case FAuthenticationErrorInvalidPassword:
@@ -63,7 +78,7 @@
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                     break;
             }
-            self.fieldOldPassword.text = @"";
+            self.fieldCurrentPassword.text = @"";
             self.fieldNewPassword.text = @"";
         } else {
             [SVProgressHUD showSuccessWithStatus:@"Password Changed!" maskType:SVProgressHUDMaskTypeBlack];
@@ -84,7 +99,9 @@
 }
 
 
-#pragma mark - Keyboard handling
+//*****************************************************************************/
+#pragma mark - Keyboard Handling
+//*****************************************************************************/
 
 -(void)dismissKeyboard
 {
@@ -93,14 +110,13 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == self.fieldOldPassword)
+    if (textField == self.fieldCurrentPassword)
     {
         [self.fieldNewPassword becomeFirstResponder];
-    }
-    
-    if (textField == self.fieldNewPassword)
+    } else if (textField == self.fieldNewPassword)
     {
         [self dismissKeyboard];
+        
     }
     
     return YES;

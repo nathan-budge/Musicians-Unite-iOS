@@ -1,122 +1,50 @@
 //
-//  DronesViewController.m
+//  ToneGenerator.m
 //  Musicians-Unite-iOS
 //
-//  Created by Nathan Budge on 3/19/15.
+//  Created by Nathan Budge on 3/28/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 //  Adapted from https://github.com/MMercieca/Handshake/blob/master/Handshake/ToneGenerator.m
+//
 
-#import "DronesViewController.h"
-#import <AVFoundation/AVFoundation.h>
-
-#import "AppConstant.h"
+#import "ToneGenerator.h"
 
 #define SAMPLE_RATE 44100
 
-#define FREQ_A0  27.5;
-#define FREQ_BB0 29.1352;
-#define FREQ_B0  30.8677;
-#define FREQ_C0  32.7032;
-#define FREQ_DB0 34.6478;
-#define FREQ_D0  36.7081;
-#define FREQ_EB0 38.8909;
-#define FREQ_E0  41.2034;
-#define FREQ_F0  43.6535;
-#define FREQ_GB0 46.2493;
-#define FREQ_G0  48.9994;
-#define FREQ_AB0 51.9131;
+@interface ToneGenerator()
 
-@interface DronesViewController ()
-
-@property (nonatomic) double frequency;
 @property (nonatomic) double theta;
-@property (nonatomic) AVAudioSession *audioSession;
-@property (nonatomic) AudioComponentInstance toneUnit;
+@property (strong, nonatomic) AVAudioSession *audioSession;
 
 @end
 
-@implementation DronesViewController
+@implementation ToneGenerator
 
-- (void)viewDidLoad{
-    [super viewDidLoad];
+-(ToneGenerator*)init
+{
+    self = [super init];
     
     self.audioSession = [AVAudioSession sharedInstance];
-    NSError *error;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    NSError *nsError;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&nsError];
+    
+    return self;
 }
 
 void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState)
 {
-    DronesViewController* dronesViewController = (__bridge DronesViewController*)inClientData;
-    [dronesViewController stop];
+    ToneGenerator* toneGenerator = (__bridge ToneGenerator*)inClientData;
+    [toneGenerator stop];
 }
 
-- (IBAction)actionC:(id)sender {
-    self.frequency = FREQ_C0;
-}
-
-
-- (IBAction)actionG:(id)sender {
-    self.frequency = FREQ_G0;
-}
-
-
-- (IBAction)actionD:(id)sender {
-    self.frequency = FREQ_D0;
-}
-
-- (IBAction)actionA:(id)sender {
-    self.frequency = FREQ_A0;
-}
-
-- (IBAction)actionE:(id)sender {
-    self.frequency = FREQ_E0;
-}
-
-- (IBAction)actionB:(id)sender {
-    self.frequency = FREQ_B0;
-}
-
-- (IBAction)actionGb:(id)sender {
-    self.frequency = FREQ_GB0;
-}
-
-- (IBAction)actionDb:(id)sender {
-    self.frequency = FREQ_DB0;
-}
-
-- (IBAction)actionAb:(id)sender {
-    self.frequency = FREQ_AB0;
-}
-
-- (IBAction)actionEb:(id)sender {
-    self.frequency = FREQ_EB0;
-}
-
-- (IBAction)actionBb:(id)sender {
-    self.frequency = FREQ_BB0;
-}
-
-- (IBAction)actionF:(id)sender {
-    self.frequency = FREQ_F0;
-}
-
-- (IBAction)actionPlay:(id)sender {
+-(void)play
+{
+    [self.audioSession setActive:true error:nil];
     
-    if (self.toneUnit) {
-        [self stop];
-        
-    } else {
-        [self.audioSession setActive:true error:nil];
-        
-        // Create the audio unit as shown above
-        [self createToneUnit];
-        
-        // Start playback
-        AudioOutputUnitStart(_toneUnit);
-        
-    }
+    [self createToneUnit];
+    
+    AudioOutputUnitStart(_toneUnit);
 }
 
 -(void)stop
@@ -197,7 +125,7 @@ OSStatus RenderTone(
     
     // Get the tone parameters out of the view controller
     //ToneGeneratorViewController *viewController = (ToneGeneratorViewController *)inRefCon;
-    DronesViewController *toneGenerator = (__bridge DronesViewController*)inRefCon;
+    ToneGenerator *toneGenerator = (__bridge ToneGenerator*)inRefCon;
     double theta = toneGenerator->_theta;
     double frequency = toneGenerator->_frequency;
     

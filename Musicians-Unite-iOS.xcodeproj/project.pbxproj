@@ -26,6 +26,11 @@
 		940CDBBD1AC33AD40006F099 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBBC1AC33AD40006F099 /* Recording.m */; };
 		940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC01AC348CE0006F099 /* RecorderViewController.m */; };
 		940CDBC41AC352BD0006F099 /* MusicToolsTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */; };
+		940CDBC71AC442870006F099 /* RecordingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC61AC442870006F099 /* RecordingsTableViewController.m */; };
+		940CDBCA1AC44F1E0006F099 /* UserSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBC91AC44F1E0006F099 /* UserSettingsTableViewController.m */; };
+		940CDBCD1AC4BCE20006F099 /* ChangePasswordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBCC1AC4BCE20006F099 /* ChangePasswordTableViewController.m */; };
+		940CDBD01AC6E8190006F099 /* DronesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940CDBCF1AC6E8190006F099 /* DronesTableViewController.m */; };
+		942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 942E57CC1AC7029800C957DB /* ToneGenerator.m */; };
 		9431B8911A93FDE60074818F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
 		9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
 		945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945958F31A97B000002CF4EF /* GroupTabBarController.m */; };
@@ -42,7 +47,6 @@
 		9479A2AB1A9A72D100C668D0 /* NewMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */; };
 		9479A2B11A9B68A400C668D0 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2B01A9B68A400C668D0 /* Message.m */; };
 		9479A2B41A9B68C000C668D0 /* MessageThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2B31A9B68C000C668D0 /* MessageThread.m */; };
-		947A47251ABB4027007B3878 /* DronesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 947A47241ABB4027007B3878 /* DronesViewController.m */; };
 		947A47271ABB418E007B3878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 947A47261ABB418E007B3878 /* AVFoundation.framework */; };
 		947A472A1ABDF62E007B3878 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 947A47291ABDF62E007B3878 /* Task.m */; };
 		947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 947A472C1ABE17B8007B3878 /* TaskViewController.m */; };
@@ -61,8 +65,6 @@
 		94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */; };
 		94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5E1A93DDD800562CE9 /* LoginViewController.m */; };
 		94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE611A93DDD800562CE9 /* RegisterViewController.m */; };
-		94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */; };
-		94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */; };
 		94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */; };
 		94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EE0B141A944ECD000F0F19 /* Utilities.m */; };
 		94F882151A97E2D6008F4AD8 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F882141A97E2D6008F4AD8 /* Group.m */; };
@@ -112,12 +114,22 @@
 		9405B9831A8F972D00EEDE19 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9405B9851A8F973700EEDE19 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9405B98A1A8F97F700EEDE19 /* AppConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
-		940CDBBB1AC33AD40006F099 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recording.h; sourceTree = "<group>"; };
-		940CDBBC1AC33AD40006F099 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recording.m; sourceTree = "<group>"; };
+		940CDBBB1AC33AD40006F099 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Recording.h; path = Models/Recording.h; sourceTree = "<group>"; };
+		940CDBBC1AC33AD40006F099 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Recording.m; path = Models/Recording.m; sourceTree = "<group>"; };
 		940CDBBF1AC348CE0006F099 /* RecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecorderViewController.h; path = MusicTools/AudioRecorder/RecorderViewController.h; sourceTree = "<group>"; };
 		940CDBC01AC348CE0006F099 /* RecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecorderViewController.m; path = MusicTools/AudioRecorder/RecorderViewController.m; sourceTree = "<group>"; };
 		940CDBC21AC352BD0006F099 /* MusicToolsTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicToolsTabBarController.h; path = MusicTools/MusicToolsTabBarController.h; sourceTree = "<group>"; };
 		940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MusicToolsTabBarController.m; path = MusicTools/MusicToolsTabBarController.m; sourceTree = "<group>"; };
+		940CDBC51AC442870006F099 /* RecordingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecordingsTableViewController.h; path = MusicTools/AudioRecorder/RecordingsTableViewController.h; sourceTree = "<group>"; };
+		940CDBC61AC442870006F099 /* RecordingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecordingsTableViewController.m; path = MusicTools/AudioRecorder/RecordingsTableViewController.m; sourceTree = "<group>"; };
+		940CDBC81AC44F1E0006F099 /* UserSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingsTableViewController.h; sourceTree = "<group>"; };
+		940CDBC91AC44F1E0006F099 /* UserSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsTableViewController.m; sourceTree = "<group>"; };
+		940CDBCB1AC4BCE20006F099 /* ChangePasswordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordTableViewController.h; sourceTree = "<group>"; };
+		940CDBCC1AC4BCE20006F099 /* ChangePasswordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordTableViewController.m; sourceTree = "<group>"; };
+		940CDBCE1AC6E8190006F099 /* DronesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DronesTableViewController.h; path = MusicTools/Drones/DronesTableViewController.h; sourceTree = "<group>"; };
+		940CDBCF1AC6E8190006F099 /* DronesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DronesTableViewController.m; path = MusicTools/Drones/DronesTableViewController.m; sourceTree = "<group>"; };
+		942E57CB1AC7029800C957DB /* ToneGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToneGenerator.h; path = MusicTools/Drones/ToneGenerator.h; sourceTree = "<group>"; };
+		942E57CC1AC7029800C957DB /* ToneGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToneGenerator.m; path = MusicTools/Drones/ToneGenerator.m; sourceTree = "<group>"; };
 		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupTabBarController.h; sourceTree = "<group>"; };
 		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupTabBarController.m; sourceTree = "<group>"; };
 		947429B61ABF1B88002D81E7 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TasksTableViewController.h; path = PracticeList/TasksTableViewController.h; sourceTree = "<group>"; };
@@ -143,15 +155,13 @@
 		9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagingTableViewController.m; path = Messaging/MessagingTableViewController.m; sourceTree = "<group>"; };
 		9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewMessageTableViewController.h; path = Messaging/NewMessageTableViewController.h; sourceTree = "<group>"; };
 		9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewMessageTableViewController.m; path = Messaging/NewMessageTableViewController.m; sourceTree = "<group>"; };
-		9479A2AF1A9B68A400C668D0 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		9479A2B01A9B68A400C668D0 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		9479A2B21A9B68C000C668D0 /* MessageThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageThread.h; sourceTree = "<group>"; };
-		9479A2B31A9B68C000C668D0 /* MessageThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageThread.m; sourceTree = "<group>"; };
-		947A47231ABB4027007B3878 /* DronesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DronesViewController.h; path = MusicTools/Drones/DronesViewController.h; sourceTree = "<group>"; };
-		947A47241ABB4027007B3878 /* DronesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DronesViewController.m; path = MusicTools/Drones/DronesViewController.m; sourceTree = "<group>"; };
+		9479A2AF1A9B68A400C668D0 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Models/Message.h; sourceTree = "<group>"; };
+		9479A2B01A9B68A400C668D0 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = Models/Message.m; sourceTree = "<group>"; };
+		9479A2B21A9B68C000C668D0 /* MessageThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageThread.h; path = Models/MessageThread.h; sourceTree = "<group>"; };
+		9479A2B31A9B68C000C668D0 /* MessageThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageThread.m; path = Models/MessageThread.m; sourceTree = "<group>"; };
 		947A47261ABB418E007B3878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		947A47281ABDF62E007B3878 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
-		947A47291ABDF62E007B3878 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		947A47281ABDF62E007B3878 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = Models/Task.h; sourceTree = "<group>"; };
+		947A47291ABDF62E007B3878 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Task.m; path = Models/Task.m; sourceTree = "<group>"; };
 		947A472B1ABE17B8007B3878 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskViewController.h; path = PracticeList/TaskViewController.h; sourceTree = "<group>"; };
 		947A472C1ABE17B8007B3878 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskViewController.m; path = PracticeList/TaskViewController.m; sourceTree = "<group>"; };
 		94833EE41A94018A00CC2930 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
@@ -174,26 +184,22 @@
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
 		94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberManagementViewController.m; sourceTree = "<group>"; };
-		94C6DE521A93DDD800562CE9 /* GroupDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupDetailViewController.h; sourceTree = "<group>"; };
-		94C6DE531A93DDD800562CE9 /* GroupDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupDetailViewController.m; sourceTree = "<group>"; };
+		94C6DE521A93DDD800562CE9 /* GroupDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupDetailViewController.h; path = ../GroupDetail/GroupDetailViewController.h; sourceTree = "<group>"; };
+		94C6DE531A93DDD800562CE9 /* GroupDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupDetailViewController.m; path = ../GroupDetail/GroupDetailViewController.m; sourceTree = "<group>"; };
 		94C6DE591A93DDD800562CE9 /* NavigationDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationDrawerViewController.h; sourceTree = "<group>"; };
 		94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationDrawerViewController.m; sourceTree = "<group>"; };
 		94C6DE5D1A93DDD800562CE9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		94C6DE5E1A93DDD800562CE9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		94C6DE601A93DDD800562CE9 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		94C6DE611A93DDD800562CE9 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
-		94C6DE631A93DDD800562CE9 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
-		94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
-		94C6DE651A93DDD800562CE9 /* UserSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingsViewController.h; sourceTree = "<group>"; };
-		94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsViewController.m; sourceTree = "<group>"; };
 		94C6DE681A93DDD800562CE9 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		94EE0B141A944ECD000F0F19 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
 		94EE0B161A944EE3000F0F19 /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
-		94F882131A97E2D6008F4AD8 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
-		94F882141A97E2D6008F4AD8 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
-		94F882161A97E39E008F4AD8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		94F882171A97E39E008F4AD8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		94F882131A97E2D6008F4AD8 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Group.h; path = Models/Group.h; sourceTree = "<group>"; };
+		94F882141A97E2D6008F4AD8 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Group.m; path = Models/Group.m; sourceTree = "<group>"; };
+		94F882161A97E39E008F4AD8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = Models/User.h; sourceTree = "<group>"; };
+		94F882171A97E39E008F4AD8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = Models/User.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,6 +337,8 @@
 			children = (
 				940CDBBF1AC348CE0006F099 /* RecorderViewController.h */,
 				940CDBC01AC348CE0006F099 /* RecorderViewController.m */,
+				940CDBC51AC442870006F099 /* RecordingsTableViewController.h */,
+				940CDBC61AC442870006F099 /* RecordingsTableViewController.m */,
 			);
 			name = "Audio Recorder";
 			sourceTree = "<group>";
@@ -350,6 +358,25 @@
 				9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */,
 			);
 			name = Messaging;
+			sourceTree = "<group>";
+		};
+		942E57CE1AC711EB00C957DB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				94F882131A97E2D6008F4AD8 /* Group.h */,
+				94F882141A97E2D6008F4AD8 /* Group.m */,
+				94F882161A97E39E008F4AD8 /* User.h */,
+				94F882171A97E39E008F4AD8 /* User.m */,
+				9479A2B21A9B68C000C668D0 /* MessageThread.h */,
+				9479A2B31A9B68C000C668D0 /* MessageThread.m */,
+				9479A2AF1A9B68A400C668D0 /* Message.h */,
+				9479A2B01A9B68A400C668D0 /* Message.m */,
+				947A47281ABDF62E007B3878 /* Task.h */,
+				947A47291ABDF62E007B3878 /* Task.m */,
+				940CDBBB1AC33AD40006F099 /* Recording.h */,
+				940CDBBC1AC33AD40006F099 /* Recording.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		9479A2811A9A693A00C668D0 /* SlackTextViewController */ = {
@@ -406,8 +433,10 @@
 		947A47221ABB3FFA007B3878 /* Drones */ = {
 			isa = PBXGroup;
 			children = (
-				947A47231ABB4027007B3878 /* DronesViewController.h */,
-				947A47241ABB4027007B3878 /* DronesViewController.m */,
+				940CDBCE1AC6E8190006F099 /* DronesTableViewController.h */,
+				940CDBCF1AC6E8190006F099 /* DronesTableViewController.m */,
+				942E57CB1AC7029800C957DB /* ToneGenerator.h */,
+				942E57CC1AC7029800C957DB /* ToneGenerator.m */,
 			);
 			name = Drones;
 			sourceTree = "<group>";
@@ -439,22 +468,11 @@
 		94C6DE491A93DDD800562CE9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				947A47211ABB3FF0007B3878 /* MusicTools */,
-				94C6DE4A1A93DDD800562CE9 /* Groups */,
 				94C6DE581A93DDD800562CE9 /* Navigation */,
 				94C6DE5B1A93DDD800562CE9 /* Users */,
-				94F882131A97E2D6008F4AD8 /* Group.h */,
-				94F882141A97E2D6008F4AD8 /* Group.m */,
-				94F882161A97E39E008F4AD8 /* User.h */,
-				94F882171A97E39E008F4AD8 /* User.m */,
-				9479A2B21A9B68C000C668D0 /* MessageThread.h */,
-				9479A2B31A9B68C000C668D0 /* MessageThread.m */,
-				9479A2AF1A9B68A400C668D0 /* Message.h */,
-				9479A2B01A9B68A400C668D0 /* Message.m */,
-				947A47281ABDF62E007B3878 /* Task.h */,
-				947A47291ABDF62E007B3878 /* Task.m */,
-				940CDBBB1AC33AD40006F099 /* Recording.h */,
-				940CDBBC1AC33AD40006F099 /* Recording.m */,
+				94C6DE4A1A93DDD800562CE9 /* Groups */,
+				947A47211ABB3FF0007B3878 /* MusicTools */,
+				942E57CE1AC711EB00C957DB /* Models */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -550,10 +568,10 @@
 		94C6DE621A93DDD800562CE9 /* UserSettings */ = {
 			isa = PBXGroup;
 			children = (
-				94C6DE631A93DDD800562CE9 /* ChangePasswordViewController.h */,
-				94C6DE641A93DDD800562CE9 /* ChangePasswordViewController.m */,
-				94C6DE651A93DDD800562CE9 /* UserSettingsViewController.h */,
-				94C6DE661A93DDD800562CE9 /* UserSettingsViewController.m */,
+				940CDBC81AC44F1E0006F099 /* UserSettingsTableViewController.h */,
+				940CDBC91AC44F1E0006F099 /* UserSettingsTableViewController.m */,
+				940CDBCB1AC4BCE20006F099 /* ChangePasswordTableViewController.h */,
+				940CDBCC1AC4BCE20006F099 /* ChangePasswordTableViewController.m */,
 			);
 			path = UserSettings;
 			sourceTree = "<group>";
@@ -673,9 +691,10 @@
 				9479A29B1A9A693A00C668D0 /* SLKTextViewController.m in Sources */,
 				9479A2961A9A693A00C668D0 /* UIScrollView+SLKAdditions.m in Sources */,
 				94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */,
-				947A47251ABB4027007B3878 /* DronesViewController.m in Sources */,
 				940CDBBD1AC33AD40006F099 /* Recording.m in Sources */,
+				940CDBCA1AC44F1E0006F099 /* UserSettingsTableViewController.m in Sources */,
 				9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */,
+				940CDBCD1AC4BCE20006F099 /* ChangePasswordTableViewController.m in Sources */,
 				94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */,
 				9479A2991A9A693A00C668D0 /* SLKTextInputbar.m in Sources */,
 				945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */,
@@ -691,7 +710,6 @@
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
 				9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */,
-				94C6DE711A93DDD800562CE9 /* ChangePasswordViewController.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
 				949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */,
 				940CDBC41AC352BD0006F099 /* MusicToolsTabBarController.m in Sources */,
@@ -702,10 +720,11 @@
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
 				947A472A1ABDF62E007B3878 /* Task.m in Sources */,
+				940CDBC71AC442870006F099 /* RecordingsTableViewController.m in Sources */,
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9479A2B11A9B68A400C668D0 /* Message.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
-				94C6DE721A93DDD800562CE9 /* UserSettingsViewController.m in Sources */,
+				942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */,
 				949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */,
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				94C6DE6C1A93DDD800562CE9 /* GroupDetailViewController.m in Sources */,
@@ -714,6 +733,7 @@
 				9479A29C1A9A693A00C668D0 /* SLKTypingIndicatorView.m in Sources */,
 				94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */,
 				947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */,
+				940CDBD01AC6E8190006F099 /* DronesTableViewController.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
 				9479A2951A9A693A00C668D0 /* SLKTextView+SLKAdditions.m in Sources */,
 			);

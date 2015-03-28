@@ -10,6 +10,4 @@
 
 @interface WelcomeViewController : UIViewController
 
-- (IBAction)unwindToWelcome:(UIStoryboardSegue *)segue;
-
 @end

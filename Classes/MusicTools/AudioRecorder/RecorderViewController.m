@@ -13,6 +13,7 @@
 #import "AppConstant.h"
 
 #import "RecorderViewController.h"
+#import "RecordingsTableViewController.h"
 #import "NavigationDrawerViewController.h"
 
 #import "User.h"
@@ -113,23 +114,26 @@
             
             Firebase *recordingRef = [[self.ref childByAppendingPath:@"recordings"] childByAutoId];
             Firebase *ownerRef;
+            NSString *ownerID;
             
             if (self.group) {
                 ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings", self.group.groupID]];
+                ownerID = self.group.groupID;
             } else {
                 ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings", self.user.userID]];
+                ownerID = self.user.userID;
             }
             
             NSDictionary *newRecording = @{
                                            @"name": textField.text,
                                            @"data": dataString,
+                                           @"owner": ownerID,
                                            };
             
             [recordingRef setValue:newRecording];
             [ownerRef updateChildValues:@{recordingRef.key:@YES}];
             
             [SVProgressHUD showSuccessWithStatus:@"Recording created" maskType:SVProgressHUDMaskTypeBlack];
-            
         }
     }
 }
@@ -164,8 +168,8 @@
 
 - (IBAction)actionPlay:(id)sender
 {
-    if (!self.recorder.recording) {
-        
+    if (!self.recorder.recording)
+    {
         self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
         [self.player setDelegate:self];
         [self.player play];
@@ -173,10 +177,16 @@
     }
 }
 
-
 - (IBAction)actionRecordings:(id)sender
 {
-    //TODO
+    if (self.group)
+    {
+        [self performSegueWithIdentifier:@"viewGroupRecordings" sender:self];
+    }
+    else
+    {
+        [self performSegueWithIdentifier:@"viewUserRecordings" sender:self];
+    }
 }
 
 
@@ -184,9 +194,17 @@
 #pragma mark - Navigation
 //*****************************************************************************/
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"viewUserRecordings"]) {
+        RecordingsTableViewController *destViewController = segue.destinationViewController;
+        destViewController.user = self.user;
+
+    } else if ([segue.identifier isEqualToString:@"viewGroupRecordings"]) {
+        RecordingsTableViewController *destViewController = segue.destinationViewController;
+        destViewController.group = self.group;
+        
+    }
 }
 
 

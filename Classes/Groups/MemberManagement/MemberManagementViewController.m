@@ -37,7 +37,9 @@
 
 @implementation MemberManagementViewController
 
-#pragma mark - Lazy instatination
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 -(Firebase *)ref
 {
@@ -75,7 +77,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad
 {
@@ -107,7 +111,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Buttons
+//*****************************************************************************/
 
 - (IBAction)actionAddMember:(id)sender
 {
@@ -124,7 +130,7 @@
         self.fieldEmail.text = @"";
         [SVProgressHUD showErrorWithStatus:@"Invalid email" maskType:SVProgressHUDMaskTypeBlack];
         
-    } else{
+    } else {
         [self addMemberToList];
         [self dismissKeyboard];
     }
@@ -200,8 +206,6 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
         [self dismissKeyboard];
     });
-    
-    
 }
 
 - (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef
@@ -276,7 +280,9 @@
 
 
 
+//*****************************************************************************/
 #pragma mark - Keyboard Handling
+//*****************************************************************************/
 
 -(void)dismissKeyboard
 {
@@ -291,7 +297,9 @@
 }
 
 
+//*****************************************************************************/
 #pragma mark - Table view data source
+//*****************************************************************************/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

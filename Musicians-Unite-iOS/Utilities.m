@@ -56,7 +56,6 @@
     }];
 }
 
-//UPDATE THIS
 +(void)removeEmptyGroups:(NSString *) groupID withRef:(Firebase *) ref
 {
     [[ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -94,18 +93,6 @@
                 
             }];
             
-
-            [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                if (![snapshot.value isEqual:[NSNull null]]) {
-                    [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", groupID]] removeValue];
-                }
-            }];
-
-            [[ref childByAppendingPath:[NSString stringWithFormat:@"todo/%@", groupID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-                if (![snapshot.value isEqual:[NSNull null]]) {
-                    [[ref childByAppendingPath:[NSString stringWithFormat:@"todo/%@", groupID]] removeValue];
-                }
-            }];
         }
         
     } withCancelBlock:^(NSError *error) {
