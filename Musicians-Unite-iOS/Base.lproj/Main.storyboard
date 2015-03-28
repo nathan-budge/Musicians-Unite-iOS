@@ -572,6 +572,24 @@
                                     <action selector="actionUserSettings:" destination="kpE-2P-7MY" eventType="touchUpInside" id="dPV-71-K2I"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1L9-cT-6iR">
+                                <rect key="frame" x="4" y="113" width="50" height="31"/>
+                                <state key="normal" image="music_tools">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionMusicTools:" destination="kpE-2P-7MY" eventType="touchUpInside" id="CS2-67-1ta"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kN9-Dj-RmR">
+                                <rect key="frame" x="4" y="163" width="50" height="30"/>
+                                <state key="normal" image="user_practice_list">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionPracticeList:" destination="kpE-2P-7MY" eventType="touchUpInside" id="l6A-Vv-bd3"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -970,7 +988,7 @@
             </objects>
             <point key="canvasLocation" x="2733" y="-594"/>
         </scene>
-        <!--Audio Recorder-->
+        <!--Audio-->
         <scene sceneID="fmE-UJ-60o">
             <objects>
                 <viewController id="iCj-CN-0wJ" customClass="RecorderViewController" sceneMemberID="viewController">
@@ -1021,7 +1039,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Audio Recorder" id="Iqb-xI-AOG"/>
+                    <tabBarItem key="tabBarItem" title="Audio" image="audio_wave" id="Iqb-xI-AOG"/>
                     <connections>
                         <outlet property="buttonPlay" destination="Bkh-Pe-ZpN" id="N8f-Kh-WHZ"/>
                         <outlet property="buttonRecord" destination="TME-7Z-RiF" id="ld3-7H-zoj"/>
@@ -1033,26 +1051,7 @@
             </objects>
             <point key="canvasLocation" x="3093" y="1093"/>
         </scene>
-        <!--Metronome-->
-        <scene sceneID="6Fp-Q7-Ccl">
-            <objects>
-                <viewController id="lGm-07-U9l" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="eyE-iq-BTp"/>
-                        <viewControllerLayoutGuide type="bottom" id="Bb1-rm-38i"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="rRK-kO-qIc">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Metronome" id="R1V-1J-d38"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BG0-BL-o8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3093" y="2593"/>
-        </scene>
-        <!--Recordings Table View Controller-->
+        <!--Recordings-->
         <scene sceneID="xSG-Yw-9Rg">
             <objects>
                 <tableViewController id="itO-Au-4mD" customClass="RecordingsTableViewController" sceneMemberID="viewController">
@@ -1073,30 +1072,11 @@
                             <outlet property="delegate" destination="itO-Au-4mD" id="hcs-Sx-sdZ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Cgv-KF-nux"/>
+                    <navigationItem key="navigationItem" title="Recordings" id="Cgv-KF-nux"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mf9-eb-xyp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3625" y="1093"/>
-        </scene>
-        <!--Tuner-->
-        <scene sceneID="QFe-Zs-0y6">
-            <objects>
-                <viewController id="MTL-qS-TCd" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="xRe-2k-I0m"/>
-                        <viewControllerLayoutGuide type="bottom" id="Miw-u2-cfu"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="mnh-1T-6G2">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Tuner" id="CdO-DD-YOk"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aMC-99-tPI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3093" y="3325"/>
         </scene>
         <!--Drones-->
         <scene sceneID="LAV-e9-LqY">
@@ -1561,10 +1541,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="iCj-CN-0wJ" kind="relationship" relationship="viewControllers" id="8TC-kK-dFS"/>
-                        <segue destination="lGm-07-U9l" kind="relationship" relationship="viewControllers" id="bmR-fe-Q1Q"/>
-                        <segue destination="MTL-qS-TCd" kind="relationship" relationship="viewControllers" id="y5m-Ex-t6m"/>
                         <segue destination="Qa2-li-Ly7" kind="relationship" relationship="viewControllers" id="teu-qr-Edb"/>
+                        <segue destination="iCj-CN-0wJ" kind="relationship" relationship="viewControllers" id="8TC-kK-dFS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ncq-vJ-4a6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1828,9 +1806,9 @@
                     </tabBar>
                     <connections>
                         <segue destination="Vb0-j3-dKk" kind="relationship" relationship="viewControllers" id="Xgu-lb-w1a"/>
-                        <segue destination="aUg-yG-wVb" kind="relationship" relationship="viewControllers" id="6hi-JB-Ula"/>
                         <segue destination="b81-LC-C8G" kind="relationship" relationship="viewControllers" id="3Kn-2K-Iep"/>
                         <segue destination="cMD-lQ-woo" kind="relationship" relationship="viewControllers" id="861-Sy-7WT"/>
+                        <segue destination="aUg-yG-wVb" kind="relationship" relationship="viewControllers" id="6hi-JB-Ula"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FA1-8v-uyz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1966,7 +1944,7 @@
             </objects>
             <point key="canvasLocation" x="1542" y="-594"/>
         </scene>
-        <!--Item-->
+        <!--Practice List-->
         <scene sceneID="DYf-2a-73F">
             <objects>
                 <tableViewController id="b81-LC-C8G" customClass="TasksTableViewController" sceneMemberID="viewController">
@@ -2004,7 +1982,7 @@
                             <outlet property="delegate" destination="b81-LC-C8G" id="hdw-c8-Qdp"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" id="Clj-RK-q2Q"/>
+                    <tabBarItem key="tabBarItem" title="Practice List" image="practice_list" id="Clj-RK-q2Q"/>
                     <navigationItem key="navigationItem" id="Hgq-MY-dnW"/>
                     <connections>
                         <segue destination="j4f-Er-0XH" kind="push" identifier="taskDetail" id="KWm-PO-kPs"/>
@@ -2083,7 +2061,7 @@
             </objects>
             <point key="canvasLocation" x="5015" y="889"/>
         </scene>
-        <!--Audio Recorder-->
+        <!--Audio-->
         <scene sceneID="0Kp-i1-4BU">
             <objects>
                 <viewController id="cMD-lQ-woo" customClass="RecorderViewController" sceneMemberID="viewController">
@@ -2134,7 +2112,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Audio Recorder" id="iFh-B3-OK9"/>
+                    <tabBarItem key="tabBarItem" title="Audio" image="audio_wave" id="iFh-B3-OK9"/>
                     <connections>
                         <outlet property="buttonPlay" destination="pCQ-P0-89A" id="OkA-lc-NfL"/>
                         <outlet property="buttonRecord" destination="XsH-VZ-uCv" id="JQt-jH-ZaN"/>
@@ -2146,11 +2124,11 @@
             </objects>
             <point key="canvasLocation" x="4910" y="1659"/>
         </scene>
-        <!--Item-->
+        <!--Drones-->
         <scene sceneID="Dhw-U4-fFf">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qa2-li-Ly7" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="8Gh-rN-rmA"/>
+                    <tabBarItem key="tabBarItem" title="Drones" image="tab_drones" id="8Gh-rN-rmA"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YQ6-Te-fcf">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -2167,15 +2145,20 @@
         </scene>
     </scenes>
     <resources>
+        <image name="audio_wave" width="35" height="29"/>
         <image name="chat_bubble" width="34" height="34"/>
         <image name="checkbox" width="60" height="60"/>
         <image name="eye_inactive" width="46" height="28"/>
         <image name="hamburger" width="26" height="20"/>
-        <image name="home" width="44" height="55"/>
+        <image name="home" width="25" height="30"/>
         <image name="logo" width="218" height="218"/>
+        <image name="music_tools" width="25" height="31"/>
+        <image name="practice_list" width="29" height="35"/>
         <image name="profile_logo" width="204" height="205"/>
-        <image name="settings" width="52" height="45"/>
+        <image name="settings" width="35" height="30"/>
+        <image name="tab_drones" width="30" height="36"/>
         <image name="tab_settings" width="35" height="32"/>
+        <image name="user_practice_list" width="25" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -2183,8 +2166,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="ZpQ-JQ-6qK"/>
         <segue reference="QnM-x0-iGX"/>
-        <segue reference="wf2-jZ-7i2"/>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
     </inferredMetricsTieBreakers>

@@ -84,6 +84,11 @@
     [self.selectedButton sendActionsForControlEvents: UIControlEventTouchUpInside];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.tabBarController.title = @"Drones";
+}
 
 //*****************************************************************************/
 #pragma mark - Buttons

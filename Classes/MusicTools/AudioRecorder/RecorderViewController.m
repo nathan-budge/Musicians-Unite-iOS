@@ -57,8 +57,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"Audio Recorder";
-    
     if (!self.group) {
         NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
         self.user = navigationDrawerViewController.user;
@@ -87,6 +85,13 @@
     self.recorder.delegate = self;
     self.recorder.meteringEnabled = YES;
     [self.recorder prepareToRecord];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.tabBarController.navigationItem.rightBarButtonItems = nil;
+    self.tabBarController.title = @"Audio Recorder";
 }
 
 

@@ -75,7 +75,7 @@
 {
     if (self.group) {
         GroupTabBarController *groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 1)];
-        TasksTableViewController *tasksTableViewController = [groupTabBarController.viewControllers objectAtIndex:2];
+        TasksTableViewController *tasksTableViewController = [groupTabBarController.viewControllers objectAtIndex:1];
         tasksTableViewController.inset = YES;
     }
 }

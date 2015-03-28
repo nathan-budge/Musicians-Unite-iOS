@@ -25,14 +25,14 @@
     messagingTableViewController.group = self.group;
     messagingTableViewController.user = self.user;
     
-    GroupDetailViewController *groupDetailTableViewController = [viewControllers objectAtIndex:1];
-    groupDetailTableViewController.group = self.group;
-    
-    TasksTableViewController *tasksTableViewController = [viewControllers objectAtIndex:2];
+    TasksTableViewController *tasksTableViewController = [viewControllers objectAtIndex:1];
     tasksTableViewController.group = self.group;
     
-    RecorderViewController *recorderViewController = [viewControllers objectAtIndex:3];
+    RecorderViewController *recorderViewController = [viewControllers objectAtIndex:2];
     recorderViewController.group = self.group;
+    
+    GroupDetailViewController *groupDetailTableViewController = [viewControllers objectAtIndex:3];
+    groupDetailTableViewController.group = self.group;
 }
 
 @end
