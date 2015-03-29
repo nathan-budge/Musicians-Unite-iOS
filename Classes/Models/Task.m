@@ -39,6 +39,14 @@
 #pragma mark - Instantiation
 //*****************************************************************************/
 
+- (Task *)init
+{
+    if (self = [super init]) {
+        return self;
+    }
+    return nil;
+}
+
 - (Task *)initWithRef: (Firebase *)taskRef
 {
     if (self = [super init]) {
@@ -81,7 +89,7 @@
             
         }
         
-        NSLog(@"Task Created");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

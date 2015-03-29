@@ -81,8 +81,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //[self.audioPlayer stop];
-    
     self.audioPlayer = nil;
     
     Recording *recording;

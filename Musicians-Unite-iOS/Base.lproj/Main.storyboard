@@ -1398,7 +1398,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Kj-bn-Kws" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1558" y="4237"/>
+            <point key="canvasLocation" x="1542" y="2721"/>
         </scene>
         <!--Practice List-->
         <scene sceneID="t15-ZM-5zI">
@@ -1452,7 +1452,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M68-Tm-tWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2350" y="4229"/>
+            <point key="canvasLocation" x="2326" y="2721"/>
         </scene>
         <!--Task View Controller-->
         <scene sceneID="98F-Sf-BTJ">
@@ -1508,12 +1508,24 @@
                                     <action selector="actionCreateOrSave:" destination="cWJ-s9-g3k" eventType="touchUpInside" id="AIQ-Rf-ax4"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AzY-Ze-m3O">
+                                <rect key="frame" x="16" y="440" width="288" height="36"/>
+                                <color key="backgroundColor" red="0.94901960780000005" green="0.14901960780000001" blue="0.074509803920000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionDelete:" destination="cWJ-s9-g3k" eventType="touchUpInside" id="EbK-9e-nGt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="DuE-WT-nUd"/>
                     <connections>
                         <outlet property="buttonCreateOrSave" destination="YYy-zn-ade" id="PVa-Ru-n0b"/>
+                        <outlet property="buttonDelete" destination="AzY-Ze-m3O" id="cXB-TQ-CXj"/>
                         <outlet property="fieldNotes" destination="7tb-cd-qg8" id="Ims-mT-Vsh"/>
                         <outlet property="fieldTempo" destination="CTD-6t-F4H" id="Fxt-2K-obj"/>
                         <outlet property="fieldTitle" destination="GWD-wV-NXp" id="Qca-cZ-eXy"/>
@@ -1521,7 +1533,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oJx-1R-g6Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3080" y="4237"/>
+            <point key="canvasLocation" x="3093" y="2721"/>
         </scene>
         <!--Music Tools Tab Bar Controller-->
         <scene sceneID="O19-bA-Rug">
@@ -1985,81 +1997,12 @@
                     <tabBarItem key="tabBarItem" title="Practice List" image="practice_list" id="Clj-RK-q2Q"/>
                     <navigationItem key="navigationItem" id="Hgq-MY-dnW"/>
                     <connections>
-                        <segue destination="j4f-Er-0XH" kind="push" identifier="taskDetail" id="KWm-PO-kPs"/>
+                        <segue destination="cWJ-s9-g3k" kind="push" identifier="taskDetail" id="RIY-LG-AEw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R2D-Ns-xEp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4378" y="889"/>
-        </scene>
-        <!--Task View Controller-->
-        <scene sceneID="orv-bz-IfT">
-            <objects>
-                <viewController id="j4f-Er-0XH" customClass="TaskViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="tow-cF-DQh"/>
-                        <viewControllerLayoutGuide type="bottom" id="i6F-vB-fWC"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="35N-2c-Xwl">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nuu-vb-EMh">
-                                <rect key="frame" x="16" y="72" width="288" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="j4f-Er-0XH" id="HYF-CB-vly"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Tempo" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jen-S2-OXq">
-                                <rect key="frame" x="16" y="110" width="191" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="j4f-Er-0XH" id="jRg-EY-yYw"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0U-QA-6Fh">
-                                <rect key="frame" x="225" y="110" width="79" height="30"/>
-                                <state key="normal" title="Metronome">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OGO-ow-qHv">
-                                <rect key="frame" x="16" y="148" width="288" height="232"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <connections>
-                                    <outlet property="delegate" destination="j4f-Er-0XH" id="aSy-Eg-mir"/>
-                                </connections>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ba-VJ-svo">
-                                <rect key="frame" x="16" y="396" width="288" height="36"/>
-                                <color key="backgroundColor" red="0.37254901959999998" green="0.7843137255" blue="0.92156862750000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Create">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="actionCreateOrSave:" destination="j4f-Er-0XH" eventType="touchUpInside" id="Dob-1d-drB"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="6gQ-Jm-QGv"/>
-                    <connections>
-                        <outlet property="buttonCreateOrSave" destination="4ba-VJ-svo" id="gcQ-8g-wtu"/>
-                        <outlet property="fieldNotes" destination="OGO-ow-qHv" id="hMY-th-FhF"/>
-                        <outlet property="fieldTempo" destination="jen-S2-OXq" id="3Ec-9X-dcT"/>
-                        <outlet property="fieldTitle" destination="Nuu-vb-EMh" id="vqH-SH-ZiT"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="t0t-ks-euR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5015" y="889"/>
+            <point key="canvasLocation" x="4378" y="1555"/>
         </scene>
         <!--Audio-->
         <scene sceneID="0Kp-i1-4BU">
@@ -2122,7 +2065,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5UG-FZ-LsC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4910" y="1659"/>
+            <point key="canvasLocation" x="4378" y="693"/>
         </scene>
         <!--Drones-->
         <scene sceneID="Dhw-U4-fFf">
@@ -2166,8 +2109,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ZpQ-JQ-6qK"/>
         <segue reference="QnM-x0-iGX"/>
+        <segue reference="RIY-LG-AEw"/>
+        <segue reference="wf2-jZ-7i2"/>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
     </inferredMetricsTieBreakers>

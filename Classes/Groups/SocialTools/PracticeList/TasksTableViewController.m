@@ -59,7 +59,8 @@
 #pragma mark - View lifecycle
 //*****************************************************************************/
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     if (!self.group) {
@@ -85,7 +86,7 @@
     
     if (self.group) {
         self.tasks = [NSMutableArray arrayWithArray:self.group.tasks];
-        self.tabBarController.navigationItem.rightBarButtonItems = @[newTaskButton, self.editButtonItem];
+        self.tabBarController.navigationItem.rightBarButtonItem = newTaskButton;
         
         if (!self.inset) {
             self.tableView.contentInset = UIEdgeInsetsMake(65.0, 0.0, 0.0, 0.0);
@@ -96,7 +97,7 @@
         
     } else {
         self.tasks = [NSMutableArray arrayWithArray:self.user.tasks];
-        self.navigationItem.rightBarButtonItems = @[newTaskButton, self.editButtonItem];
+        self.navigationItem.rightBarButtonItem = newTaskButton;
     }
 }
 
@@ -204,9 +205,11 @@
     return cell;
 }
 
+/*
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
+
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -231,7 +234,6 @@
     }
 }
 
-/*
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return YES;

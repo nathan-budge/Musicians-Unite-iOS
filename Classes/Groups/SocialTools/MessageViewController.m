@@ -40,7 +40,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @end
 
+
 @implementation MessageViewController
+
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
 
 -(Firebase *)ref
 {
@@ -69,6 +74,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return _messages;
 }
 
+
+//*****************************************************************************/
+#pragma mark - Instantiation
+//*****************************************************************************/
+
 - (id)init
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
@@ -95,7 +105,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-#pragma mark - View lifecycle
+//*****************************************************************************/
+#pragma mark - View Lifecycle
+//*****************************************************************************/
 
 - (void)viewDidLoad
 {
@@ -189,7 +201,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super viewWillAppear:animated];
 }
 
+
+//*****************************************************************************/
 #pragma mark - Action Methods
+//*****************************************************************************/
 
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
 {
@@ -218,8 +233,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-
+//*****************************************************************************/
 #pragma mark - Overriden Methods
+//*****************************************************************************/
 
 - (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
 {
@@ -305,8 +321,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-
-#pragma mark - UITableViewDataSource Methods
+//*****************************************************************************/
+#pragma mark - Table view data source
+//*****************************************************************************/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -413,8 +430,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-
+//*****************************************************************************/
 #pragma mark - UIScrollViewDelegate Methods
+//*****************************************************************************/
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -422,8 +440,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super scrollViewDidScroll:scrollView];
 }
 
-
-#pragma mark - UIScrollViewDelegate Methods
 
 /** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text

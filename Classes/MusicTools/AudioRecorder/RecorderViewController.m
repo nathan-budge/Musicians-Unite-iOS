@@ -54,7 +54,8 @@
 #pragma mark - View Lifecycle
 //*****************************************************************************/
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     if (!self.group) {
@@ -139,6 +140,10 @@
             [ownerRef updateChildValues:@{recordingRef.key:@YES}];
             
             [SVProgressHUD showSuccessWithStatus:@"Recording created" maskType:SVProgressHUDMaskTypeBlack];
+            
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"No name" maskType:SVProgressHUDMaskTypeBlack];
+            
         }
     }
 }

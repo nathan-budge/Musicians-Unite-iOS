@@ -306,6 +306,7 @@
         if (task.count > 0) {
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {

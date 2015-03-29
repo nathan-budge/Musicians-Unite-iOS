@@ -12,6 +12,7 @@
 
 #import "Recording.h"
 
+
 @interface Recording ()
 
 @property (nonatomic) Firebase *recordingRef;
@@ -39,6 +40,14 @@
 //*****************************************************************************/
 #pragma mark - Instantiation
 //*****************************************************************************/
+
+- (Recording *)init
+{
+    if (self = [super init]) {
+        return self;
+    }
+    return nil;
+}
 
 - (Recording *)initWithRef: (Firebase *)recordingRef
 {

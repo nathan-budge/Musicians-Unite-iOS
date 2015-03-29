@@ -9,6 +9,8 @@
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
 
+#import "SharedData.h"
+
 #import "TaskViewController.h"
 #import "TasksTableViewController.h"
 #import "GroupTabBarController.h"
@@ -24,11 +26,14 @@
 
 @property (nonatomic) Firebase *ref;
 
+@property (nonatomic, weak) SharedData *sharedData;
+
 @property (weak, nonatomic) IBOutlet UITextField *fieldTitle;
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
 @property (weak, nonatomic) IBOutlet UITextView *fieldNotes;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrSave;
+@property (weak, nonatomic) IBOutlet UIButton *buttonDelete;
 
 @end
 
@@ -48,9 +53,17 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
-#pragma mark - View lifecycle
+#pragma mark - View Lifecycle
 //*****************************************************************************/
 
 - (void)viewDidLoad {
@@ -62,9 +75,11 @@
         self.fieldNotes.text = self.task.notes;
         
         [self.buttonCreateOrSave setTitle:@"Save" forState:UIControlStateNormal];
+        self.buttonDelete.hidden = NO;
         
     } else {
         [self.buttonCreateOrSave setTitle:@"Create" forState:UIControlStateNormal];
+        self.buttonDelete.hidden = YES;
         
     }
     
@@ -125,7 +140,7 @@
         
         [self dismissKeyboard];
         
-        //[self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -149,12 +164,34 @@
         
         [self dismissKeyboard];
         
-        //[self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
+- (IBAction)actionDelete:(id)sender
+{
+    Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", self.task.taskID]];
+    
+    Firebase *ownerTaskRef;
+    
+    if (self.group) {
+        ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/tasks/%@", self.group.groupID, self.task.taskID]];
+    } else {
+        ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/tasks/%@", self.ref.authData.uid, self.task.taskID]];
+    }
+    
+    [taskRef removeValue];
+    [ownerTaskRef removeValue];
+    
+    [SVProgressHUD showSuccessWithStatus:@"Task deleted" maskType:SVProgressHUDMaskTypeBlack];
+    
+    [self dismissKeyboard];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 //*****************************************************************************/
-#pragma mark - Keyboard handling
+#pragma mark - Keyboard Handling
 //*****************************************************************************/
 
 -(void)dismissKeyboard
