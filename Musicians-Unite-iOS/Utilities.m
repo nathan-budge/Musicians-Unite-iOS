@@ -25,6 +25,7 @@
     [sender setSelected:![sender isSelected]];
 }
 
+// Adapted from http://stackoverflow.com/questions/7123667/is-there-any-way-to-make-a-text-field-entry-must-be-email-in-xcode
 + (BOOL)validateEmail:(NSString *)emailStr {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
