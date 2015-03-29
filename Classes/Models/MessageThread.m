@@ -161,6 +161,8 @@
         Message *newMessage = [[Message alloc] initWithRef:messageRef];
         [self addMessage:newMessage];
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Data Updated" object:self];
+        
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error);
     }];

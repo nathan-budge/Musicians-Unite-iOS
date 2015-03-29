@@ -55,13 +55,13 @@
 		94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE91A94018A00CC2930 /* SVProgressHUD.m */; };
 		9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9486FA441AA1F2EA005568E9 /* SharedData.m */; };
 		9491FB101A940346003FE08E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491FB0F1A940346003FE08E /* Firebase.framework */; };
+		949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9494328F1AC83C270013B73F /* GroupDetailViewController.m */; };
 		949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */; };
 		949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04271A9D0EB10029B4E3 /* MessageTextView.m */; };
 		949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04291A9D0EB10029B4E3 /* MessageViewController.m */; };
 		94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94A3372A1A93768200E38E97 /* QuartzCore.framework */; };
 		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
 		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
-		94C6DE6C1A93DDD800562CE9 /* GroupDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE531A93DDD800562CE9 /* GroupDetailViewController.m */; };
 		94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */; };
 		94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5E1A93DDD800562CE9 /* LoginViewController.m */; };
 		94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE611A93DDD800562CE9 /* RegisterViewController.m */; };
@@ -173,6 +173,8 @@
 		9486FA431AA1F2EA005568E9 /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
 		9486FA441AA1F2EA005568E9 /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
 		9491FB0F1A940346003FE08E /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
+		9494328F1AC83C270013B73F /* GroupDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupDetailViewController.m; path = Classes/Groups/GroupDetail/GroupDetailViewController.m; sourceTree = SOURCE_ROOT; };
+		949432901AC83C270013B73F /* GroupDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupDetailViewController.h; path = Classes/Groups/GroupDetail/GroupDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
 		949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		949B04261A9D0EB10029B4E3 /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
@@ -184,8 +186,6 @@
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
 		94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberManagementViewController.m; sourceTree = "<group>"; };
-		94C6DE521A93DDD800562CE9 /* GroupDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupDetailViewController.h; path = ../GroupDetail/GroupDetailViewController.h; sourceTree = "<group>"; };
-		94C6DE531A93DDD800562CE9 /* GroupDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupDetailViewController.m; path = ../GroupDetail/GroupDetailViewController.m; sourceTree = "<group>"; };
 		94C6DE591A93DDD800562CE9 /* NavigationDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationDrawerViewController.h; sourceTree = "<group>"; };
 		94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationDrawerViewController.m; sourceTree = "<group>"; };
 		94C6DE5D1A93DDD800562CE9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -509,8 +509,8 @@
 		94C6DE511A93DDD800562CE9 /* GroupDetail */ = {
 			isa = PBXGroup;
 			children = (
-				94C6DE521A93DDD800562CE9 /* GroupDetailViewController.h */,
-				94C6DE531A93DDD800562CE9 /* GroupDetailViewController.m */,
+				9494328F1AC83C270013B73F /* GroupDetailViewController.m */,
+				949432901AC83C270013B73F /* GroupDetailViewController.h */,
 			);
 			name = GroupDetail;
 			path = NewGroup;
@@ -724,10 +724,10 @@
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9479A2B11A9B68A400C668D0 /* Message.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
+				949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */,
 				942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */,
 				949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */,
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
-				94C6DE6C1A93DDD800562CE9 /* GroupDetailViewController.m in Sources */,
 				94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */,
 				9479A29A1A9A693A00C668D0 /* SLKTextView.m in Sources */,
 				9479A29C1A9A693A00C668D0 /* SLKTypingIndicatorView.m in Sources */,

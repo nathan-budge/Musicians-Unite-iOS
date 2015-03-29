@@ -12,6 +12,7 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+#import "SharedData.h"
 
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
@@ -31,6 +32,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 @property (nonatomic) Firebase *messageThreadRef;
 
 @property (nonatomic, strong) NSMutableArray *messages;
+
+@property (nonatomic) SharedData *sharedData;
 
 @property (nonatomic, strong) NSArray *users;
 @property (nonatomic, strong) NSArray *channels;
@@ -74,6 +77,14 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     return _messages;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
 #pragma mark - Instantiation
@@ -83,7 +94,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
-        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
         [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
@@ -93,7 +103,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
         [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
@@ -121,15 +130,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
-
-    [self.leftButton setImage:[UIImage imageNamed:@"icn_upload"] forState:UIControlStateNormal];
-    [self.leftButton setTintColor:[UIColor grayColor]];
     
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
-    
-    [self.textInputbar.editorTitle setTextColor:[UIColor darkGrayColor]];
-    [self.textInputbar.editortLeftButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
-    [self.textInputbar.editortRightButton setTintColor:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0]];
     
     self.textInputbar.autoHideRightButton = YES;
     self.textInputbar.maxCharCount = 256;
@@ -170,16 +172,21 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
                 
             }
         }
-        
+
     }
     
     self.navigationItem.title = title;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Message Data Updated"
+                                               object:nil];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     for (Message *message in self.messageThread.messages) {
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -197,8 +204,34 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    
-    [super viewWillAppear:animated];
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Message Data Updated"])
+    {
+        MessageThread *updatedMessageThread = notification.object;
+        if (updatedMessageThread.messageThreadID == self.messageThread.messageThreadID) {
+            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
+                UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
+                
+                [self.tableView beginUpdates];
+                [self.messages insertObject:[self.messageThread.messages lastObject] atIndex:0];
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
+                [self.tableView endUpdates];
+                
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        }
+    }
 }
 
 
