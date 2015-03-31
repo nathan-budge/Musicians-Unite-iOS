@@ -56,6 +56,7 @@
 		9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9486FA441AA1F2EA005568E9 /* SharedData.m */; };
 		9491FB101A940346003FE08E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491FB0F1A940346003FE08E /* Firebase.framework */; };
 		949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9494328F1AC83C270013B73F /* GroupDetailViewController.m */; };
+		949432941AC850E40013B73F /* MemberManagementTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949432931AC850E40013B73F /* MemberManagementTableViewController.m */; };
 		949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */; };
 		949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04271A9D0EB10029B4E3 /* MessageTextView.m */; };
 		949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04291A9D0EB10029B4E3 /* MessageViewController.m */; };
@@ -175,6 +176,8 @@
 		9491FB0F1A940346003FE08E /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
 		9494328F1AC83C270013B73F /* GroupDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupDetailViewController.m; path = Classes/Groups/GroupDetail/GroupDetailViewController.m; sourceTree = SOURCE_ROOT; };
 		949432901AC83C270013B73F /* GroupDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupDetailViewController.h; path = Classes/Groups/GroupDetail/GroupDetailViewController.h; sourceTree = SOURCE_ROOT; };
+		949432921AC850E40013B73F /* MemberManagementTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementTableViewController.h; sourceTree = "<group>"; };
+		949432931AC850E40013B73F /* MemberManagementTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberManagementTableViewController.m; sourceTree = "<group>"; };
 		949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
 		949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		949B04261A9D0EB10029B4E3 /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
@@ -502,6 +505,8 @@
 			children = (
 				94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */,
 				94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */,
+				949432921AC850E40013B73F /* MemberManagementTableViewController.h */,
+				949432931AC850E40013B73F /* MemberManagementTableViewController.m */,
 			);
 			path = MemberManagement;
 			sourceTree = "<group>";
@@ -509,8 +514,8 @@
 		94C6DE511A93DDD800562CE9 /* GroupDetail */ = {
 			isa = PBXGroup;
 			children = (
-				9494328F1AC83C270013B73F /* GroupDetailViewController.m */,
 				949432901AC83C270013B73F /* GroupDetailViewController.h */,
+				9494328F1AC83C270013B73F /* GroupDetailViewController.m */,
 			);
 			name = GroupDetail;
 			path = NewGroup;
@@ -687,6 +692,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				949432941AC850E40013B73F /* MemberManagementTableViewController.m in Sources */,
 				9479A2AB1A9A72D100C668D0 /* NewMessageTableViewController.m in Sources */,
 				9479A29B1A9A693A00C668D0 /* SLKTextViewController.m in Sources */,
 				9479A2961A9A693A00C668D0 /* UIScrollView+SLKAdditions.m in Sources */,

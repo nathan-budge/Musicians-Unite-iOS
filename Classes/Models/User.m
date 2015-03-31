@@ -43,6 +43,14 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 -(NSMutableArray *)groups
 {
     if (!_groups) {
@@ -65,14 +73,6 @@
         _recordings = [[NSMutableArray alloc] init];
     }
     return _recordings;
-}
-
--(SharedData *)sharedData
-{
-    if (!_sharedData) {
-        _sharedData = [SharedData sharedInstance];
-    }
-    return _sharedData;
 }
 
 
@@ -125,18 +125,33 @@
             self.firstName = memberData[@"first_name"];
             self.lastName = memberData[@"last_name"];
             self.profileImage = [Utilities decodeBase64ToImage:memberData[@"profile_image"]];
+            
         }else {
             self.completedRegistration = NO;
         }
         
         if ([self.userID isEqualToString:self.ref.authData.uid]) {
             
+            self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
             self.userTasksRef = [self.userRef childByAppendingPath:@"tasks"];
             self.userRecordingsRef = [self.userRef childByAppendingPath:@"recordings"];
             
+            [self.sharedData addChildObserver:self.userGroupsRef];
             [self.sharedData addChildObserver:self.userTasksRef];
             [self.sharedData addChildObserver:self.userRecordingsRef];
             
+            [self.userGroupsRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                
+                if ([snapshot.value isEqual:[NSNull null]]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"No Groups" object:self];
+                }
+                
+            } withCancelBlock:^(NSError *error) {
+                NSLog(@"%@", error.description);
+            }];
+            
+            [self attachListenerForAddedGroups];
+            [self attachListenerForRemovedGroups];
             [self attachListenerForAddedTasks];
             [self attachListenerForRemovedTasks];
             [self attachListenerForAddedRecordings];
@@ -157,7 +172,6 @@
 
 - (void)attachListenerForChanges
 {
-    
     [self.userRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
         if ([snapshot.key isEqualToString:@"first_name"]) {
@@ -173,6 +187,41 @@
         
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error);
+    }];
+}
+
+- (void)attachListenerForAddedGroups
+{
+    [self.userGroupsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *newGroupID = snapshot.key;
+        
+        Firebase *groupRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", newGroupID]];
+        
+        Group *newGroup = [[Group alloc] initWithRef:groupRef];
+        
+        [self addGroup:newGroup];
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error.description);
+    }];
+}
+
+- (void)attachListenerForRemovedGroups
+{
+    [self.userGroupsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", snapshot.key];
+        NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
+        
+        if (group.count > 0) {
+            Group *removedGroup = [group objectAtIndex:0];
+            [self removeGroup:removedGroup];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Removed" object:removedGroup];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

@@ -12,7 +12,6 @@
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
-#import "Utilities.h"
 #import "SharedData.h"
 
 #import "GroupsTableViewController.h"
@@ -22,15 +21,12 @@
 
 #import "User.h"
 #import "Group.h"
-#import "MessageThread.h"
-#import "Message.h"
 
 
 @interface GroupsTableViewController ()
 
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *userRef;
-@property (nonatomic) Firebase *userGroupsRef;
 
 @property (nonatomic, weak) SharedData *sharedData;
 
@@ -84,8 +80,6 @@
 {
     [super viewDidLoad];
     
-    self.tableView.hidden = YES;
-    
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
@@ -94,15 +88,26 @@
                                                  name:@"Data Loaded"
                                                object:nil];
     
-    self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"New Group"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"No Groups"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Group Removed"
+                                               object:nil];
     
     [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
     
     [self loadUser];
-    [self loadGroups];
     
     dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-        self.tableView.hidden = NO;
         [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
     });
 }
@@ -114,66 +119,11 @@
 
 -(void)loadUser
 {
+    self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
     self.user = [[User alloc] initWithRef:self.userRef];
     
     NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
     navigationDrawerViewController.user = self.user;
-}
-
-
-//*****************************************************************************/
-#pragma mark - Load Groups
-//*****************************************************************************/
-
-- (void)loadGroups
-{
-    self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
-    
-    [self.sharedData addChildObserver:self.userGroupsRef];
-    
-    [self.userGroupsRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        
-        if ([snapshot.value isEqual:[NSNull null]]) {
-            [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
-        }
-        
-    } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error.description);
-    }];
-    
-    [self attachListenerForAddedGroupsToUser];
-    [self attachListenerForRemovedGroupsToUser];
-}
-
--(void)attachListenerForAddedGroupsToUser
-{
-    [self.userGroupsRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        
-        NSString *groupID = snapshot.key;
-        
-        Firebase *groupRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]];
-        
-        Group *newGroup = [[Group alloc] initWithRef:groupRef];
-        
-        [self.groups addObject:newGroup];
-        [self.user addGroup:newGroup];
-        
-    }];
-}
-
-- (void)attachListenerForRemovedGroupsToUser
-{
-    [self.userGroupsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
-        
-        NSString *groupID = snapshot.key;
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", groupID];
-        NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
-        
-        [self.groups removeObject:[group objectAtIndex:0]];
-        [self.user removeGroup:[group objectAtIndex:0]];
-        [self.tableView reloadData];
-        
-    }];
 }
 
 
@@ -186,6 +136,17 @@
     if ([[notification name] isEqualToString:@"Data Loaded"]) {
         [self.tableView reloadData];
 
+    } else if ([[notification name] isEqualToString:@"No Groups"]) {
+        [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
+        
+    } else if ([[notification name] isEqualToString:@"New Group"]) {
+        [self.groups addObject:notification.object];
+        [self.tableView reloadData];
+        
+    } else if ([[notification name] isEqualToString:@"Group Removed"]) {
+        [self.groups removeObject:notification.object];
+        [self.tableView reloadData];
+        
     }
 }
 
@@ -229,7 +190,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.groups count];
+    return self.groups.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

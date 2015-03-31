@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14D87p" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14D87p" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -1398,7 +1398,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Kj-bn-Kws" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1542" y="2721"/>
+            <point key="canvasLocation" x="1542" y="3497"/>
         </scene>
         <!--Practice List-->
         <scene sceneID="t15-ZM-5zI">
@@ -1452,7 +1452,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M68-Tm-tWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2326" y="2721"/>
+            <point key="canvasLocation" x="2326" y="3469"/>
         </scene>
         <!--Task View Controller-->
         <scene sceneID="98F-Sf-BTJ">
@@ -1533,7 +1533,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oJx-1R-g6Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3093" y="2721"/>
+            <point key="canvasLocation" x="3093" y="3469"/>
         </scene>
         <!--Music Tools Tab Bar Controller-->
         <scene sceneID="O19-bA-Rug">
@@ -1553,13 +1553,14 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
+                        <segue destination="Y9V-6d-R8d" kind="relationship" relationship="viewControllers" id="VYk-Pm-2jr"/>
                         <segue destination="Qa2-li-Ly7" kind="relationship" relationship="viewControllers" id="teu-qr-Edb"/>
                         <segue destination="iCj-CN-0wJ" kind="relationship" relationship="viewControllers" id="8TC-kK-dFS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ncq-vJ-4a6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2326" y="1343"/>
+            <point key="canvasLocation" x="2286" y="1343"/>
         </scene>
         <!--New Group-->
         <scene sceneID="wVP-K4-Soa">
@@ -1667,12 +1668,12 @@
                         <outlet property="buttonConfirm" destination="Xip-LM-WhQ" id="ead-9E-DFK"/>
                         <outlet property="buttonProfileImage" destination="OTZ-YJ-uqb" id="xTo-yp-Qsn"/>
                         <outlet property="fieldGroupName" destination="BuV-71-JkP" id="n5i-rD-Id7"/>
-                        <segue destination="LFx-he-epZ" kind="push" identifier="newGroupToMemberManagement" id="EWH-kh-XIg"/>
+                        <segue destination="LFx-he-epZ" kind="push" identifier="viewMemberManagement" id="gEY-2k-WGo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7oy-3C-jJm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3750" y="-887"/>
+            <point key="canvasLocation" x="3848" y="-1113"/>
         </scene>
         <!--Members-->
         <scene sceneID="4ZG-WM-JNB">
@@ -1803,7 +1804,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ngv-hS-Mac" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bd3-3F-ZO8" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4378" y="-887"/>
+            <point key="canvasLocation" x="4559" y="-1113"/>
         </scene>
         <!--Group Tab Bar Controller-->
         <scene sceneID="8uB-Re-Epc">
@@ -2086,6 +2087,25 @@
             </objects>
             <point key="canvasLocation" x="3093" y="1815"/>
         </scene>
+        <!--Item-->
+        <scene sceneID="NDa-9a-ho2">
+            <objects>
+                <viewController id="Y9V-6d-R8d" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WFS-7s-gW0"/>
+                        <viewControllerLayoutGuide type="bottom" id="ILE-3W-pSS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1eC-0Y-IPa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="Khi-NA-60O"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Vy-ZG-b4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3083" y="2565"/>
+        </scene>
     </scenes>
     <resources>
         <image name="audio_wave" width="35" height="29"/>
@@ -2111,8 +2131,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
-        <segue reference="QnM-x0-iGX"/>
+        <segue reference="LUN-Gh-Rit"/>
         <segue reference="wf2-jZ-7i2"/>
-        <segue reference="RIY-LG-AEw"/>
+        <segue reference="QnM-x0-iGX"/>
     </inferredMetricsTieBreakers>
 </document>

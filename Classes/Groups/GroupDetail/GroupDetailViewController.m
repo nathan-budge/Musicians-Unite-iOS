@@ -108,7 +108,7 @@
     if ([self.fieldGroupName.text isEqualToString:@""]) {
         [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
     } else {
-        [self performSegueWithIdentifier:@"newGroupToMemberManagement" sender:self];
+        [self performSegueWithIdentifier:@"viewMemberManagement" sender:self];
     }
 }
 
@@ -203,7 +203,7 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"newGroupToMemberManagement"]) {
+    if ([segue.identifier isEqualToString:@"viewMemberManagement"]) {
         MemberManagementViewController *destViewController = segue.destinationViewController;
         
         if (self.group) {

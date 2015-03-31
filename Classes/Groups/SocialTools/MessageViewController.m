@@ -218,6 +218,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         MessageThread *updatedMessageThread = notification.object;
         if (updatedMessageThread.messageThreadID == self.messageThread.messageThreadID) {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+               
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
                 UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
                 UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;

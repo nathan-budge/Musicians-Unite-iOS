@@ -46,6 +46,14 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 -(NSMutableArray *)members
 {
     if (!_members) {
@@ -76,14 +84,6 @@
         _recordings = [[NSMutableArray alloc] init];
     }
     return _recordings;
-}
-
--(SharedData *)sharedData
-{
-    if (!_sharedData) {
-        _sharedData = [SharedData sharedInstance];
-    }
-    return _sharedData;
 }
 
 
@@ -158,7 +158,7 @@
         self.name = groupData[@"name"];
         self.profileImage = [Utilities decodeBase64ToImage:groupData[@"profile_image"]];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Group" object:self];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
@@ -212,8 +212,9 @@
                 Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
                 
                 User *newUser = [[User alloc] initWithRef:userRef];
-                [newUser addGroup:self];
+                
                 [self addMember:newUser];
+                //[newUser addGroup:self];
 
             }
         }
