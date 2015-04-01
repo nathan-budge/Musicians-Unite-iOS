@@ -103,13 +103,7 @@
                                                  name:@"Group Removed"
                                                object:nil];
     
-    [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
-    
     [self loadUser];
-    
-    dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-        [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
-    });
 }
 
 
@@ -119,6 +113,8 @@
 
 -(void)loadUser
 {
+    [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
+    
     self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
     self.user = [[User alloc] initWithRef:self.userRef];
     
@@ -140,9 +136,13 @@
         [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
         
     } else if ([[notification name] isEqualToString:@"New Group"]) {
-        [self.groups addObject:notification.object];
-        [self.tableView reloadData];
-        
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            [self.groups addObject:notification.object];
+            [self.tableView reloadData];
+            if (self.groups.count == self.user.groups.count) {
+                [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
+            }
+        });
     } else if ([[notification name] isEqualToString:@"Group Removed"]) {
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];

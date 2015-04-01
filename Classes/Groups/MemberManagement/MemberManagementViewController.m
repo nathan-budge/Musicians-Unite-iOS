@@ -202,7 +202,6 @@
     [self addMembers:self.members toGroup:groupRef];
     
     dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-        [SVProgressHUD showSuccessWithStatus:@"Group created" maskType:SVProgressHUDMaskTypeBlack];
         [self.navigationController popToRootViewControllerAnimated:YES];
         [self dismissKeyboard];
     });

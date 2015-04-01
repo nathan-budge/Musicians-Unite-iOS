@@ -90,8 +90,9 @@
     self.tabBarController.title = @"Drones";
 }
 
+
 //*****************************************************************************/
-#pragma mark - Buttons
+#pragma mark - Drone Buttons
 //*****************************************************************************/
 
 - (IBAction)actionC:(id)sender
@@ -166,19 +167,21 @@
     [self selectButton:self.buttonF withFrequency:frequency];
 }
 
-- (void)selectButton:(UIButton *)button withFrequency:(const double)frequency
+
+//*****************************************************************************/
+#pragma mark - Octave Stepper
+//*****************************************************************************/
+
+- (IBAction)actionChangeOctave:(id)sender
 {
-    self.selectedButton.selected = NO;
-    self.selectedButton = button;
-    button.selected = YES;
-    self.toneGenerator.frequency = frequency;
-    [self changePitch];
+    self.labelOctave.text = [NSString stringWithFormat:@"%.f",self.octaveStepper.value];
+    [self.selectedButton sendActionsForControlEvents: UIControlEventTouchUpInside];
 }
 
-- (void)changePitch
-{
-    self.toneGenerator.frequency *= pow(2, self.octaveStepper.value);
-}
+
+//*****************************************************************************/
+#pragma mark - Play Button
+//*****************************************************************************/
 
 - (IBAction)actionPlay:(id)sender
 {
@@ -192,14 +195,27 @@
         [self.toneGenerator play];
         
         [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
-
+        
     }
 }
 
-- (IBAction)actionChangeOctave:(id)sender
+
+//*****************************************************************************/
+#pragma mark - Helper Methods
+//*****************************************************************************/
+
+- (void)selectButton:(UIButton *)button withFrequency:(const double)frequency
 {
-    self.labelOctave.text = [NSString stringWithFormat:@"%.f",self.octaveStepper.value];
-    [self.selectedButton sendActionsForControlEvents: UIControlEventTouchUpInside];
+    self.selectedButton.selected = NO;
+    self.selectedButton = button;
+    button.selected = YES;
+    self.toneGenerator.frequency = frequency;
+    [self changePitch];
+}
+
+- (void)changePitch
+{
+    self.toneGenerator.frequency *= pow(2, self.octaveStepper.value);
 }
 
 @end
