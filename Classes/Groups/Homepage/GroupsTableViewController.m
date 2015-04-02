@@ -103,7 +103,9 @@
                                                  name:@"Group Removed"
                                                object:nil];
     
+    
     [self loadUser];
+    
 }
 
 
@@ -113,13 +115,27 @@
 
 -(void)loadUser
 {
-    [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
+    Firebase *connectedRef = [self.ref childByAppendingPath:@".info/connected"];
+    [self.sharedData addChildObserver:connectedRef];
     
-    self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
-    self.user = [[User alloc] initWithRef:self.userRef];
-    
-    NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-    navigationDrawerViewController.user = self.user;
+    [connectedRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        if([snapshot.value boolValue]) {
+            NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
+            if (!navigationDrawerViewController.user) {
+                [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
+                
+                self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
+                self.user = [[User alloc] initWithRef:self.userRef];
+                
+                NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
+                navigationDrawerViewController.user = self.user;
+            }
+            
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"No Network Connection" maskType:SVProgressHUDMaskTypeBlack];
+            
+        }
+    }];
 }
 
 

@@ -218,7 +218,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         MessageThread *updatedMessageThread = notification.object;
         if (updatedMessageThread.messageThreadID == self.messageThread.messageThreadID) {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-               
+                
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
                 UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
                 UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
@@ -316,21 +316,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [newMessage setValue:messageData];
     
     [self.messageThreadRef updateChildValues:@{newMessage.key:@YES}];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
-    UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
-
-    [self.tableView beginUpdates];
-    [self.messages insertObject:message atIndex:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
-    [self.tableView endUpdates];
-    
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-    
-    // Fixes the cell from blinking (because of the transform, when using translucent cells)
-    // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [super didPressRightButton:sender];
 }
