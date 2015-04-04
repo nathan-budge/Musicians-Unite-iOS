@@ -9,8 +9,6 @@
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
 
-#import "SharedData.h"
-
 #import "TaskViewController.h"
 #import "TasksTableViewController.h"
 #import "GroupTabBarController.h"
@@ -25,8 +23,6 @@
 @interface TaskViewController ()
 
 @property (nonatomic) Firebase *ref;
-
-@property (nonatomic, weak) SharedData *sharedData;
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldTitle;
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
@@ -51,14 +47,6 @@
     }
     
     return _ref;
-}
-
--(SharedData *)sharedData
-{
-    if (!_sharedData) {
-        _sharedData = [SharedData sharedInstance];
-    }
-    return _sharedData;
 }
 
 
@@ -101,7 +89,6 @@
 
 - (IBAction)actionCreateOrSave:(id)sender
 {
-    
     if (self.task) {
         [self actionSave];
     } else {

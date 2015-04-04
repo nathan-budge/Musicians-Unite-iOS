@@ -33,6 +33,7 @@
 		942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 942E57CC1AC7029800C957DB /* ToneGenerator.m */; };
 		9431B8911A93FDE60074818F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9405B9181A8EF7AC00EEDE19 /* Main.storyboard */; };
 		9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9405B91D1A8EF7AC00EEDE19 /* LaunchScreen.xib */; };
+		9434D5551ACF351C002462C6 /* RecordingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9434D5541ACF351C002462C6 /* RecordingTableViewController.m */; };
 		9442D8801ACAD80B00B47996 /* MetronomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9442D87F1ACAD80B00B47996 /* MetronomeViewController.m */; };
 		9442D8831ACADFB500B47996 /* MetronomeDots.m in Sources */ = {isa = PBXBuildFile; fileRef = 9442D8821ACADFB500B47996 /* MetronomeDots.m */; };
 		945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945958F31A97B000002CF4EF /* GroupTabBarController.m */; };
@@ -132,6 +133,8 @@
 		940CDBCF1AC6E8190006F099 /* DronesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DronesTableViewController.m; path = MusicTools/Drones/DronesTableViewController.m; sourceTree = "<group>"; };
 		942E57CB1AC7029800C957DB /* ToneGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToneGenerator.h; path = MusicTools/Drones/ToneGenerator.h; sourceTree = "<group>"; };
 		942E57CC1AC7029800C957DB /* ToneGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToneGenerator.m; path = MusicTools/Drones/ToneGenerator.m; sourceTree = "<group>"; };
+		9434D5531ACF351C002462C6 /* RecordingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecordingTableViewController.h; path = MusicTools/AudioRecorder/RecordingTableViewController.h; sourceTree = "<group>"; };
+		9434D5541ACF351C002462C6 /* RecordingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecordingTableViewController.m; path = MusicTools/AudioRecorder/RecordingTableViewController.m; sourceTree = "<group>"; };
 		9442D87E1ACAD80B00B47996 /* MetronomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetronomeViewController.h; path = MusicTools/Metronome/MetronomeViewController.h; sourceTree = "<group>"; };
 		9442D87F1ACAD80B00B47996 /* MetronomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MetronomeViewController.m; path = MusicTools/Metronome/MetronomeViewController.m; sourceTree = "<group>"; };
 		9442D8811ACADFB500B47996 /* MetronomeDots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetronomeDots.h; path = MusicTools/Metronome/MetronomeDots.h; sourceTree = "<group>"; };
@@ -345,6 +348,8 @@
 				940CDBC01AC348CE0006F099 /* RecorderViewController.m */,
 				940CDBC51AC442870006F099 /* RecordingsTableViewController.h */,
 				940CDBC61AC442870006F099 /* RecordingsTableViewController.m */,
+				9434D5531ACF351C002462C6 /* RecordingTableViewController.h */,
+				9434D5541ACF351C002462C6 /* RecordingTableViewController.m */,
 			);
 			name = "Audio Recorder";
 			sourceTree = "<group>";
@@ -726,6 +731,7 @@
 				9479A2B41A9B68C000C668D0 /* MessageThread.m in Sources */,
 				9479A2971A9A693A00C668D0 /* UIView+SLKAdditions.m in Sources */,
 				949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */,
+				9434D5551ACF351C002462C6 /* RecordingTableViewController.m in Sources */,
 				9405B9581A8F08F900EEDE19 /* ECSlidingInteractiveTransition.m in Sources */,
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
 				9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */,

@@ -287,6 +287,7 @@
         if (recording.count > 0) {
             Recording *removedRecording = [recording objectAtIndex:0];
             [self removeRecording:removedRecording];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {

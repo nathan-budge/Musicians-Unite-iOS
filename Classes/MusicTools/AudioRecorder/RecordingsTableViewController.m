@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
-#import <AVFoundation/AVFoundation.h>
-
 #import "RecordingsTableViewController.h"
+#import "RecordingTableViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -16,7 +15,9 @@
 
 @interface RecordingsTableViewController ()
 
-@property (nonatomic, retain) AVAudioPlayer *audioPlayer;
+@property (nonatomic) Recording *selectedRecording;
+@property (nonatomic) User *selectedRecordingUser;
+@property (nonatomic) Group *selectedRecordingGroup;
 
 @end
 
@@ -26,11 +27,27 @@
 #pragma mark - View Lifecycle
 //*****************************************************************************/
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Recording Data Updated"
+                                               object:nil];
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Recording Data Updated"])
+    {
+        [self.tableView reloadData];
+    }
 }
 
 
@@ -40,7 +57,33 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    if (self.user)
+    {
+        return self.user.groups.count + 1;
+    }
+    else if (self.group)
+    {
+        return 1;
+    }
+    return 0;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (self.user)
+    {
+        NSString *sectionName;
+        if (section == 0) {
+            sectionName = @"Unassigned";
+            
+        } else {
+            Group *group = [self.user.groups objectAtIndex:section - 1];
+            sectionName = group.name;
+        }
+        return sectionName;
+    }
+    
+    return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -48,13 +91,32 @@
     if (self.group) {
         return self.group.recordings.count;
     } else if (self.user) {
-        return self.user.recordings.count;
+        
+        if (section == 0)
+        {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
+            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            
+            return recordings.count;
+            
+        }
+        else
+        {
+            Group *group = [self.user.groups objectAtIndex:section - 1];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", group.groupID];
+            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            
+            return recordings.count;
+        }
     }
     
     return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
@@ -68,10 +130,27 @@
     if (self.group)
     {
         recording = [self.group.recordings objectAtIndex:indexPath.row];
+        
     }
     else if (self.user)
     {
-        recording = [self.user.recordings objectAtIndex:indexPath.row];
+        if (indexPath.section == 0)
+        {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
+            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            
+            recording = [recordings objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            Group *group = [self.user.groups objectAtIndex:indexPath.section - 1];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", group.groupID];
+            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            
+            recording = [recordings objectAtIndex:indexPath.row];
+        }
+        
     }
     
     cell.textLabel.text = recording.name;
@@ -79,69 +158,57 @@
     return cell;
 }
 
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.audioPlayer = nil;
-    
-    Recording *recording;
-    
     if (self.group)
     {
-        recording = [self.group.recordings objectAtIndex:indexPath.row];
+        self.selectedRecording = [self.group.recordings objectAtIndex:indexPath.row];
+        self.selectedRecordingGroup = self.group;
+        self.selectedRecordingUser = nil;
     }
     else if (self.user)
     {
-        recording = [self.user.recordings objectAtIndex:indexPath.row];
+        self.selectedRecordingUser = self.user;
+        if (indexPath.section == 0)
+        {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
+            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            
+            self.selectedRecording = [recordings objectAtIndex:indexPath.row];
+            self.selectedRecordingGroup = nil;
+        }
+        else
+        {
+            Group *group = [self.user.groups objectAtIndex:indexPath.section - 1];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", group.groupID];
+            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            
+            self.selectedRecording = [recordings objectAtIndex:indexPath.row];
+            self.selectedRecordingGroup = group;
+        }
     }
     
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:nil];
-    
-    [self.audioPlayer play];
-    
+    [self performSegueWithIdentifier:@"viewRecording" sender:self];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
+//*****************************************************************************/
 #pragma mark - Navigation
+//*****************************************************************************/
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"viewRecording"])
+    {
+        RecordingTableViewController *destViewController = segue.destinationViewController;
+        destViewController.recording = self.selectedRecording;
+        
+        destViewController.group = self.selectedRecordingGroup;
+        destViewController.user = self.selectedRecordingUser;
+    }
 }
-*/
+
 
 @end

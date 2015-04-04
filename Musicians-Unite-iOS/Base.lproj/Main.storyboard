@@ -1075,10 +1075,103 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Recordings" id="Cgv-KF-nux"/>
+                    <connections>
+                        <segue destination="IEv-dn-3Lp" kind="push" identifier="viewRecording" id="PV9-9n-aIL"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mf9-eb-xyp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3625" y="1093"/>
+            <point key="canvasLocation" x="3593" y="1093"/>
+        </scene>
+        <!--Recording Table View Controller-->
+        <scene sceneID="mks-gC-Kql">
+            <objects>
+                <tableViewController id="IEv-dn-3Lp" customClass="RecordingTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2TQ-Mk-FQ2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="Cdy-xM-bDB">
+                            <rect key="frame" x="0.0" y="174" width="320" height="80"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sc5-FX-i2r">
+                                    <rect key="frame" x="8" y="38" width="304" height="30"/>
+                                    <state key="normal" title="Delete">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="actionDelete:" destination="IEv-dn-3Lp" eventType="touchUpInside" id="un4-y2-EVD"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vzU-IX-FBe">
+                                    <rect key="frame" x="8" y="0.0" width="304" height="30"/>
+                                    <state key="normal" title="Save">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="actionSave:" destination="IEv-dn-3Lp" eventType="touchUpInside" id="7US-Dg-8y4"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
+                        <sections>
+                            <tableViewSection id="yJd-Cl-ymj">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="vGK-w9-iAm">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vGK-w9-iAm" id="59Q-xH-EdI">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Recording Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KjX-t8-lpq">
+                                                    <rect key="frame" x="8" y="7" width="304" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="IEv-dn-3Lp" id="p2P-GU-5Lc"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="CBK-vF-XLc">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CBK-vF-XLc" id="F61-IV-11r">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Group Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ieP-j6-zAe">
+                                                    <rect key="frame" x="8" y="11" width="304" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="dws-ps-oih">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dws-ps-oih" id="j9E-Za-uVi">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="IEv-dn-3Lp" id="D3A-GB-fVK"/>
+                            <outlet property="delegate" destination="IEv-dn-3Lp" id="b2b-A6-clR"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="eBX-Bk-p4M"/>
+                    <connections>
+                        <outlet property="fieldRecordingName" destination="KjX-t8-lpq" id="uIi-o8-JQ1"/>
+                        <outlet property="labelGroupName" destination="ieP-j6-zAe" id="ySB-sr-YKT"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bnS-8p-NRI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4111" y="1093"/>
         </scene>
         <!--Drones-->
         <scene sceneID="LAV-e9-LqY">
@@ -2005,7 +2098,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R2D-Ns-xEp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4378" y="1555"/>
+            <point key="canvasLocation" x="4552" y="1645"/>
         </scene>
         <!--Audio-->
         <scene sceneID="0Kp-i1-4BU">
@@ -2068,7 +2161,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5UG-FZ-LsC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4378" y="693"/>
+            <point key="canvasLocation" x="4378" y="465"/>
         </scene>
         <!--Drones-->
         <scene sceneID="Dhw-U4-fFf">
@@ -2432,8 +2525,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
-        <segue reference="LUN-Gh-Rit"/>
         <segue reference="wf2-jZ-7i2"/>
         <segue reference="QnM-x0-iGX"/>
+        <segue reference="RIY-LG-AEw"/>
     </inferredMetricsTieBreakers>
 </document>
