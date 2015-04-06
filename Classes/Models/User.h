@@ -25,6 +25,8 @@
 @property (nonatomic) NSMutableArray *tasks;
 @property (nonatomic) NSMutableArray *recordings;
 
+@property (nonatomic) NSString *deviceToken;
+
 - (User *)initWithRef: (Firebase *)userRef;
 
 - (void)addGroup: (Group *)group;

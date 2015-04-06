@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <Firebase/Firebase.h>
+#import "User.h"
 
 #import "AppConstant.h"
 
@@ -46,7 +47,27 @@
     self.window.rootViewController = rootViewController;
     
     [self.window makeKeyAndVisible];
+    
+    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+    
+    [application registerForRemoteNotifications];
+
     return YES;
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    NSLog(@"My token is: %@", deviceToken);
+    
+    NSString *tokenString = [deviceToken description];
+    tokenString = [tokenString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    tokenString = [tokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [[NSUserDefaults standardUserDefaults] setObject:tokenString forKey:@"DeviceToken"];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+    NSLog(@"Failed to get token, error: %@", error);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
