@@ -70,6 +70,8 @@
 		94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE611A93DDD800562CE9 /* RegisterViewController.m */; };
 		94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */; };
 		94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EE0B141A944ECD000F0F19 /* Utilities.m */; };
+		94F498E11AD5988400F2760C /* FaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F498E01AD5988400F2760C /* FaceView.m */; };
+		94F498E41AD5A36400F2760C /* TunerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F498E31AD5A36400F2760C /* TunerViewController.m */; };
 		94F882151A97E2D6008F4AD8 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F882141A97E2D6008F4AD8 /* Group.m */; };
 		94F882181A97E39E008F4AD8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F882171A97E39E008F4AD8 /* User.m */; };
 /* End PBXBuildFile section */
@@ -205,6 +207,10 @@
 		94C6DE691A93DDD800562CE9 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		94EE0B141A944ECD000F0F19 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
 		94EE0B161A944EE3000F0F19 /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		94F498DF1AD5988400F2760C /* FaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FaceView.h; path = MusicTools/Tuner/FaceView.h; sourceTree = "<group>"; };
+		94F498E01AD5988400F2760C /* FaceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FaceView.m; path = MusicTools/Tuner/FaceView.m; sourceTree = "<group>"; };
+		94F498E21AD5A36400F2760C /* TunerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TunerViewController.h; path = MusicTools/Tuner/TunerViewController.h; sourceTree = "<group>"; };
+		94F498E31AD5A36400F2760C /* TunerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TunerViewController.m; path = MusicTools/Tuner/TunerViewController.m; sourceTree = "<group>"; };
 		94F882131A97E2D6008F4AD8 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Group.h; path = Models/Group.h; sourceTree = "<group>"; };
 		94F882141A97E2D6008F4AD8 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Group.m; path = Models/Group.m; sourceTree = "<group>"; };
 		94F882161A97E39E008F4AD8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = Models/User.h; sourceTree = "<group>"; };
@@ -444,6 +450,7 @@
 		947A47211ABB3FF0007B3878 /* MusicTools */ = {
 			isa = PBXGroup;
 			children = (
+				94F498DE1AD597DE00F2760C /* Tuner */,
 				9442D87D1ACAD7E100B47996 /* Metronome */,
 				940CDBBE1AC3484C0006F099 /* Audio Recorder */,
 				947A47221ABB3FFA007B3878 /* Drones */,
@@ -608,6 +615,17 @@
 			path = Welcome;
 			sourceTree = "<group>";
 		};
+		94F498DE1AD597DE00F2760C /* Tuner */ = {
+			isa = PBXGroup;
+			children = (
+				94F498DF1AD5988400F2760C /* FaceView.h */,
+				94F498E01AD5988400F2760C /* FaceView.m */,
+				94F498E21AD5A36400F2760C /* TunerViewController.h */,
+				94F498E31AD5A36400F2760C /* TunerViewController.m */,
+			);
+			name = Tuner;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -711,10 +729,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9479A2AB1A9A72D100C668D0 /* NewMessageTableViewController.m in Sources */,
+				94F498E41AD5A36400F2760C /* TunerViewController.m in Sources */,
 				9479A29B1A9A693A00C668D0 /* SLKTextViewController.m in Sources */,
 				9479A2961A9A693A00C668D0 /* UIScrollView+SLKAdditions.m in Sources */,
 				94C6DE701A93DDD800562CE9 /* RegisterViewController.m in Sources */,
 				940CDBBD1AC33AD40006F099 /* Recording.m in Sources */,
+				94F498E11AD5988400F2760C /* FaceView.m in Sources */,
 				940CDBCA1AC44F1E0006F099 /* UserSettingsTableViewController.m in Sources */,
 				9442D8801ACAD80B00B47996 /* MetronomeViewController.m in Sources */,
 				9405B95B1A8F08F900EEDE19 /* UIViewController+ECSlidingViewController.m in Sources */,

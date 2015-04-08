@@ -1489,7 +1489,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Kj-bn-Kws" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1542" y="3497"/>
+            <point key="canvasLocation" x="1542" y="3916"/>
         </scene>
         <!--Practice List-->
         <scene sceneID="t15-ZM-5zI">
@@ -1543,7 +1543,84 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M68-Tm-tWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2326" y="3469"/>
+            <point key="canvasLocation" x="2319" y="3916"/>
+        </scene>
+        <!--Tuner-->
+        <scene sceneID="3Sl-Sb-fO9">
+            <objects>
+                <viewController id="DcY-kB-BbY" customClass="TunerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OEM-dq-mIJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="XtH-Py-jUd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZX8-My-wb8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vpC-bm-Tlo" customClass="FaceView">
+                                <rect key="frame" x="0.0" y="64" width="320" height="277"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pitch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s4F-9j-vPD">
+                                <rect key="frame" x="48" y="349" width="40" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Gp0-Si-2u2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cents" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="51D-86-rlu">
+                                <rect key="frame" x="225" y="349" width="46" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r8J-UN-Znl">
+                                <rect key="frame" x="61" y="413" width="14" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="u2A-ka-5Ge"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jcc-Z7-ZxF">
+                                <rect key="frame" x="241" y="412" width="14" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jcc-Z7-ZxF" firstAttribute="top" secondItem="51D-86-rlu" secondAttribute="bottom" constant="42" id="4zt-Mb-XF4"/>
+                            <constraint firstItem="XtH-Py-jUd" firstAttribute="top" secondItem="r8J-UN-Znl" secondAttribute="bottom" constant="85" id="7PO-Th-Ql3"/>
+                            <constraint firstItem="vpC-bm-Tlo" firstAttribute="leading" secondItem="ZX8-My-wb8" secondAttribute="leading" id="8vE-bj-O3W"/>
+                            <constraint firstItem="vpC-bm-Tlo" firstAttribute="top" secondItem="OEM-dq-mIJ" secondAttribute="bottom" id="GFD-ou-nZ2"/>
+                            <constraint firstItem="s4F-9j-vPD" firstAttribute="top" secondItem="vpC-bm-Tlo" secondAttribute="bottom" constant="8" symbolic="YES" id="KwN-X9-b4r"/>
+                            <constraint firstItem="51D-86-rlu" firstAttribute="firstBaseline" secondItem="s4F-9j-vPD" secondAttribute="firstBaseline" id="VVy-xf-n46"/>
+                            <constraint firstItem="s4F-9j-vPD" firstAttribute="leading" secondItem="ZX8-My-wb8" secondAttribute="leadingMargin" constant="32" id="Wyg-VY-vgU"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="51D-86-rlu" secondAttribute="trailing" constant="33" id="hvA-uo-Kue"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="jcc-Z7-ZxF" secondAttribute="trailing" constant="49" id="kTu-ME-gPv"/>
+                            <constraint firstAttribute="trailing" secondItem="vpC-bm-Tlo" secondAttribute="trailing" id="oX0-ek-U8s"/>
+                            <constraint firstItem="r8J-UN-Znl" firstAttribute="top" secondItem="s4F-9j-vPD" secondAttribute="bottom" constant="43" id="tHr-rc-pSH"/>
+                            <constraint firstItem="r8J-UN-Znl" firstAttribute="leading" secondItem="ZX8-My-wb8" secondAttribute="leadingMargin" constant="45" id="tnD-Pb-334"/>
+                            <constraint firstItem="51D-86-rlu" firstAttribute="baseline" secondItem="s4F-9j-vPD" secondAttribute="baseline" id="uJs-Bk-cjD"/>
+                            <constraint firstItem="XtH-Py-jUd" firstAttribute="top" secondItem="jcc-Z7-ZxF" secondAttribute="bottom" constant="86" id="uaT-Dc-8uP"/>
+                            <constraint firstItem="s4F-9j-vPD" firstAttribute="centerX" secondItem="r8J-UN-Znl" secondAttribute="centerX" id="uxm-z2-YfE"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Tuner" image="tuning_fork" id="cj2-E3-ajn"/>
+                    <connections>
+                        <outlet property="faceView" destination="vpC-bm-Tlo" id="8vV-FU-71Z"/>
+                        <outlet property="labelCents" destination="jcc-Z7-ZxF" id="W30-Tx-nBB"/>
+                        <outlet property="labelPitch" destination="r8J-UN-Znl" id="Fuz-fm-pg3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4RD-TQ-Pj4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3093" y="3171"/>
         </scene>
         <!--Task View Controller-->
         <scene sceneID="98F-Sf-BTJ">
@@ -1624,7 +1701,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oJx-1R-g6Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3093" y="3469"/>
+            <point key="canvasLocation" x="3093" y="3916"/>
         </scene>
         <!--Music Tools Tab Bar Controller-->
         <scene sceneID="O19-bA-Rug">
@@ -1645,6 +1722,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="Y9V-6d-R8d" kind="relationship" relationship="viewControllers" id="VYk-Pm-2jr"/>
+                        <segue destination="DcY-kB-BbY" kind="relationship" relationship="viewControllers" id="FBJ-gI-aEm"/>
                         <segue destination="Qa2-li-Ly7" kind="relationship" relationship="viewControllers" id="teu-qr-Edb"/>
                         <segue destination="iCj-CN-0wJ" kind="relationship" relationship="viewControllers" id="8TC-kK-dFS"/>
                     </connections>
@@ -2493,7 +2571,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Vy-ZG-b4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3083" y="2565"/>
+            <point key="canvasLocation" x="3093" y="2495"/>
         </scene>
     </scenes>
     <resources>
@@ -2511,6 +2589,7 @@
         <image name="settings" width="35" height="30"/>
         <image name="tab_drones" width="30" height="36"/>
         <image name="tab_settings" width="35" height="32"/>
+        <image name="tuning_fork" width="31" height="30"/>
         <image name="user_practice_list" width="25" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -2519,9 +2598,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="wf2-jZ-7i2"/>
         <segue reference="2ZW-Oq-Jzn"/>
-        <segue reference="RIY-LG-AEw"/>
+        <segue reference="wf2-jZ-7i2"/>
+        <segue reference="LUN-Gh-Rit"/>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
     </inferredMetricsTieBreakers>
