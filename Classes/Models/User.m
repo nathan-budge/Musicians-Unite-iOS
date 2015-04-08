@@ -150,6 +150,8 @@
                 NSLog(@"%@", error.description);
             }];
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Remote Notifications" object:self];
+            
             [self attachListenerForAddedGroups];
             [self attachListenerForRemovedGroups];
             [self attachListenerForAddedTasks];

@@ -673,20 +673,16 @@
                                 <action selector="actionDrawerToggle:" destination="f1v-bp-hIe" id="K92-OK-tW0"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="9fW-6N-g6X">
-                            <connections>
-                                <segue destination="aUg-yG-wVb" kind="push" id="QnM-x0-iGX"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="buttonMenu" destination="nY1-Jt-XMr" id="4fj-yZ-jjR"/>
                         <segue destination="35D-ZR-R4b" kind="push" identifier="showGroupTabs" id="mFO-yM-cYg"/>
+                        <segue destination="aUg-yG-wVb" kind="push" identifier="newGroup" id="2ZW-Oq-Jzn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a9H-7Y-u93" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2294" y="370"/>
+            <point key="canvasLocation" x="2326" y="354"/>
         </scene>
         <!--User Settings-->
         <scene sceneID="QTM-uQ-VJf">
@@ -2523,10 +2519,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="wf2-jZ-7i2"/>
+        <segue reference="2ZW-Oq-Jzn"/>
+        <segue reference="RIY-LG-AEw"/>
         <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
-        <segue reference="wf2-jZ-7i2"/>
-        <segue reference="QnM-x0-iGX"/>
-        <segue reference="RIY-LG-AEw"/>
     </inferredMetricsTieBreakers>
 </document>

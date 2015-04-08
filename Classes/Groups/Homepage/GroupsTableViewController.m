@@ -37,6 +37,8 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
 
+@property (nonatomic) UIActivityIndicatorView *activityIndicator;
+
 @end
 
 
@@ -103,6 +105,10 @@
                                                  name:@"Group Removed"
                                                object:nil];
     
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    UIBarButtonItem *activityButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    UIBarButtonItem *newGroupButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionNewGroup)];
+    self.navigationItem.rightBarButtonItems = @[newGroupButton, activityButton];
     
     [self loadUser];
     
@@ -120,12 +126,15 @@
     
     [connectedRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         if([snapshot.value boolValue]) {
+            [SVProgressHUD dismiss];
             NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-            if (!navigationDrawerViewController.user) {
-                [SVProgressHUD showWithStatus:@"Loading" maskType:SVProgressHUDMaskTypeBlack];
+            if (!navigationDrawerViewController.user)
+            {
+                [self.activityIndicator startAnimating];
                 
                 self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
                 self.user = [[User alloc] initWithRef:self.userRef];
+                NSLog(@"User Crated");
                 
                 NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
                 navigationDrawerViewController.user = self.user;
@@ -145,24 +154,28 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Data Loaded"]) {
+    if ([[notification name] isEqualToString:@"Data Loaded"])
+    {
         [self.tableView reloadData];
-
-    } else if ([[notification name] isEqualToString:@"No Groups"]) {
-        [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
-        
-    } else if ([[notification name] isEqualToString:@"New Group"]) {
+    }
+    else if ([[notification name] isEqualToString:@"No Groups"])
+    {
+        [self.activityIndicator stopAnimating];
+    }
+    else if ([[notification name] isEqualToString:@"New Group"])
+    {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             [self.groups addObject:notification.object];
             [self.tableView reloadData];
             if (self.groups.count == self.user.groups.count) {
-                [SVProgressHUD showSuccessWithStatus:@"Done" maskType:SVProgressHUDMaskTypeBlack];
+                [self.activityIndicator stopAnimating];
             }
         });
-    } else if ([[notification name] isEqualToString:@"Group Removed"]) {
+    }
+    else if ([[notification name] isEqualToString:@"Group Removed"])
+    {
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];
-        
     }
 }
 
@@ -176,6 +189,10 @@
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 
+- (void)actionNewGroup
+{
+    [self performSegueWithIdentifier:@"newGroup" sender:nil];
+}
 
 //*****************************************************************************/
 #pragma mark - Prepare for segue

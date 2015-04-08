@@ -8,13 +8,16 @@
 
 #import "AppDelegate.h"
 #import <Firebase/Firebase.h>
-#import "User.h"
 
 #import "AppConstant.h"
+
+#import "User.h"
 
 @interface AppDelegate ()
 
 @property (nonatomic) Firebase *ref;
+@property (nonatomic) UIApplication *application;
+@property (nonatomic) User *user;
 
 @end
 
@@ -50,10 +53,25 @@
     
     [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
     
-    [application registerForRemoteNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Remote Notifications"
+                                               object:nil];
+    
+    self.application = application;
 
     return YES;
 }
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Remote Notifications"])
+    {
+        [self.application registerForRemoteNotifications];
+        self.user = (User *)notification.object;
+    }
+}
+
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
@@ -62,7 +80,24 @@
     NSString *tokenString = [deviceToken description];
     tokenString = [tokenString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     tokenString = [tokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
-    [[NSUserDefaults standardUserDefaults] setObject:tokenString forKey:@"DeviceToken"];
+    
+    NSString *deviceID = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    NSLog(@"My device id is: %@", deviceID);
+    
+    Firebase *devicesRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"devices/%@", deviceID]];
+    Firebase *userDevicesRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/devices", self.user.userID]];
+    
+    NSDictionary *updatedDeviceValues = @{
+                                          @"device_type":@"iOS",
+                                          @"device_token":tokenString,
+                                          };
+    
+    NSDictionary *updatedUserValues = @{
+                                        deviceID:@TRUE,
+                                        };
+    
+    [devicesRef updateChildValues:updatedDeviceValues];
+    [userDevicesRef updateChildValues:updatedUserValues];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
