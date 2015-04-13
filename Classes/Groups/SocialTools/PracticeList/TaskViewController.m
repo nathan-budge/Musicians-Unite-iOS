@@ -98,10 +98,16 @@
 
 - (void)actionCreate
 {
-    if ([self.fieldTitle.text isEqualToString:@""]) {
+    if ([self.fieldTitle.text isEqualToString:@""])
+    {
         [SVProgressHUD showErrorWithStatus:@"Title required" maskType:SVProgressHUDMaskTypeBlack];
-        
-    } else {
+    }
+    else if (![self validTempo])
+    {
+        [SVProgressHUD showErrorWithStatus:@"Invalid tempo" maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else
+    {
         Firebase *taskRef = [[self.ref childByAppendingPath:@"tasks"] childByAutoId];
         
         Firebase *ownerRef;
@@ -133,10 +139,17 @@
 
 - (void)actionSave
 {
-    if ([self.fieldTitle.text isEqualToString:@""]) {
+    if ([self.fieldTitle.text isEqualToString:@""])
+    {
         [SVProgressHUD showErrorWithStatus:@"Title required" maskType:SVProgressHUDMaskTypeBlack];
         
-    } else {
+    }
+    else if (![self validTempo])
+    {
+        [SVProgressHUD showErrorWithStatus:@"Invalid tempo" maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else
+    {
         Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", self.task.taskID]];
         
         NSDictionary *updatedTask = @{
@@ -153,6 +166,11 @@
         
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+- (IBAction)actionMetronome:(id)sender
+{
+    [self performSegueWithIdentifier:@"viewMetronome" sender:nil];
 }
 
 - (IBAction)actionDelete:(id)sender
@@ -176,6 +194,23 @@
     
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+//*****************************************************************************/
+#pragma mark - Check Tempo
+//*****************************************************************************/
+
+//Adpated from http://stackoverflow.com/questions/565696/nsstring-is-integer
+- (BOOL)validTempo
+{
+    if (self.fieldTempo.text.length == 0) {
+        return YES;
+    }
+    
+    NSScanner *tempoScanner = [NSScanner scannerWithString:self.fieldTempo.text];
+    return [tempoScanner scanInt:nil] && [tempoScanner isAtEnd];
+}
+
 
 //*****************************************************************************/
 #pragma mark - Keyboard Handling

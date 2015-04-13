@@ -23,13 +23,17 @@
 @property (nonatomic) NSMutableArray *tasks;
 @property (nonatomic) NSMutableArray *recordings;
 
+
+//Constructors
 - (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
 - (Group *)initWithRef: (Firebase *)groupRef;
 
-- (void)addMember: (User *)member;
-- (void)removeMember:(User *)member;
 
-- (void)addMessageThread: (MessageThread *)messageThread;
-- (void)removeMessageThread:(MessageThread *)messageThread;
+//Array methods
+//- (void)addMember: (User *)member;
+//- (void)removeMember:(User *)member;
+
+//- (void)addMessageThread: (MessageThread *)messageThread;
+//- (void)removeMessageThread:(MessageThread *)messageThread;
 
 @end

@@ -17,6 +17,7 @@
 @property (nonatomic) NSData *data;
 @property (nonatomic) NSString *ownerID;
 
+//Constructor
 - (Recording *)initWithRef: (Firebase *)recordingRef;
 
 @end

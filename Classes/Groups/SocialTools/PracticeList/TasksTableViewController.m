@@ -14,6 +14,7 @@
 #import "NavigationDrawerViewController.h"
 
 #import "AppConstant.h"
+#import "SharedData.h"
 
 #import "User.h"
 #import "Task.h"
@@ -27,7 +28,10 @@
 @property (nonatomic) User *user;
 
 @property (nonatomic) Task *selectedTask;
-@property (nonatomic) NSMutableArray *tasks;
+@property (nonatomic) NSMutableArray *incompleteTasks;
+@property (nonatomic) NSMutableArray *completedTasks;
+
+@property (nonatomic) SharedData *sharedData;
 
 @end
 
@@ -46,12 +50,28 @@
     return _ref;
 }
 
--(NSMutableArray *)tasks
+-(NSMutableArray *)incompleteTasks
 {
-    if (!_tasks) {
-        _tasks = [[NSMutableArray alloc] init];
+    if (!_incompleteTasks) {
+        _incompleteTasks = [[NSMutableArray alloc] init];
     }
-    return _tasks;
+    return _incompleteTasks;
+}
+
+-(NSMutableArray *)completedTasks
+{
+    if (!_completedTasks) {
+        _completedTasks = [[NSMutableArray alloc] init];
+    }
+    return _completedTasks;
+}
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
 }
 
 
@@ -63,40 +83,78 @@
 {
     [super viewDidLoad];
     
-    if (!self.group) {
+    if (!self.group)
+    {
         NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
         self.user = navigationDrawerViewController.user;
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
+                                                 name:@"New Task"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Task Removed"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
                                                  name:@"Task Data Updated"
                                                object:nil];
+    
+    
+    NSMutableArray *tasks;
+    if (self.group)
+    {
+        tasks = [NSMutableArray arrayWithArray:self.group.tasks];
+    }
+    else if (self.user)
+    {
+        tasks = [NSMutableArray arrayWithArray:self.user.tasks];
+    }
+    
+    for (Task *task in tasks)
+    {
+        if (task.completed)
+        {
+            [self.completedTasks addObject:task];
+        }
+        else
+        {
+            [self.incompleteTasks addObject:task];
+        }
+    }
+    
+    [self.tableView reloadData];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    self.tabBarController.title = @"Practice List";
-    
-    self.clearsSelectionOnViewWillAppear = YES;
-    
     UIBarButtonItem *newTaskButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionAddTask)];
     
-    if (self.group) {
-        self.tasks = [NSMutableArray arrayWithArray:self.group.tasks];
+    if (self.group)
+    {
+        self.tabBarController.title = @"Practice List";
         self.tabBarController.navigationItem.rightBarButtonItem = newTaskButton;
         
-        if (!self.inset) {
+        if (!self.inset)
+        {
             self.tableView.contentInset = UIEdgeInsetsMake(65.0, 0.0, 0.0, 0.0);
             self.inset = YES;
-        } else {
+        }
+        else
+        {
             self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         }
         
-    } else {
-        self.tasks = [NSMutableArray arrayWithArray:self.user.tasks];
+    }
+    else if (self.user)
+    {
         self.navigationItem.rightBarButtonItem = newTaskButton;
     }
 }
@@ -104,18 +162,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
-    if (self.group) {
-        [self.group.tasks removeAllObjects];
-        self.group.tasks = [NSMutableArray arrayWithArray:self.tasks];
-    } else {
-        [self.user.tasks removeAllObjects];
-        self.user.tasks = [NSMutableArray arrayWithArray:self.tasks];
-    }
-    
     self.inset = NO;
-    
-    [self.tasks removeAllObjects];
 }
 
 
@@ -123,7 +170,8 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionDrawerToggle:(id)sender {
+- (IBAction)actionDrawerToggle:(id)sender
+{
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 
@@ -133,20 +181,38 @@
     CGPoint touchPoint = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchPoint];
     
-    Task *task = [self.tasks objectAtIndex:indexPath.row];
+    Task *task;
+    if (indexPath.section == 0)
+    {
+        if (self.incompleteTasks.count == 0)
+        {
+            task = [self.completedTasks objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            task = [self.incompleteTasks objectAtIndex:indexPath.row];\
+        }
+    }
+    else if (indexPath.section == 1)
+    {
+        task = [self.completedTasks objectAtIndex:indexPath.row];
+    }
     
     Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", task.taskID]];
     
     task.completed = !task.completed;
     task.completed ? [taskRef updateChildValues:@{@"completed":@YES}] : [taskRef updateChildValues:@{@"completed":@NO}];
     
-    if (task.completed) {
-        [self.tasks removeObject:task];
-        [self.tasks addObject:task];
+    if (task.completed)
+    {
+        [self.incompleteTasks removeObject:task];
+        [self.completedTasks addObject:task];
         [self.tableView reloadData];
-    } else {
-        [self.tasks removeObject:task];
-        [self.tasks insertObject:task atIndex:0];
+    }
+    else
+    {
+        [self.completedTasks removeObject:task];
+        [self.incompleteTasks addObject:task];
         [self.tableView reloadData];
     }
 }
@@ -164,9 +230,31 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Task Data Updated"]) {
+    if ([[notification name] isEqualToString:@"Task Data Updated"])
+    {
         [self.tableView reloadData];
         
+    }
+    else if ([[notification name] isEqualToString:@"New Task"])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            [self.incompleteTasks addObject:notification.object];
+            [self.tableView reloadData];
+        });
+    }
+    else if ([[notification name] isEqualToString:@"Task Removed"])
+    {
+        Task *removedTask = notification.object;
+        
+        if (removedTask.completed)
+        {
+            [self.completedTasks removeObject:removedTask];
+        }
+        else
+        {
+            [self.incompleteTasks removeObject:removedTask];
+        }
+        [self.tableView reloadData];
     }
 }
 
@@ -175,27 +263,94 @@
 #pragma mark - Table view data source
 //*****************************************************************************/
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.tasks.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    if (self.incompleteTasks.count == 0 && self.completedTasks.count == 0)
+    {
+        return 0;
+    }
+    else if (self.incompleteTasks.count == 0 || self.completedTasks.count == 0)
+    {
+        return 1;
+    }
     
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        if (self.incompleteTasks.count == 0)
+        {
+            return self.completedTasks.count;
+        }
+        else
+        {
+            return self.incompleteTasks.count;
+        }
+        
+    }
+    else if (section == 1)
+    {
+        return self.completedTasks.count;
+    }
+    
+    return 0;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        if (self.incompleteTasks.count == 0)
+        {
+            return @"Complete";
+        }
+        else
+        {
+            return @"Incomplete";
+        }
+    }
+    else if (section == 1)
+    {
+        return @"Complete";
+    }
+    
+    return nil;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TaskCell"];
     
-    Task *task = [self.tasks objectAtIndex:indexPath.row];
+    Task *task;
+    if (indexPath.section == 0)
+    {
+        if (self.incompleteTasks.count == 0)
+        {
+            task = [self.completedTasks objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            task = [self.incompleteTasks objectAtIndex:indexPath.row];
+        }
+    }
+    else if (indexPath.section == 1)
+    {
+        task = [self.completedTasks objectAtIndex:indexPath.row];
+    }
     
     UIButton *checkbox = (UIButton *)[cell viewWithTag:1];
     UILabel *taskTitle = (UILabel *)[cell viewWithTag:2];
     
-    if (!task.completed) {
+    if (!task.completed)
+    {
         [checkbox setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
         cell.backgroundColor = [UIColor clearColor];
-    } else {
+    }
+    else
+    {
         [checkbox setImage:[UIImage imageNamed:@"checkbox_completed"] forState:UIControlStateNormal];
         cell.backgroundColor = [UIColor lightGrayColor];
     }
@@ -258,7 +413,22 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.selectedTask = [self.tasks objectAtIndex:indexPath.row];
+    if (indexPath.section == 0)
+    {
+        if (self.incompleteTasks.count == 0)
+        {
+            self.selectedTask = [self.completedTasks objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            self.selectedTask = [self.incompleteTasks objectAtIndex:indexPath.row];
+        }
+    }
+    else if (indexPath.section == 1)
+    {
+        self.selectedTask = [self.completedTasks objectAtIndex:indexPath.row];
+    }
+    
     [self performSegueWithIdentifier:@"taskDetail" sender:nil];
 }
 

@@ -25,11 +25,13 @@
 @property (nonatomic) NSMutableArray *tasks;
 @property (nonatomic) NSMutableArray *recordings;
 
-@property (nonatomic) NSString *deviceToken;
+//@property (nonatomic) NSString *deviceToken;
 
+
+//Constructor
 - (User *)initWithRef: (Firebase *)userRef;
 
-- (void)addGroup: (Group *)group;
-- (void)removeGroup:(Group *)group;
+//- (void)addGroup: (Group *)group;
+//- (void)removeGroup:(Group *)group;
 
 @end

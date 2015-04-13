@@ -19,12 +19,17 @@
 
 @interface MessageThread ()
 
+//Firebase references
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *messageThreadRef;
 @property (nonatomic) Firebase *threadMembersRef;
 @property (nonatomic) Firebase *threadMessagesRef;
 
+//Shared data 
 @property (weak, nonatomic) SharedData *sharedData;
+
+//Group object
+@property (nonatomic) Group *group;
 
 @end
 
@@ -82,7 +87,7 @@
 }
 
 
-- (MessageThread *)initWithRef: (Firebase *)messageThreadRef
+- (MessageThread *)initWithRef: (Firebase *)messageThreadRef andGroup: (Group *)group
 {
     if (self = [super init]) {
         self.messageThreadRef = messageThreadRef;
@@ -92,6 +97,8 @@
         [self.sharedData addChildObserver:self.messageThreadRef];
         [self.sharedData addChildObserver:self.threadMembersRef];
         [self.sharedData addChildObserver:self.threadMessagesRef];
+        
+        self.group = group;
         
         [self loadMessageThreadData];
         [self attachListenerForAddedMembers];
@@ -115,10 +122,12 @@
     [self.messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         self.messageThreadID = snapshot.key;
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread" object:self];
+        
         dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -138,7 +147,10 @@
             dispatch_group_enter(self.sharedData.downloadGroup);
             
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
-            NSArray *member= [self.sharedData.users filteredArrayUsingPredicate:predicate];
+            NSArray *member= [self.group.members filteredArrayUsingPredicate:predicate];
+            
+            //TOOD: Fix error where user no longer belongs to a group
+            
             User *aMember = [member objectAtIndex:0];
             
             [self addMember:aMember];
@@ -147,7 +159,7 @@
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -158,15 +170,19 @@
         NSString *messageID = snapshot.key;
         
         Firebase *messageRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", messageID]];
-        Message *newMessage = [[Message alloc] initWithRef:messageRef];
+        Message *newMessage = [[Message alloc] initWithRef:messageRef andGroup:self.group];
         [self addMessage:newMessage];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Data Updated" object:self];
+        //Double check notifications
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:self];
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
+
+//TODO: Remove Messages Listener
+
 
 //*****************************************************************************/
 #pragma mark - Array handling

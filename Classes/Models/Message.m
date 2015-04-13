@@ -18,9 +18,14 @@
 
 @interface Message ()
 
+//Firebase reference
 @property (nonatomic) Firebase *messageRef;
 
+//Shared data singleton
 @property (weak, nonatomic) SharedData *sharedData;
+
+//Group object
+@property (nonatomic) Group *group;
 
 @end
 
@@ -52,10 +57,11 @@
     return nil;
 }
 
-- (Message *)initWithRef: (Firebase *)messageRef
+- (Message *)initWithRef: (Firebase *)messageRef andGroup: (Group *)group
 {
     if (self = [super init]) {
         self.messageRef = messageRef;
+        self.group = group;
         
         [self loadMessageData];
         
@@ -74,6 +80,7 @@
     dispatch_group_enter(self.sharedData.downloadGroup);
     
     [self.messageRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
         NSDictionary *messageData = snapshot.value;
         
         self.messageID = snapshot.key;
@@ -81,15 +88,18 @@
         
         NSString *senderID = messageData[@"sender"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", senderID];
-        NSArray *member= [self.sharedData.users filteredArrayUsingPredicate:predicate];
-        User *aMember = [member objectAtIndex:0];
+        NSArray *member= [self.group.members filteredArrayUsingPredicate:predicate];
         
-        self.sender = aMember;
+        //TOOD: Fix error where user no longer belongs to a group
+        
+        User *sender = [member objectAtIndex:0];
+        
+        self.sender = sender;
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

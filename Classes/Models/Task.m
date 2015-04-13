@@ -81,20 +81,21 @@
         self.tempo = taskData[@"tempo"];
         self.notes = taskData[@"notes"];
         
-        if ([taskData[@"completed"] isEqual:@YES]) {
+        if ([taskData[@"completed"] isEqual:@YES])
+        {
             self.completed = YES;
-            
-        } else {
+        }
+        else
+        {
             self.completed = NO;
-            
         }
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Task" object:self];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -121,18 +122,20 @@
             
         } else if ([snapshot.key isEqualToString:@"completed"]) {
             
-            if ([snapshot.value isEqual:@YES]) {
+            if ([snapshot.value isEqual:@YES])
+            {
                 self.completed = YES;
-                
-            } else {
-                self.completed = NO;
-                
             }
+            else
+            {
+                self.completed = NO;
+            }
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

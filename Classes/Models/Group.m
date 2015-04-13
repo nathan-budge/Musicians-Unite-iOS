@@ -20,6 +20,7 @@
 
 @interface Group ()
 
+//Firebase references
 @property (nonatomic) Firebase *ref;
 @property (nonatomic) Firebase *groupRef;
 @property (nonatomic) Firebase *groupMembersRef;
@@ -27,6 +28,7 @@
 @property (nonatomic) Firebase *groupTasksRef;
 @property (nonatomic) Firebase *groupRecordingsRef;
 
+//Shared data singleton
 @property (weak, nonatomic) SharedData *sharedData;
 
 @end
@@ -163,7 +165,7 @@
         dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@", error.description);
     }];
 }
 
@@ -179,17 +181,17 @@
         if ([snapshot.key isEqualToString:@"name"]) {
             
             self.name = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Data Updated" object:self];
             
         } else if ([snapshot.key isEqualToString:@"profile_image"]) {
             
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Data Loaded" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Data Updated" object:self];
             
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -199,28 +201,15 @@
         
         NSString *newMemberID = snapshot.key;
         
-        if (![newMemberID isEqualToString:self.ref.authData.uid]) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", newMemberID];
-            NSArray *userArray = [self.sharedData.users filteredArrayUsingPredicate:predicate];
-            
-            if (userArray.count > 0) {
-                User *aUser = [userArray objectAtIndex:0];
-                [aUser addGroup:self];
-                [self addMember:aUser];
-                
-            } else {
-                Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
-                
-                User *newUser = [[User alloc] initWithRef:userRef];
-                
-                [self addMember:newUser];
-                //[newUser addGroup:self];
-
-            }
+        if (![newMemberID isEqualToString:self.ref.authData.uid])
+        {
+            Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
+            User *newUser = [[User alloc] initWithRef:userRef];
+            [self addMember:newUser];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@", error.description);
     }];
 }
 
@@ -231,20 +220,16 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", snapshot.key];
         NSArray *member = [self.members filteredArrayUsingPredicate:predicate];
         
-        if (member.count > 0) {
+        if (member.count > 0)
+        {
             User *removedMember = [member objectAtIndex:0];
             [self removeMember:removedMember];
             
-            [removedMember removeGroup:self];
-            
-            if (removedMember.groups.count == 0) {
-                [self.sharedData removeUser:removedMember];
-            }
-            
+            //TODO: Notification, User Removed?
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@", error.description);
     }];
 }
 
@@ -261,22 +246,19 @@
            
             NSDictionary *messageThreadData = snapshot.value;
             
-            if ([[messageThreadData[@"members"] allKeys] containsObject:self.ref.authData.uid]) {
-                
-                MessageThread *newMessageThread = [[MessageThread alloc] initWithRef:messageThreadRef];
-                
+            if ([[messageThreadData[@"members"] allKeys] containsObject:self.ref.authData.uid])
+            {
+                MessageThread *newMessageThread = [[MessageThread alloc] initWithRef:messageThreadRef andGroup:self];
                 [self addMessageThread:newMessageThread];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Loaded" object:self];
             }
             
         } withCancelBlock:^(NSError *error) {
-            NSLog(@"%@", error);
+            NSLog(@"%@", error.description);
         }];
        
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@", error.description);
     }];
 }
 
@@ -293,7 +275,7 @@
         [self addTask:newTask];
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -307,11 +289,11 @@
         if (task.count > 0) {
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTask];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -328,7 +310,7 @@
         [self addRecording:newRecording];
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -342,11 +324,11 @@
         if (recording.count > 0) {
             Recording *removedRecording = [recording objectAtIndex:0];
             [self removeRecording:removedRecording];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Removed" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

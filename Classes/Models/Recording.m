@@ -51,7 +51,8 @@
 
 - (Recording *)initWithRef: (Firebase *)recordingRef
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
         self.recordingRef = recordingRef;
         
         [self.sharedData addChildObserver:self.recordingRef];
@@ -83,10 +84,12 @@
         self.data = [[NSData alloc] initWithBase64EncodedString:recordingData[@"data"] options:0];
         self.ownerID = recordingData[@"owner"];
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Recording" object:self];
+        
         dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -99,13 +102,14 @@
 {
     [self.recordingRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"name"]) {
+        if ([snapshot.key isEqualToString:@"name"])
+        {
             self.name = snapshot.value;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

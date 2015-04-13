@@ -133,7 +133,7 @@
 
 -(void)actionCreateGroup
 {
-    [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
+    //[SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
     
     if ([self.fieldGroupName.text isEqualToString:@""]) {
         [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];

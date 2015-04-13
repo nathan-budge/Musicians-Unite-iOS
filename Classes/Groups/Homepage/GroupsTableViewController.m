@@ -87,7 +87,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Data Loaded"
+                                                 name:@"Group Data Updated"
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -97,12 +97,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"No Groups"
+                                                 name:@"Group Removed"
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Group Removed"
+                                                 name:@"No Groups"
                                                object:nil];
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -125,16 +125,18 @@
     [self.sharedData addChildObserver:connectedRef];
     
     [connectedRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
         if([snapshot.value boolValue]) {
+            
             [SVProgressHUD dismiss];
             NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
+            
             if (!navigationDrawerViewController.user)
             {
                 [self.activityIndicator startAnimating];
                 
                 self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
                 self.user = [[User alloc] initWithRef:self.userRef];
-                NSLog(@"User Crated");
                 
                 NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
                 navigationDrawerViewController.user = self.user;
@@ -154,13 +156,9 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Data Loaded"])
+    if ([[notification name] isEqualToString:@"Group Data Updated"])
     {
         [self.tableView reloadData];
-    }
-    else if ([[notification name] isEqualToString:@"No Groups"])
-    {
-        [self.activityIndicator stopAnimating];
     }
     else if ([[notification name] isEqualToString:@"New Group"])
     {
@@ -176,6 +174,10 @@
     {
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];
+    }
+    else if ([[notification name] isEqualToString:@"No Groups"])
+    {
+        [self.activityIndicator stopAnimating];
     }
 }
 

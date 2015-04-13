@@ -18,6 +18,7 @@
 @property (nonatomic) NSString *notes;
 @property (nonatomic) BOOL completed;
 
+//Constructor
 - (Task *)initWithRef: (Firebase *)taskRef;
 
 @end

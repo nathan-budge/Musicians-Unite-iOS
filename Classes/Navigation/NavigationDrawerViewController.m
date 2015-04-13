@@ -92,13 +92,11 @@
 {
     [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
     
-    SharedData *childObservers = [SharedData sharedInstance];
+    SharedData *sharedData = [SharedData sharedInstance];
     
-    for (Firebase *ref in childObservers.childObservers){
+    for (Firebase *ref in sharedData.childObservers){
         [ref removeAllObservers];
     }
-    
-    [childObservers.users removeAllObjects];
     
     [self.ref unauth];
 

@@ -13,8 +13,6 @@
 @interface SharedData : NSObject
 
 @property (nonatomic, retain) NSMutableArray *childObservers;
-@property (nonatomic) NSMutableArray *users;
-@property (nonatomic, retain) NSMutableArray *groups;
 @property (nonatomic) dispatch_group_t downloadGroup;
 
 
@@ -22,7 +20,5 @@
 
 - (void) addChildObserver:(Firebase *)childObserver;
 - (void) removeChildObserver:(Firebase *)childObserver;
-- (void) addUser:(User *)user;
-- (void) removeUser:(User *)user;
 
 @end

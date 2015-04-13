@@ -120,18 +120,21 @@
         self.userID = snapshot.key;
         self.email = memberData[@"email"];
         
-        if ([memberData[@"completed_registration"] isEqual:@YES]) {
+        if ([memberData[@"completed_registration"] isEqual:@YES])
+        {
             self.completedRegistration = YES;
             self.firstName = memberData[@"first_name"];
             self.lastName = memberData[@"last_name"];
             self.profileImage = [Utilities decodeBase64ToImage:memberData[@"profile_image"]];
             
-        }else {
+        }
+        else
+        {
             self.completedRegistration = NO;
         }
         
-        if ([self.userID isEqualToString:self.ref.authData.uid]) {
-            
+        if ([self.userID isEqualToString:self.ref.authData.uid])
+        {
             self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
             self.userTasksRef = [self.userRef childByAppendingPath:@"tasks"];
             self.userRecordingsRef = [self.userRef childByAppendingPath:@"recordings"];
@@ -160,10 +163,10 @@
             [self attachListenerForRemovedRecordings];
         }
         
-        [self.sharedData addUser:self];
+        dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -176,19 +179,21 @@
 {
     [self.userRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"first_name"]) {
+        if ([snapshot.key isEqualToString:@"first_name"])
+        {
             self.firstName = snapshot.value;
-            
-        } else if ([snapshot.key isEqualToString:@"last_name"]) {
+        }
+        else if ([snapshot.key isEqualToString:@"last_name"])
+        {
             self.lastName = snapshot.value;
-            
-        } else if ([snapshot.key isEqualToString:@"profile_image"]) {
+        }
+        else if ([snapshot.key isEqualToString:@"profile_image"])
+        {
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
-            
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -216,7 +221,8 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", snapshot.key];
         NSArray *group = [self.groups filteredArrayUsingPredicate:predicate];
         
-        if (group.count > 0) {
+        if (group.count > 0)
+        {
             Group *removedGroup = [group objectAtIndex:0];
             [self removeGroup:removedGroup];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Removed" object:removedGroup];
@@ -240,7 +246,7 @@
         [self addTask:newTask];
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -251,14 +257,15 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.taskID=%@", snapshot.key];
         NSArray *task = [self.tasks filteredArrayUsingPredicate:predicate];
         
-        if (task.count > 0) {
+        if (task.count > 0)
+        {
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTask];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -275,7 +282,7 @@
         [self addRecording:newRecording];
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -289,13 +296,12 @@
         if (recording.count > 0) {
             Recording *removedRecording = [recording objectAtIndex:0];
             [self removeRecording:removedRecording];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Removed" object:self];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error);
-    }];
-    
+        NSLog(@"ERROR: %@", error.description);
+    }];    
 }
 
 
