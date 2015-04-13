@@ -183,10 +183,8 @@
     }];
 }
 
-- (IBAction)actionCreateGroup:(id)sender {
-    
-    [SVProgressHUD showWithStatus:@"Creating your group..." maskType:SVProgressHUDMaskTypeBlack];
-    
+- (IBAction)actionCreateGroup:(id)sender
+{
     Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
     
     NSDictionary *newGroup = @{
