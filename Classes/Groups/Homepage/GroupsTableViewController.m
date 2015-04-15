@@ -17,7 +17,6 @@
 #import "GroupsTableViewController.h"
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
-#import "NavigationDrawerViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -129,17 +128,15 @@
         if([snapshot.value boolValue]) {
             
             [SVProgressHUD dismiss];
-            NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
             
-            if (!navigationDrawerViewController.user)
+            if (!self.sharedData.user)
             {
                 [self.activityIndicator startAnimating];
                 
                 self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
                 self.user = [[User alloc] initWithRef:self.userRef];
                 
-                NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-                navigationDrawerViewController.user = self.user;
+                self.sharedData.user = self.user;
             }
             
         } else {

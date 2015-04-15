@@ -241,7 +241,6 @@
         
         Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", newMessageThreadID]];
         
-        
         [messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
            
             NSDictionary *messageThreadData = snapshot.value;
@@ -253,12 +252,11 @@
             }
             
         } withCancelBlock:^(NSError *error) {
-            NSLog(@"%@", error.description);
+            NSLog(@"ERROR: %@", error.description);
         }];
-       
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error.description);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

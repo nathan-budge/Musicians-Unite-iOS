@@ -57,10 +57,11 @@
     return nil;
 }
 
-- (Message *)initWithRef: (Firebase *)messageRef andGroup: (Group *)group
+- (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group
 {
     if (self = [super init]) {
         self.messageRef = messageRef;
+        
         self.group = group;
         
         [self loadMessageData];
@@ -86,15 +87,24 @@
         self.messageID = snapshot.key;
         self.text = messageData[@"text"];
         
-        NSString *senderID = messageData[@"sender"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", senderID];
-        NSArray *member= [self.group.members filteredArrayUsingPredicate:predicate];
-        
         //TOOD: Fix error where user no longer belongs to a group
-        
-        User *sender = [member objectAtIndex:0];
-        
-        self.sender = sender;
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            NSString *senderID = messageData[@"sender"];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", senderID];
+            NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
+            
+            User *sender;
+            if (member.count > 0) {
+                sender = [member objectAtIndex:0];
+            } else {
+                sender = self.sharedData.user;
+            }
+            
+            self.sender = sender;
+            
+        });
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

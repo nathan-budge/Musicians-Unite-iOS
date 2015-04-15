@@ -12,9 +12,9 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+#import "SharedData.h"
 
 #import "UserSettingsTableViewController.h"
-#import "NavigationDrawerViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -23,6 +23,8 @@
 @interface UserSettingsTableViewController ()
 
 @property (nonatomic) Firebase *ref;
+
+@property (nonatomic) SharedData *sharedData;
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldFirstName;
 @property (weak, nonatomic) IBOutlet UITextField *fieldLastName;
@@ -48,6 +50,14 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -57,8 +67,7 @@
 {
     [super viewDidLoad];
     
-    NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-    self.user = navigationDrawerViewController.user;
+    self.user = self.sharedData.user;
     
     self.fieldFirstName.text = self.user.firstName;
     self.fieldLastName.text = self.user.lastName;

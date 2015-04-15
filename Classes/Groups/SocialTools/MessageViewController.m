@@ -1,11 +1,9 @@
 //
 //  MessageViewController.m
-//  Musicians-Unite-iOS
+//  Messenger
 //
-//  Created by Nathan Budge on 2/22/15.
-//  Copyright (c) 2015 CWRU. All rights reserved.
-//
-//  Adapted from https://github.com/slackhq/SlackTextViewController/blob/master/Examples/Messenger/Messenger-Shared/MessageViewController.m
+//  Created by Ignacio Romero Zurbuchen on 8/15/14.
+//  Copyright (c) 2014 Slack Technologies, Inc. All rights reserved.
 //
 
 #import <Firebase/Firebase.h>
@@ -20,11 +18,10 @@
 
 #import "Message.h"
 #import "MessageThread.h"
-#import "Group.h"
 #import "User.h"
 
+
 static NSString *MessengerCellIdentifier = @"MessengerCell";
-static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 @interface MessageViewController ()
 
@@ -34,12 +31,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 @property (nonatomic, strong) NSMutableArray *messages;
 
 @property (nonatomic) SharedData *sharedData;
-
-@property (nonatomic, strong) NSArray *users;
-@property (nonatomic, strong) NSArray *channels;
-@property (nonatomic, strong) NSArray *emojis;
-
-@property (nonatomic, strong) NSArray *searchResult;
 
 @end
 
@@ -55,7 +46,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -64,7 +54,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if (!_messageThreadRef) {
         _messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages", self.messageThread.messageThreadID]];
     }
-    
     return _messageThreadRef;
 }
 
@@ -73,7 +62,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     if (!_messages) {
         _messages = [[NSMutableArray alloc] init];
     }
-    
     return _messages;
 }
 
@@ -86,7 +74,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 }
 
 
-//*****************************************************************************/
+/*****************************************************************************/
 #pragma mark - Instantiation
 //*****************************************************************************/
 
@@ -94,6 +82,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
+        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
         [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
@@ -103,6 +92,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
         [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
@@ -131,61 +121,27 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
     
+    [self.leftButton setTitle:NSLocalizedString(@"Photo", nil) forState:UIControlStateNormal];
+    [self.leftButton setTintColor:[UIColor grayColor]];
+    
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     
     self.textInputbar.autoHideRightButton = YES;
     self.textInputbar.maxCharCount = 256;
     self.textInputbar.counterStyle = SLKCounterStyleSplit;
+    self.textInputbar.counterPosition = SLKCounterPositionTop;
     
-    self.typingIndicatorView.canResignByTouch = YES;
-
-    
-    NSMutableString *title = [[NSMutableString alloc] init];
-    if ([self.messageThread.members count] == 1) {
-        User *member = [self.messageThread.members objectAtIndex:0];
-        [title appendString:[NSString stringWithFormat:@"%@", member.firstName]];
-        
-    } else if ([self.messageThread.members count] == 2){
-        for (int i = 0; i < [self.messageThread.members count]; i++) {
-            
-            User *member = [self.messageThread.members objectAtIndex:i];
-            
-            if (i == ([self.messageThread.members count] - 1)) {
-                [title appendString:[NSString stringWithFormat:@"and %@", member.firstName]];
-                
-            } else {
-                [title appendString:[NSString stringWithFormat:@"%@ ", member.firstName]];
-                
-            }
-        }
-        
-    } else {
-        for (int i = 0; i < [self.messageThread.members count]; i++) {
-            
-            User *member = [self.messageThread.members objectAtIndex:i];
-            
-            if (i == ([self.messageThread.members count] - 1)) {
-                [title appendString:[NSString stringWithFormat:@"and %@", member.firstName]];
-                
-            } else {
-                [title appendString:[NSString stringWithFormat:@"%@, ", member.firstName]];
-                
-            }
-        }
-
-    }
-    
-    self.navigationItem.title = title;
+    self.navigationItem.title = self.messageThread.title;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Message Data Updated"
+                                                 name:@"New Message"
                                                object:nil];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Message Removed"
+                                               object:nil];
     
     for (Message *message in self.messageThread.messages) {
         
@@ -206,6 +162,15 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
 
 //*****************************************************************************/
 #pragma mark - Notification Center
@@ -213,10 +178,12 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Message Data Updated"])
+    if ([[notification name] isEqualToString:@"New Message"])
     {
         MessageThread *updatedMessageThread = notification.object;
-        if (updatedMessageThread.messageThreadID == self.messageThread.messageThreadID) {
+        
+        if (updatedMessageThread.messageThreadID == self.messageThread.messageThreadID)
+        {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
                 
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -230,8 +197,21 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
                 
                 [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
                 [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                
             });
         }
+    }
+    else if ([[notification name] isEqualToString:@"Message Removed"])
+    {
+        Message *removedMessage = notification.object;
+        
+        NSUInteger position = [self.messages indexOfObject:removedMessage];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
+        
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        [self.messages removeObject:removedMessage];
     }
 }
 
@@ -240,20 +220,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 #pragma mark - Action Methods
 //*****************************************************************************/
 
-- (void)editCellMessage:(UIGestureRecognizer *)gesture
+- (void)deleteMessage:(UIGestureRecognizer *)gesture
 {
-    MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
-    Message *message = self.messages[cell.indexPath.row];
-    
-    [self editText:message.text];
-    
-    [self.tableView scrollToRowAtIndexPath:cell.indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-}
-
-
-- (void)editOrDeleteMessage:(UIGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateEnded) {
+    if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateBegan) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
@@ -266,51 +235,50 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     }
 }
 
+//*****************************************************************************/
+#pragma mark - UIActionSheet Methods
+//*****************************************************************************/
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            [self removeMessage:actionSheet.tag];
+            break;
+        default:
+            break;
+    }
+    
+}
+
+- (void)removeMessage:(NSInteger)row
+{
+    Message *removedMessage = [self.messages objectAtIndex:row];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", self.messageThread.messageThreadID, removedMessage.messageID]] removeValue];
+}
+
 
 //*****************************************************************************/
 #pragma mark - Overriden Methods
 //*****************************************************************************/
 
-- (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status
-{
-    // Notifies the view controller that the keyboard changed status.
-}
-
-- (void)textWillUpdate
-{
-    // Notifies the view controller that the text will update.
-
-    [super textWillUpdate];
-}
-
-- (void)textDidUpdate:(BOOL)animated
-{
-    // Notifies the view controller that the text did update.
-
-    [super textDidUpdate:animated];
-}
-
 - (void)didPressLeftButton:(id)sender
 {
+    // Notifies the view controller when the left button's action has been triggered, manually.
+    
     [super didPressLeftButton:sender];
 }
 
 - (void)didPressRightButton:(id)sender
 {
-    // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
-    
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
-    
-    Message *message = [Message new];
-    message.sender = self.user;
-    message.text = [self.textView.text copy];
     
     Firebase *newMessage = [[self.ref childByAppendingPath:@"messages"] childByAutoId];
     
     NSDictionary *messageData = @{
                                   @"sender":self.user.userID,
-                                  @"text":message.text,
+                                  @"text":[self.textView.text copy],
                                   };
     
     [newMessage setValue:messageData];
@@ -318,25 +286,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self.messageThreadRef updateChildValues:@{newMessage.key:@YES}];
     
     [super didPressRightButton:sender];
-}
-
-
-- (NSString *)keyForTextCaching
-{
-    return [[NSBundle mainBundle] bundleIdentifier];
-}
-
-
-- (void)willRequestUndo
-{
-    // Notifies the view controller when a user did shake the device to undo the typed text
-    
-    [super willRequestUndo];
-}
-
-- (BOOL)canPressRightButton
-{
-    return [super canPressRightButton];
 }
 
 
@@ -356,43 +305,40 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self messageCellForRowAtIndexPath:indexPath];
-}
-
-- (MessageTableViewCell *)messageCellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
     MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
     
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editOrDeleteMessage:)];
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteMessage:)];
     [cell addGestureRecognizer:longPress];
     
-    if (!cell.textLabel.text) {
+    dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
         
-    }
-    
-    Message *message = self.messages[indexPath.row];
-    
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", message.sender.firstName, message.sender.lastName];
-    cell.bodyLabel.text = message.text;
-    
-    cell.tumbnailView.image = message.sender.profileImage;
-    cell.tumbnailView.layer.shouldRasterize = YES;
-    cell.tumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    
-    cell.indexPath = indexPath;
-    cell.usedForMessage = YES;
-    
-    // Cells must inherit the table view's transform
-    // This is very important, since the main table view may be inverted
-    cell.transform = self.tableView.transform;
+        Message *message = [self.messages objectAtIndex:indexPath.row];
+        
+        User *sender = message.sender;
+        
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", sender.firstName, sender.lastName];
+        cell.bodyLabel.text = message.text;
+        
+        cell.thumbnailView.image = sender.profileImage;
+        cell.thumbnailView.layer.shouldRasterize = YES;
+        cell.thumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        
+        cell.indexPath = indexPath;
+        cell.usedForMessage = YES;
+        
+        // Cells must inherit the table view's transform
+        // This is very important, since the main table view may be inverted
+        cell.transform = self.tableView.transform;
+        
+    });
     
     return cell;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView isEqual:self.tableView]) {
+        
         Message *message = self.messages[indexPath.row];
         
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
@@ -414,7 +360,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
         
         CGFloat height = CGRectGetHeight(titleBounds);
         height += CGRectGetHeight(bodyBounds);
-        height += 40.0;
+        height += 50.0;
         if (message.attachment) {
             height += 80.0 + 10.0;
         }
@@ -430,28 +376,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        UIView *topView = [UIView new];
-        topView.backgroundColor = self.autoCompletionView.separatorColor;
-        return topView;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if ([tableView isEqual:self.autoCompletionView]) {
-        return 0.5;
-    }
-    return 0.0;
-}
 
 
-//*****************************************************************************/
 #pragma mark - UIScrollViewDelegate Methods
-//*****************************************************************************/
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -459,6 +386,8 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [super scrollViewDidScroll:scrollView];
 }
 
+
+#pragma mark - UIScrollViewDelegate Methods
 
 /** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -470,35 +399,5 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     [super textViewDidChangeSelection:textView];
 }
-
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0:
-            [self removeMessage:actionSheet.tag];
-            break;
-        case 1:
-            //[self editCellMessage:];
-            break;
-        default:
-            break;
-    }
-    
-}
-
-- (void)removeMessage:(NSInteger)row
-{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    
-    Message *removedMessage = [self.messages objectAtIndex:row];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", self.messageThread.messageThreadID, removedMessage.messageID]] removeValue];
-    
-    [self.messages removeObjectAtIndex:row];
-    [self.messageThread.messages removeObject:removedMessage];
-    
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-}
-
 
 @end

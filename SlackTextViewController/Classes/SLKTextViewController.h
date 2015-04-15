@@ -14,7 +14,9 @@
 //   limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 #import "SLKTextInputbar.h"
 #import "SLKTypingIndicatorView.h"
 #import "SLKTextView.h"
@@ -23,14 +25,16 @@
 #import "UIScrollView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
+#import "SLKUIConstants.h"
+
 /**
  UIKeyboard notification replacement, posting reliably only when showing/hiding the keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc).
  Only triggered when using SLKTextViewController's text view.
  */
-extern NSString *const SLKKeyboardWillShowNotification;
-extern NSString *const SLKKeyboardDidShowNotification;
-extern NSString *const SLKKeyboardWillHideNotification;
-extern NSString *const SLKKeyboardDidHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,
@@ -40,13 +44,16 @@ typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
 };
 
 /** @name A drop-in UIViewController subclass with a growing text input view and other useful messaging features. */
-NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
+NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController <UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 
 /** The main table view managed by the controller object. Created by default initializing with -init or initWithNibName:bundle: */
 @property (nonatomic, readonly) UITableView *tableView;
 
 /** The main collection view managed by the controller object. Not nil if the controller is initialised with -initWithCollectionViewLayout: */
 @property (nonatomic, readonly) UICollectionView *collectionView;
+
+/** The main scroll view managed by the controller object. Not nil if the controller is initialised with -initWithScrollView: */
+@property (nonatomic, readonly) UIScrollView *scrollView;
 
 /** The bottom toolbar containing a text view and buttons. */
 @property (nonatomic, readonly) SLKTextInputbar *textInputbar;
@@ -112,7 +119,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithTableViewStyle:(UITableViewStyle)style NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTableViewStyle:(UITableViewStyle)style SLK_DESIGNATED_INITIALIZER;
 
 /**
  Initializes a collection view controller and configures the collection view with the provided layout.
@@ -121,7 +128,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout SLK_DESIGNATED_INITIALIZER;
+
+/**
+ Initializes a text view controller to manage an arbitraty scroll view. The caller is responsible for configuration of the scroll view, including wiring the delegate.
+
+ @param a UISCrollView to be used as the main content area.
+ @return An initialized SLKTextViewController object or nil if the object could not be created.
+ */
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView SLK_DESIGNATED_INITIALIZER;
 
 /**
  Initializes either a table or collection view controller.
@@ -130,7 +145,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param decoder An unarchiver object.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder *)decoder SLK_DESIGNATED_INITIALIZER;
 
 /**
  Returns the tableView style to be configured when using Interface Builder. Default is UITableViewStylePlain.
@@ -405,6 +420,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 ///------------------------------------------------
 /// @name Customization
 ///------------------------------------------------
+
 /**
  Registers a class for customizing the behavior and appearance of the text view.
  You need to call this method inside of any initialization method.

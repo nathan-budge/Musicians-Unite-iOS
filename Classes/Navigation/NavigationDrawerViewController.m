@@ -44,7 +44,6 @@
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 

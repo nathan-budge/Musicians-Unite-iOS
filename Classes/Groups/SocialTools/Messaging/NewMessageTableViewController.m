@@ -41,7 +41,6 @@
     if(!_ref){
         _ref =[[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -50,7 +49,6 @@
     if (!_registeredMembers) {
         _registeredMembers = [[NSMutableArray alloc] init];
     }
-    
     return _registeredMembers;
 }
 
@@ -72,7 +70,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Thread Loaded"
+                                                 name:@"New Thread"
                                                object:nil];
 }
 
@@ -83,10 +81,10 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Thread Loaded"]) {
+    if ([[notification name] isEqualToString:@"New Thread"])
+    {
         [SVProgressHUD showSuccessWithStatus:@"Thread Created" maskType:SVProgressHUDMaskTypeBlack];
         [self.navigationController popViewControllerAnimated:YES];
-        
     }
 }
 
@@ -101,7 +99,6 @@
     for (User *member in self.registeredMembers) {
         if (member.selected) {
             [newThreadMembers addObject:member];
-            
         }
     }
     
@@ -165,7 +162,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {    
-    return [self.registeredMembers count];
+    return self.registeredMembers.count;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

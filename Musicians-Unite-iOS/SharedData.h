@@ -9,11 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @class User;
+@class Firebase;
 
 @interface SharedData : NSObject
 
 @property (nonatomic, retain) NSMutableArray *childObservers;
 @property (nonatomic) dispatch_group_t downloadGroup;
+
+@property (nonatomic) User *user;
 
 
 + (SharedData *)sharedInstance;

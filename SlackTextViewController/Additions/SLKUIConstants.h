@@ -14,7 +14,7 @@
 //   limitations under the License.
 //
 
-#define SLK_IS_LANDSCAPE         ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight)
+#define SLK_IS_LANDSCAPE         ([[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationLandscapeLeft || [[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationLandscapeRight)
 #define SLK_IS_IPAD              ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 #define SLK_IS_IPHONE            ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 #define SLK_IS_IPHONE4           (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height < 568.0)
@@ -25,6 +25,10 @@
 
 #define SLK_INPUT_ACCESSORY_DEBUG           DEBUG && 0  // Renders a translucent red area representing the keyboard accessory view
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG     DEBUG && 0  // Logs every keyboard notification being sent
+
+#if __has_attribute(objc_designated_initializer)
+#define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
+#endif
 
 static NSString *SLKTextViewControllerDomain = @"com.slack.TextViewController";
 

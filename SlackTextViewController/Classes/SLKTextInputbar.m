@@ -30,6 +30,7 @@
 @property (nonatomic, strong) NSLayoutConstraint *rightButtonWC;
 @property (nonatomic, strong) NSLayoutConstraint *rightMarginWC;
 @property (nonatomic, strong) NSLayoutConstraint *editorContentViewHC;
+@property (nonatomic, strong) NSArray *charCountLabelVCs;
 
 @property (nonatomic, strong) UILabel *charCountLabel;
 
@@ -68,6 +69,9 @@
 
 - (void)slk_commonInit
 {
+    self.charCountLabelNormalColor = [UIColor lightGrayColor];
+    self.charCountLabelWarningColor = [UIColor redColor];
+    
     self.autoHideRightButton = YES;
     self.editorContentViewHeight = 38.0;
     self.contentInset = UIEdgeInsetsMake(5.0, 8.0, 5.0, 8.0);
@@ -80,6 +84,9 @@
 
     [self slk_setupViewConstraints];
     [self slk_updateConstraintConstants];
+    
+    self.counterStyle = SLKCounterStyleNone;
+    self.counterPosition = SLKCounterPositionTop;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewText:) name:UITextViewTextDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
@@ -119,7 +126,7 @@
     {
         Class class = self.textViewClass ? : [SLKTextView class];
         
-        _textView = [class new];
+        _textView = [[class alloc] init];
         _textView.translatesAutoresizingMaskIntoConstraints = NO;
         _textView.font = [UIFont systemFontOfSize:15.0];
         _textView.maxNumberOfLines = [self slk_defaultNumberOfLines];
@@ -248,7 +255,7 @@
     }
 }
 
-- (BOOL)slk_limitExceeded
+- (BOOL)limitExceeded
 {
     NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
@@ -352,6 +359,39 @@
     _editorContentView.hidden = !editing;
 }
 
+- (void)setCounterPosition:(SLKCounterPosition)counterPosition
+{
+    if (self.counterPosition == counterPosition && self.charCountLabelVCs) {
+        return;
+    }
+    
+    // Clears the previous constraints
+    if (_charCountLabelVCs.count > 0) {
+        [self removeConstraints:_charCountLabelVCs];
+        _charCountLabelVCs = nil;
+    }
+    
+    _counterPosition = counterPosition;
+    
+    NSDictionary *views = @{@"rightButton": self.rightButton,
+                            @"charCountLabel": self.charCountLabel
+                            };
+    
+    NSDictionary *metrics = @{@"top" : @(self.contentInset.top),
+                              @"bottom" : @(-self.contentInset.bottom/2.0)
+                              };
+    
+    // Constraints are different depending of the counter's position type
+    if (counterPosition == SLKCounterPositionBottom) {
+        _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[charCountLabel]-(bottom)-[rightButton]" options:0 metrics:metrics views:views];
+    }
+    else {
+        _charCountLabelVCs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views];
+    }
+    
+    [self addConstraints:self.charCountLabelVCs];
+}
+
 
 #pragma mark - Text Editing
 
@@ -406,9 +446,13 @@
     if (self.counterStyle == SLKCounterStyleCountdown) {
         counter = [NSString stringWithFormat:@"%ld", (long)(text.length - self.maxCharCount)];
     }
+    if (self.counterStyle == SLKCounterStyleCountdownReversed)
+    {
+        counter = [NSString stringWithFormat:@"%ld", (long)(self.maxCharCount - text.length)];
+    }
     
     self.charCountLabel.text = counter;
-    self.charCountLabel.textColor = [self slk_limitExceeded] ?  [UIColor redColor] : [UIColor lightGrayColor];
+    self.charCountLabel.textColor = [self limitExceeded] ? self.charCountLabelWarningColor : self.charCountLabelNormalColor;
 }
 
 
@@ -511,13 +555,12 @@
                               @"rightVerMargin" : @(rightVerMargin),
                               @"minTextViewHeight" : @(self.textView.intrinsicContentSize.height),
                               };
-
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left)-[leftButton(0)]-(<=left)-[textView]-(right)-[rightButton(0)]-(right)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=0)-[leftButton(0)]-(0@750)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=rightVerMargin)-[rightButton]-(<=rightVerMargin)-|" options:0 metrics:metrics views:views]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=top)-[charCountLabel]-(>=0)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(left@250)-[charCountLabel(<=50@1000)]-(right@750)-|" options:0 metrics:metrics views:views]];
-
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView(0)]-(<=top)-[textView(minTextViewHeight@250)]-(bottom)-|" options:0 metrics:metrics views:views]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:metrics views:views]];
     
@@ -547,8 +590,7 @@
         self.rightButtonWC.constant = zero;
         self.rightMarginWC.constant = zero;
     }
-    else
-    {
+    else {
         self.editorContentViewHC.constant = zero;
 
         CGSize leftButtonSize = [self.leftButton imageForState:self.leftButton.state].size;

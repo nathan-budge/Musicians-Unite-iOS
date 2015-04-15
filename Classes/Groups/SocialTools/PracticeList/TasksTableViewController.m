@@ -11,7 +11,6 @@
 
 #import "TasksTableViewController.h"
 #import "TaskViewController.h"
-#import "NavigationDrawerViewController.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
@@ -85,8 +84,7 @@
     
     if (!self.group)
     {
-        NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-        self.user = navigationDrawerViewController.user;
+        self.user = self.sharedData.user;
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self

@@ -29,11 +29,4 @@
 - (Group *)initWithRef: (Firebase *)groupRef;
 
 
-//Array methods
-//- (void)addMember: (User *)member;
-//- (void)removeMember:(User *)member;
-
-//- (void)addMessageThread: (MessageThread *)messageThread;
-//- (void)removeMessageThread:(MessageThread *)messageThread;
-
 @end

@@ -12,9 +12,9 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+#import "SharedData.h"
 
 #import "ChangePasswordTableViewController.h"
-#import "NavigationDrawerViewController.h"
 
 #import "User.h"
 
@@ -24,6 +24,8 @@
 @property (nonatomic) Firebase *ref;
 
 @property (nonatomic) User *user;
+
+@property (nonatomic) SharedData *sharedData;
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *fieldNewPassword;
@@ -44,6 +46,14 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -52,8 +62,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-    self.user = navigationDrawerViewController.user;
+    self.user = self.sharedData.user;
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }

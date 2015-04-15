@@ -13,6 +13,4 @@
 
 @interface NavigationDrawerViewController : UIViewController
 
-@property (nonatomic) User *user;
-
 @end

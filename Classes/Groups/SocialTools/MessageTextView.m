@@ -10,6 +10,8 @@
 
 #import "MessageTextView.h"
 
+#import "MessageTextView.h"
+
 @implementation MessageTextView
 
 - (instancetype)init

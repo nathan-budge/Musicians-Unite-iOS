@@ -11,10 +11,10 @@
 #import "SVProgressHUD.h"
 
 #import "AppConstant.h"
+#import "SharedData.h"
 
 #import "RecorderViewController.h"
 #import "RecordingsTableViewController.h"
-#import "NavigationDrawerViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -24,6 +24,8 @@
 @property (nonatomic) Firebase *ref;
 
 @property (nonatomic) User *user;
+
+@property (nonatomic) SharedData *sharedData;
 
 @property (strong, nonatomic) AVAudioRecorder *recorder;
 @property (strong, nonatomic) AVAudioPlayer *player;
@@ -49,6 +51,15 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -58,9 +69,9 @@
 {
     [super viewDidLoad];
     
-    if (!self.group) {
-        NavigationDrawerViewController *navigationDrawerViewController = (NavigationDrawerViewController *)self.slidingViewController.underLeftViewController;
-        self.user = navigationDrawerViewController.user;
+    if (!self.group)
+    {
+        self.user = self.sharedData.user;
     }
     
     [self.buttonPlay setEnabled:NO];

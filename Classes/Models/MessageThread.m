@@ -103,6 +103,7 @@
         [self loadMessageThreadData];
         [self attachListenerForAddedMembers];
         [self attachListenerForAddedMessages];
+        [self attachListenerForRemovedMessages];
         
         return self;
     }
@@ -120,6 +121,7 @@
     dispatch_group_enter(self.sharedData.downloadGroup);
     
     [self.messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
         self.messageThreadID = snapshot.key;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread" object:self];
@@ -142,20 +144,20 @@
         
         NSString *memberID = snapshot.key;
         
-        if (![memberID isEqualToString:self.ref.authData.uid]) {
-            
-            dispatch_group_enter(self.sharedData.downloadGroup);
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
-            NSArray *member= [self.group.members filteredArrayUsingPredicate:predicate];
-            
-            //TOOD: Fix error where user no longer belongs to a group
-            
-            User *aMember = [member objectAtIndex:0];
-            
-            [self addMember:aMember];
-            
-            dispatch_group_leave(self.sharedData.downloadGroup);
+        if (![memberID isEqualToString:self.ref.authData.uid])
+        {
+            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+                
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
+                NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
+                
+                //TODO: Fix error where user no longer belongs to group
+                
+                User *aMember = [member objectAtIndex:0];
+                
+                [self addMember:aMember];
+                
+            });
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -173,7 +175,6 @@
         Message *newMessage = [[Message alloc] initWithRef:messageRef andGroup:self.group];
         [self addMessage:newMessage];
         
-        //Double check notifications
         [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:self];
         
     } withCancelBlock:^(NSError *error) {
@@ -181,14 +182,33 @@
     }];
 }
 
-//TODO: Remove Messages Listener
+-(void)attachListenerForRemovedMessages
+{
+    [self.threadMessagesRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *messageID = snapshot.key;
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.messageID=%@", messageID];
+        NSArray *message = [self.messages filteredArrayUsingPredicate:predicate];
+        
+        if (message.count > 0) {
+            Message *removedMessage = [message objectAtIndex:0];
+            [self removeMessage:removedMessage];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Removed" object:removedMessage];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error.description);
+    }];
+    
+}
 
 
 //*****************************************************************************/
 #pragma mark - Array handling
 //*****************************************************************************/
 
-- (void)addMember: (User *)member
+-(void)addMember: (User *)member
 {
     [self.members addObject:member];
 }
@@ -198,7 +218,7 @@
     [self.members removeObject:member];
 }
 
-- (void)addMessage: (Message *)message
+-(void)addMessage: (Message *)message
 {
     [self.messages addObject:message];
 }

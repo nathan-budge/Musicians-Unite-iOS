@@ -11,13 +11,13 @@
 #import <UIKit/UIKit.h>
 
 #define kAvatarSize 30.0
-#define kMinimumHeight 50.0
+#define kMinimumHeight 60.0
 
 @interface MessageTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *bodyLabel;
-@property (nonatomic, strong) UIImageView *tumbnailView;
+@property (nonatomic, strong) UIImageView *thumbnailView;
 @property (nonatomic, strong) UIImageView *attachmentView;
 
 @property (nonatomic, strong) NSIndexPath *indexPath;

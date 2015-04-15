@@ -19,7 +19,6 @@
 @property (nonatomic) NSString *text;
 @property (nonatomic) UIImage *attachment;
 
-//Constructor
-- (Message *)initWithRef: (Firebase *)messageRef andGroup: (Group *)group;
+- (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group;
 
 @end

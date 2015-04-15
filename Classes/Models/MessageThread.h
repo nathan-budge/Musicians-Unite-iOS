@@ -19,11 +19,8 @@
 @property (nonatomic) NSMutableArray *members;
 @property (nonatomic) NSMutableArray *messages;
 
-//Constructor
-- (MessageThread *)initWithRef: (Firebase *)messageThreadRef andGroup: (Group *)group;
+@property (nonatomic) NSString *title;
 
-//Array methods
-//- (void)addMember: (User *)member;
-//- (void)addMessage: (Message *)message;
+- (MessageThread *)initWithRef: (Firebase *)messageThreadRef andGroup: (Group *)group;
 
 @end

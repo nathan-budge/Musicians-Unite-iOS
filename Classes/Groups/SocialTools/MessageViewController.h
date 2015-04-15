@@ -12,6 +12,7 @@
 
 @class MessageThread;
 @class User;
+@class Group;
 
 @interface MessageViewController : SLKTextViewController <UIActionSheetDelegate>
 
