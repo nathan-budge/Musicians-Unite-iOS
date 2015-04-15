@@ -88,16 +88,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
-        [self registerClassForTextView:[MessageTextView class]];
-    }
-    return self;
-}
-
 + (UITableViewStyle)tableViewStyleForCoder:(NSCoder *)decoder
 {
     return UITableViewStylePlain;
@@ -121,9 +111,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
     
-    [self.leftButton setTitle:NSLocalizedString(@"Photo", nil) forState:UIControlStateNormal];
-    [self.leftButton setTintColor:[UIColor grayColor]];
-    
     [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
     
     self.textInputbar.autoHideRightButton = YES;
@@ -146,8 +133,8 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     for (Message *message in self.messageThread.messages) {
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
-        UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
+        UITableViewRowAnimation rowAnimation = UITableViewRowAnimationBottom;
+        UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
         
         [self.tableView beginUpdates];
         [self.messages insertObject:message atIndex:0];
@@ -162,15 +149,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
 
 //*****************************************************************************/
 #pragma mark - Notification Center
@@ -187,8 +165,8 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
                 
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                UITableViewRowAnimation rowAnimation = self.inverted ? UITableViewRowAnimationBottom : UITableViewRowAnimationTop;
-                UITableViewScrollPosition scrollPosition = self.inverted ? UITableViewScrollPositionBottom : UITableViewScrollPositionTop;
+                UITableViewRowAnimation rowAnimation = UITableViewRowAnimationBottom;
+                UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
                 
                 [self.tableView beginUpdates];
                 [self.messages insertObject:[self.messageThread.messages lastObject] atIndex:0];
@@ -205,13 +183,9 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     {
         Message *removedMessage = notification.object;
         
-        NSUInteger position = [self.messages indexOfObject:removedMessage];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
-        
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
         [self.messages removeObject:removedMessage];
+        
+        [self.tableView reloadData];
     }
 }
 
@@ -239,7 +213,8 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 #pragma mark - UIActionSheet Methods
 //*****************************************************************************/
 
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     switch (buttonIndex) {
         case 0:
             [self removeMessage:actionSheet.tag];
@@ -247,7 +222,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
         default:
             break;
     }
-    
 }
 
 - (void)removeMessage:(NSInteger)row
@@ -261,13 +235,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 //*****************************************************************************/
 #pragma mark - Overriden Methods
 //*****************************************************************************/
-
-- (void)didPressLeftButton:(id)sender
-{
-    // Notifies the view controller when the left button's action has been triggered, manually.
-    
-    [super didPressLeftButton:sender];
-}
 
 - (void)didPressRightButton:(id)sender
 {
@@ -377,8 +344,9 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 }
 
 
-
+//*****************************************************************************/
 #pragma mark - UIScrollViewDelegate Methods
+//*****************************************************************************/
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -386,10 +354,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     [super scrollViewDidScroll:scrollView];
 }
 
-
-#pragma mark - UIScrollViewDelegate Methods
-
-/** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];

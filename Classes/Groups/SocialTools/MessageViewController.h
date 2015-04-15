@@ -14,7 +14,7 @@
 @class User;
 @class Group;
 
-@interface MessageViewController : SLKTextViewController <UIActionSheetDelegate>
+@interface MessageViewController : SLKTextViewController <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) MessageThread *messageThread;
 @property (nonatomic) User *user;

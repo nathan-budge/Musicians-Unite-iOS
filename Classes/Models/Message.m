@@ -9,6 +9,7 @@
 #import <Firebase/Firebase.h>
 
 #import "AppConstant.h"
+#import "Utilities.h"
 #import "SharedData.h"
 
 #import "Message.h"
