@@ -284,25 +284,25 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="ylY-Ql-jRd">
-                                <rect key="frame" x="10" y="125" width="301" height="160.5"/>
+                                <rect key="frame" x="80" y="120" width="160" height="160"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="ylY-Ql-jRd" secondAttribute="height" multiplier="15:8" id="IXS-zx-AOr"/>
-                                    <constraint firstAttribute="width" constant="301" id="d1O-MC-1DG"/>
+                                    <constraint firstAttribute="height" constant="160" id="UKT-h8-LZn"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="ngo-lm-bg4" firstAttribute="width" secondItem="q43-0V-Qnr" secondAttribute="width" id="09D-DS-vUh"/>
-                            <constraint firstItem="ylY-Ql-jRd" firstAttribute="centerX" secondItem="6Is-Xq-F8P" secondAttribute="centerX" constant="-0.5" id="3Tx-0S-Fy7"/>
                             <constraint firstItem="q43-0V-Qnr" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="5BF-v8-wgb"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="ngo-lm-bg4" secondAttribute="bottom" constant="20" id="88b-Mq-ZU6"/>
-                            <constraint firstAttribute="centerX" secondItem="ylY-Ql-jRd" secondAttribute="centerX" id="CVD-d1-Y2w"/>
+                            <constraint firstItem="ylY-Ql-jRd" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="64" id="CT1-67-e7k"/>
+                            <constraint firstItem="ylY-Ql-jRd" firstAttribute="centerX" secondItem="6Is-Xq-F8P" secondAttribute="centerX" id="DA5-jz-DNl"/>
+                            <constraint firstItem="6Is-Xq-F8P" firstAttribute="top" secondItem="ylY-Ql-jRd" secondAttribute="bottom" constant="9" id="KO0-Hx-l4V"/>
+                            <constraint firstItem="ylY-Ql-jRd" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="100" id="RkP-i8-9AO"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="q43-0V-Qnr" secondAttribute="bottom" constant="20" id="VL5-aQ-fA8"/>
                             <constraint firstItem="ngo-lm-bg4" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="mEm-WO-Rr7"/>
-                            <constraint firstItem="ylY-Ql-jRd" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="105" id="qr8-E8-h8X"/>
+                            <constraint firstItem="ylY-Ql-jRd" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="ya7-f8-Wu5"/>
                             <constraint firstItem="ngo-lm-bg4" firstAttribute="leading" secondItem="q43-0V-Qnr" secondAttribute="trailing" constant="16" id="zcH-Jw-Yl1"/>
-                            <constraint firstItem="6Is-Xq-F8P" firstAttribute="top" secondItem="ylY-Ql-jRd" secondAttribute="bottom" constant="3.5" id="zoH-II-zpg"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="13y-YX-at8"/>
