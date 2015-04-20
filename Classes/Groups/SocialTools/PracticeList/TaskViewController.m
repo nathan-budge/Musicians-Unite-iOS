@@ -31,6 +31,9 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrSave;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDelete;
+@property (weak, nonatomic) IBOutlet UIButton *buttonMetronome;
+
+@property (nonatomic) GroupTabBarController *groupTabBarController;
 
 @end
 
@@ -65,21 +68,27 @@
         
         [self.buttonCreateOrSave setTitle:@"Save" forState:UIControlStateNormal];
         self.buttonDelete.hidden = NO;
+        self.buttonMetronome.hidden = NO;
         
     } else {
         [self.buttonCreateOrSave setTitle:@"Create" forState:UIControlStateNormal];
         self.buttonDelete.hidden = YES;
+        self.buttonMetronome.hidden = YES;
         
     }
+    
+    self.groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
+    NSLog(@"%@", self.groupTabBarController);
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    if (self.group) {
-        GroupTabBarController *groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 1)];
-        TasksTableViewController *tasksTableViewController = [groupTabBarController.viewControllers objectAtIndex:1];
+    if (self.group)
+    {
+        NSLog(@"%@", self.groupTabBarController);
+        TasksTableViewController *tasksTableViewController = [self.groupTabBarController.viewControllers objectAtIndex:1];
         tasksTableViewController.inset = YES;
     }
 }

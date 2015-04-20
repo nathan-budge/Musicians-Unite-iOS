@@ -65,6 +65,7 @@
 
 - (IBAction)actionHome:(id)sender
 {
+    [self.transitionsNavigationController popToRootViewControllerAnimated:NO];
     self.slidingViewController.topViewController = self.transitionsNavigationController;
     [self.slidingViewController resetTopViewAnimated:YES];
 }

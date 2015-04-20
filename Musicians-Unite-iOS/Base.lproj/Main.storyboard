@@ -1697,6 +1697,7 @@
                     <connections>
                         <outlet property="buttonCreateOrSave" destination="YYy-zn-ade" id="PVa-Ru-n0b"/>
                         <outlet property="buttonDelete" destination="AzY-Ze-m3O" id="cXB-TQ-CXj"/>
+                        <outlet property="buttonMetronome" destination="gmz-BX-Gqq" id="5NZ-IZ-0Sd"/>
                         <outlet property="fieldNotes" destination="7tb-cd-qg8" id="Ims-mT-Vsh"/>
                         <outlet property="fieldTempo" destination="CTD-6t-F4H" id="Fxt-2K-obj"/>
                         <outlet property="fieldTitle" destination="GWD-wV-NXp" id="Qca-cZ-eXy"/>
@@ -2603,11 +2604,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="2ZW-Oq-Jzn"/>
         <segue reference="wf2-jZ-7i2"/>
+        <segue reference="2ZW-Oq-Jzn"/>
         <segue reference="jSx-mn-aV4"/>
         <segue reference="LUN-Gh-Rit"/>
-        <segue reference="XmG-1B-asj"/>
         <segue reference="zaQ-AW-62G"/>
+        <segue reference="b05-xO-KrZ"/>
     </inferredMetricsTieBreakers>
 </document>
