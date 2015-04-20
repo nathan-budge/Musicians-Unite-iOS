@@ -7,9 +7,9 @@
 //
 
 #import <Firebase/Firebase.h>
+#import "SVProgressHUD.h"
 
 #import "AppConstant.h"
-#import "Utilities.h"
 #import "SharedData.h"
 
 #import "MessageViewController.h"
@@ -130,6 +130,11 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
                                                  name:@"Message Removed"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Thread Removed"
+                                               object:nil];
+    
     for (Message *message in self.messageThread.messages) {
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -182,10 +187,15 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     else if ([[notification name] isEqualToString:@"Message Removed"])
     {
         Message *removedMessage = notification.object;
-        
         [self.messages removeObject:removedMessage];
-        
         [self.tableView reloadData];
+    }
+    else if ([[notification name] isEqualToString:@"Thread Removed"])
+    {
+        if ([notification.object isEqual:self.messageThread]) {
+            [SVProgressHUD showInfoWithStatus:@"Thread Removed" maskType:SVProgressHUDMaskTypeBlack];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -304,8 +314,8 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([tableView isEqual:self.tableView]) {
-        
+    if ([tableView isEqual:self.tableView])
+    {
         Message *message = self.messages[indexPath.row];
         
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
@@ -321,24 +331,28 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
         CGRect titleBounds = [message.sender.firstName boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         CGRect bodyBounds = [message.text boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
-        if (message.text.length == 0) {
+        if (message.text.length == 0)
+        {
             return 0.0;
         }
         
         CGFloat height = CGRectGetHeight(titleBounds);
         height += CGRectGetHeight(bodyBounds);
         height += 50.0;
-        if (message.attachment) {
+        if (message.attachment)
+        {
             height += 80.0 + 10.0;
         }
         
-        if (height < kMinimumHeight) {
+        if (height < kMinimumHeight)
+        {
             height = kMinimumHeight;
         }
         
         return height;
     }
-    else {
+    else
+    {
         return kMinimumHeight;
     }
 }

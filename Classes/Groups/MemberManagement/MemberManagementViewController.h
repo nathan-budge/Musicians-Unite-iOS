@@ -10,7 +10,7 @@
 
 @class Group;
 
-@interface MemberManagementViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MemberManagementViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
 
 @property (nonatomic) Group *group;
 

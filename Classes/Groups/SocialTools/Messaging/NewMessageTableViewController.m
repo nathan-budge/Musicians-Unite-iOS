@@ -62,7 +62,8 @@
     [super viewDidLoad];
     
     for (User *member in self.group.members) {
-        if (member.completedRegistration) {
+        if (member.completedRegistration)
+        {
             member.selected = NO;
             [self.registeredMembers addObject:member];
         }
@@ -97,7 +98,8 @@
 {
     NSMutableArray *newThreadMembers = [[NSMutableArray alloc] init];
     for (User *member in self.registeredMembers) {
-        if (member.selected) {
+        if (member.selected)
+        {
             [newThreadMembers addObject:member];
         }
     }
@@ -105,35 +107,41 @@
     BOOL matchingGroup = NO;
     for (MessageThread *messageThread in self.group.messageThreads) {
         
-        if (messageThread.members.count == newThreadMembers.count) {
-            
+        if (messageThread.members.count == newThreadMembers.count)
+        {
             for (User *member in newThreadMembers) {
                 
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
                 NSArray *user = [messageThread.members filteredArrayUsingPredicate:predicate];
                 
-                if (user.count > 0) {
+                if (user.count > 0)
+                {
                     matchingGroup = YES;
-                } else {
+                }
+                else
+                {
                     matchingGroup = NO;
-        
                 }
             
             }
         }
         
-        if (matchingGroup) {
+        if (matchingGroup)
+        {
             break;
         }
     }
     
-    if (matchingGroup) {
+    if (matchingGroup)
+    {
         [SVProgressHUD showErrorWithStatus:@"Thread already exists" maskType:SVProgressHUDMaskTypeBlack];
-        
-    } else if (newThreadMembers.count == 0){
+    }
+    else if (newThreadMembers.count == 0)
+    {
         [SVProgressHUD showErrorWithStatus:@"No members selected" maskType:SVProgressHUDMaskTypeBlack];
-        
-    } else {
+    }
+    else
+    {
         Firebase* newMessageThread = [[self.ref childByAppendingPath:@"message_threads"] childByAutoId];
         
         [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads", self.group.groupID]] updateChildValues:@{newMessageThread.key:@YES}];
@@ -143,8 +151,6 @@
         }
         
         [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
-        
-        //[self performSegueWithIdentifier:@"viewNewThread" sender:nil];
         
         [SVProgressHUD showWithStatus:@"Creating Thread" maskType:SVProgressHUDMaskTypeBlack];
     }
@@ -167,7 +173,8 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (self.registeredMembers.count > 0) {
+    if (self.registeredMembers.count > 0)
+    {
         return @"Select Members";
     }
     
@@ -192,9 +199,12 @@
     
     userName.text = [NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName];
     
-    if (member.selected) {
+    if (member.selected)
+    {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
+    }
+    else
+    {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     

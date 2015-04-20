@@ -13,8 +13,6 @@
 
 @interface Task ()
 
-@property (nonatomic) Firebase *taskRef;
-
 @property (weak, nonatomic) SharedData *sharedData;
 
 @end

@@ -1897,7 +1897,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="actionAddMember:" destination="LFx-he-epZ" eventType="touchUpInside" id="Ni9-hQ-PXB"/>
+                                    <action selector="actionAddMemberToTableView:" destination="LFx-he-epZ" eventType="touchUpInside" id="bfX-Tm-21e"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="RSK-hM-vYv">

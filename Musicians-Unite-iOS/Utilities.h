@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @class Firebase;
+@class MessageThread;
+@class Group;
 
 @interface Utilities : NSObject
 

@@ -15,18 +15,11 @@
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
+#import "Message.h"
 #import "Task.h"
 #import "Recording.h"
 
 @interface Group ()
-
-//Firebase references
-@property (nonatomic) Firebase *ref;
-@property (nonatomic) Firebase *groupRef;
-@property (nonatomic) Firebase *groupMembersRef;
-@property (nonatomic) Firebase *groupMessageThreadsRef;
-@property (nonatomic) Firebase *groupTasksRef;
-@property (nonatomic) Firebase *groupRecordingsRef;
 
 //Shared data singleton
 @property (weak, nonatomic) SharedData *sharedData;
@@ -46,14 +39,6 @@
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
     return _ref;
-}
-
--(SharedData *)sharedData
-{
-    if (!_sharedData) {
-        _sharedData = [SharedData sharedInstance];
-    }
-    return _sharedData;
 }
 
 -(NSMutableArray *)members
@@ -86,6 +71,14 @@
         _recordings = [[NSMutableArray alloc] init];
     }
     return _recordings;
+}
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
 }
 
 
@@ -132,6 +125,7 @@
         [self attachListenerForAddedMembers];
         [self attachListenerForRemovedMembers];
         [self attachListenerForAddedMessageThreads];
+        [self attachListenerForRemovedMessageThreads];
         [self attachListenerForAddedTasks];
         [self attachListenerForRemovedTasks];
         [self attachListenerForAddedRecordings];
@@ -178,16 +172,15 @@
 {
     [self.groupRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"name"]) {
-            
+        if ([snapshot.key isEqualToString:@"name"])
+        {
             self.name = snapshot.value;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Data Updated" object:self];
-            
-        } else if ([snapshot.key isEqualToString:@"profile_image"]) {
-            
+        }
+        else if ([snapshot.key isEqualToString:@"profile_image"])
+        {
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Data Updated" object:self];
-            
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -220,12 +213,38 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", snapshot.key];
         NSArray *member = [self.members filteredArrayUsingPredicate:predicate];
         
+        NSString *userID;
+        User *removedMember;
         if (member.count > 0)
         {
-            User *removedMember = [member objectAtIndex:0];
-            [self removeMember:removedMember];
+            removedMember = [member objectAtIndex:0];
+            userID = removedMember.userID;
+        }
+        else
+        {
+            userID = self.ref.authData.uid;
+        }
+        
+        //Remove user from group message threads
+        for (MessageThread *messageThread in self.messageThreads) {
             
-            //TODO: Notification, User Removed?
+            Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", messageThread.messageThreadID]];
+            
+            [[[messageThreadRef queryOrderedByChild:@"members"] queryEqualToValue:userID] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                
+                NSString *messageThreadID = snapshot.key;
+                
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/members/%@", messageThreadID, userID]] removeValue];
+                
+            } withCancelBlock:^(NSError *error) {
+                NSLog(@"ERROR: %@", error.description);
+            }];
+        }
+        
+        if (member.count > 0)
+        {
+            [self removeMember:removedMember];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Member Removed" object:removedMember];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -241,11 +260,11 @@
         
         Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", newMessageThreadID]];
         
-        [messageThreadRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        [[messageThreadRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
            
-            NSDictionary *messageThreadData = snapshot.value;
-            
-            if ([[messageThreadData[@"members"] allKeys] containsObject:self.ref.authData.uid])
+            NSString *userID = snapshot.key;
+        
+            if ([userID isEqualToString:self.sharedData.user.userID])
             {
                 MessageThread *newMessageThread = [[MessageThread alloc] initWithRef:messageThreadRef andGroup:self];
                 [self addMessageThread:newMessageThread];
@@ -258,6 +277,37 @@
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
     }];
+}
+
+- (void)attachListenerForRemovedMessageThreads
+{
+    [self.groupMessageThreadsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *messageThreadID = snapshot.key;
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.messageThreadID=%@", messageThreadID];
+        NSArray *messageThread = [self.messageThreads filteredArrayUsingPredicate:predicate];
+        
+        if (messageThread.count > 0)
+        {
+            MessageThread *removedMessageThread = [messageThread objectAtIndex:0];
+            [self removeMessageThread:removedMessageThread];
+            
+            [removedMessageThread.messageThreadRef removeAllObservers];
+            [removedMessageThread.threadMembersRef removeAllObservers];
+            [removedMessageThread.threadMessagesRef removeAllObservers];
+            
+            for (Message *message in removedMessageThread.messages) {
+                [message.messageRef removeAllObservers];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Removed" object:removedMessageThread];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error.description);
+    }];
+    
 }
 
 - (void)attachListenerForAddedTasks
@@ -281,10 +331,13 @@
 {
     [self.groupTasksRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.taskID=%@", snapshot.key];
+        NSString *taskID = snapshot.key;
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.taskID=%@", taskID];
         NSArray *task = [self.tasks filteredArrayUsingPredicate:predicate];
         
-        if (task.count > 0) {
+        if (task.count > 0)
+        {
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTask];
@@ -316,10 +369,13 @@
 {
     [self.groupRecordingsRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", snapshot.key];
+        NSString *recordingID = snapshot.key;
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", recordingID];
         NSArray *recording = [self.recordings filteredArrayUsingPredicate:predicate];
         
-        if (recording.count > 0) {
+        if (recording.count > 0)
+        {
             Recording *removedRecording = [recording objectAtIndex:0];
             [self removeRecording:removedRecording];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Removed" object:self];

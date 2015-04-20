@@ -15,12 +15,10 @@
 #import "Message.h"
 #import "User.h"
 #import "Group.h"
+#import "MessageThread.h"
 
 
 @interface Message ()
-
-//Firebase reference
-@property (nonatomic) Firebase *messageRef;
 
 //Shared data singleton
 @property (weak, nonatomic) SharedData *sharedData;
@@ -88,7 +86,6 @@
         self.messageID = snapshot.key;
         self.text = messageData[@"text"];
         
-        //TOOD: Fix error where user no longer belongs to a group
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
             NSString *senderID = messageData[@"sender"];
@@ -97,9 +94,12 @@
             NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
             
             User *sender;
-            if (member.count > 0) {
+            if (member.count > 0)
+            {
                 sender = [member objectAtIndex:0];
-            } else {
+            }
+            else
+            {
                 sender = self.sharedData.user;
             }
             

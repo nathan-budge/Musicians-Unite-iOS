@@ -16,14 +16,10 @@
 #import "Group.h"
 #import "Task.h"
 #import "Recording.h"
+#import "MessageThread.h"
+#import "Message.h"
 
 @interface User ()
-
-@property (nonatomic) Firebase *ref;
-@property (nonatomic) Firebase *userRef;
-@property (nonatomic) Firebase *userGroupsRef;
-@property (nonatomic) Firebase *userTasksRef;
-@property (nonatomic) Firebase *userRecordingsRef;
 
 @property (weak, nonatomic) SharedData *sharedData;
 
@@ -224,7 +220,33 @@
         if (group.count > 0)
         {
             Group *removedGroup = [group objectAtIndex:0];
+            
+            /*Remove Firebase listeners for group*/
+            
+            //Task observers
+            for (Task *task in removedGroup.tasks) {
+                [task.taskRef removeAllObservers];
+            }
+            
+            //Recording observers
+            for (Recording *recording in removedGroup.recordings) {
+                [recording.recordingRef removeAllObservers];
+            }
+            
+            
+            //Group observers
+            [removedGroup.groupRef removeAllObservers];
+            [removedGroup.groupMembersRef removeAllObservers];
+            [removedGroup.groupMessageThreadsRef removeAllObservers];
+            [removedGroup.groupTasksRef removeAllObservers];
+            [removedGroup.groupRecordingsRef removeAllObservers];
+            
+            
+            //Remove groups with no more members left (currently a utilities method)
+            
+            
             [self removeGroup:removedGroup];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Removed" object:removedGroup];
         }
         

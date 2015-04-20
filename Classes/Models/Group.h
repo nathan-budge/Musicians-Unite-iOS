@@ -23,10 +23,20 @@
 @property (nonatomic) NSMutableArray *tasks;
 @property (nonatomic) NSMutableArray *recordings;
 
+//Firebase references
+@property (nonatomic) Firebase *ref;
+@property (nonatomic) Firebase *groupRef;
+@property (nonatomic) Firebase *groupMembersRef;
+@property (nonatomic) Firebase *groupMessageThreadsRef;
+@property (nonatomic) Firebase *groupTasksRef;
+@property (nonatomic) Firebase *groupRecordingsRef;
 
 //Constructors
 - (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
 - (Group *)initWithRef: (Firebase *)groupRef;
 
+//Array Method
+- (void)addMessageThread: (MessageThread *)messageThread;
+- (void)removeMessageThread:(MessageThread *)messageThread;
 
 @end

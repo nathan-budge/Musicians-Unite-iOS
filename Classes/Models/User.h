@@ -25,6 +25,13 @@
 @property (nonatomic) NSMutableArray *tasks;
 @property (nonatomic) NSMutableArray *recordings;
 
+//Firebase References
+@property (nonatomic) Firebase *ref;
+@property (nonatomic) Firebase *userRef;
+@property (nonatomic) Firebase *userGroupsRef;
+@property (nonatomic) Firebase *userTasksRef;
+@property (nonatomic) Firebase *userRecordingsRef;
+
 //Constructor
 - (User *)initWithRef: (Firebase *)userRef;
 

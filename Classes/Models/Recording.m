@@ -15,8 +15,6 @@
 
 @interface Recording ()
 
-@property (nonatomic) Firebase *recordingRef;
-
 @property (weak, nonatomic) SharedData *sharedData;
 
 @end

@@ -16,6 +16,7 @@
 #import "MemberManagementViewController.h"
 
 #import "Group.h"
+#import "MessageThread.h"
 
 
 @interface GroupDetailViewController ()
@@ -40,7 +41,6 @@
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -53,7 +53,8 @@
 {
     [super viewDidLoad];
     
-    if (self.group) {
+    if (self.group)
+    {
         self.fieldGroupName.text = self.group.name;
         
         [self.buttonProfileImage setImage:self.group.profileImage forState:UIControlStateNormal];
@@ -61,7 +62,9 @@
         [self.buttonConfirm setTitle:@"Leave Group" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
-    } else {
+    }
+    else
+    {
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
     }
@@ -73,7 +76,8 @@
 {
     [super viewWillAppear:animated];
     
-    if (self.group) {
+    if (self.group)
+    {
         self.tabBarController.title = @"Settings";
         self.tabBarController.navigationItem.rightBarButtonItems = nil;
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
@@ -120,23 +124,19 @@
 
 -(void)actionLeaveGroup
 {
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", self.ref.authData.uid, self.group.groupID]] removeValue];
-    
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, self.ref.authData.uid]] removeValue];
-    
-    [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
-    
-    [self dismissKeyboard];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"All of your data will be removed from the group. Would you like to continue?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    [alert show];
 }
 
 -(void)actionCreateGroup
 {
-    if ([self.fieldGroupName.text isEqualToString:@""]) {
+    if ([self.fieldGroupName.text isEqualToString:@""])
+    {
         [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
         
-    } else {
+    }
+    else
+    {
         Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
         Firebase *userRef = [self.ref childByAppendingPath:@"users"];
         
@@ -200,16 +200,40 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"viewMemberManagement"]) {
+    if ([segue.identifier isEqualToString:@"viewMemberManagement"])
+    {
         MemberManagementViewController *destViewController = segue.destinationViewController;
         
-        if (self.group) {
+        if (self.group)
+        {
             destViewController.group = self.group;
-            
-        } else {
+        }
+        else
+        {
             NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
             destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text andProfileImageString:profileImageString];
         }
+    }
+}
+
+
+//*****************************************************************************/
+#pragma mark - Leave group alert view
+//*****************************************************************************/
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, self.ref.authData.uid]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", self.ref.authData.uid, self.group.groupID]] removeValue];
+        
+        //Move this method to attachListenerForRemovedGroups
+        [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
+        
+        [self dismissKeyboard];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 

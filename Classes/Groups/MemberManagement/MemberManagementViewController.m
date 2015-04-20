@@ -17,6 +17,8 @@
 
 #import "User.h"
 #import "Group.h"
+#import "MessageThread.h"
+#import "Message.h"
 
 
 @interface MemberManagementViewController ()
@@ -29,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *memberTableView;
 
 @property (nonatomic) NSMutableArray *members;
+@property (nonatomic) NSMutableArray *membersToRemove;
 
 @property (nonatomic, weak) SharedData *sharedData;
 
@@ -46,7 +49,6 @@
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -55,7 +57,6 @@
     if (!_userRef) {
         _userRef = [self.ref childByAppendingPath:@"users"];
     }
-    
     return _userRef;
 }
 
@@ -64,8 +65,15 @@
     if (!_members) {
         _members = [[NSMutableArray alloc] init];
     }
-    
     return _members;
+}
+
+-(NSMutableArray *)membersToRemove
+{
+    if (!_membersToRemove) {
+        _membersToRemove = [[NSMutableArray alloc] init];
+    }
+    return _membersToRemove;
 }
 
 -(SharedData *)sharedData
@@ -85,16 +93,15 @@
 {
     [super viewDidLoad];
     
-    if(self.group.groupID) {
+    if(self.group.groupID)
+    {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
-        
         self.buttonConfirm.hidden = YES;
-        
-        for (User *member in self.group.members) {
-            [self.members addObject:member];
-        }
-        
-    } else {
+        self.members = [NSMutableArray arrayWithArray:self.group.members];
+    }
+    else
+    {
+        self.buttonConfirm.hidden = NO;
         [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
     }
     
@@ -115,58 +122,61 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionAddMember:(id)sender
+- (IBAction)actionAddMemberToTableView:(id)sender
 {
     [SVProgressHUD showWithStatus:@"Adding member..." maskType:SVProgressHUDMaskTypeBlack];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.email=%@", self.fieldEmail.text];
     NSArray *existingMember = [self.members filteredArrayUsingPredicate:predicate];
     
-    if ([existingMember count] > 0) {
+    if (existingMember.count > 0)
+    {
         self.fieldEmail.text = @"";
         [SVProgressHUD showErrorWithStatus:@"Member already exists" maskType:SVProgressHUDMaskTypeBlack];
-        
-    } else if (![Utilities validateEmail:self.fieldEmail.text]|| [self.fieldEmail.text isEqualToString:self.ref.authData.providerData[@"email"]]){
+    }
+    else if (![Utilities validateEmail:self.fieldEmail.text]|| [self.fieldEmail.text isEqualToString:self.ref.authData.providerData[@"email"]])
+    {
         self.fieldEmail.text = @"";
         [SVProgressHUD showErrorWithStatus:@"Invalid email" maskType:SVProgressHUDMaskTypeBlack];
-        
-    } else {
-        [self addMemberToList];
+    }
+    else
+    {
+        [self addMemberToTableView];
         [self dismissKeyboard];
     }
 }
 
--(void)addMemberToList
+-(void)addMemberToTableView
 {
-    self.userRef = [self.ref childByAppendingPath:@"users"];
-    
     [[[self.userRef queryOrderedByChild:@"email"] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         User *newMember = [[User alloc] init];
         
-        if (![snapshot.value isEqual:[NSNull null]]) {
-            
+        if ([snapshot.value isEqual:[NSNull null]])
+        {
+            newMember.completedRegistration = NO;
+            newMember.email = self.fieldEmail.text;
+        }
+        else
+        {
             NSDictionary *userData = snapshot.value;
             NSString *userID = [userData allKeys][0];
             
             newMember.userID = userID;
             newMember.email = userData[userID][@"email"];
             
-            if ([userData[userID][@"completed_registration"] isEqual:@YES]) {
+            if ([userData[userID][@"completed_registration"] isEqual:@YES])
+            {
                 newMember.completedRegistration = YES;
                 newMember.firstName = userData[userID][@"first_name"];
                 newMember.lastName = userData[userID][@"last_name"];
                 newMember.profileImage = [Utilities decodeBase64ToImage:userData[userID][@"profile_image"]];
-                
-            }else {
+            }
+            else
+            {
                 newMember.completedRegistration = NO;
                 newMember.email = self.fieldEmail.text;
             }
-            
-        } else {
-            newMember.email = self.fieldEmail.text;
-            newMember.completedRegistration = NO;
-            
         }
         
         [self.members addObject:newMember];
@@ -177,9 +187,7 @@
         [SVProgressHUD showSuccessWithStatus:@"Member Added" maskType:SVProgressHUDMaskTypeBlack];
         
     } withCancelBlock:^(NSError *error) {
-        
-        NSLog(@"%@", error.description);
-        
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -205,15 +213,84 @@
     });
 }
 
+-(void)actionSaveGroup
+{
+    [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
+    
+    if ([self.group.members count] > 0)
+    {
+        for (User *member in self.group.members) {
+        
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
+            NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
+            
+            if ([foundMember count] > 0) //Membership didn't change
+            {
+                [self.members removeObject:[foundMember objectAtIndex:0]];
+            }
+            else // User was removed from a group
+            {
+                [self.membersToRemove addObject:member];
+            }
+        }
+    }
+    
+    if (self.membersToRemove.count > 0)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Removing users will remove their data from the group. Would you like to continue?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
+    else if ([self.members count] > 0) //User was added to a group
+    {
+        Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
+        [self addMembers:self.members toGroup:groupRef];
+        
+        [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        [self dismissKeyboard];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        for (User *member in self.membersToRemove) {
+        
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
+            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups/%@", member.userID, self.group.groupID]] removeValue];
+            
+            if (!member.completedRegistration) //Remove temp users that do not belong to any group
+            {
+                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+            }
+        }
+        
+        if ([self.members count] > 0) //User was added to a group
+        {
+            Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
+            [self addMembers:self.members toGroup:groupRef];
+        }
+        
+        [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        [self dismissKeyboard];
+    }
+}
+
 - (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef
 {
     for (User *member in members) {
         
-        if (member.userID) {
+        if (member.userID)
+        {
             [[groupRef childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
             [[[self.userRef childByAppendingPath:member.userID] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
-
-        } else {
+        }
+        else
+        {
             NSDictionary *newTempMember = @{
                                             @"email":member.email,
                                             @"completed_registration":@NO
@@ -228,53 +305,12 @@
     }
 }
 
--(void)actionSaveGroup
-{
-    [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
-    
-    if ([self.group.members count] > 0) {
-        
-        for (User *member in self.group.members) {
-        
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
-            NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
-            
-            if ([foundMember count] > 0) {
-                [self.members removeObject:[foundMember objectAtIndex:0]];
-                
-            } else {
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, member.userID]] removeValue];
-                [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups/%@", member.userID, self.group.groupID]] removeValue];
-                
-                if (!member.completedRegistration) {
-                    [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
-                }
-                
-            }
-        }
-        
-    }
-    
-    if ([self.members count] > 0) {
-        Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
-        [self addMembers:self.members toGroup:oldGroup];
-    }
-    
-    [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
-    
-    
-    [self dismissKeyboard];
-}
-
 -(void)actionDeleteMember:(id)sender
 {
     UIButton *btn =(UIButton*)sender;
-    
     [self.members removeObjectAtIndex:btn.tag];
-    
     [self.memberTableView reloadData];
 }
-
 
 
 //*****************************************************************************/
@@ -289,7 +325,6 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self dismissKeyboard];
-    
     return YES;
 }
 
@@ -305,7 +340,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.members count];
+    return self.members.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

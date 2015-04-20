@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
+#import "SVProgressHUD.h"
+
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
 #import "MessagingTableViewController.h"
@@ -33,6 +35,46 @@
     
     GroupDetailViewController *groupDetailTableViewController = [viewControllers objectAtIndex:3];
     groupDetailTableViewController.group = self.group;
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Group Removed"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Group Member Removed"
+                                               object:nil];
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Group Removed"])
+    {
+        if ([notification.object isEqual:self.group]) {
+            [SVProgressHUD showInfoWithStatus:@"Group Removed" maskType:SVProgressHUDMaskTypeBlack];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }
+    else if ([[notification name] isEqualToString:@"Group Member Removed"])
+    {
+        User *removedMember = notification.object;
+        
+        if (removedMember.completedRegistration)
+        {
+            [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@ was removed", removedMember.firstName] maskType:SVProgressHUDMaskTypeBlack];
+        }
+        else
+        {
+            [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@ was removed", removedMember.email] maskType:SVProgressHUDMaskTypeBlack];
+        }
+    }
 }
 
 @end

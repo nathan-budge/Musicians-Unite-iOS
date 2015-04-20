@@ -11,7 +11,7 @@
 @class Group;
 @class User;
 
-@interface MessagingTableViewController : UITableViewController
+@interface MessagingTableViewController : UITableViewController <UIActionSheetDelegate>
 
 @property (nonatomic) Group *group;
 @property (nonatomic) User *user;

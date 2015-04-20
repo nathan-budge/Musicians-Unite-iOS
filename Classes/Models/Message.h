@@ -19,6 +19,9 @@
 @property (nonatomic) NSString *text;
 @property (nonatomic) UIImage *attachment;
 
+//Firebase reference
+@property (nonatomic) Firebase *messageRef;
+
 - (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group;
 
 @end

@@ -9,8 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+
 #import "Utilities.h"
+#import "SharedData.h"
 #import "AppConstant.h"
+
+#import "MessageThread.h"
+#import "Group.h"
+#import "Message.h"
+#import "User.h"
+#import "Task.h"
+#import "Recording.h"
 
 
 @interface Utilities ()
@@ -53,9 +62,10 @@
         }
         
     } withCancelBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
+
 
 +(void)removeEmptyGroups:(NSString *) groupID withRef:(Firebase *) ref
 {
@@ -100,6 +110,7 @@
         [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
     }];
 }
+
 
 @end
 

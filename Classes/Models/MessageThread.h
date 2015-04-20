@@ -21,6 +21,17 @@
 
 @property (nonatomic) NSString *title;
 
+//Firebase references
+@property (nonatomic) Firebase *ref;
+@property (nonatomic) Firebase *messageThreadRef;
+@property (nonatomic) Firebase *threadMembersRef;
+@property (nonatomic) Firebase *threadMessagesRef;
+
+//Constructor
 - (MessageThread *)initWithRef: (Firebase *)messageThreadRef andGroup: (Group *)group;
+
+//Array mehtodds
+-(void)addMessage: (Message *)message;
+-(void)removeMessage:(Message *)message;
 
 @end

@@ -6,11 +6,14 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
+#import <Firebase/Firebase.h>
+
+#import "SharedData.h"
+#import "AppConstant.h"
+
 #import "MessagingTableViewController.h"
 #import "NewMessageTableViewController.h"
 #import "MessageViewController.h"
-
-#import "SharedData.h"
 
 #import "Group.h"
 #import "User.h"
@@ -19,6 +22,8 @@
 
 
 @interface MessagingTableViewController ()
+
+@property (nonatomic) Firebase *ref;
 
 @property (nonatomic) MessageThread *selectedMessageThread;
 @property (nonatomic) NSMutableArray *messageThreads;
@@ -33,6 +38,14 @@
 //*****************************************************************************/
 #pragma mark - Lazy instantiation
 //*****************************************************************************/
+
+-(Firebase *)ref
+{
+    if (!_ref) {
+        _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
+    }
+    return _ref;
+}
 
 -(NSMutableArray *)messageThreads
 {
@@ -64,11 +77,25 @@
                                                  name:@"New Thread"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Thread Removed"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"New Message"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Message Removed"
+                                               object:nil];
+    
     self.messageThreads = [NSMutableArray arrayWithArray:self.group.messageThreads];
     
     [self.tableView reloadData];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -91,6 +118,53 @@
 
 
 //*****************************************************************************/
+#pragma mark - UIActionSheet Methods
+//*****************************************************************************/
+
+- (void)deleteThread:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateBegan) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:@"Delete"
+                                                        otherButtonTitles: nil];
+        
+        
+        //Adapted from http://stackoverflow.com/questions/7144592/getting-cell-indexpath-on-swipe-gesture-uitableview
+        CGPoint location = [gesture locationInView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
+        
+        actionSheet.tag = indexPath.row;
+        [actionSheet showInView:gesture.view];
+    }
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self removeMessageThread:actionSheet.tag];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)removeMessageThread:(NSInteger)row
+{
+    MessageThread *removedMessageThread = [self.messageThreads objectAtIndex:row];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads/%@", self.group.groupID, removedMessageThread.messageThreadID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", removedMessageThread.messageThreadID]] removeValue];
+    
+    for (Message *removedMessage in removedMessageThread.messages) {
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", removedMessageThread.messageThreadID, removedMessage.messageID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
+    }
+}
+
+
+//*****************************************************************************/
 #pragma mark - Notification Center
 //*****************************************************************************/
 
@@ -100,6 +174,19 @@
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             [self.messageThreads addObject:notification.object];
+            [self.tableView reloadData];
+        });
+    }
+    else if ([[notification name] isEqualToString:@"Thread Removed"])
+    {
+        MessageThread *removedMessageThread = notification.object;
+        [self.messageThreads removeObject:removedMessageThread];
+        [self.tableView reloadData];
+    }
+    else if ([[notification name] isEqualToString:@"New Message"] || [[notification name] isEqualToString:@"Message Removed"])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
             [self.tableView reloadData];
         });
     }
@@ -130,9 +217,13 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteThread:)];
+    [cell addGestureRecognizer:longPress];
+    
     MessageThread *messageThread = [self.messageThreads objectAtIndex:indexPath.row];
    
-    cell.textLabel.text = [self getThreadTitle:messageThread];
+    messageThread.title = [self getThreadTitle:messageThread];
+    cell.textLabel.text = messageThread.title;
     
     Message *mostRecentMessage = [messageThread.messages lastObject];
     
@@ -208,10 +299,9 @@
         }
     }
     
-    messageThread.title = title;
-    
     return title;
 }
+
 
 //*****************************************************************************/
 #pragma mark - Prepare for Segue

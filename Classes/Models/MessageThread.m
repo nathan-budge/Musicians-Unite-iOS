@@ -10,6 +10,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "MessageThread.h"
 #import "Message.h"
@@ -18,12 +19,6 @@
 
 
 @interface MessageThread ()
-
-//Firebase references
-@property (nonatomic) Firebase *ref;
-@property (nonatomic) Firebase *messageThreadRef;
-@property (nonatomic) Firebase *threadMembersRef;
-@property (nonatomic) Firebase *threadMessagesRef;
 
 //Shared data 
 @property (weak, nonatomic) SharedData *sharedData;
@@ -35,7 +30,6 @@
 
 
 @implementation MessageThread
-
 
 //*****************************************************************************/
 #pragma mark - Lazy instantiation
@@ -102,6 +96,7 @@
         
         [self loadMessageThreadData];
         [self attachListenerForAddedMembers];
+        [self attachListenerForRemovedMembers];
         [self attachListenerForAddedMessages];
         [self attachListenerForRemovedMessages];
         
@@ -138,7 +133,7 @@
 #pragma mark - Firebase observers
 //*****************************************************************************/
 
--(void)attachListenerForAddedMembers
+- (void)attachListenerForAddedMembers
 {
     [self.threadMembersRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         
@@ -151,12 +146,12 @@
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
                 NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
                 
-                //TODO: Fix error where user no longer belongs to group
-                
                 User *aMember = [member objectAtIndex:0];
                 
                 [self addMember:aMember];
                 
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread Member" object:aMember];
+
             });
         }
         
@@ -165,9 +160,59 @@
     }];
 }
 
+-(void)attachListenerForRemovedMembers
+{
+    [self.threadMembersRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        
+        NSString *memberID = snapshot.key;
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
+        NSArray *member = [self.members filteredArrayUsingPredicate:predicate];
+        
+        NSString *userID;
+        User *removedMember;
+        if (member.count > 0)
+        {
+            removedMember = [member objectAtIndex:0];
+            userID = removedMember.userID;
+        }
+        else
+        {
+            userID = self.ref.authData.uid;
+        }
+        
+        //Delete necessary threads and messages
+        if (self.members.count == 1)
+        {
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads/%@", self.group.groupID, self.messageThreadID]] removeValue];
+            [self.messageThreadRef removeValue];
+        }
+        else
+        {
+            for (Message *message in self.messages) {
+                
+                if ([message.sender.userID isEqualToString:userID])
+                {
+                    [[self.threadMessagesRef childByAppendingPath:message.messageID] removeValue];
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", message.messageID]] removeValue];
+                }
+            }
+        }
+        
+        if (member.count > 0)
+        {
+            [self removeMember:removedMember];
+        }
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error.description);
+    }];
+}
+
+
 -(void)attachListenerForAddedMessages
 {
-    [self.threadMessagesRef observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+    [self.threadMessagesRef observeEventType:FEventTypeChildAdded andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
         
         NSString *messageID = snapshot.key;
         
@@ -178,7 +223,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:self];
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error.description);
+         NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -200,7 +245,6 @@
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
     }];
-    
 }
 
 

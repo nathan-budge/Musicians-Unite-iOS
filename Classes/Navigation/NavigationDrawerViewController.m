@@ -98,6 +98,8 @@
     }
     
     [self.ref unauth];
+    
+    sharedData.user = nil;
 
     [self performSegueWithIdentifier:@"Logout" sender:sender];
     [SVProgressHUD dismiss];
