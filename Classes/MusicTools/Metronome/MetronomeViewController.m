@@ -49,7 +49,15 @@
     [self.buttonBeats setTitle:@"1" forState:UIControlStateNormal];
     [self.viewDots setNeedsDisplay];
     
-    self.stepperTempo.value = 60.0;
+    if (self.tempo)
+    {
+        self.stepperTempo.value = self.tempo;
+    }
+    else
+    {
+        self.stepperTempo.value = 60.0;
+    }
+    
     self.labelTempo.text = [NSString stringWithFormat:@"%.f",self.stepperTempo.value];
 }
 

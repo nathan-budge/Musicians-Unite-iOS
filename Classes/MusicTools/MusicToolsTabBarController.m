@@ -9,6 +9,7 @@
 #import "UIViewController+ECSlidingViewController.h"
 
 #import "MusicToolsTabBarController.h"
+#import "MetronomeViewController.h"
 
 @interface MusicToolsTabBarController ()
 
@@ -26,6 +27,12 @@
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
+    NSArray *viewControllers = self.viewControllers;
+    
+    MetronomeViewController *metronomeViewController = [viewControllers objectAtIndex:0];
+    if (self.tempo) {
+        metronomeViewController.tempo = self.tempo;
+    }    
 }
 
 

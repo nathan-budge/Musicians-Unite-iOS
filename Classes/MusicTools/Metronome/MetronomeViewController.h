@@ -10,4 +10,6 @@
 
 @interface MetronomeViewController : UIViewController
 
+@property (nonatomic) double tempo;
+
 @end

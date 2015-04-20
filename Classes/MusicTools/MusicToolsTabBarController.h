@@ -10,4 +10,6 @@
 
 @interface MusicToolsTabBarController : UITabBarController
 
+@property (nonatomic) double tempo;
+
 @end

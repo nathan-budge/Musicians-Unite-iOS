@@ -12,6 +12,7 @@
 #import "TaskViewController.h"
 #import "TasksTableViewController.h"
 #import "GroupTabBarController.h"
+#import "MusicToolsTabBarController.h"
 
 #import "AppConstant.h"
 
@@ -195,6 +196,18 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//*****************************************************************************/
+#pragma mark - Navigation
+//*****************************************************************************/
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    
+    if ([segue.identifier isEqualToString:@"viewMetronome"]) {
+        MusicToolsTabBarController *destViewController = segue.destinationViewController;
+        destViewController.tempo = [self.fieldTempo.text doubleValue];
+    }
+}
 
 //*****************************************************************************/
 #pragma mark - Check Tempo
