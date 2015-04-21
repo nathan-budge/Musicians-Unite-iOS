@@ -1115,7 +1115,7 @@
                         <sections>
                             <tableViewSection id="yJd-Cl-ymj">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="vGK-w9-iAm">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="vGK-w9-iAm" userLabel="nameCell">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vGK-w9-iAm" id="59Q-xH-EdI">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1131,7 +1131,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="CBK-vF-XLc">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="CBK-vF-XLc" userLabel="groupCell">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CBK-vF-XLc" id="F61-IV-11r">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1145,10 +1145,19 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="dws-ps-oih">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="164" id="dws-ps-oih" userLabel="groupPickerCell">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dws-ps-oih" id="j9E-Za-uVi">
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <pickerView hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n5s-v1-fjn">
+                                                    <rect key="frame" x="0.0" y="1" width="320" height="162"/>
+                                                    <connections>
+                                                        <outlet property="dataSource" destination="IEv-dn-3Lp" id="4gE-I9-wXZ"/>
+                                                        <outlet property="delegate" destination="IEv-dn-3Lp" id="OrR-K9-eXg"/>
+                                                    </connections>
+                                                </pickerView>
+                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -1163,6 +1172,7 @@
                     <connections>
                         <outlet property="fieldRecordingName" destination="KjX-t8-lpq" id="uIi-o8-JQ1"/>
                         <outlet property="labelGroupName" destination="ieP-j6-zAe" id="ySB-sr-YKT"/>
+                        <outlet property="pickerGroups" destination="n5s-v1-fjn" id="6ek-bV-scD"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bnS-8p-NRI" userLabel="First Responder" sceneMemberID="firstResponder"/>

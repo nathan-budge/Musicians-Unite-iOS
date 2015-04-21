@@ -12,7 +12,7 @@
 @class User;
 @class Group;
 
-@interface RecordingTableViewController : UITableViewController
+@interface RecordingTableViewController : UITableViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic) Recording *recording;
 @property (nonatomic) User *user;

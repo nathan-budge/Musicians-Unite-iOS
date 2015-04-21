@@ -13,15 +13,32 @@
 #import "Group.h"
 #import "Recording.h"
 
+#define kUnassignedRecording    @"Unassigned"
+
 @interface RecordingsTableViewController ()
 
 @property (nonatomic) Recording *selectedRecording;
 @property (nonatomic) User *selectedRecordingUser;
 @property (nonatomic) Group *selectedRecordingGroup;
 
+@property (nonatomic) NSMutableArray *groupNames;
+
 @end
 
 @implementation RecordingsTableViewController
+
+//*****************************************************************************/
+#pragma mark - Lazy Instantiation
+//*****************************************************************************/
+
+-(NSMutableArray *)groupNames
+{
+    if (!_groupNames) {
+        _groupNames = [[NSMutableArray alloc] init];
+    }
+    return _groupNames;
+}
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -31,9 +48,20 @@
 {
     [super viewDidLoad];
     
+    for (Group *group in self.user.groups) {
+        [self.groupNames addObject:group.name];
+    }
+    
+    [self.groupNames insertObject:kUnassignedRecording atIndex:0];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
                                                  name:@"Recording Data Updated"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Recording Removed"
                                                object:nil];
 }
 
@@ -44,7 +72,7 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Recording Data Updated"])
+    if ([[notification name] isEqualToString:@"Recording Data Updated"] || [[notification name] isEqualToString:@"Recording Removed"])
     {
         [self.tableView reloadData];
     }
@@ -72,17 +100,17 @@
 {
     if (self.user)
     {
-        NSString *sectionName;
-        if (section == 0) {
-            sectionName = @"Unassigned";
-            
-        } else {
-            Group *group = [self.user.groups objectAtIndex:section - 1];
-            sectionName = group.name;
+        if (section == 0)
+        {
+            return kUnassignedRecording;
         }
-        return sectionName;
+        else
+        {
+            Group *group = [self.user.groups objectAtIndex:section - 1];
+            return group.name;
+            
+        }
     }
-    
     return nil;
 }
 
@@ -98,7 +126,6 @@
             NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
             
             return recordings.count;
-            
         }
         else
         {
@@ -114,10 +141,8 @@
     return 0;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     if (cell == nil)
@@ -130,7 +155,6 @@
     if (self.group)
     {
         recording = [self.group.recordings objectAtIndex:indexPath.row];
-        
     }
     else if (self.user)
     {

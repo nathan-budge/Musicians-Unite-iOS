@@ -105,6 +105,11 @@
             self.name = snapshot.value;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
         }
+        else if ([snapshot.key isEqualToString:@"owner"])
+        {
+            self.ownerID = snapshot.value;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
+        }
         
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
