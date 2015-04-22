@@ -99,6 +99,8 @@
         self.buttonConfirm.hidden = YES;
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
         self.members = [NSMutableArray arrayWithArray:self.group.members];
+        
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     else
     {
@@ -182,22 +184,13 @@
         [self.members addObject:newMember];
         
         self.fieldEmail.text = @"";
+        [SVProgressHUD dismiss];
         [self.memberTableView reloadData];
         
-        [SVProgressHUD dismiss];
-        NSDictionary *options = @{
-                                  kCRToastTextKey : kMemberAddedSuccessMessage,
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
+        if (self.group.groupID)
+        {
+            self.navigationItem.rightBarButtonItem.enabled = [self enableSave];
+        }
         
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
@@ -316,6 +309,11 @@
     UIButton *btn =(UIButton*)sender;
     [self.members removeObjectAtIndex:btn.tag];
     [self.memberTableView reloadData];
+    
+    if (self.group.groupID)
+    {
+        self.navigationItem.rightBarButtonItem.enabled = [self enableSave];
+    }
 }
 
 -(void)groupSavedNotification
@@ -337,6 +335,38 @@
     [self.navigationController popViewControllerAnimated:YES];
     [self dismissKeyboard];
 }
+
+- (BOOL)enableSave
+{
+    if (self.group.members.count != self.members.count)
+    {
+        return YES;
+    }
+    else
+    {
+        BOOL membersMatch = NO;
+        for (User *member in self.members) {
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.email=%@", member.email];
+            NSArray *existingMember = [self.group.members filteredArrayUsingPredicate:predicate];
+            
+            if (existingMember.count > 0)
+            {
+                membersMatch = YES;
+            }
+            else
+            {
+                membersMatch = NO;
+                break;
+            }
+        }
+        
+        return !membersMatch;
+    }
+    
+    return NO;
+}
+
 
 //*****************************************************************************/
 #pragma mark - Keyboard Handling
