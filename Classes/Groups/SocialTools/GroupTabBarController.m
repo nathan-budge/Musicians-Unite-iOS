@@ -68,8 +68,9 @@
 {
     if ([[notification name] isEqualToString:@"Group Removed"])
     {
-        if ([notification.object isEqual:self.group]) {
-            
+        if ([notification.object isEqual:self.group])
+        {
+            [self dismissKeyboard];
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }
@@ -134,6 +135,16 @@
                                         }];
         }
     }
+}
+
+
+//*****************************************************************************/
+#pragma mark - Keyboard Handling
+//*****************************************************************************/
+
+-(void)dismissKeyboard
+{
+    [self.view endEditing:YES];
 }
 
 @end

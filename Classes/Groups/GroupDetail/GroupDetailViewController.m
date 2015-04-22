@@ -77,15 +77,9 @@
         [self.buttonConfirm setTitle:kLeaveGroupButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kGroupRemovedNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kGroupDataUpdatedNotification
-                                                   object:nil];
+        [self.fieldGroupName addTarget:self
+                                action:@selector(textFieldDidChange)
+                      forControlEvents:UIControlEventEditingChanged];
     }
     else
     {
@@ -112,6 +106,7 @@
         self.tabBarController.title = kGroupSettingsTitle;
         self.tabBarController.navigationItem.rightBarButtonItems = nil;
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
+        self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     }
 }
 
@@ -119,6 +114,7 @@
 {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -202,6 +198,24 @@
                                     };
     
     [oldGroup updateChildValues:updatedValues];
+    
+    [self dismissKeyboard];
+    
+    NSDictionary *options = @{
+                              kCRToastTextKey : kGroupSavedSuccessMessage,
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor greenColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
+    
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
+    
+    self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 
@@ -220,35 +234,6 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }
-    else if ([[notification name] isEqualToString:kGroupRemovedNotification])
-    {
-        if ([notification.object isEqual:self.group])
-        {
-            [self dismissKeyboard];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
-    }
-    else if ([[notification name] isEqualToString:kGroupDataUpdatedNotification])
-    {
-        if ([notification.object isEqual:self.group])
-        {
-            [self dismissKeyboard];
-            
-            NSDictionary *options = @{
-                                      kCRToastTextKey : kGroupSavedSuccessMessage,
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
-            
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
-        }
-    }
 }
 
 
@@ -264,8 +249,19 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self dismissKeyboard];
-    
     return YES;
+}
+
+- (void)textFieldDidChange
+{
+    if (![self.fieldGroupName.text isEqualToString:self.group.name])
+    {
+        self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+    else
+    {
+        self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
+    }
 }
 
 
@@ -368,13 +364,24 @@
 -(void)removePhoto
 {
     [self.buttonProfileImage setImage:[UIImage imageNamed:kProfileLogoImage] forState:UIControlStateNormal];
+    
+    if (self.group)
+    {
+        self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = info[UIImagePickerControllerEditedImage];
     [self.buttonProfileImage setImage:image forState:UIControlStateNormal];
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        if (self.group)
+        {
+            self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+        }
+    }];
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
