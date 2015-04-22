@@ -12,17 +12,23 @@
 
 #import "AppConstant.h"
 #import "Utilities.h"
+#import "SharedData.h"
 
 #import "GroupDetailViewController.h"
 #import "MemberManagementViewController.h"
 
 #import "Group.h"
+#import "User.h"
 #import "MessageThread.h"
 
 
 @interface GroupDetailViewController ()
 
 @property (nonatomic) Firebase *ref;
+
+@property (nonatomic) SharedData *sharedData;
+
+@property (assign) NSString *groupID; //Keep track of id for new groups
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldGroupName;
 @property (weak, nonatomic) IBOutlet UIButton *buttonConfirm;
@@ -45,6 +51,14 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -63,14 +77,30 @@
         [self.buttonConfirm setTitle:kLeaveGroupButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupRemovedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupDataUpdatedNotification
+                                                   object:nil];
     }
     else
     {
         [self.buttonConfirm setTitle:kCreateButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupNotification
+                                                   object:nil];
     }
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
+    
+    [self.sharedData addNotificationCenterObserver:self];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -83,7 +113,6 @@
         self.tabBarController.navigationItem.rightBarButtonItems = nil;
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
     }
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -141,12 +170,13 @@
     if ([self.fieldGroupName.text isEqualToString:@""])
     {
         [SVProgressHUD showErrorWithStatus:kGroupNameError maskType:SVProgressHUDMaskTypeBlack];
-        
     }
     else
     {
         Firebase *groupRef = [[self.ref childByAppendingPath:kGroupsFirebaseNode] childByAutoId];
         Firebase *userRef = [self.ref childByAppendingPath:kUsersFirebaseNode];
+        
+        self.groupID = groupRef.key;
         
         NSDictionary *newGroup = @{
                                    kGroupNameFirebaseField:self.fieldGroupName.text,
@@ -157,10 +187,6 @@
         
         [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
         [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.ref.authData.uid:@YES}];
-        
-        [self dismissKeyboard];
-        
-        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 
@@ -176,22 +202,53 @@
                                     };
     
     [oldGroup updateChildValues:updatedValues];
-    
-    [self dismissKeyboard];
-    
-    NSDictionary *options = @{
-                              kCRToastTextKey : kGroupSavedSuccessMessage,
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor greenColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:kNewGroupNotification])
+    {
+        Group *newGroup = notification.object;
+        if ([newGroup.groupID isEqualToString:self.groupID])
+        {
+            [self dismissKeyboard];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupRemovedNotification])
+    {
+        if ([notification.object isEqual:self.group])
+        {
+            [self dismissKeyboard];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupDataUpdatedNotification])
+    {
+        if ([notification.object isEqual:self.group])
+        {
+            [self dismissKeyboard];
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : kGroupSavedSuccessMessage,
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
+        }
+    }
 }
 
 
@@ -243,15 +300,11 @@
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, self.ref.authData.uid]] removeValue];
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.ref.authData.uid, kGroupsFirebaseNode, self.group.groupID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, self.sharedData.user.userID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
         
         //Move this method to attachListenerForRemovedGroups
         [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
-        
-        [self dismissKeyboard];
-        
-        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 
