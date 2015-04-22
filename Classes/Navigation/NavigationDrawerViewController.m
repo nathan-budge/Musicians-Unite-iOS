@@ -9,6 +9,7 @@
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
@@ -98,12 +99,30 @@
         [ref removeAllObservers];
     }
     
+    for (id controller in sharedData.notificationCenterObservers) {
+        [[NSNotificationCenter defaultCenter] removeObserver:controller];
+    }
+    
     [self.ref unauth];
     
     sharedData.user = nil;
 
     [SVProgressHUD dismiss];
     [self performSegueWithIdentifier:kLogoutSegueIdentifier sender:sender];
+    
+    NSDictionary *options = @{
+                              kCRToastTextKey : kLoggedOutSuccessMessage,
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor redColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
+    
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
     
 }
 

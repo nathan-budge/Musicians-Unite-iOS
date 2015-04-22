@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -104,6 +105,20 @@
         {
             [SVProgressHUD dismiss];
             [self performSegueWithIdentifier:kLoginToGroupSegueIdentifier sender:sender];
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : kLoggedInSuccessMessage,
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
         }
     }];
 }

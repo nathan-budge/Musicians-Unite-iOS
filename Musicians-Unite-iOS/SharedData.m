@@ -33,6 +33,7 @@
 {
     if (self = [super init]) {
         self.childObservers = [[NSMutableArray alloc] init];
+        self.notificationCenterObservers = [[NSMutableArray alloc] init];
         self.downloadGroup = dispatch_group_create();
         return self;
     }
@@ -52,6 +53,16 @@
 - (void) removeChildObserver:(Firebase *)childObserver
 {
     [self.childObservers removeObject:childObserver];
+}
+
+- (void) addNotificationCenterObserver:(id)notificationCenterObserver;
+{
+    [self.notificationCenterObservers addObject:notificationCenterObserver];
+}
+
+- (void) removeNoticiationCenterObserver:(id)notificationCenterObserver;
+{
+    [self.notificationCenterObservers removeObject:notificationCenterObserver];
 }
 
 

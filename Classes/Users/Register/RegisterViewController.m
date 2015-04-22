@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -200,6 +201,20 @@
                     {
                         [SVProgressHUD dismiss];
                         [self performSegueWithIdentifier:kRegisterToGroupSegueIdentifier sender:nil];
+                        
+                        NSDictionary *options = @{
+                                                  kCRToastTextKey : kAccountCreatedSuccessMessage,
+                                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                                  };
+                        
+                        [CRToastManager showNotificationWithOptions:options
+                                                    completionBlock:^{
+                                                    }];
                     }
                 }
             }];
@@ -224,6 +239,20 @@
         
         [SVProgressHUD dismiss];
         [self performSegueWithIdentifier:kRegisterToGroupSegueIdentifier sender:nil];
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : kAccountCreatedSuccessMessage,
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
 
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);

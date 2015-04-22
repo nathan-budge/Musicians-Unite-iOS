@@ -86,25 +86,28 @@
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
     [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Group Data Updated"
+                                                 name:kGroupDataUpdatedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"New Group"
+                                                 name:kNewGroupNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Group Removed"
+                                                 name:kGroupRemovedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"No Groups"
+                                                 name:kNoGroupsNotification
                                                object:nil];
+    
+    [self.sharedData addNotificationCenterObserver:self];
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *activityButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
@@ -112,7 +115,6 @@
     self.navigationItem.rightBarButtonItems = @[newGroupButton, activityButton];
     
     [self loadUser];
-    
 }
 
 
@@ -122,13 +124,13 @@
 
 -(void)loadUser
 {
-    Firebase *connectedRef = [self.ref childByAppendingPath:@".info/connected"];
+    Firebase *connectedRef = [self.ref childByAppendingPath:kNetworkConnectionNode];
     [self.sharedData addChildObserver:connectedRef];
     
     [connectedRef observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
-        if([snapshot.value boolValue]) {
-            
+        if([snapshot.value boolValue])
+        {
             [SVProgressHUD dismiss];
             
             if (!self.sharedData.user)
@@ -137,15 +139,13 @@
                 
                 [self.activityIndicator startAnimating];
                 
-                self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
-                self.user = [[User alloc] initWithRef:self.userRef];
-                
-                self.sharedData.user = self.user;
+                self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.ref.authData.uid]];
+                self.sharedData.user = [[User alloc] initWithRef:self.userRef];
             }
-            
-        } else {
-            [SVProgressHUD showErrorWithStatus:@"No Network Connection" maskType:SVProgressHUDMaskTypeBlack];
-            
+        }
+        else
+        {
+            [SVProgressHUD showErrorWithStatus:kNetworkError maskType:SVProgressHUDMaskTypeBlack];
         }
     }];
 }
@@ -157,19 +157,21 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Group Data Updated"])
+    if ([[notification name] isEqualToString:kGroupDataUpdatedNotification])
     {
         [self.tableView reloadData];
     }
-    else if ([[notification name] isEqualToString:@"New Group"])
+    else if ([[notification name] isEqualToString:kNewGroupNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
             [self.groups addObject:notification.object];
             [self.tableView reloadData];
             
             if (self.initialLoad)
             {
-                if (self.groups.count == self.user.groups.count) {
+                if (self.groups.count == self.sharedData.user.groups.count)
+                {
                     [self.activityIndicator stopAnimating];
                     self.initialLoad = NO;
                 }
@@ -177,7 +179,7 @@
             else
             {
                 NSDictionary *options = @{
-                                          kCRToastTextKey : @"New Group!",
+                                          kCRToastTextKey : kNewGroupSuccessMessage,
                                           kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                                           kCRToastBackgroundColorKey : [UIColor greenColor],
                                           kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -193,13 +195,13 @@
             
         });
     }
-    else if ([[notification name] isEqualToString:@"Group Removed"])
+    else if ([[notification name] isEqualToString:kGroupRemovedNotification])
     {
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];
         
         NSDictionary *options = @{
-                                  kCRToastTextKey : @"Group Removed!",
+                                  kCRToastTextKey : kGroupRemovedSuccessMessage,
                                   kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                                   kCRToastBackgroundColorKey : [UIColor redColor],
                                   kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -212,7 +214,7 @@
                                     completionBlock:^{
                                     }];
     }
-    else if ([[notification name] isEqualToString:@"No Groups"])
+    else if ([[notification name] isEqualToString:kNoGroupsNotification])
     {
         [self.activityIndicator stopAnimating];
     }
@@ -230,8 +232,9 @@
 
 - (void)actionNewGroup
 {
-    [self performSegueWithIdentifier:@"newGroup" sender:nil];
+    [self performSegueWithIdentifier:kNewGroupSegueIdentifier sender:nil];
 }
+
 
 //*****************************************************************************/
 #pragma mark - Prepare for segue
@@ -239,12 +242,13 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showGroupTabs"]) {
+    if ([segue.identifier isEqualToString:kGroupTabsSegueIdentifier])
+    {
         GroupTabBarController *destViewController = segue.destinationViewController;
         destViewController.group = self.selectedGroup;
-        destViewController.user = self.user;
-        
-    } else if ([segue.identifier isEqualToString:@"newGroup"]) {
+    }
+    else if ([segue.identifier isEqualToString:kNewGroupSegueIdentifier])
+    {
         GroupDetailViewController *destViewController = segue.destinationViewController;
         destViewController.group = nil;
     }
@@ -267,7 +271,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GroupCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kGroupCellIdentifier];
     
     Group *group = [self.groups objectAtIndex:indexPath.row];
     
@@ -290,7 +294,7 @@
 {
     self.selectedGroup = [self.groups objectAtIndex:indexPath.row];
     
-    [self performSegueWithIdentifier:@"showGroupTabs" sender:nil];
+    [self performSegueWithIdentifier:kGroupTabsSegueIdentifier sender:nil];
 }
 
 

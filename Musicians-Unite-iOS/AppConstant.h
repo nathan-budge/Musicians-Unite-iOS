@@ -28,6 +28,11 @@
 #define kRegisterToGroupSegueIdentifier             @"RegisterToGroups"
 #define kChangePasswordSegueIdentifier              @"changePassword"
 #define kDeleteAccountSegueIdentifier               @"deleteAccount"
+#define kNewGroupSegueIdentifier                    @"newGroup"
+#define kGroupTabsSegueIdentifier                   @"showGroupTabs"
+
+//Cell Identifiers
+#define kGroupCellIdentifier                        @"GroupCell"
 
 //Error Messages
 #define kError                                      @"Error"
@@ -44,7 +49,12 @@
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
 #define kUserDataSavedSuccessMessage                @"User Saved!"
 #define kAccountDeletedSuccessMessage               @"Account Deleted!"
+#define kAccountCreatedSuccessMessage               @"Account Created!"
 #define kPasswordChangedSuccessMessage              @"Password Changed!"
+#define kNewGroupSuccessMessage                     @"New Group! :)"
+#define kGroupRemovedSuccessMessage                 @"Group Removed!"
+#define kLoggedOutSuccessMessage                    @"Logged Out!"
+#define kLoggedInSuccessMessage                     @"Logged In!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
@@ -61,6 +71,7 @@
 #define kUsersFirebaseNode                          @"users"
 #define kGroupsFirebaseNode                         @"groups"
 #define kMembersFirebaseNode                        @"members"
+#define kNetworkConnectionNode                      @".info/connected"
 
 //Firebase Fields
 #define kUserEmailFirebaseField                     @"email"
@@ -71,3 +82,9 @@
 
 //Image Assets
 #define kProfileLogoImage                           @"profile_logo"
+
+//Notifications
+#define kGroupDataUpdatedNotification               @"Group Data Updated"
+#define kNewGroupNotification                       @"New Group"
+#define kGroupRemovedNotification                   @"Group Removed"
+#define kNoGroupsNotification                       @"No Groups"

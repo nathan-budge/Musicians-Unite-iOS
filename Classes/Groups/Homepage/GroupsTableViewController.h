@@ -12,6 +12,4 @@
 
 @interface GroupsTableViewController : UITableViewController
 
-@property (nonatomic) User *user;
-
 @end

@@ -14,6 +14,7 @@
 @interface SharedData : NSObject
 
 @property (nonatomic, retain) NSMutableArray *childObservers;
+@property (nonatomic, retain) NSMutableArray *notificationCenterObservers;
 @property (nonatomic) dispatch_group_t downloadGroup;
 
 @property (nonatomic) User *user;
@@ -23,5 +24,8 @@
 
 - (void) addChildObserver:(Firebase *)childObserver;
 - (void) removeChildObserver:(Firebase *)childObserver;
+
+- (void) addNotificationCenterObserver:(id)notificationCenterObserver;
+- (void) removeNoticiationCenterObserver:(id)notificationCenterObserver;
 
 @end

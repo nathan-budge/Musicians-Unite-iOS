@@ -269,7 +269,6 @@
             
             //Remove groups with no more members left (currently a utilities method)
             
-            
             [self removeGroup:removedGroup];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Removed" object:removedGroup];
