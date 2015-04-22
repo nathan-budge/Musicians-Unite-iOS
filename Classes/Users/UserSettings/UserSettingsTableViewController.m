@@ -181,7 +181,6 @@
                     [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
                 }
             
-                NSLog(@"%@", self.user.userID);
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.user.userID]] removeValue];
                 
                 [self.ref unauth];

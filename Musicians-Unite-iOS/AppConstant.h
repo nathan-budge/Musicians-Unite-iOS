@@ -30,6 +30,7 @@
 #define kDeleteAccountSegueIdentifier               @"deleteAccount"
 #define kNewGroupSegueIdentifier                    @"newGroup"
 #define kGroupTabsSegueIdentifier                   @"showGroupTabs"
+#define kMemberManagementSegueIdentifier            @"viewMemberManagement"
 
 //Cell Identifiers
 #define kGroupCellIdentifier                        @"GroupCell"
@@ -44,6 +45,7 @@
 #define kNetworkError                               @"Network Error"
 #define kNoFirstNameError                           @"First name is required"
 #define kNoCameraError                              @"Device has no camera"
+#define kGroupNameError                             @"Group name is required"
 
 //Success Messages
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
@@ -55,10 +57,12 @@
 #define kGroupRemovedSuccessMessage                 @"Group Removed!"
 #define kLoggedOutSuccessMessage                    @"Logged Out!"
 #define kLoggedInSuccessMessage                     @"Logged In!"
+#define kGroupSavedSuccessMessage                   @"Group Saved!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
 #define kDeleteAccountAlertMessage                  @"Please enter your password"
+#define kLeaveGroupAlertMessage                     @"All of your data will be removed from the group. Would you like to continue?"
 
 //Button Titles
 #define kConfirmButtonTitle                         @"OK"
@@ -66,6 +70,11 @@
 #define kRemovePhotoButtonTitle                     @"Remove Photo"
 #define kTakePhotoButtonTitle                       @"Take Photo"
 #define kChooseFromLibraryButtonTitle               @"Choose From Library"
+#define kLeaveGroupButtonTitle                      @"Leave Group"
+#define kCreateButtonTitle                          @"Create"
+
+//View Titles
+#define kGroupSettingsTitle                         @"Group Settings"
 
 //Firebase Nodes
 #define kUsersFirebaseNode                          @"users"
@@ -79,6 +88,7 @@
 #define kUserLastNameFirebaseField                  @"last_name"
 #define kUserCompletedRegistrationFirebaseField     @"completed_registration"
 #define kProfileImageFirebaseField                  @"profile_image"
+#define kGroupNameFirebaseField                     @"name"
 
 //Image Assets
 #define kProfileLogoImage                           @"profile_logo"

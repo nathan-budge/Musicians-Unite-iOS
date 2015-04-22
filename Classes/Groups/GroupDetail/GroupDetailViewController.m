@@ -60,13 +60,13 @@
         
         [self.buttonProfileImage setImage:self.group.profileImage forState:UIControlStateNormal];
         
-        [self.buttonConfirm setTitle:@"Leave Group" forState:UIControlStateNormal];
+        [self.buttonConfirm setTitle:kLeaveGroupButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
     }
     else
     {
-        [self.buttonConfirm setTitle:@"Create" forState:UIControlStateNormal];
+        [self.buttonConfirm setTitle:kCreateButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
     }
     
@@ -79,7 +79,7 @@
     
     if (self.group)
     {
-        self.tabBarController.title = @"Settings";
+        self.tabBarController.title = kGroupSettingsTitle;
         self.tabBarController.navigationItem.rightBarButtonItems = nil;
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
     }
@@ -101,9 +101,9 @@
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                               delegate:self
-                                     cancelButtonTitle:@"Cancel"
-                                destructiveButtonTitle:@"Remove Photo"
-                                     otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
+                                     cancelButtonTitle:kCancelButtonTitle
+                                destructiveButtonTitle:kRemovePhotoButtonTitle
+                                     otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
 
     [actionSheet showInView:self.view];
 }
@@ -111,10 +111,13 @@
 - (IBAction)actionMemberManagement:(id)sender
 {
     
-    if ([self.fieldGroupName.text isEqualToString:@""]) {
-        [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
-    } else {
-        [self performSegueWithIdentifier:@"viewMemberManagement" sender:self];
+    if ([self.fieldGroupName.text isEqualToString:@""])
+    {
+        [SVProgressHUD showErrorWithStatus:kGroupNameError maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else
+    {
+        [self performSegueWithIdentifier:kMemberManagementSegueIdentifier sender:self];
     }
 }
 
@@ -125,7 +128,11 @@
 
 -(void)actionLeaveGroup
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"All of your data will be removed from the group. Would you like to continue?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:kLeaveGroupAlertMessage
+                                                   delegate:self
+                                          cancelButtonTitle:kCancelButtonTitle
+                                          otherButtonTitles:kConfirmButtonTitle, nil];
     [alert show];
 }
 
@@ -133,23 +140,23 @@
 {
     if ([self.fieldGroupName.text isEqualToString:@""])
     {
-        [SVProgressHUD showErrorWithStatus:@"Group name required" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kGroupNameError maskType:SVProgressHUDMaskTypeBlack];
         
     }
     else
     {
-        Firebase *groupRef = [[self.ref childByAppendingPath:@"groups"] childByAutoId];
-        Firebase *userRef = [self.ref childByAppendingPath:@"users"];
+        Firebase *groupRef = [[self.ref childByAppendingPath:kGroupsFirebaseNode] childByAutoId];
+        Firebase *userRef = [self.ref childByAppendingPath:kUsersFirebaseNode];
         
         NSDictionary *newGroup = @{
-                                   @"name":self.fieldGroupName.text,
-                                   @"profile_image":[Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image],
+                                   kGroupNameFirebaseField:self.fieldGroupName.text,
+                                   kProfileImageFirebaseField:[Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image],
                                    };
         
         [groupRef setValue:newGroup];
         
-        [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:@"groups"] updateChildValues:@{groupRef.key:@YES}];
-        [[groupRef childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
+        [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
+        [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.ref.authData.uid:@YES}];
         
         [self dismissKeyboard];
         
@@ -159,13 +166,13 @@
 
 -(void)actionSaveGroup
 {
-    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
+    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
     
     NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
     
     NSDictionary *updatedValues = @{
-                                    @"name":self.fieldGroupName.text,
-                                    @"profile_image":profileImageString,
+                                    kGroupNameFirebaseField:self.fieldGroupName.text,
+                                    kProfileImageFirebaseField:profileImageString,
                                     };
     
     [oldGroup updateChildValues:updatedValues];
@@ -173,7 +180,7 @@
     [self dismissKeyboard];
     
     NSDictionary *options = @{
-                              kCRToastTextKey : @"Group Saved!",
+                              kCRToastTextKey : kGroupSavedSuccessMessage,
                               kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                               kCRToastBackgroundColorKey : [UIColor greenColor],
                               kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -211,7 +218,7 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"viewMemberManagement"])
+    if ([segue.identifier isEqualToString:kMemberManagementSegueIdentifier])
     {
         MemberManagementViewController *destViewController = segue.destinationViewController;
         
@@ -236,8 +243,8 @@
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", self.group.groupID, self.ref.authData.uid]] removeValue];
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/groups/%@", self.ref.authData.uid, self.group.groupID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, self.ref.authData.uid]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.ref.authData.uid, kGroupsFirebaseNode, self.group.groupID]] removeValue];
         
         //Move this method to attachListenerForRemovedGroups
         [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
@@ -274,16 +281,18 @@
 //Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
 -(void)takePhoto
 {
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                              message:@"Device has no camera"
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:kError
+                                                              message:kNoCameraError
                                                              delegate:nil
-                                                    cancelButtonTitle:@"OK"
+                                                    cancelButtonTitle:kConfirmButtonTitle
                                                     otherButtonTitles: nil];
         
         [myAlertView show];
-    } else {
-        NSLog(@"Take Photo Called");
+    }
+    else
+    {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
@@ -295,7 +304,6 @@
 
 -(void)selectPhoto
 {
-    NSLog(@"Select Photo Called");
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
@@ -306,7 +314,7 @@
 
 -(void)removePhoto
 {
-    [self.buttonProfileImage setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
+    [self.buttonProfileImage setImage:[UIImage imageNamed:kProfileLogoImage] forState:UIControlStateNormal];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
