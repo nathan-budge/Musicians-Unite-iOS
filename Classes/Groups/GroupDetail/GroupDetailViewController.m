@@ -219,6 +219,23 @@
 
 
 //*****************************************************************************/
+#pragma mark - Leave group alert view
+//*****************************************************************************/
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, self.sharedData.user.userID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
+        
+        //Move this method to attachListenerForRemovedGroups
+        [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
+    }
+}
+
+
+//*****************************************************************************/
 #pragma mark - Notification Center
 //*****************************************************************************/
 
@@ -288,23 +305,6 @@
             NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
             destViewController.group = [[Group alloc] initWithName:self.fieldGroupName.text andProfileImageString:profileImageString];
         }
-    }
-}
-
-
-//*****************************************************************************/
-#pragma mark - Leave group alert view
-//*****************************************************************************/
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, self.sharedData.user.userID]] removeValue];
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
-        
-        //Move this method to attachListenerForRemovedGroups
-        [Utilities removeEmptyGroups:self.group.groupID withRef:self.ref];
     }
 }
 

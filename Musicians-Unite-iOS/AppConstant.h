@@ -21,6 +21,7 @@
 #define kRegisteringProgressMessage                 @"Registering..."
 #define kDeletingAccountProgressMessage             @"Deleting account..."
 #define kChangingPasswordProgressMessage            @"Changing password..."
+#define kAddingMemberProgressMessage                @"Adding member..."
 
 //Segue Identifiers
 #define kLogoutSegueIdentifier                      @"Logout"
@@ -34,6 +35,7 @@
 
 //Cell Identifiers
 #define kGroupCellIdentifier                        @"GroupCell"
+#define kUserCellIdentifier                         @"UserCell"
 
 //Error Messages
 #define kError                                      @"Error"
@@ -46,6 +48,7 @@
 #define kNoFirstNameError                           @"First name is required"
 #define kNoCameraError                              @"Device has no camera"
 #define kGroupNameError                             @"Group name is required"
+#define kMemberAlreadyExistsError                   @"Member already exists"
 
 //Success Messages
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
@@ -53,16 +56,18 @@
 #define kAccountDeletedSuccessMessage               @"Account Deleted!"
 #define kAccountCreatedSuccessMessage               @"Account Created!"
 #define kPasswordChangedSuccessMessage              @"Password Changed!"
-#define kNewGroupSuccessMessage                     @"New Group! :)"
+#define kNewGroupSuccessMessage                     @"New Group!"
 #define kGroupRemovedSuccessMessage                 @"Group Removed!"
 #define kLoggedOutSuccessMessage                    @"Logged Out!"
 #define kLoggedInSuccessMessage                     @"Logged In!"
 #define kGroupSavedSuccessMessage                   @"Group Saved!"
+#define kMemberAddedSuccessMessage                  @"Member Added!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
 #define kDeleteAccountAlertMessage                  @"Please enter your password"
 #define kLeaveGroupAlertMessage                     @"All of your data will be removed from the group. Would you like to continue?"
+#define kDeleteMemberAlertMessage                   @"Removing users will remove their data from the group. Would you like to continue?"
 
 //Button Titles
 #define kConfirmButtonTitle                         @"OK"
