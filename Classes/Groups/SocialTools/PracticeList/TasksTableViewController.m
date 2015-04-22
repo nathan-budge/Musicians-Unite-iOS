@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
+#import "CRToast.h"
 
 #import "TasksTableViewController.h"
 #import "TaskViewController.h"
@@ -238,6 +239,20 @@
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             [self.incompleteTasks addObject:notification.object];
             [self.tableView reloadData];
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : @"Task Created!",
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
         });
     }
     else if ([[notification name] isEqualToString:@"Task Removed"])

@@ -107,6 +107,16 @@
         self.labelGroupName.text = self.group.name;
         self.ownerID = self.group.groupID;
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Recording Data Updated"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Recording Removed"
+                                               object:nil];
 }
 
 
@@ -153,22 +163,6 @@
                 [groupRecordingsRef updateChildValues:@{self.recording.recordingID:@YES}];
             }
         }
-        
-        NSDictionary *options = @{
-                                  kCRToastTextKey : @"Recording Saved!",
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
-        
-        [self dismissKeyboard];
     }
 }
 
@@ -203,26 +197,41 @@
         Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings/%@", self.group.groupID, self.recording.recordingID]];
         [groupRecordingRef removeValue];
     }
-    
-    NSDictionary *options = @{
-                              kCRToastTextKey : @"Recording Deleted!",
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor redColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
-    
-    [self dismissKeyboard];
-    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"Recording Removed"])
+    {
+        [self dismissKeyboard];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if ([[notification name] isEqualToString:@"Recording Data Updated"])
+    {
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Recording Saved!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
+        
+        [self dismissKeyboard];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
 //*****************************************************************************/
 #pragma mark - Picker data source methods

@@ -36,7 +36,6 @@
     if (!_ref) {
         _ref = [[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -75,34 +74,36 @@
 
 - (IBAction)actionLogin:(id)sender
 {
-    [SVProgressHUD showWithStatus:@"Logging in..." maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:kLoggingInProgressMessage maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
     [self.ref authUser:self.fieldEmail.text password:self.fieldPassword.text withCompletionBlock:^(NSError *error, FAuthData *authData) {
         
-        if (error) {
+        if (error)
+        {
             switch(error.code) {
                 case FAuthenticationErrorInvalidEmail:
-                    [SVProgressHUD showErrorWithStatus:@"Invalid email and/or password" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kInvalidEmailPasswordError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorInvalidPassword:
-                    [SVProgressHUD showErrorWithStatus:@"Invalid email and/or password" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kInvalidEmailPasswordError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorUserDoesNotExist:
-                    [SVProgressHUD showErrorWithStatus:@"User does not exist" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kUserDoesNotExistError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorNetworkError:
-                    [SVProgressHUD showErrorWithStatus:@"Network Error" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kNetworkError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 default:
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                     break;
             }
             self.fieldPassword.text = @"";
-            
-        } else {
+        }
+        else
+        {
             [SVProgressHUD dismiss];
-            [self performSegueWithIdentifier:@"LoginToGroups" sender:sender];
+            [self performSegueWithIdentifier:kLoginToGroupSegueIdentifier sender:sender];
         }
     }];
 }
@@ -122,32 +123,36 @@
 {
     [self dismissKeyboard];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please enter your email address" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:kForgotPasswordAlertMessage delegate:self cancelButtonTitle:kCancelButtonTitle otherButtonTitles:kConfirmButtonTitle, nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != alertView.cancelButtonIndex) {
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
         UITextField *textField = [alertView textFieldAtIndex:0];
         
         [self.ref resetPasswordForUser:textField.text withCompletionBlock:^(NSError *error) {
             
-            if (error) {
+            if (error)
+            {
                 switch (error.code) {
                     case FAuthenticationErrorInvalidEmail:
-                        [SVProgressHUD showErrorWithStatus:@"Email is invalid" maskType:SVProgressHUDMaskTypeBlack];
+                        [SVProgressHUD showErrorWithStatus:kInvalidEmailError maskType:SVProgressHUDMaskTypeBlack];
                         break;
                     default:
                         [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                         break;
                 }
                 self.fieldPassword.text = @"";
-                
-            } else {
-                [SVProgressHUD showSuccessWithStatus:@"Password reset email sent!" ];
             }
+            else
+            {
+                [SVProgressHUD showSuccessWithStatus:kResetPasswordSuccessMessage];
+            }
+            
         }];
     }
 }
@@ -164,12 +169,13 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == self.fieldEmail) {
+    if (textField == self.fieldEmail)
+    {
         [self.fieldPassword becomeFirstResponder];
-        
-    } else if (textField == self.fieldPassword) {
+    }
+    else if (textField == self.fieldPassword)
+    {
         [self dismissKeyboard];
-        
     }
 
     return YES;

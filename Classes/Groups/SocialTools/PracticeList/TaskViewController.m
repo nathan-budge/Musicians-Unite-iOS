@@ -138,20 +138,6 @@
         
         [ownerRef updateChildValues:@{taskRef.key:@YES}];
         
-        NSDictionary *options = @{
-                                  kCRToastTextKey : @"Task Created!",
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
-        
         [self dismissKeyboard];
         
         [self.navigationController popViewControllerAnimated:YES];

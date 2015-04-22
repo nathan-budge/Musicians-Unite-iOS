@@ -380,6 +380,7 @@
         {
             Recording *removedRecording = [recording objectAtIndex:0];
             [self removeRecording:removedRecording];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Removed" object:self];
         }
         

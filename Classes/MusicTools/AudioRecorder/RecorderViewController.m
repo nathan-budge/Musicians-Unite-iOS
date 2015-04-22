@@ -19,6 +19,7 @@
 
 #import "User.h"
 #import "Group.h"
+#import "Recording.h"
 
 @interface RecorderViewController ()
 
@@ -34,6 +35,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonRecord;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPlay;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSave;
+
+@property (assign) NSString *recordingID;
 
 @end
 
@@ -139,6 +142,7 @@
             NSString *dataString = [data base64EncodedStringWithOptions:0];
             
             Firebase *recordingRef = [[self.ref childByAppendingPath:@"recordings"] childByAutoId];
+            self.recordingID = recordingRef.key;
             Firebase *ownerRef;
             NSString *ownerID;
             
@@ -226,21 +230,27 @@
 {
     if ([[notification name] isEqualToString:@"New Recording"])
     {
-        [SVProgressHUD dismiss];
+        Recording *newRecording = notification.object;
+        if ([newRecording.recordingID isEqualToString:self.recordingID])
+        {
+            [SVProgressHUD dismiss];
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : @"Recording Created!",
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
+        }
         
-        NSDictionary *options = @{
-                                  kCRToastTextKey : @"Recording Created!",
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
+        self.recordingID = nil;
     }
 }
 

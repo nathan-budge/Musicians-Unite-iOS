@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
+#import "CRToast.h"
+
 #import "RecordingsTableViewController.h"
 #import "RecordingTableViewController.h"
 
@@ -61,6 +63,11 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
+                                                 name:@"New Recording"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
                                                  name:@"Recording Removed"
                                                object:nil];
 }
@@ -72,7 +79,29 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Recording Data Updated"] || [[notification name] isEqualToString:@"Recording Removed"])
+    if ([[notification name] isEqualToString:@"Recording Data Updated"])
+    {
+        [self.tableView reloadData];
+    }
+    else if ([[notification name] isEqualToString:@"Recording Removed"])
+    {
+        [self.tableView reloadData];
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Recording Deleted!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor redColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
+    }
+    else if ([[notification name] isEqualToString:@"New Recording"])
     {
         [self.tableView reloadData];
     }

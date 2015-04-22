@@ -96,20 +96,20 @@
     
     if (self.fieldFirstName.text.length > 0)
     {
-        Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.user.userID]];
+        Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.user.userID]];
         
         NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
         
         NSDictionary *updatedValues = @{
-                                        @"first_name":self.fieldFirstName.text,
-                                        @"last_name":self.fieldLastName.text,
-                                        @"profile_image":profileImageString,
+                                        kUserFirstNameFirebaseField:self.fieldFirstName.text,
+                                        kUserLastNameFirebaseField:self.fieldLastName.text,
+                                        kProfileImageFirebaseField:profileImageString,
                                         };
         
         [userRef updateChildValues:updatedValues];
         
         NSDictionary *options = @{
-                                  kCRToastTextKey : @"Saved!",
+                                  kCRToastTextKey : kUserDataSavedSuccessMessage,
                                   kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                                   kCRToastBackgroundColorKey : [UIColor greenColor],
                                   kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -124,7 +124,7 @@
     }
     else
     {
-        [SVProgressHUD showErrorWithStatus:@"First name is required" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoFirstNameError maskType:SVProgressHUDMaskTypeBlack];
     }
 }
 
@@ -132,9 +132,9 @@
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:@"Remove Photo"
-                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
+                                                    cancelButtonTitle:kCancelButtonTitle
+                                               destructiveButtonTitle:kRemovePhotoButtonTitle
+                                                    otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
     
     
     
@@ -143,21 +143,21 @@
 
 - (IBAction)actionChangePassword:(id)sender
 {
-    [self performSegueWithIdentifier:@"changePassword" sender:self];
+    [self performSegueWithIdentifier:kChangePasswordSegueIdentifier sender:self];
 }
 
 - (IBAction)actionDeleteAccount:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please enter your password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kDeleteAccountAlertMessage message:nil delegate:self cancelButtonTitle:kCancelButtonTitle otherButtonTitles:kConfirmButtonTitle, nil];
     alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != alertView.cancelButtonIndex) {
-        
-        [SVProgressHUD showWithStatus:@"Deleteing account..." maskType:SVProgressHUDMaskTypeBlack];
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        [SVProgressHUD showWithStatus:kDeletingAccountProgressMessage maskType:SVProgressHUDMaskTypeBlack];
         
         UITextField *textField = [alertView textFieldAtIndex:0];
         
@@ -167,31 +167,31 @@
             {
                 switch(error.code) {
                     case FAuthenticationErrorInvalidPassword:
-                        [SVProgressHUD showErrorWithStatus:@"Your password is invalid." maskType:SVProgressHUDMaskTypeBlack];
+                        [SVProgressHUD showErrorWithStatus:kInvalidPasswordError maskType:SVProgressHUDMaskTypeBlack];
                         break;
                     default:
                         [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                         break;
                 }
-                
             }
             else
             {
                 for (Group *group in self.user.groups) {
-                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", group.groupID, self.user.userID]] removeValue];
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, group.groupID, kMembersFirebaseNode, self.user.userID]] removeValue];
                     [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
                 }
             
                 NSLog(@"%@", self.user.userID);
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.user.userID]] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.user.userID]] removeValue];
                 
                 [self.ref unauth];
                 self.sharedData.user = nil;
                 [SVProgressHUD dismiss];
-                [self performSegueWithIdentifier:@"deleteAccount" sender:nil];
+                
+                [self performSegueWithIdentifier:kDeleteAccountSegueIdentifier sender:nil];
                 
                 NSDictionary *options = @{
-                                          kCRToastTextKey : @"Account Deleted",
+                                          kCRToastTextKey : kAccountDeletedSuccessMessage,
                                           kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                                           kCRToastBackgroundColorKey : [UIColor redColor],
                                           kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -230,7 +230,8 @@
 #pragma mark - Profile Image Handling
 //*****************************************************************************/
 
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     switch (buttonIndex) {
         case 0:
             [self removePhoto];
@@ -244,22 +245,23 @@
         default:
             break;
     }
-    
 }
 
 //Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
 -(void)takePhoto
 {
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                              message:@"Device has no camera"
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:kError
+                                                              message:kNoCameraError
                                                              delegate:nil
-                                                    cancelButtonTitle:@"OK"
+                                                    cancelButtonTitle:kConfirmButtonTitle
                                                     otherButtonTitles: nil];
         
         [myAlertView show];
-    } else {
-        NSLog(@"Take Photo Called");
+    }
+    else
+    {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
@@ -271,7 +273,6 @@
 
 -(void)selectPhoto
 {
-    NSLog(@"Select Photo Called");
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
@@ -282,7 +283,7 @@
 
 -(void)removePhoto
 {
-    [self.buttonProfileImage setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
+    [self.buttonProfileImage setImage:[UIImage imageNamed:kProfileLogoImage] forState:UIControlStateNormal];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

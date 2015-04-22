@@ -96,9 +96,9 @@
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:@"Remove Photo"
-                                                    otherButtonTitles:@"Take Photo", @"Choose From Library", nil];
+                                                    cancelButtonTitle:kCancelButtonTitle
+                                               destructiveButtonTitle:kRemovePhotoButtonTitle
+                                                    otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
     
     [actionSheet showInView:self.view];
 }
@@ -116,19 +116,21 @@
 
 - (IBAction)actionRegisterUser:(id)sender
 {
-    [SVProgressHUD showWithStatus:@"Registering..." maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:kRegisteringProgressMessage maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
     if (self.fieldFirstName.text.length > 0)
     {
-        self.usersRef = [self.ref childByAppendingPath:@"users"];
+        self.usersRef = [self.ref childByAppendingPath:kUsersFirebaseNode];
         
-        [[[self.usersRef queryOrderedByChild:@"email"] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        [[[self.usersRef queryOrderedByChild:kUserEmailFirebaseField] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
             
-            if (![snapshot.value isEqual:[NSNull null]]) {
+            if (![snapshot.value isEqual:[NSNull null]])
+            {
                 [self createUser:snapshot.value];
             }
-            else {
+            else
+            {
                 [self createUser:nil];
             }
             
@@ -139,7 +141,7 @@
     }
     else
     {
-        [SVProgressHUD showErrorWithStatus:@"First name is required" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoFirstNameError maskType:SVProgressHUDMaskTypeBlack];
         self.fieldPassword.text = @"";
     }
 }
@@ -148,24 +150,26 @@
 {
     [self.ref createUser:self.fieldEmail.text password:self.fieldPassword.text withCompletionBlock:^(NSError *error) {
         
-        if(error) {
+        if(error)
+        {
             switch (error.code) {
                 case FAuthenticationErrorEmailTaken:
-                    [SVProgressHUD showErrorWithStatus:@"Email is already taken" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kEmailTakenError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorInvalidEmail:
-                    [SVProgressHUD showErrorWithStatus:@"Email is invalid" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kInvalidEmailError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 case FAuthenticationErrorInvalidPassword:
-                    [SVProgressHUD showErrorWithStatus:@"Password is invalid" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kInvalidPasswordError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 default:
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
                     break;
             }
             self.fieldPassword.text = @"";
-            
-        } else {
+        }
+        else
+        {
             [self.ref authUser:self.fieldEmail.text password:self.fieldPassword.text withCompletionBlock:^(NSError *error, FAuthData *authData) {
                 
                 if (error)
@@ -178,11 +182,11 @@
                     
                     NSString * profileImageString = [Utilities encodeImageToBase64:self.profileImageButton.imageView.image];
                     NSDictionary *newUser = @{
-                                              @"first_name":self.fieldFirstName.text,
-                                              @"last_name":self.fieldLastName.text,
-                                              @"email":authData.providerData[@"email"],
-                                              @"completed_registration":@YES,
-                                              @"profile_image":profileImageString,
+                                              kUserFirstNameFirebaseField:self.fieldFirstName.text,
+                                              kUserLastNameFirebaseField:self.fieldLastName.text,
+                                              kUserEmailFirebaseField:authData.providerData[@"email"],
+                                              kUserCompletedRegistrationFirebaseField:@YES,
+                                              kProfileImageFirebaseField:profileImageString,
                                               };
                     
                     [newUserRef setValue:newUser];
@@ -195,7 +199,7 @@
                     else
                     {
                         [SVProgressHUD dismiss];
-                        [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
+                        [self performSegueWithIdentifier:kRegisterToGroupSegueIdentifier sender:nil];
                     }
                 }
             }];
@@ -205,22 +209,21 @@
 
 - (void)addGroups: (NSString *)tempUserID withAuthData: (FAuthData *)authData andNewUserRef: (Firebase *)newUserRef
 {
-    [[self.usersRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups", tempUserID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        
+    [[self.usersRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@", tempUserID, kGroupsFirebaseNode]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         NSArray *userGroups = [snapshot.value allKeys];
         
         for (NSString *groupID in userGroups) {
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members", groupID]] updateChildValues:@{authData.uid:@YES}];
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", groupID, tempUserID]] removeValue];
-            [[newUserRef childByAppendingPath:@"groups"] updateChildValues:@{groupID:@YES}];
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, groupID, kMembersFirebaseNode]] updateChildValues:@{authData.uid:@YES}];
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, groupID, kMembersFirebaseNode, tempUserID]] removeValue];
+            [[newUserRef childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupID:@YES}];
         }
         
         //Remove the temporary user once complete
         [[self.usersRef childByAppendingPath:tempUserID] removeValue];
         
         [SVProgressHUD dismiss];
-        [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
+        [self performSegueWithIdentifier:kRegisterToGroupSegueIdentifier sender:nil];
 
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
@@ -267,18 +270,21 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == self.fieldFirstName){
+    if (textField == self.fieldFirstName)
+    {
         [self.fieldLastName becomeFirstResponder];
-    
-    } else if (textField == self.fieldLastName) {
+    }
+    else if (textField == self.fieldLastName)
+    {
         [self.fieldEmail becomeFirstResponder];
-        
-    } else if (textField == self.fieldEmail) {
+    }
+    else if (textField == self.fieldEmail)
+    {
         [self.fieldPassword becomeFirstResponder];
-    
-    } else if (textField == self.fieldPassword) {
+    }
+    else if (textField == self.fieldPassword)
+    {
         [self dismissKeyboard];
-        
     }
     
     return YES;
@@ -309,16 +315,18 @@
 //Code for takePhoto and selectPhoto adapted from http://www.appcoda.com/ios-programming-camera-iphone-app/
 -(void)takePhoto
 {
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                              message:@"Device has no camera"
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:kError
+                                                              message:kNoCameraError
                                                              delegate:nil
-                                                    cancelButtonTitle:@"OK"
+                                                    cancelButtonTitle:kConfirmButtonTitle
                                                     otherButtonTitles: nil];
         
         [myAlertView show];
-        
-    } else {
+    }
+    else
+    {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
@@ -340,7 +348,7 @@
 
 -(void)removePhoto
 {
-    [self.profileImageButton setImage:[UIImage imageNamed:@"profile_logo"] forState:UIControlStateNormal];
+    [self.profileImageButton setImage:[UIImage imageNamed:kProfileLogoImage] forState:UIControlStateNormal];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -356,7 +364,3 @@
 }
 
 @end
-
-
-
-

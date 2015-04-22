@@ -30,6 +30,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *fieldNewPassword;
+
 @end
 
 
@@ -76,14 +77,16 @@
 
 - (IBAction)actionSave:(id)sender
 {
-    [SVProgressHUD showWithStatus:@"Changing Password..." maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:kChangingPasswordProgressMessage maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
     [self.ref changePasswordForUser:self.user.email fromOld:self.fieldCurrentPassword.text toNew:self.fieldNewPassword.text withCompletionBlock:^(NSError *error) {
-        if (error) {
+        
+        if (error)
+        {
             switch (error.code) {
                 case FAuthenticationErrorInvalidPassword:
-                    [SVProgressHUD showErrorWithStatus:@"Invalid password" maskType:SVProgressHUDMaskTypeBlack];
+                    [SVProgressHUD showErrorWithStatus:kInvalidPasswordError maskType:SVProgressHUDMaskTypeBlack];
                     break;
                 default:
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
@@ -91,12 +94,14 @@
             }
             self.fieldCurrentPassword.text = @"";
             self.fieldNewPassword.text = @"";
-        } else {
+        }
+        else
+        {
             [SVProgressHUD dismiss];
             //[SVProgressHUD showSuccessWithStatus:@"Password Changed!" maskType:SVProgressHUDMaskTypeBlack];
             
             NSDictionary *options = @{
-                                      kCRToastTextKey : @"Password Saved!",
+                                      kCRToastTextKey : kPasswordChangedSuccessMessage,
                                       kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                                       kCRToastBackgroundColorKey : [UIColor greenColor],
                                       kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -142,10 +147,10 @@
     if (textField == self.fieldCurrentPassword)
     {
         [self.fieldNewPassword becomeFirstResponder];
-    } else if (textField == self.fieldNewPassword)
+    }
+    else if (textField == self.fieldNewPassword)
     {
         [self dismissKeyboard];
-        
     }
     
     return YES;

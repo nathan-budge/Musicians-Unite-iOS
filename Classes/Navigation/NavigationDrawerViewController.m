@@ -72,25 +72,25 @@
 
 -(IBAction)actionMusicTools:(id)sender
 {
-    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MusicToolsNavigationController"];
+    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:kMusicToolsNavigationController];
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
 - (IBAction)actionPracticeList:(id)sender
 {
-    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PracticeListNavigationController"];
+    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:kPracticeListNavigationController];
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
 - (IBAction)actionUserSettings:(id)sender
 {
-    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserSettingsNavigationController"];
+    self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:kUserSettingsNavigationController];
     [self.slidingViewController resetTopViewAnimated:YES];
 }
 
 - (IBAction)actionLogout:(id)sender
 {
-    [SVProgressHUD showWithStatus:@"Logging out..." maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:kLoggingOutProgressMessage maskType:SVProgressHUDMaskTypeBlack];
     
     SharedData *sharedData = [SharedData sharedInstance];
     
@@ -103,7 +103,7 @@
     sharedData.user = nil;
 
     [SVProgressHUD dismiss];
-    [self performSegueWithIdentifier:@"Logout" sender:sender];
+    [self performSegueWithIdentifier:kLogoutSegueIdentifier sender:sender];
     
 }
 
