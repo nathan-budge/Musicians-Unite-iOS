@@ -114,7 +114,6 @@
 {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -181,8 +180,8 @@
         
         [groupRef setValue:newGroup];
         
-        [[[userRef childByAppendingPath:self.ref.authData.uid] childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
-        [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.ref.authData.uid:@YES}];
+        [[[userRef childByAppendingPath:self.sharedData.user.userID] childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
+        [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.sharedData.user.userID:@YES}];
     }
 }
 
@@ -227,12 +226,17 @@
 {
     if ([[notification name] isEqualToString:kNewGroupNotification])
     {
-        Group *newGroup = notification.object;
-        if ([newGroup.groupID isEqualToString:self.groupID])
-        {
-            [self dismissKeyboard];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            Group *newGroup = notification.object;
+            if ([newGroup.groupID isEqualToString:self.groupID])
+            {
+                [self dismissKeyboard];
+                [[NSNotificationCenter defaultCenter] removeObserver:self];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+            
+        });
     }
 }
 
