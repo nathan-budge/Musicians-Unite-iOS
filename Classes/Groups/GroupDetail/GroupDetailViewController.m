@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -158,8 +159,6 @@
 
 -(void)actionSaveGroup
 {
-    [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
-    
     Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
     
     NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
@@ -173,7 +172,19 @@
     
     [self dismissKeyboard];
     
-    [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
+    NSDictionary *options = @{
+                              kCRToastTextKey : @"Group Saved!",
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor greenColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
+    
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
 }
 
 

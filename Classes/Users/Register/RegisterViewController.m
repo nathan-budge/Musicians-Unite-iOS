@@ -119,8 +119,8 @@
     [SVProgressHUD showWithStatus:@"Registering..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
-    if (self.fieldFirstName.text.length > 0) {
-        
+    if (self.fieldFirstName.text.length > 0)
+    {
         self.usersRef = [self.ref childByAppendingPath:@"users"];
         
         [[[self.usersRef queryOrderedByChild:@"email"] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -133,13 +133,14 @@
             }
             
         } withCancelBlock:^(NSError *error) {
-            [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
+            NSLog(@"ERROR: %@", error.description);
         }];
         
-    } else {
+    }
+    else
+    {
         [SVProgressHUD showErrorWithStatus:@"First name is required" maskType:SVProgressHUDMaskTypeBlack];
         self.fieldPassword.text = @"";
-        
     }
 }
 
@@ -167,10 +168,12 @@
         } else {
             [self.ref authUser:self.fieldEmail.text password:self.fieldPassword.text withCompletionBlock:^(NSError *error, FAuthData *authData) {
                 
-                if (error) {
+                if (error)
+                {
                     [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
-                    
-                } else {
+                }
+                else
+                {
                     Firebase *newUserRef = [self.usersRef childByAppendingPath:authData.uid];
                     
                     NSString * profileImageString = [Utilities encodeImageToBase64:self.profileImageButton.imageView.image];
@@ -184,14 +187,15 @@
                     
                     [newUserRef setValue:newUser];
                     
-                    if (tempUser != nil) {
+                    if (tempUser != nil)
+                    {
                         NSString *tempUserID = [tempUser allKeys][0];
                         [self addGroups:tempUserID withAuthData:authData andNewUserRef:newUserRef];
-                        
-                    } else {
+                    }
+                    else
+                    {
                         [SVProgressHUD dismiss];
                         [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
-                        
                     }
                 }
             }];
@@ -202,6 +206,7 @@
 - (void)addGroups: (NSString *)tempUserID withAuthData: (FAuthData *)authData andNewUserRef: (Firebase *)newUserRef
 {
     [[self.usersRef childByAppendingPath:[NSString stringWithFormat:@"%@/groups", tempUserID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        
         
         NSArray *userGroups = [snapshot.value allKeys];
         
@@ -218,7 +223,7 @@
         [self performSegueWithIdentifier:@"RegisterToGroups" sender:nil];
 
     } withCancelBlock:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:error.description maskType:SVProgressHUDMaskTypeBlack];
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 

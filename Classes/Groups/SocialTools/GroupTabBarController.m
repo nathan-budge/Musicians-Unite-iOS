@@ -7,6 +7,7 @@
 //
 
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
@@ -46,6 +47,16 @@
                                              selector:@selector(receivedNotification:)
                                                  name:@"Group Member Removed"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"New Group Member"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"New Thread"
+                                               object:nil];
 }
 
 
@@ -58,21 +69,69 @@
     if ([[notification name] isEqualToString:@"Group Removed"])
     {
         if ([notification.object isEqual:self.group]) {
-            [SVProgressHUD showInfoWithStatus:@"Group Removed" maskType:SVProgressHUDMaskTypeBlack];
+            
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }
     else if ([[notification name] isEqualToString:@"Group Member Removed"])
     {
         User *removedMember = notification.object;
+        NSString *errorMessage;
         
         if (removedMember.completedRegistration)
         {
-            [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@ was removed", removedMember.firstName] maskType:SVProgressHUDMaskTypeBlack];
+            errorMessage = [NSString stringWithFormat:@"%@ was removed", removedMember.firstName];
         }
         else
         {
-            [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@ was removed", removedMember.email] maskType:SVProgressHUDMaskTypeBlack];
+            errorMessage = [NSString stringWithFormat:@"%@ was removed", removedMember.email];
+        }
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : errorMessage,
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor redColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
+    }
+    else if ([[notification name] isEqualToString:@"New Group Member"])
+    {
+        NSArray *newMemberData = notification.object;
+        if ([[newMemberData objectAtIndex:0] isEqual:self.group])
+        {
+            User *newMember = [newMemberData objectAtIndex:1];
+            
+            NSString *successMessage;
+            
+            if (newMember.completedRegistration)
+            {
+                successMessage = [NSString stringWithFormat:@"%@ was added to the group", newMember.firstName];
+            }
+            else
+            {
+                successMessage = [NSString stringWithFormat:@"%@ was added to the group", newMember.email];
+            }
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : successMessage,
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
         }
     }
 }

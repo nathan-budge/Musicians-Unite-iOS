@@ -23,6 +23,8 @@
 
 @property (weak, nonatomic) SharedData *sharedData;
 
+@property (nonatomic) Group *group;
+
 @end
 
 @implementation User
@@ -100,6 +102,24 @@
     return nil;
 }
 
+- (User *)initWithRef: (Firebase *)userRef andGroup: (Group *)group
+{
+    if (self = [super init]) {
+        self.userRef = userRef;
+        
+        [self.sharedData addChildObserver:self.userRef];
+        
+        self.group = group;
+        
+        [self loadUserData];
+        
+        [self attachListenerForChanges];
+        
+        return self;
+    }
+    return nil;
+}
+
 
 //*****************************************************************************/
 # pragma mark - Load user data
@@ -122,7 +142,6 @@
             self.firstName = memberData[@"first_name"];
             self.lastName = memberData[@"last_name"];
             self.profileImage = [Utilities decodeBase64ToImage:memberData[@"profile_image"]];
-            
         }
         else
         {
@@ -157,6 +176,12 @@
             [self attachListenerForRemovedTasks];
             [self attachListenerForAddedRecordings];
             [self attachListenerForRemovedRecordings];
+        }
+        
+        if (self.group)
+        {
+            NSArray *newMemberData = @[self.group, self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"New Group Member" object:newMemberData];
         }
         
         dispatch_group_leave(self.sharedData.downloadGroup);

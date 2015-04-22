@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "TaskViewController.h"
 #import "TasksTableViewController.h"
@@ -49,7 +50,6 @@
     if(!_ref){
         _ref =[[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
-    
     return _ref;
 }
 
@@ -61,7 +61,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (self.task) {
+    if (self.task)
+    {
         self.fieldTitle.text = self.task.title;
         self.fieldTempo.text = self.task.tempo;
         self.fieldNotes.text = self.task.notes;
@@ -70,7 +71,9 @@
         self.buttonDelete.hidden = NO;
         self.buttonMetronome.hidden = NO;
         
-    } else {
+    }
+    else
+    {
         [self.buttonCreateOrSave setTitle:@"Create" forState:UIControlStateNormal];
         self.buttonDelete.hidden = YES;
         self.buttonMetronome.hidden = YES;
@@ -135,7 +138,19 @@
         
         [ownerRef updateChildValues:@{taskRef.key:@YES}];
         
-        [SVProgressHUD showSuccessWithStatus:@"Task created" maskType:SVProgressHUDMaskTypeBlack];
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Task Created!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
         
         [self dismissKeyboard];
         
@@ -166,7 +181,19 @@
         
         [taskRef updateChildValues:updatedTask];
         
-        [SVProgressHUD showSuccessWithStatus:@"Task saved" maskType:SVProgressHUDMaskTypeBlack];
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Task Saved!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
         
         [self dismissKeyboard];
         
@@ -194,7 +221,19 @@
     [taskRef removeValue];
     [ownerTaskRef removeValue];
     
-    [SVProgressHUD showSuccessWithStatus:@"Task deleted" maskType:SVProgressHUDMaskTypeBlack];
+    NSDictionary *options = @{
+                              kCRToastTextKey : @"Task Deleted!",
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor redColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
+    
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
     
     [self dismissKeyboard];
     

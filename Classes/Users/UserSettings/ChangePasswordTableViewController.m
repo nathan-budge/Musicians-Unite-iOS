@@ -9,6 +9,7 @@
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -59,7 +60,8 @@
 #pragma mark - View Lifecycle
 //*****************************************************************************/
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.user = self.sharedData.user;
@@ -90,7 +92,25 @@
             self.fieldCurrentPassword.text = @"";
             self.fieldNewPassword.text = @"";
         } else {
-            [SVProgressHUD showSuccessWithStatus:@"Password Changed!" maskType:SVProgressHUDMaskTypeBlack];
+            [SVProgressHUD dismiss];
+            //[SVProgressHUD showSuccessWithStatus:@"Password Changed!" maskType:SVProgressHUDMaskTypeBlack];
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : @"Password Saved!",
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [NSThread sleepForTimeInterval:.5];
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
+            
+            
             [self.navigationController popViewControllerAnimated:YES];
         }
     }];

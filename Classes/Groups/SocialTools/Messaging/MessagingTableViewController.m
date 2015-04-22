@@ -7,6 +7,7 @@
 //
 
 #import <Firebase/Firebase.h>
+#import "CRToast.h"
 
 #import "SharedData.h"
 #import "AppConstant.h"
@@ -175,6 +176,20 @@
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             [self.messageThreads addObject:notification.object];
             [self.tableView reloadData];
+            
+            NSDictionary *options = @{
+                                      kCRToastTextKey : @"Thread Created!",
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
+            
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
         });
     }
     else if ([[notification name] isEqualToString:@"Thread Removed"])
@@ -182,11 +197,24 @@
         MessageThread *removedMessageThread = notification.object;
         [self.messageThreads removeObject:removedMessageThread];
         [self.tableView reloadData];
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Thread Removed!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor redColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
     }
     else if ([[notification name] isEqualToString:@"New Message"] || [[notification name] isEqualToString:@"Message Removed"])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-            
             [self.tableView reloadData];
         });
     }
@@ -229,7 +257,7 @@
     
     if (mostRecentMessage)
     {
-        if ([mostRecentMessage.sender isEqual:self.user.userID])
+        if ([mostRecentMessage.sender.userID isEqual:self.user.userID])
         {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];
         }

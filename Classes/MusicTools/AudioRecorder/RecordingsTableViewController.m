@@ -194,13 +194,13 @@
     else if (self.user)
     {
         self.selectedRecordingUser = self.user;
+        self.selectedRecordingGroup = nil;
         if (indexPath.section == 0)
         {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
             NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
             
             self.selectedRecording = [recordings objectAtIndex:indexPath.row];
-            self.selectedRecordingGroup = nil;
         }
         else
         {
@@ -210,7 +210,6 @@
             NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
             
             self.selectedRecording = [recordings objectAtIndex:indexPath.row];
-            self.selectedRecordingGroup = group;
         }
     }
     

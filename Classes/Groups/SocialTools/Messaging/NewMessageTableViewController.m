@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "NewMessageTableViewController.h"
 #import "MessageViewController.h"
@@ -84,7 +85,6 @@
 {
     if ([[notification name] isEqualToString:@"New Thread"])
     {
-        [SVProgressHUD showSuccessWithStatus:@"Thread Created" maskType:SVProgressHUDMaskTypeBlack];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -151,8 +151,6 @@
         }
         
         [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
-        
-        [SVProgressHUD showWithStatus:@"Creating Thread" maskType:SVProgressHUDMaskTypeBlack];
     }
 }
 

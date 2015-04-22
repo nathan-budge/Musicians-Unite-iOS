@@ -9,6 +9,7 @@
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -91,11 +92,10 @@
 
 - (IBAction)actionSave:(id)sender
 {
-    [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
     [self dismissKeyboard];
     
-    if (self.fieldFirstName.text.length > 0) {
-        
+    if (self.fieldFirstName.text.length > 0)
+    {
         Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.user.userID]];
         
         NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
@@ -107,9 +107,23 @@
                                         };
         
         [userRef updateChildValues:updatedValues];
-        [SVProgressHUD showSuccessWithStatus:@"Saved" maskType:SVProgressHUDMaskTypeBlack];
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Saved!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
     }
-    else {
+    else
+    {
         [SVProgressHUD showErrorWithStatus:@"First name is required" maskType:SVProgressHUDMaskTypeBlack];
     }
 }
@@ -149,8 +163,8 @@
         
         [self.ref removeUser:self.user.email password:textField.text withCompletionBlock:^(NSError *error) {
             
-            if (error) {
-                
+            if (error)
+            {
                 switch(error.code) {
                     case FAuthenticationErrorInvalidPassword:
                         [SVProgressHUD showErrorWithStatus:@"Your password is invalid." maskType:SVProgressHUDMaskTypeBlack];
@@ -160,18 +174,36 @@
                         break;
                 }
                 
-            } else {
-                
+            }
+            else
+            {
                 for (Group *group in self.user.groups) {
                     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/members/%@", group.groupID, self.user.userID]] removeValue];
                     [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
                 }
             
+                NSLog(@"%@", self.user.userID);
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.user.userID]] removeValue];
                 
                 [self.ref unauth];
+                self.sharedData.user = nil;
                 [SVProgressHUD dismiss];
                 [self performSegueWithIdentifier:@"deleteAccount" sender:nil];
+                
+                NSDictionary *options = @{
+                                          kCRToastTextKey : @"Account Deleted",
+                                          kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                          kCRToastBackgroundColorKey : [UIColor redColor],
+                                          kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                          kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                          kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                          kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                          };
+                
+                [NSThread sleepForTimeInterval:.5];
+                [CRToastManager showNotificationWithOptions:options
+                                            completionBlock:^{
+                                            }];
             }
         }];
     }

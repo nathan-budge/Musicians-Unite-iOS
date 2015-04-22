@@ -34,6 +34,7 @@
 
 //Constructor
 - (User *)initWithRef: (Firebase *)userRef;
+- (User *)initWithRef: (Firebase *)userRef andGroup: (Group *)group;
 
 
 @end

@@ -102,8 +102,9 @@
     
     sharedData.user = nil;
 
-    [self performSegueWithIdentifier:@"Logout" sender:sender];
     [SVProgressHUD dismiss];
+    [self performSegueWithIdentifier:@"Logout" sender:sender];
+    
 }
 
 @end

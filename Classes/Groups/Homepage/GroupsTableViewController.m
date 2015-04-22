@@ -10,6 +10,7 @@
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
@@ -37,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
 
 @property (nonatomic) UIActivityIndicatorView *activityIndicator;
+@property (assign) BOOL initialLoad;
 
 @end
 
@@ -131,6 +133,8 @@
             
             if (!self.sharedData.user)
             {
+                self.initialLoad = YES;
+                
                 [self.activityIndicator startAnimating];
                 
                 self.userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", self.ref.authData.uid]];
@@ -162,15 +166,51 @@
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             [self.groups addObject:notification.object];
             [self.tableView reloadData];
-            if (self.groups.count == self.user.groups.count) {
-                [self.activityIndicator stopAnimating];
+            
+            if (self.initialLoad)
+            {
+                if (self.groups.count == self.user.groups.count) {
+                    [self.activityIndicator stopAnimating];
+                    self.initialLoad = NO;
+                }
             }
+            else
+            {
+                NSDictionary *options = @{
+                                          kCRToastTextKey : @"New Group!",
+                                          kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                          kCRToastBackgroundColorKey : [UIColor greenColor],
+                                          kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                          kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                          kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                          kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                          };
+                
+                [CRToastManager showNotificationWithOptions:options
+                                            completionBlock:^{
+                                            }];
+            }
+            
         });
     }
     else if ([[notification name] isEqualToString:@"Group Removed"])
     {
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Group Removed!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor redColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
     }
     else if ([[notification name] isEqualToString:@"No Groups"])
     {

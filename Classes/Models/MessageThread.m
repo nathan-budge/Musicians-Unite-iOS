@@ -149,9 +149,6 @@
                 User *aMember = [member objectAtIndex:0];
                 
                 [self addMember:aMember];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread Member" object:aMember];
-
             });
         }
         
@@ -217,10 +214,8 @@
         NSString *messageID = snapshot.key;
         
         Firebase *messageRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", messageID]];
-        Message *newMessage = [[Message alloc] initWithRef:messageRef andGroup:self.group];
+        Message *newMessage = [[Message alloc] initWithRef:messageRef andGroup:self.group andThread:self];
         [self addMessage:newMessage];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:self];
         
     } withCancelBlock:^(NSError *error) {
          NSLog(@"ERROR: %@", error.description);
@@ -236,7 +231,8 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.messageID=%@", messageID];
         NSArray *message = [self.messages filteredArrayUsingPredicate:predicate];
         
-        if (message.count > 0) {
+        if (message.count > 0)
+        {
             Message *removedMessage = [message objectAtIndex:0];
             [self removeMessage:removedMessage];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Removed" object:removedMessage];

@@ -26,6 +26,8 @@
 //Group object
 @property (nonatomic) Group *group;
 
+@property (nonatomic) MessageThread *thread;
+
 @end
 
 
@@ -56,12 +58,13 @@
     return nil;
 }
 
-- (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group
+- (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group andThread:(MessageThread *)thread
 {
     if (self = [super init]) {
         self.messageRef = messageRef;
         
         self.group = group;
+        self.thread = thread;
         
         [self loadMessageData];
         
@@ -106,6 +109,10 @@
             self.sender = sender;
             
         });
+        
+        
+        NSArray *newMessageData = @[self.thread, self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:newMessageData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "RecordingTableViewController.h"
 
@@ -91,6 +92,11 @@
             [self.pickerGroups selectRow:[self.user.groups indexOfObject:foundGroup] + 1 inComponent:0 animated:YES];
         }
     }
+    else if (self.group)
+    {
+        self.labelGroupName.text = self.group.name;
+        self.ownerID = self.group.groupID;
+    }
 }
 
 
@@ -117,6 +123,7 @@
         {
             Firebase *groupRecordingsRef;
             NSString *oldOwnerID = self.recording.ownerID;
+            
             if ([oldOwnerID isEqualToString:self.user.userID] && ![self.ownerID isEqualToString:self.user.userID])
             {
                 groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings", self.ownerID]];
@@ -137,7 +144,19 @@
             }
         }
         
-        [SVProgressHUD showSuccessWithStatus:kRecordingSaved maskType:SVProgressHUDMaskTypeBlack];
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Recording Saved!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
         
         [self dismissKeyboard];
     }
@@ -145,22 +164,50 @@
 
 - (IBAction)actionDelete:(id)sender
 {
-    if (self.group)
+    if (self.user)
     {
+        if ([self.recording.ownerID isEqualToString:self.user.userID])
+        {
+            Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
+            [recordingRef removeValue];
+        }
+        
+        Firebase *userRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings/%@", self.user.userID, self.recording.recordingID]];
+        [userRecordingRef removeValue];
+    }
+    else if (self.group)
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", self.recording.recordingID];
+        NSArray *recording = [self.user.recordings filteredArrayUsingPredicate:predicate];
+        
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
+        NSLog(@"%lu", (unsigned long)recording.count);
+        if (recording.count == 0)
+        {
+            [recordingRef removeValue];
+        }
+        else
+        {
+            [recordingRef updateChildValues:@{@"owner":self.user.userID}];
+        }
+        
         Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings/%@", self.group.groupID, self.recording.recordingID]];
         [groupRecordingRef removeValue];
     }
     
-    if (self.user)
-    {
-        Firebase *userRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings/%@", self.user.userID, self.recording.recordingID]];
-        [userRecordingRef removeValue];
-    }
+    NSDictionary *options = @{
+                              kCRToastTextKey : @"Recording Deleted!",
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor redColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
     
-    Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
-    [recordingRef removeValue];
-    
-    [SVProgressHUD showSuccessWithStatus:kRecordingDeleted maskType:SVProgressHUDMaskTypeBlack];
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
     
     [self dismissKeyboard];
     

@@ -7,7 +7,7 @@
 //
 
 #import <Firebase/Firebase.h>
-#import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
@@ -163,25 +163,22 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 {
     if ([[notification name] isEqualToString:@"New Message"])
     {
-        MessageThread *updatedMessageThread = notification.object;
+        NSArray *newMessageData = notification.object;
         
-        if (updatedMessageThread.messageThreadID == self.messageThread.messageThreadID)
+        if ([[newMessageData objectAtIndex:0] isEqual:self.messageThread])
         {
-            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-                
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                UITableViewRowAnimation rowAnimation = UITableViewRowAnimationBottom;
-                UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
-                
-                [self.tableView beginUpdates];
-                [self.messages insertObject:[self.messageThread.messages lastObject] atIndex:0];
-                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
-                [self.tableView endUpdates];
-                
-                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                
-            });
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            UITableViewRowAnimation rowAnimation = UITableViewRowAnimationBottom;
+            UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
+            
+            [self.tableView beginUpdates];
+            Message *newMessage = [newMessageData objectAtIndex:1];
+            [self.messages insertObject:newMessage atIndex:0];
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
+            [self.tableView endUpdates];
+            
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
     else if ([[notification name] isEqualToString:@"Message Removed"])
@@ -192,8 +189,8 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     }
     else if ([[notification name] isEqualToString:@"Thread Removed"])
     {
-        if ([notification.object isEqual:self.messageThread]) {
-            [SVProgressHUD showInfoWithStatus:@"Thread Removed" maskType:SVProgressHUDMaskTypeBlack];
+        if ([notification.object isEqual:self.messageThread])
+        {
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
@@ -219,6 +216,7 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     }
 }
 
+
 //*****************************************************************************/
 #pragma mark - UIActionSheet Methods
 //*****************************************************************************/
@@ -239,6 +237,20 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     Message *removedMessage = [self.messages objectAtIndex:row];
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", self.messageThread.messageThreadID, removedMessage.messageID]] removeValue];
+    
+    NSDictionary *options = @{
+                              kCRToastTextKey : @"Message Removed!",
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor redColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
+    
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
 }
 
 

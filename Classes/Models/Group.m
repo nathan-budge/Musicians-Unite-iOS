@@ -197,7 +197,7 @@
         if (![newMemberID isEqualToString:self.ref.authData.uid])
         {
             Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
-            User *newUser = [[User alloc] initWithRef:userRef];
+            User *newUser = [[User alloc] initWithRef:userRef andGroup:self];
             [self addMember:newUser];
         }
         
@@ -210,7 +210,9 @@
 {
     [self.groupMembersRef observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", snapshot.key];
+        NSString *memberID = snapshot.key;
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
         NSArray *member = [self.members filteredArrayUsingPredicate:predicate];
         
         NSString *userID;

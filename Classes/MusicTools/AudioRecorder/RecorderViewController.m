@@ -9,6 +9,7 @@
 #import <Firebase/Firebase.h>
 #import "UIViewController+ECSlidingViewController.h"
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
@@ -150,11 +151,24 @@
             [recordingRef setValue:newRecording];
             [ownerRef updateChildValues:@{recordingRef.key:@YES}];
             
-            [SVProgressHUD showSuccessWithStatus:@"Recording created" maskType:SVProgressHUDMaskTypeBlack];
+            NSDictionary *options = @{
+                                      kCRToastTextKey : @"Recording Created!",
+                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                      kCRToastBackgroundColorKey : [UIColor greenColor],
+                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                      };
             
-        } else {
+            [CRToastManager showNotificationWithOptions:options
+                                        completionBlock:^{
+                                        }];
+            
+        }
+        else
+        {
             [SVProgressHUD showErrorWithStatus:@"No name" maskType:SVProgressHUDMaskTypeBlack];
-            
         }
     }
 }

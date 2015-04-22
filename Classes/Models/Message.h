@@ -22,6 +22,6 @@
 //Firebase reference
 @property (nonatomic) Firebase *messageRef;
 
-- (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group;
+- (Message *)initWithRef: (Firebase *)messageRef andGroup:(Group *)group andThread:(MessageThread *)thread;
 
 @end

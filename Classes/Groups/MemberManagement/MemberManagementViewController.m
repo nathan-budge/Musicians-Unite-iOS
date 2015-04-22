@@ -8,6 +8,7 @@
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
+#import "CRToast.h"
 
 #import "AppConstant.h"
 #import "Utilities.h"
@@ -184,7 +185,21 @@
         self.fieldEmail.text = @"";
         [self.memberTableView reloadData];
         
-        [SVProgressHUD showSuccessWithStatus:@"Member Added" maskType:SVProgressHUDMaskTypeBlack];
+        //[SVProgressHUD showSuccessWithStatus:@"Member Added" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD dismiss];
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Member Added!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
         
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
@@ -215,23 +230,18 @@
 
 -(void)actionSaveGroup
 {
-    [SVProgressHUD showWithStatus:@"Saving your group..." maskType:SVProgressHUDMaskTypeBlack];
-    
-    if ([self.group.members count] > 0)
-    {
-        for (User *member in self.group.members) {
+    for (User *member in self.group.members) {
         
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
-            NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
-            
-            if ([foundMember count] > 0) //Membership didn't change
-            {
-                [self.members removeObject:[foundMember objectAtIndex:0]];
-            }
-            else // User was removed from a group
-            {
-                [self.membersToRemove addObject:member];
-            }
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
+        NSArray *foundMember = [self.members filteredArrayUsingPredicate:predicate];
+        
+        if (foundMember.count > 0) //Membership didn't change
+        {
+            [self.members removeObject:[foundMember objectAtIndex:0]];
+        }
+        else // User was removed from a group
+        {
+            [self.membersToRemove addObject:member];
         }
     }
     
@@ -240,15 +250,16 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Removing users will remove their data from the group. Would you like to continue?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
         [alert show];
     }
-    else if ([self.members count] > 0) //User was added to a group
+    else if (self.members.count > 0) //User was added to a group
     {
         Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
         [self addMembers:self.members toGroup:groupRef];
         
-        [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
-        [self.navigationController popViewControllerAnimated:YES];
-        
-        [self dismissKeyboard];
+        [self groupSavedNotification];
+    }
+    else
+    {
+        [self groupSavedNotification];
     }
 }
 
@@ -267,16 +278,13 @@
             }
         }
         
-        if ([self.members count] > 0) //User was added to a group
+        if (self.members.count > 0) //User was added to a group
         {
             Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", self.group.groupID]];
             [self addMembers:self.members toGroup:groupRef];
         }
         
-        [SVProgressHUD showSuccessWithStatus:@"Group saved" maskType:SVProgressHUDMaskTypeBlack];
-        [self.navigationController popViewControllerAnimated:YES];
-        
-        [self dismissKeyboard];
+        [self groupSavedNotification];
     }
 }
 
@@ -312,6 +320,25 @@
     [self.memberTableView reloadData];
 }
 
+-(void)groupSavedNotification
+{
+    NSDictionary *options = @{
+                              kCRToastTextKey : @"Group Saved!",
+                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                              kCRToastBackgroundColorKey : [UIColor greenColor],
+                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                              };
+    
+    [CRToastManager showNotificationWithOptions:options
+                                completionBlock:^{
+                                }];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissKeyboard];
+}
 
 //*****************************************************************************/
 #pragma mark - Keyboard Handling
