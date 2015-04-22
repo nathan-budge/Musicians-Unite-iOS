@@ -98,6 +98,11 @@
     self.recorder.delegate = self;
     self.recorder.meteringEnabled = YES;
     [self.recorder prepareToRecord];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"New Recording"
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -127,6 +132,9 @@
         UITextField *textField = [alertView textFieldAtIndex:0];
         
         if ([textField.text isEqualToString:@""] == NO) {
+            
+            [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
+            
             NSData *data = [NSData dataWithContentsOfFile:self.recorder.url.path];
             NSString *dataString = [data base64EncodedStringWithOptions:0];
             
@@ -150,21 +158,6 @@
             
             [recordingRef setValue:newRecording];
             [ownerRef updateChildValues:@{recordingRef.key:@YES}];
-            
-            NSDictionary *options = @{
-                                      kCRToastTextKey : @"Recording Created!",
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
-            
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
-            
         }
         else
         {
@@ -224,6 +217,32 @@
     }
 }
 
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"New Recording"])
+    {
+        [SVProgressHUD dismiss];
+        
+        NSDictionary *options = @{
+                                  kCRToastTextKey : @"Recording Created!",
+                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
+                                  kCRToastBackgroundColorKey : [UIColor greenColor],
+                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
+                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
+                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
+                                  };
+        
+        [CRToastManager showNotificationWithOptions:options
+                                    completionBlock:^{
+                                    }];
+    }
+}
 
 //*****************************************************************************/
 #pragma mark - Navigation

@@ -13,6 +13,7 @@
 #import "RecordingTableViewController.h"
 
 #import "AppConstant.h"
+#import "SharedData.h"
 
 #import "Recording.h"
 #import "User.h"
@@ -43,6 +44,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelGroupName;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerGroups;
 
+@property (nonatomic) SharedData *sharedData;
+
 @end
 
 
@@ -60,6 +63,13 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -178,17 +188,16 @@
     else if (self.group)
     {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", self.recording.recordingID];
-        NSArray *recording = [self.user.recordings filteredArrayUsingPredicate:predicate];
+        NSArray *recording = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
         
         Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
-        NSLog(@"%lu", (unsigned long)recording.count);
         if (recording.count == 0)
         {
             [recordingRef removeValue];
         }
         else
         {
-            [recordingRef updateChildValues:@{@"owner":self.user.userID}];
+            [recordingRef updateChildValues:@{@"owner":self.sharedData.user.userID}];
         }
         
         Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings/%@", self.group.groupID, self.recording.recordingID]];
