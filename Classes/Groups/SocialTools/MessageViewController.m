@@ -266,7 +266,7 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     Firebase *newMessage = [[self.ref childByAppendingPath:@"messages"] childByAutoId];
     
     NSDictionary *messageData = @{
-                                  @"sender":self.user.userID,
+                                  @"sender":self.sharedData.user.userID,
                                   @"text":[self.textView.text copy],
                                   };
     

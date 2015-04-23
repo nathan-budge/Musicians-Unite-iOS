@@ -10,12 +10,13 @@
 #import "SVProgressHUD.h"
 #import "CRToast.h"
 
+#import "AppConstant.h"
+#import "SharedData.h"
+
 #import "TaskViewController.h"
 #import "TasksTableViewController.h"
 #import "GroupTabBarController.h"
 #import "MusicToolsTabBarController.h"
-
-#import "AppConstant.h"
 
 #import "User.h"
 #import "Group.h"
@@ -25,6 +26,8 @@
 @interface TaskViewController ()
 
 @property (nonatomic) Firebase *ref;
+
+@property (nonatomic) SharedData *sharedData;
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldTitle;
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
@@ -53,6 +56,14 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -67,14 +78,14 @@
         self.fieldTempo.text = self.task.tempo;
         self.fieldNotes.text = self.task.notes;
         
-        [self.buttonCreateOrSave setTitle:@"Save" forState:UIControlStateNormal];
+        [self.buttonCreateOrSave setTitle:kSaveButtonTitle forState:UIControlStateNormal];
         self.buttonDelete.hidden = NO;
         self.buttonMetronome.hidden = NO;
         
     }
     else
     {
-        [self.buttonCreateOrSave setTitle:@"Create" forState:UIControlStateNormal];
+        [self.buttonCreateOrSave setTitle:kCreateButtonTitle forState:UIControlStateNormal];
         self.buttonDelete.hidden = YES;
         self.buttonMetronome.hidden = YES;
         self.groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
@@ -90,6 +101,8 @@
         TasksTableViewController *tasksTableViewController = [self.groupTabBarController.viewControllers objectAtIndex:1];
         tasksTableViewController.inset = YES;
     }
+    
+    [self dismissKeyboard];
 }
 
 //*****************************************************************************/
@@ -98,48 +111,43 @@
 
 - (IBAction)actionCreateOrSave:(id)sender
 {
-    if (self.task) {
-        [self actionSave];
-    } else {
-        [self actionCreate];
-    }
+    self.task ? [self actionSave] : [self actionCreate];
 }
 
 - (void)actionCreate
 {
     if ([self.fieldTitle.text isEqualToString:@""])
     {
-        [SVProgressHUD showErrorWithStatus:@"Title required" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoTaskTitleError maskType:SVProgressHUDMaskTypeBlack];
     }
     else if (![self validTempo])
     {
-        [SVProgressHUD showErrorWithStatus:@"Invalid tempo" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kInvalidTempoError maskType:SVProgressHUDMaskTypeBlack];
     }
     else
     {
-        Firebase *taskRef = [[self.ref childByAppendingPath:@"tasks"] childByAutoId];
+        Firebase *taskRef = [[self.ref childByAppendingPath:kTasksFirebaseNode] childByAutoId];
         
         Firebase *ownerRef;
         
         if (self.group) {
-            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/tasks", self.group.groupID]];
+            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode]];
         } else {
-            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/tasks", self.ref.authData.uid]];
+            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode]];
         }
         
         NSDictionary *newTask = @{
-                                  @"title":self.fieldTitle.text,
-                                  @"tempo":self.fieldTempo.text,
-                                  @"notes":self.fieldNotes.text,
-                                  @"completed":@NO,
+                                  kTaskTitleFirebaseField:self.fieldTitle.text,
+                                  kTaskTempoFirebaseField:self.fieldTempo.text,
+                                  kTaskNotesFirebaseField:self.fieldNotes.text,
+                                  kTaskCompletedFirebaseField:@NO,
                                   };
         
         [taskRef setValue:newTask];
         
         [ownerRef updateChildValues:@{taskRef.key:@YES}];
         
-        [self dismissKeyboard];
-        
+        //Add notification observer for this
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -148,27 +156,27 @@
 {
     if ([self.fieldTitle.text isEqualToString:@""])
     {
-        [SVProgressHUD showErrorWithStatus:@"Title required" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoTaskTitleError maskType:SVProgressHUDMaskTypeBlack];
         
     }
     else if (![self validTempo])
     {
-        [SVProgressHUD showErrorWithStatus:@"Invalid tempo" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kInvalidTempoError maskType:SVProgressHUDMaskTypeBlack];
     }
     else
     {
-        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", self.task.taskID]];
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, self.task.taskID]];
         
         NSDictionary *updatedTask = @{
-                                  @"title":self.fieldTitle.text,
-                                  @"tempo":self.fieldTempo.text,
-                                  @"notes":self.fieldNotes.text,
+                                  kTaskTitleFirebaseField:self.fieldTitle.text,
+                                  kTaskTempoFirebaseField:self.fieldTempo.text,
+                                  kTaskNotesFirebaseField:self.fieldNotes.text,
                                   };
         
         [taskRef updateChildValues:updatedTask];
         
         NSDictionary *options = @{
-                                  kCRToastTextKey : @"Task Saved!",
+                                  kCRToastTextKey : kTaskSavedSuccessMessage,
                                   kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                                   kCRToastBackgroundColorKey : [UIColor greenColor],
                                   kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -181,34 +189,35 @@
                                     completionBlock:^{
                                     }];
         
-        [self dismissKeyboard];
-        
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
 - (IBAction)actionMetronome:(id)sender
 {
-    [self performSegueWithIdentifier:@"viewMetronome" sender:nil];
+    [self performSegueWithIdentifier:kMetronomeSegueIdentifier sender:nil];
 }
 
 - (IBAction)actionDelete:(id)sender
 {
-    Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", self.task.taskID]];
+    Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, self.task.taskID]];
     
     Firebase *ownerTaskRef;
     
-    if (self.group) {
-        ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/tasks/%@", self.group.groupID, self.task.taskID]];
-    } else {
-        ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/tasks/%@", self.ref.authData.uid, self.task.taskID]];
+    if (self.group)
+    {
+        ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode, self.task.taskID]];
+    }
+    else
+    {
+        ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode, self.task.taskID]];
     }
     
     [taskRef removeValue];
     [ownerTaskRef removeValue];
     
     NSDictionary *options = @{
-                              kCRToastTextKey : @"Task Deleted!",
+                              kCRToastTextKey : kTaskRemovedSuccessMessage,
                               kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                               kCRToastBackgroundColorKey : [UIColor redColor],
                               kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
@@ -221,8 +230,6 @@
                                 completionBlock:^{
                                 }];
     
-    [self dismissKeyboard];
-    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -233,7 +240,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
-    if ([segue.identifier isEqualToString:@"viewMetronome"]) {
+    if ([segue.identifier isEqualToString:kMetronomeSegueIdentifier])
+    {
         MusicToolsTabBarController *destViewController = segue.destinationViewController;
         destViewController.tempo = [self.fieldTempo.text doubleValue];
     }
@@ -246,7 +254,8 @@
 //Adpated from http://stackoverflow.com/questions/565696/nsstring-is-integer
 - (BOOL)validTempo
 {
-    if (self.fieldTempo.text.length == 0) {
+    if (self.fieldTempo.text.length == 0)
+    {
         return YES;
     }
     

@@ -32,6 +32,7 @@
 #define kNewGroupSegueIdentifier                    @"newGroup"
 #define kGroupTabsSegueIdentifier                   @"showGroupTabs"
 #define kMemberManagementSegueIdentifier            @"viewMemberManagement"
+#define kMetronomeSegueIdentifier                   @"viewMetronome"
 
 //Cell Identifiers
 #define kGroupCellIdentifier                        @"GroupCell"
@@ -42,12 +43,14 @@
 #define kInvalidEmailPasswordError                  @"Invalid email and/or password"
 #define kInvalidEmailError                          @"Invalid Email"
 #define kInvalidPasswordError                       @"Invalid Password"
+#define kInvalidTempoError                          @"Invalid Tempo"
 #define kEmailTakenError                            @"Email is already taken"
 #define kUserDoesNotExistError                      @"User does not exist"
 #define kNetworkError                               @"Network Error"
 #define kNoFirstNameError                           @"First name is required"
 #define kNoCameraError                              @"Device has no camera"
-#define kGroupNameError                             @"Group name is required"
+#define kNoGroupNameError                           @"Group name is required"
+#define kNoTaskTitleError                           @"Task title is required"
 #define kMemberAlreadyExistsError                   @"Member already exists"
 
 //Success Messages
@@ -62,6 +65,8 @@
 #define kLoggedInSuccessMessage                     @"Logged In!"
 #define kGroupSavedSuccessMessage                   @"Group Saved!"
 #define kMemberAddedSuccessMessage                  @"Member Added!"
+#define kTaskSavedSuccessMessage                    @"Task Saved!"
+#define kTaskRemovedSuccessMessage                  @"Task Removed!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
@@ -77,6 +82,7 @@
 #define kChooseFromLibraryButtonTitle               @"Choose From Library"
 #define kLeaveGroupButtonTitle                      @"Leave Group"
 #define kCreateButtonTitle                          @"Create"
+#define kSaveButtonTitle                            @"Save"
 
 //View Titles
 #define kGroupSettingsTitle                         @"Group Settings"
@@ -86,6 +92,7 @@
 #define kGroupsFirebaseNode                         @"groups"
 #define kMembersFirebaseNode                        @"members"
 #define kNetworkConnectionNode                      @".info/connected"
+#define kTasksFirebaseNode                          @"tasks"
 
 //Firebase Fields
 #define kUserEmailFirebaseField                     @"email"
@@ -94,6 +101,10 @@
 #define kUserCompletedRegistrationFirebaseField     @"completed_registration"
 #define kProfileImageFirebaseField                  @"profile_image"
 #define kGroupNameFirebaseField                     @"name"
+#define kTaskTitleFirebaseField                     @"title"
+#define kTaskTempoFirebaseField                     @"tempo"
+#define kTaskNotesFirebaseField                     @"notes"
+#define kTaskCompletedFirebaseField                 @"completed"
 
 //Image Assets
 #define kProfileLogoImage                           @"profile_logo"
