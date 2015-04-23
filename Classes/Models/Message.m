@@ -88,28 +88,7 @@
         
         self.messageID = snapshot.key;
         self.text = messageData[@"text"];
-        
-        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-            
-            NSString *senderID = messageData[@"sender"];
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", senderID];
-            NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
-            
-            User *sender;
-            if (member.count > 0)
-            {
-                sender = [member objectAtIndex:0];
-            }
-            else
-            {
-                sender = self.sharedData.user;
-            }
-            
-            self.sender = sender;
-            
-        });
-        
+        self.senderID = messageData[@"sender"];
         
         NSArray *newMessageData = @[self.thread, self, self.group];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:newMessageData];

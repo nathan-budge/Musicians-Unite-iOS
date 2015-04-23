@@ -20,6 +20,7 @@
 #import "Message.h"
 #import "MessageThread.h"
 #import "User.h"
+#import "Group.h"
 
 
 @interface MessageViewController ()
@@ -292,7 +293,19 @@
     
     Message *message = [self.messages objectAtIndex:indexPath.row];
     
-    User *sender = message.sender;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", message.senderID];
+    NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
+    
+    User *sender;
+    if (member.count > 0)
+    {
+        sender = [member objectAtIndex:0];
+    }
+    else
+    {
+        sender = self.sharedData.user;
+    }
+    
     
     cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", sender.firstName, sender.lastName];
     cell.bodyLabel.text = message.text;
@@ -313,7 +326,20 @@
 {
     if ([tableView isEqual:self.tableView])
     {
-        Message *message = self.messages[indexPath.row];
+        Message *message = [self.messages objectAtIndex:indexPath.row];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", message.senderID];
+        NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
+        
+        User *sender;
+        if (member.count > 0)
+        {
+            sender = [member objectAtIndex:0];
+        }
+        else
+        {
+            sender = self.sharedData.user;
+        }
         
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
         paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
@@ -325,7 +351,7 @@
         CGFloat width = CGRectGetWidth(tableView.frame)-kAvatarSize;
         width -= 25.0;
         
-        CGRect titleBounds = [message.sender.firstName boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
+        CGRect titleBounds = [sender.firstName boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         CGRect bodyBounds = [message.text boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:NULL];
         
         if (message.text.length == 0)
@@ -336,10 +362,6 @@
         CGFloat height = CGRectGetHeight(titleBounds);
         height += CGRectGetHeight(bodyBounds);
         height += 50.0;
-        if (message.attachment)
-        {
-            height += 80.0 + 10.0;
-        }
         
         if (height < kMinimumHeight)
         {

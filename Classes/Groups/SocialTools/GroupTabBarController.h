@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Group.h"
-#import "User.h"
+
+@class Group;
 
 @interface GroupTabBarController : UITabBarController
 

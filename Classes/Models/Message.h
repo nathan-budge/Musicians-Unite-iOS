@@ -15,9 +15,8 @@
 @interface Message : NSObject
 
 @property (nonatomic) NSString *messageID;
-@property (nonatomic) User *sender;
+@property (nonatomic) NSString *senderID;
 @property (nonatomic) NSString *text;
-@property (nonatomic) UIImage *attachment;
 
 //Firebase reference
 @property (nonatomic) Firebase *messageRef;

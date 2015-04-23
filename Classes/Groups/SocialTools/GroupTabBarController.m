@@ -19,8 +19,26 @@
 #import "TasksTableViewController.h"
 #import "RecorderViewController.h"
 
+#import "Group.h"
+#import "User.h"
+#import "Message.h"
+
+
+@interface GroupTabBarController ()
+
+@property (nonatomic) SharedData *sharedData;
+
+@end
 
 @implementation GroupTabBarController
+
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
 
 -(void)viewDidLoad
 {
@@ -193,7 +211,11 @@
         NSArray *newMessageData = notification.object;
         if ([[newMessageData objectAtIndex:2] isEqual:self.group])
         {
-            [Utilities greenToastMessage:kNewMessageSuccessMessage];
+            Message *newMessage = [newMessageData objectAtIndex:1];
+            if (![newMessage.senderID isEqual:self.sharedData.user.userID])
+            {
+                [Utilities greenToastMessage:kNewMessageSuccessMessage];
+            }
         }
     }
 }

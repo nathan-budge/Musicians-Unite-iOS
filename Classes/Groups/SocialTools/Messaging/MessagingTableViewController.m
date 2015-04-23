@@ -236,13 +236,17 @@
     
     if (mostRecentMessage)
     {
-        if ([mostRecentMessage.sender.userID isEqual:self.user.userID])
+        if ([mostRecentMessage.senderID isEqual:self.sharedData.user.userID])
         {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];
         }
         else
         {
-            User *sender = mostRecentMessage.sender;
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", mostRecentMessage.senderID];
+            NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
+            
+            User *sender = [member objectAtIndex:0];
+            
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@: %@", sender.firstName, sender.lastName, mostRecentMessage.text];
         }
         
@@ -272,21 +276,29 @@
     
     if ([messageThread.members count] == 1)
     {
-        User *member = [messageThread.members objectAtIndex:0];
-        [title appendString:[NSString stringWithFormat:@"%@ %@", member.firstName, member.lastName]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", [messageThread.members objectAtIndex:0]];
+        NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
+        
+        User *threadMember = [member objectAtIndex:0];
+        
+        [title appendString:[NSString stringWithFormat:@"%@ %@", threadMember.firstName, threadMember.lastName]];
     }
     else if ([messageThread.members count] == 2)
     {
         for (int i = 0; i < [messageThread.members count]; i++) {
             
-            User *member = [messageThread.members objectAtIndex:i];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", [messageThread.members objectAtIndex:i]];
+            NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
             
-            if (i == ([messageThread.members count] - 1)) {
-                [title appendString:[NSString stringWithFormat:@"and %@ %@", member.firstName, member.lastName]];
-                
-            } else {
-                [title appendString:[NSString stringWithFormat:@"%@ %@ ", member.firstName, member.lastName]];
-                
+            User *threadMember = [member objectAtIndex:0];
+            
+            if (i == ([messageThread.members count] - 1))
+            {
+                [title appendString:[NSString stringWithFormat:@"and %@ %@", threadMember.firstName, threadMember.lastName]];
+            }
+            else
+            {
+                [title appendString:[NSString stringWithFormat:@"%@ %@ ", threadMember.firstName, threadMember.lastName]];
             }
         }
     }
@@ -294,14 +306,18 @@
     {
         for (int i = 0; i < [messageThread.members count]; i++) {
             
-            User *member = [messageThread.members objectAtIndex:i];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", [messageThread.members objectAtIndex:i]];
+            NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
             
-            if (i == ([messageThread.members count] - 1)) {
-                [title appendString:[NSString stringWithFormat:@"and %@ %@", member.firstName, member.lastName]];
-                
-            } else {
-                [title appendString:[NSString stringWithFormat:@"%@ %@, ", member.firstName, member.lastName]];
-                
+            User *threadMember = [member objectAtIndex:0];
+            
+            if (i == ([messageThread.members count] - 1))
+            {
+                [title appendString:[NSString stringWithFormat:@"and %@ %@", threadMember.firstName, threadMember.lastName]];
+            }
+            else
+            {
+                [title appendString:[NSString stringWithFormat:@"%@ %@, ", threadMember.firstName, threadMember.lastName]];
             }
         }
     }
@@ -325,6 +341,7 @@
     {
         MessageViewController *destViewController = segue.destinationViewController;
         destViewController.messageThread = self.selectedMessageThread;
+        destViewController.group = self.group;
     }
 }
 

@@ -83,7 +83,8 @@
 
 - (MessageThread *)initWithRef: (Firebase *)messageThreadRef andGroup: (Group *)group
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
         self.messageThreadRef = messageThreadRef;
         self.threadMembersRef = [self.messageThreadRef childByAppendingPath:@"members"];
         self.threadMessagesRef = [self.messageThreadRef childByAppendingPath:@"messages"];
@@ -140,17 +141,9 @@
         
         NSString *memberID = snapshot.key;
         
-        if (![memberID isEqualToString:self.ref.authData.uid])
+        if (![memberID isEqualToString:self.sharedData.user.userID])
         {
-            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-                
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
-                NSArray *member = [self.group.members filteredArrayUsingPredicate:predicate];
-                
-                User *aMember = [member objectAtIndex:0];
-                
-                [self addMember:aMember];
-            });
+            [self addMember:memberID];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -164,19 +157,14 @@
         
         NSString *memberID = snapshot.key;
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", memberID];
-        NSArray *member = [self.members filteredArrayUsingPredicate:predicate];
-        
         NSString *userID;
-        User *removedMember;
-        if (member.count > 0)
+        if ([self.members containsObject:memberID])
         {
-            removedMember = [member objectAtIndex:0];
-            userID = removedMember.userID;
+            userID = memberID;
         }
         else
         {
-            userID = self.ref.authData.uid;
+            userID = self.sharedData.user.userID;
         }
         
         //Delete necessary threads and messages
@@ -184,12 +172,17 @@
         {
             [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads/%@", self.group.groupID, self.messageThreadID]] removeValue];
             [self.messageThreadRef removeValue];
+            
+            for (Message *message in self.messages) {
+                [[self.threadMessagesRef childByAppendingPath:message.messageID] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", message.messageID]] removeValue];
+            }
         }
         else
         {
             for (Message *message in self.messages) {
                 
-                if ([message.sender.userID isEqualToString:userID])
+                if ([message.senderID isEqualToString:userID])
                 {
                     [[self.threadMessagesRef childByAppendingPath:message.messageID] removeValue];
                     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", message.messageID]] removeValue];
@@ -197,9 +190,9 @@
             }
         }
         
-        if (member.count > 0)
+        if ([self.members containsObject:memberID])
         {
-            [self removeMember:removedMember];
+            [self removeMember:memberID];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -249,14 +242,14 @@
 #pragma mark - Array handling
 //*****************************************************************************/
 
--(void)addMember: (User *)member
+-(void)addMember: (NSString *)memberID
 {
-    [self.members addObject:member];
+    [self.members addObject:memberID];
 }
 
--(void)removeMember:(User *)member
+-(void)removeMember:(NSString *)memberID
 {
-    [self.members removeObject:member];
+    [self.members removeObject:memberID];
 }
 
 -(void)addMessage: (Message *)message

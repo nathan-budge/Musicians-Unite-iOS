@@ -11,11 +11,11 @@
 #import "SLKTextViewController.h"
 
 @class MessageThread;
-@class User;
 @class Group;
 
 @interface MessageViewController : SLKTextViewController <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) MessageThread *messageThread;
+@property (nonatomic) Group *group;
 
 @end

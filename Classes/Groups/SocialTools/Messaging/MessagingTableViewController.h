@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @class Group;
-@class User;
 
 @interface MessagingTableViewController : UITableViewController <UIActionSheetDelegate>
 
 @property (nonatomic) Group *group;
-@property (nonatomic) User *user;
 
 @end
