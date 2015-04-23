@@ -63,6 +63,11 @@
 		949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04271A9D0EB10029B4E3 /* MessageTextView.m */; };
 		949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04291A9D0EB10029B4E3 /* MessageViewController.m */; };
 		94A3372B1A93768200E38E97 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94A3372A1A93768200E38E97 /* QuartzCore.framework */; };
+		94A377FB1AE97DA700B7ACBE /* CRToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F11AE97DA700B7ACBE /* CRToast.m */; };
+		94A377FC1AE97DA700B7ACBE /* CRToastManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F41AE97DA700B7ACBE /* CRToastManager.m */; };
+		94A377FD1AE97DA700B7ACBE /* CRToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F61AE97DA700B7ACBE /* CRToastView.m */; };
+		94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F81AE97DA700B7ACBE /* CRToastViewController.m */; };
+		94A377FF1AE97DA700B7ACBE /* CRToastWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */; };
 		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
 		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
 		94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */; };
@@ -74,11 +79,6 @@
 		94F498E41AD5A36400F2760C /* TunerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F498E31AD5A36400F2760C /* TunerViewController.m */; };
 		94F882151A97E2D6008F4AD8 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F882141A97E2D6008F4AD8 /* Group.m */; };
 		94F882181A97E39E008F4AD8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F882171A97E39E008F4AD8 /* User.m */; };
-		94F89F8A1AE7955E007997F9 /* CRToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F89F801AE7955E007997F9 /* CRToast.m */; };
-		94F89F8B1AE7955E007997F9 /* CRToastManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F89F831AE7955E007997F9 /* CRToastManager.m */; };
-		94F89F8C1AE7955E007997F9 /* CRToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F89F851AE7955E007997F9 /* CRToastView.m */; };
-		94F89F8D1AE7955E007997F9 /* CRToastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F89F871AE7955E007997F9 /* CRToastViewController.m */; };
-		94F89F8E1AE7955E007997F9 /* CRToastWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F89F891AE7955E007997F9 /* CRToastWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +198,17 @@
 		949B04281A9D0EB10029B4E3 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		949B04291A9D0EB10029B4E3 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		94A3372A1A93768200E38E97 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		94A377F01AE97DA700B7ACBE /* CRToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToast.h; sourceTree = "<group>"; };
+		94A377F11AE97DA700B7ACBE /* CRToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToast.m; sourceTree = "<group>"; };
+		94A377F21AE97DA700B7ACBE /* CRToastLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastLayoutHelpers.h; sourceTree = "<group>"; };
+		94A377F31AE97DA700B7ACBE /* CRToastManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastManager.h; sourceTree = "<group>"; };
+		94A377F41AE97DA700B7ACBE /* CRToastManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastManager.m; sourceTree = "<group>"; };
+		94A377F51AE97DA700B7ACBE /* CRToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastView.h; sourceTree = "<group>"; };
+		94A377F61AE97DA700B7ACBE /* CRToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastView.m; sourceTree = "<group>"; };
+		94A377F71AE97DA700B7ACBE /* CRToastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastViewController.h; sourceTree = "<group>"; };
+		94A377F81AE97DA700B7ACBE /* CRToastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastViewController.m; sourceTree = "<group>"; };
+		94A377F91AE97DA700B7ACBE /* CRToastWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastWindow.h; sourceTree = "<group>"; };
+		94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastWindow.m; sourceTree = "<group>"; };
 		94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
@@ -220,17 +231,6 @@
 		94F882141A97E2D6008F4AD8 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Group.m; path = Models/Group.m; sourceTree = "<group>"; };
 		94F882161A97E39E008F4AD8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = Models/User.h; sourceTree = "<group>"; };
 		94F882171A97E39E008F4AD8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = Models/User.m; sourceTree = "<group>"; };
-		94F89F7F1AE7955E007997F9 /* CRToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToast.h; sourceTree = "<group>"; };
-		94F89F801AE7955E007997F9 /* CRToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToast.m; sourceTree = "<group>"; };
-		94F89F811AE7955E007997F9 /* CRToastLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastLayoutHelpers.h; sourceTree = "<group>"; };
-		94F89F821AE7955E007997F9 /* CRToastManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastManager.h; sourceTree = "<group>"; };
-		94F89F831AE7955E007997F9 /* CRToastManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastManager.m; sourceTree = "<group>"; };
-		94F89F841AE7955E007997F9 /* CRToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastView.h; sourceTree = "<group>"; };
-		94F89F851AE7955E007997F9 /* CRToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastView.m; sourceTree = "<group>"; };
-		94F89F861AE7955E007997F9 /* CRToastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastViewController.h; sourceTree = "<group>"; };
-		94F89F871AE7955E007997F9 /* CRToastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastViewController.m; sourceTree = "<group>"; };
-		94F89F881AE7955E007997F9 /* CRToastWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastWindow.h; sourceTree = "<group>"; };
-		94F89F891AE7955E007997F9 /* CRToastWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,7 +270,7 @@
 				9405B9481A8F08F900EEDE19 /* ECSlidingViewController */,
 				9479A2811A9A693A00C668D0 /* SlackTextViewController */,
 				94833EE31A94018A00CC2930 /* SVProgressHUD */,
-				94F89F7E1AE7955E007997F9 /* CRToast */,
+				94A377EF1AE97DA700B7ACBE /* CRToast */,
 			);
 			sourceTree = "<group>";
 		};
@@ -529,6 +529,24 @@
 			name = GroupTabBar;
 			sourceTree = "<group>";
 		};
+		94A377EF1AE97DA700B7ACBE /* CRToast */ = {
+			isa = PBXGroup;
+			children = (
+				94A377F01AE97DA700B7ACBE /* CRToast.h */,
+				94A377F11AE97DA700B7ACBE /* CRToast.m */,
+				94A377F21AE97DA700B7ACBE /* CRToastLayoutHelpers.h */,
+				94A377F31AE97DA700B7ACBE /* CRToastManager.h */,
+				94A377F41AE97DA700B7ACBE /* CRToastManager.m */,
+				94A377F51AE97DA700B7ACBE /* CRToastView.h */,
+				94A377F61AE97DA700B7ACBE /* CRToastView.m */,
+				94A377F71AE97DA700B7ACBE /* CRToastViewController.h */,
+				94A377F81AE97DA700B7ACBE /* CRToastViewController.m */,
+				94A377F91AE97DA700B7ACBE /* CRToastWindow.h */,
+				94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */,
+			);
+			path = CRToast;
+			sourceTree = "<group>";
+		};
 		94C6DE491A93DDD800562CE9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -659,25 +677,6 @@
 			name = Tuner;
 			sourceTree = "<group>";
 		};
-		94F89F7E1AE7955E007997F9 /* CRToast */ = {
-			isa = PBXGroup;
-			children = (
-				94F89F7F1AE7955E007997F9 /* CRToast.h */,
-				94F89F801AE7955E007997F9 /* CRToast.m */,
-				94F89F811AE7955E007997F9 /* CRToastLayoutHelpers.h */,
-				94F89F821AE7955E007997F9 /* CRToastManager.h */,
-				94F89F831AE7955E007997F9 /* CRToastManager.m */,
-				94F89F841AE7955E007997F9 /* CRToastView.h */,
-				94F89F851AE7955E007997F9 /* CRToastView.m */,
-				94F89F861AE7955E007997F9 /* CRToastViewController.h */,
-				94F89F871AE7955E007997F9 /* CRToastViewController.m */,
-				94F89F881AE7955E007997F9 /* CRToastWindow.h */,
-				94F89F891AE7955E007997F9 /* CRToastWindow.m */,
-			);
-			name = CRToast;
-			path = "../../../../Downloads/CRToast-master/CRToast";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -794,14 +793,14 @@
 				9444BD551ADEC9560076C8D5 /* SLKTextInputbar.m in Sources */,
 				945958F41A97B000002CF4EF /* GroupTabBarController.m in Sources */,
 				9444BD571ADEC9560076C8D5 /* SLKTextViewController.m in Sources */,
-				94F89F8C1AE7955E007997F9 /* CRToastView.m in Sources */,
+				94A377FD1AE97DA700B7ACBE /* CRToastView.m in Sources */,
 				9444BD541ADEC9560076C8D5 /* SLKInputAccessoryView.m in Sources */,
 				94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */,
 				04E6E4EF1A99661800254638 /* CircularButton.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
 				9479A2A81A9A72C000C668D0 /* MessagingTableViewController.m in Sources */,
 				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
-				94F89F8E1AE7955E007997F9 /* CRToastWindow.m in Sources */,
+				94A377FF1AE97DA700B7ACBE /* CRToastWindow.m in Sources */,
 				947429B81ABF1B88002D81E7 /* TasksTableViewController.m in Sources */,
 				9479A2B41A9B68C000C668D0 /* MessageThread.m in Sources */,
 				9444BD521ADEC9560076C8D5 /* UIScrollView+SLKAdditions.m in Sources */,
@@ -828,9 +827,9 @@
 				949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */,
 				942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */,
 				949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */,
-				94F89F8B1AE7955E007997F9 /* CRToastManager.m in Sources */,
+				94A377FC1AE97DA700B7ACBE /* CRToastManager.m in Sources */,
 				9405B9561A8F08F900EEDE19 /* ECPercentDrivenInteractiveTransition.m in Sources */,
-				94F89F8A1AE7955E007997F9 /* CRToast.m in Sources */,
+				94A377FB1AE97DA700B7ACBE /* CRToast.m in Sources */,
 				9444BD511ADEC9560076C8D5 /* SLKTextView+SLKAdditions.m in Sources */,
 				94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */,
 				94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */,
@@ -838,7 +837,7 @@
 				947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */,
 				940CDBD01AC6E8190006F099 /* DronesTableViewController.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
-				94F89F8D1AE7955E007997F9 /* CRToastViewController.m in Sources */,
+				94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
