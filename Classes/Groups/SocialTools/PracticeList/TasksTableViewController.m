@@ -12,6 +12,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "TasksTableViewController.h"
 #import "TaskViewController.h"
@@ -24,8 +25,6 @@
 @interface TasksTableViewController ()
 
 @property (nonatomic) Firebase *ref;
-
-@property (nonatomic) User *user;
 
 @property (nonatomic) Task *selectedTask;
 @property (nonatomic) NSMutableArray *incompleteTasks;
@@ -83,20 +82,15 @@
 {
     [super viewDidLoad];
     
-    if (!self.group)
-    {
-        self.user = self.sharedData.user;
-    }
-    
     
     NSMutableArray *tasks;
     if (self.group)
     {
         tasks = [NSMutableArray arrayWithArray:self.group.tasks];
     }
-    else if (self.user)
+    else
     {
-        tasks = [NSMutableArray arrayWithArray:self.user.tasks];
+        tasks = [NSMutableArray arrayWithArray:self.sharedData.user.tasks];
     }
     
     for (Task *task in tasks)
@@ -113,21 +107,48 @@
     
     [self.tableView reloadData];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kNewTaskNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kTaskRemovedNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kTaskDataUpdatedNotification
-                                               object:nil];
-    
+    if (self.group)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupTaskNotification
+                                                   object:nil];
+        
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupTaskRemovedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupTaskDataUpdatedNotification
+                                                   object:nil];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewUserTaskNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kUserTaskRemovedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kUserTaskDataUpdatedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kUserTaskCompletedNotification
+                                                   object:nil];
+        
+        
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -152,16 +173,21 @@
         }
         
     }
-    else if (self.user)
+    else
     {
         self.navigationItem.rightBarButtonItem = newTaskButton;
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     self.inset = NO;
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -169,9 +195,10 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionDrawerToggle:(id)sender
+- (void)actionAddTask
 {
-    [self.slidingViewController anchorTopViewToRightAnimated:YES];
+    self.selectedTask = nil;
+    [self performSegueWithIdentifier:kTaskDetailSegueIdentifier sender:nil];
 }
 
 - (IBAction)actionCheckbox:(id)sender
@@ -216,10 +243,9 @@
     }
 }
 
-- (void)actionAddTask
+- (IBAction)actionDrawerToggle:(id)sender
 {
-    self.selectedTask = nil;
-    [self performSegueWithIdentifier:kTaskDetailSegueIdentifier sender:nil];
+    [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 
 
@@ -229,57 +255,84 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:kTaskDataUpdatedNotification])
-    {
-        [self.tableView reloadData];
-    }
-    else if ([[notification name] isEqualToString:kNewTaskNotification])
+    if ([[notification name] isEqualToString:kNewUserTaskNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+
+            Task *newTask = notification.object;
+            [self.incompleteTasks addObject:newTask];
+            [self.tableView reloadData];
+                
+            [Utilities greenToastMessage:kNewTaskSuccessMessage];
             
-            if (self.group)
+        });
+    }
+    else if ([[notification name] isEqualToString:kNewGroupTaskNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+
+            NSArray *newTaskData = notification.object;
+            NSLog(@"MADE IT%@", newTaskData);
+            if ([[newTaskData objectAtIndex:0] isEqual:self.group])
             {
-                NSArray *newTaskData = notification.object;
-                if ([[newTaskData objectAtIndex:0] isEqual:self.group])
-                {
-                    Task *newTask = [newTaskData objectAtIndex:1];
-                    [self.incompleteTasks addObject:newTask];
-                    [self.tableView reloadData];
-                }
-            }
-            else
-            {
-                //TODO: User Tasks
+                Task *newTask = [newTaskData objectAtIndex:1];
+                [self.incompleteTasks addObject:newTask];
+                [self.tableView reloadData];
             }
             
         });
     }
-    else if ([[notification name] isEqualToString:kTaskRemovedNotification])
+    else if ([[notification name] isEqualToString:kUserTaskRemovedNotification])
     {
-        if (self.group)
+
+        Task *removedTask = notification.object;
+            
+        if (removedTask.completed)
         {
-            NSArray *removedTaskData = notification.object;
-            if ([[removedTaskData objectAtIndex:0] isEqual:self.group])
-            {
-                Task *removedTask = [removedTaskData objectAtIndex:1];
-                
-                if (removedTask.completed)
-                {
-                    [self.completedTasks removeObject:removedTask];
-                }
-                else
-                {
-                    [self.incompleteTasks removeObject:removedTask];
-                }
-                [self.tableView reloadData];
-            }
+            [self.completedTasks removeObject:removedTask];
         }
         else
         {
-            //TODO: User Tasks
+            [self.incompleteTasks removeObject:removedTask];
+        }
+        [self.tableView reloadData];
+            
+        [Utilities redToastMessage:kTaskRemovedSuccessMessage];
+    }
+    else if ([[notification name] isEqualToString:kGroupTaskRemovedNotification])
+    {
+        NSArray *removedTaskData = notification.object;
+        if ([[removedTaskData objectAtIndex:0] isEqual:self.group])
+        {
+            Task *removedTask = [removedTaskData objectAtIndex:1];
+                
+            if (removedTask.completed)
+            {
+                [self.completedTasks removeObject:removedTask];
+            }
+            else
+            {
+                [self.incompleteTasks removeObject:removedTask];
+            }
+            [self.tableView reloadData];
+        }
+    }
+    else if ([[notification name] isEqualToString:kUserTaskDataUpdatedNotification])
+    {
+        [self.tableView reloadData];
+    }
+    else if ([[notification name] isEqualToString:kGroupTaskDataUpdatedNotification])
+    {
+        NSArray *updatedTaskData = notification.object;
+        if ([[updatedTaskData objectAtIndex:0] isEqual:self.group])
+        {
+            [self.tableView reloadData];
         }
         
-        
+    }
+    else if ([[notification name] isEqualToString:kUserTaskCompletedNotification])
+    {
+        [Utilities greenToastMessage:kTaskCompletedSuccessMessage];
     }
 }
 

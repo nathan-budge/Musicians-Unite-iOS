@@ -42,17 +42,32 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Group Removed"
+                                                 name:kGroupRemovedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Group Member Removed"
+                                                 name:kGroupMemberRemovedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"New Group Member"
+                                                 name:kNewGroupMemberNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupTaskNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupTaskRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupTaskCompletedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -63,16 +78,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
                                                  name:@"Thread Removed"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"New Task"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Task Removed"
                                                object:nil];
 }
 
@@ -121,7 +126,7 @@
         NSArray *removedMemberData = notification.object;
         if ([[removedMemberData objectAtIndex:0] isEqual:self.group])
         {
-            User *removedMember = notification.object;
+            User *removedMember = [removedMemberData objectAtIndex:1];
             NSString *errorMessage;
             
             if (removedMember.completedRegistration)
@@ -136,7 +141,7 @@
             [Utilities redToastMessage:errorMessage];
         }
     }
-    else if ([[notification name] isEqualToString:@"New Task"])
+    else if ([[notification name] isEqualToString:kNewGroupTaskNotification])
     {
         NSArray *newTaskData = notification.object;
         if ([[newTaskData objectAtIndex:0] isEqual:self.group])
@@ -144,12 +149,20 @@
             [Utilities greenToastMessage:kNewTaskSuccessMessage];
         }
     }
-    else if ([[notification name] isEqualToString:@"Task Removed"])
+    else if ([[notification name] isEqualToString:kGroupTaskRemovedNotification])
     {
         NSArray *removedTaskData = notification.object;
         if ([[removedTaskData objectAtIndex:0] isEqual:self.group])
         {
             [Utilities redToastMessage:kTaskRemovedSuccessMessage];
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupTaskCompletedNotification])
+    {
+        NSArray *completedTaskData = notification.object;
+        if ([[completedTaskData objectAtIndex:0] isEqual:self.group])
+        {
+            [Utilities greenToastMessage:kTaskCompletedSuccessMessage];
         }
     }
 }

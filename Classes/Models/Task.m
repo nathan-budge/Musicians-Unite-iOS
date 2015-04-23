@@ -10,6 +10,7 @@
 #import <Firebase/Firebase.h>
 
 #import "SharedData.h"
+#import "AppConstant.h"
 
 #import "Group.h"
 
@@ -110,17 +111,15 @@
             self.completed = NO;
         }
         
-        NSArray *newTaskData;
         if (self.group)
         {
-            newTaskData = @[self.group, self];
+            NSArray *newTaskData = @[self.group, self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"New Group Task" object:newTaskData];
         }
         else
         {
-            newTaskData = @[self.sharedData.user, self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"New User Task" object:self];
         }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Task" object:newTaskData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
@@ -140,28 +139,83 @@
         
         if ([snapshot.key isEqualToString:@"title"]) {
             self.title = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
             
-        } else if ([snapshot.key isEqualToString:@"tempo"]) {
+            if (self.group)
+            {
+                NSArray *updatedTaskData = @[self.group, self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupTaskDataUpdatedNotification object:updatedTaskData];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserTaskDataUpdatedNotification object:self];
+            }
+            
+        }
+        else if ([snapshot.key isEqualToString:@"tempo"])
+        {
             self.tempo = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
             
-        } else if ([snapshot.key isEqualToString:@"notes"]) {
+            if (self.group)
+            {
+                NSArray *updatedTaskData = @[self.group, self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupTaskDataUpdatedNotification object:updatedTaskData];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserTaskDataUpdatedNotification object:self];
+            }
+            
+        }
+        else if ([snapshot.key isEqualToString:@"notes"])
+        {
             self.notes = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
             
-        } else if ([snapshot.key isEqualToString:@"completed"]) {
+            if (self.group)
+            {
+                NSArray *updatedTaskData = @[self.group, self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupTaskDataUpdatedNotification object:updatedTaskData];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserTaskDataUpdatedNotification object:self];
+            }
             
+        }
+        else if ([snapshot.key isEqualToString:@"completed"])
+        {
             if ([snapshot.value isEqual:@YES])
             {
                 self.completed = YES;
+                
+                if (self.group)
+                {
+                    NSArray *completedTaskData = @[self.group, self];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kGroupTaskCompletedNotification object:completedTaskData];
+                    
+                }
+                else
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kUserTaskCompletedNotification object:self];
+                }
             }
             else
             {
                 self.completed = NO;
             }
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Data Updated" object:self];
+            if (self.group)
+            {
+                NSArray *updatedTaskData = @[self.group, self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupTaskDataUpdatedNotification object:updatedTaskData];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserTaskDataUpdatedNotification object:self];
+            }
         }
         
     } withCancelBlock:^(NSError *error) {

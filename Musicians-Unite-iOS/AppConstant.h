@@ -70,6 +70,7 @@
 #define kTaskSavedSuccessMessage                    @"Task Saved!"
 #define kTaskRemovedSuccessMessage                  @"Task Removed!"
 #define kNewTaskSuccessMessage                      @"New Task!"
+#define kTaskCompletedSuccessMessage                @"Task Completed!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
@@ -126,6 +127,11 @@
 #define kNoGroupsNotification                       @"No Groups"
 #define kGroupMemberRemovedNotification             @"Group Member Removed"
 #define kNewGroupMemberNotification                 @"New Group Member"
-#define kNewTaskNotification                        @"New Task"
-#define kTaskRemovedNotification                    @"Task Removed"
-#define kTaskDataUpdatedNotification                @"Task Data Updated"
+#define kNewUserTaskNotification                    @"New User Task"
+#define kNewGroupTaskNotification                   @"New Group Task"
+#define kUserTaskRemovedNotification                @"User Task Removed"
+#define kGroupTaskRemovedNotification               @"Group Task Removed"
+#define kUserTaskDataUpdatedNotification            @"User Task Data Updated"
+#define kGroupTaskDataUpdatedNotification           @"Group Task Data Updated"
+#define kUserTaskCompletedNotification              @"User Task Completed"
+#define kGroupTaskCompletedNotification             @"Group Task Completed"

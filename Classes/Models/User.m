@@ -271,7 +271,7 @@
             
             [self removeGroup:removedGroup];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Removed" object:removedGroup];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGroupRemovedNotification object:removedGroup];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -308,8 +308,7 @@
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
             
-            NSArray *removedTaskData = @[self, removedTask];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTaskData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserTaskRemovedNotification object:removedTask];
         }
         
     } withCancelBlock:^(NSError *error) {

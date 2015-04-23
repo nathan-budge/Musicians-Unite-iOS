@@ -106,14 +106,24 @@
     {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receivedNotification:)
-                                                     name:kTaskRemovedNotification
+                                                     name:kUserTaskRemovedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupTaskRemovedNotification
                                                    object:nil];
     }
     else
     {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receivedNotification:)
-                                                     name:kNewTaskNotification
+                                                     name:kNewUserTaskNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupTaskNotification
                                                    object:nil];
     }
 }
@@ -243,7 +253,19 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:kNewTaskNotification])
+    if ([[notification name] isEqualToString:kNewUserTaskNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            Task *newTask = notification.object;
+            if ([newTask.taskID isEqualToString:self.taskID])
+            {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+        });
+    }
+    else if ([[notification name] isEqualToString:kNewGroupTaskNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
@@ -255,9 +277,20 @@
             }
             
         });
+        
     }
-    else if ([[notification name] isEqualToString:kTaskRemovedNotification])
+    else if ([[notification name] isEqualToString:kUserTaskRemovedNotification])
     {
+
+        Task *removedTask = notification.object;
+        if ([removedTask isEqual:self.task])
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupTaskRemovedNotification])
+    {
+
         NSArray *newTaskData = notification.object;
         Task *removedTask = [newTaskData objectAtIndex:1];
         if ([removedTask isEqual:self.task])
