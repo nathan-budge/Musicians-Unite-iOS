@@ -33,10 +33,12 @@
 #define kGroupTabsSegueIdentifier                   @"showGroupTabs"
 #define kMemberManagementSegueIdentifier            @"viewMemberManagement"
 #define kMetronomeSegueIdentifier                   @"viewMetronome"
+#define kTaskDetailSegueIdentifier                  @"taskDetail"
 
 //Cell Identifiers
 #define kGroupCellIdentifier                        @"GroupCell"
 #define kUserCellIdentifier                         @"UserCell"
+#define kTaskCellIdentifier                         @"TaskCell"
 
 //Error Messages
 #define kError                                      @"Error"
@@ -67,6 +69,7 @@
 #define kMemberAddedSuccessMessage                  @"Member Added!"
 #define kTaskSavedSuccessMessage                    @"Task Saved!"
 #define kTaskRemovedSuccessMessage                  @"Task Removed!"
+#define kNewTaskSuccessMessage                      @"New Task!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
@@ -86,6 +89,11 @@
 
 //View Titles
 #define kGroupSettingsTitle                         @"Group Settings"
+#define kPracticeListTitle                          @"Practice List"
+
+//Table section headers
+#define kCompletedTasksSectionHeader                @"Completed"
+#define kIncompleteTasksSectionHeader               @"Incomplete"
 
 //Firebase Nodes
 #define kUsersFirebaseNode                          @"users"
@@ -108,6 +116,8 @@
 
 //Image Assets
 #define kProfileLogoImage                           @"profile_logo"
+#define kCheckboxImage                              @"checkbox"
+#define kCompletedCheckboxImage                     @"checkbox_completed"
 
 //Notifications
 #define kGroupDataUpdatedNotification               @"Group Data Updated"
@@ -116,3 +126,6 @@
 #define kNoGroupsNotification                       @"No Groups"
 #define kGroupMemberRemovedNotification             @"Group Member Removed"
 #define kNewGroupMemberNotification                 @"New Group Member"
+#define kNewTaskNotification                        @"New Task"
+#define kTaskRemovedNotification                    @"Task Removed"
+#define kTaskDataUpdatedNotification                @"Task Data Updated"

@@ -9,6 +9,10 @@
 #import "SVProgressHUD.h"
 #import "CRToast.h"
 
+#import "AppConstant.h"
+#import "Utilities.h"
+#import "SharedData.h"
+
 #import "GroupTabBarController.h"
 #import "GroupDetailViewController.h"
 #import "MessagingTableViewController.h"
@@ -26,7 +30,6 @@
     
     MessagingTableViewController *messagingTableViewController = [viewControllers objectAtIndex:0];
     messagingTableViewController.group = self.group;
-    messagingTableViewController.user = self.user;
     
     TasksTableViewController *tasksTableViewController = [viewControllers objectAtIndex:1];
     tasksTableViewController.group = self.group;
@@ -36,7 +39,6 @@
     
     GroupDetailViewController *groupDetailTableViewController = [viewControllers objectAtIndex:3];
     groupDetailTableViewController.group = self.group;
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
@@ -57,8 +59,27 @@
                                              selector:@selector(receivedNotification:)
                                                  name:@"New Thread"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Thread Removed"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"New Task"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:@"Task Removed"
+                                               object:nil];
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 //*****************************************************************************/
 #pragma mark - Notification Center
@@ -66,7 +87,7 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Group Removed"])
+    if ([[notification name] isEqualToString:kGroupRemovedNotification])
     {
         if ([notification.object isEqual:self.group])
         {
@@ -74,35 +95,7 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }
-    else if ([[notification name] isEqualToString:@"Group Member Removed"])
-    {
-        User *removedMember = notification.object;
-        NSString *errorMessage;
-        
-        if (removedMember.completedRegistration)
-        {
-            errorMessage = [NSString stringWithFormat:@"%@ was removed", removedMember.firstName];
-        }
-        else
-        {
-            errorMessage = [NSString stringWithFormat:@"%@ was removed", removedMember.email];
-        }
-        
-        NSDictionary *options = @{
-                                  kCRToastTextKey : errorMessage,
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor redColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
-    }
-    else if ([[notification name] isEqualToString:@"New Group Member"])
+    else if ([[notification name] isEqualToString:kNewGroupMemberNotification])
     {
         NSArray *newMemberData = notification.object;
         if ([[newMemberData objectAtIndex:0] isEqual:self.group])
@@ -120,19 +113,43 @@
                 successMessage = [NSString stringWithFormat:@"%@ was added to the group", newMember.email];
             }
             
-            NSDictionary *options = @{
-                                      kCRToastTextKey : successMessage,
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
+            [Utilities greenToastMessage:successMessage];
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupMemberRemovedNotification])
+    {
+        NSArray *removedMemberData = notification.object;
+        if ([[removedMemberData objectAtIndex:0] isEqual:self.group])
+        {
+            User *removedMember = notification.object;
+            NSString *errorMessage;
             
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
+            if (removedMember.completedRegistration)
+            {
+                errorMessage = [NSString stringWithFormat:@"%@ was removed", removedMember.firstName];
+            }
+            else
+            {
+                errorMessage = [NSString stringWithFormat:@"%@ was removed", removedMember.email];
+            }
+            
+            [Utilities redToastMessage:errorMessage];
+        }
+    }
+    else if ([[notification name] isEqualToString:@"New Task"])
+    {
+        NSArray *newTaskData = notification.object;
+        if ([[newTaskData objectAtIndex:0] isEqual:self.group])
+        {
+            [Utilities greenToastMessage:kNewTaskSuccessMessage];
+        }
+    }
+    else if ([[notification name] isEqualToString:@"Task Removed"])
+    {
+        NSArray *removedTaskData = notification.object;
+        if ([[removedTaskData objectAtIndex:0] isEqual:self.group])
+        {
+            [Utilities redToastMessage:kTaskRemovedSuccessMessage];
         }
     }
 }

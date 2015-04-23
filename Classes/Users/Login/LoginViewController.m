@@ -106,19 +106,7 @@
             [SVProgressHUD dismiss];
             [self performSegueWithIdentifier:kLoginToGroupSegueIdentifier sender:sender];
             
-            NSDictionary *options = @{
-                                      kCRToastTextKey : kLoggedInSuccessMessage,
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
-            
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
+            [Utilities greenToastMessage:kLoggedInSuccessMessage];
         }
     }];
 }

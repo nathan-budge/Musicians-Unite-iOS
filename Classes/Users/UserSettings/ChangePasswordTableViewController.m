@@ -98,23 +98,8 @@
         else
         {
             [SVProgressHUD dismiss];
-            //[SVProgressHUD showSuccessWithStatus:@"Password Changed!" maskType:SVProgressHUDMaskTypeBlack];
             
-            NSDictionary *options = @{
-                                      kCRToastTextKey : kPasswordChangedSuccessMessage,
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
-            
-            [NSThread sleepForTimeInterval:.5];
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
-            
+            [Utilities greenToastMessage:kPasswordChangedSuccessMessage];
             
             [self.navigationController popViewControllerAnimated:YES];
         }

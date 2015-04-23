@@ -12,6 +12,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "TaskViewController.h"
 #import "TasksTableViewController.h"
@@ -29,6 +30,10 @@
 
 @property (nonatomic) SharedData *sharedData;
 
+@property (nonatomic) GroupTabBarController *groupTabBarController;
+
+@property (nonatomic) NSString *taskID; //Keep track of new task ID
+
 @property (weak, nonatomic) IBOutlet UITextField *fieldTitle;
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
 @property (weak, nonatomic) IBOutlet UITextView *fieldNotes;
@@ -36,8 +41,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrSave;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDelete;
 @property (weak, nonatomic) IBOutlet UIButton *buttonMetronome;
-
-@property (nonatomic) GroupTabBarController *groupTabBarController;
 
 @end
 
@@ -69,7 +72,8 @@
 #pragma mark - View Lifecycle
 //*****************************************************************************/
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     if (self.task)
@@ -81,7 +85,6 @@
         [self.buttonCreateOrSave setTitle:kSaveButtonTitle forState:UIControlStateNormal];
         self.buttonDelete.hidden = NO;
         self.buttonMetronome.hidden = NO;
-        
     }
     else
     {
@@ -94,16 +97,40 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.task)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kTaskRemovedNotification
+                                                   object:nil];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewTaskNotification
+                                                   object:nil];
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
+    
     if (self.group)
     {
         TasksTableViewController *tasksTableViewController = [self.groupTabBarController.viewControllers objectAtIndex:1];
         tasksTableViewController.inset = YES;
     }
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self dismissKeyboard];
 }
+
 
 //*****************************************************************************/
 #pragma mark - Buttons
@@ -128,11 +155,16 @@
     {
         Firebase *taskRef = [[self.ref childByAppendingPath:kTasksFirebaseNode] childByAutoId];
         
+        self.taskID = taskRef.key;
+        
         Firebase *ownerRef;
         
-        if (self.group) {
+        if (self.group)
+        {
             ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode]];
-        } else {
+        }
+        else
+        {
             ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode]];
         }
         
@@ -146,56 +178,7 @@
         [taskRef setValue:newTask];
         
         [ownerRef updateChildValues:@{taskRef.key:@YES}];
-        
-        //Add notification observer for this
-        [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (void)actionSave
-{
-    if ([self.fieldTitle.text isEqualToString:@""])
-    {
-        [SVProgressHUD showErrorWithStatus:kNoTaskTitleError maskType:SVProgressHUDMaskTypeBlack];
-        
-    }
-    else if (![self validTempo])
-    {
-        [SVProgressHUD showErrorWithStatus:kInvalidTempoError maskType:SVProgressHUDMaskTypeBlack];
-    }
-    else
-    {
-        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, self.task.taskID]];
-        
-        NSDictionary *updatedTask = @{
-                                  kTaskTitleFirebaseField:self.fieldTitle.text,
-                                  kTaskTempoFirebaseField:self.fieldTempo.text,
-                                  kTaskNotesFirebaseField:self.fieldNotes.text,
-                                  };
-        
-        [taskRef updateChildValues:updatedTask];
-        
-        NSDictionary *options = @{
-                                  kCRToastTextKey : kTaskSavedSuccessMessage,
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
-        
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (IBAction)actionMetronome:(id)sender
-{
-    [self performSegueWithIdentifier:kMetronomeSegueIdentifier sender:nil];
 }
 
 - (IBAction)actionDelete:(id)sender
@@ -215,22 +198,72 @@
     
     [taskRef removeValue];
     [ownerTaskRef removeValue];
-    
-    NSDictionary *options = @{
-                              kCRToastTextKey : kTaskRemovedSuccessMessage,
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor redColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
-    
-    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)actionSave
+{
+    if ([self.fieldTitle.text isEqualToString:@""])
+    {
+        [SVProgressHUD showErrorWithStatus:kNoTaskTitleError maskType:SVProgressHUDMaskTypeBlack];
+        
+    }
+    else if (![self validTempo])
+    {
+        [SVProgressHUD showErrorWithStatus:kInvalidTempoError maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else
+    {
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, self.task.taskID]];
+        
+        NSDictionary *updatedTask = @{
+                                      kTaskTitleFirebaseField:self.fieldTitle.text,
+                                      kTaskTempoFirebaseField:self.fieldTempo.text,
+                                      kTaskNotesFirebaseField:self.fieldNotes.text,
+                                      };
+        
+        [taskRef updateChildValues:updatedTask];
+        
+        [Utilities greenToastMessage:kTaskSavedSuccessMessage];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+
+- (IBAction)actionMetronome:(id)sender
+{
+    [self performSegueWithIdentifier:kMetronomeSegueIdentifier sender:nil];
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:kNewTaskNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            NSArray *newTaskData = notification.object;
+            Task *newTask = [newTaskData objectAtIndex:1];
+            if ([newTask.taskID isEqualToString:self.taskID])
+            {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+        });
+    }
+    else if ([[notification name] isEqualToString:kTaskRemovedNotification])
+    {
+        NSArray *newTaskData = notification.object;
+        Task *removedTask = [newTaskData objectAtIndex:1];
+        if ([removedTask isEqual:self.task])
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
 }
 
 
@@ -246,6 +279,7 @@
         destViewController.tempo = [self.fieldTempo.text doubleValue];
     }
 }
+
 
 //*****************************************************************************/
 #pragma mark - Check Tempo

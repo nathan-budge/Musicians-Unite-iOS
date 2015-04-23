@@ -23,6 +23,8 @@
 +(NSString *)encodeImageToBase64:(UIImage *) image;
 +(UIImage *)decodeBase64ToImage:(NSString *)strEncodeData;
 
++(void)redToastMessage:(NSString *)message;
++(void)greenToastMessage:(NSString *)message;
 
 @end
 

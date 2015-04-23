@@ -113,21 +113,31 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
     
     self.memberTableView.contentInset = UIEdgeInsetsMake(-35.0f, 0.0f, 0.0f, 0.0f);
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kNewGroupNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kGroupMemberRemovedNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kNewGroupMemberNotification
-                                               object:nil];
+    if (self.group.groupID)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupMemberRemovedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupMemberNotification
+                                                   object:nil];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupNotification
+                                                   object:nil];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -141,35 +151,6 @@
 //*****************************************************************************/
 #pragma mark - Buttons
 //*****************************************************************************/
-
-- (IBAction)actionAddMemberToTableView:(id)sender
-{
-    [SVProgressHUD showWithStatus:kAddingMemberProgressMessage maskType:SVProgressHUDMaskTypeBlack];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.email=%@", self.fieldEmail.text];
-    NSArray *existingMember = [self.members filteredArrayUsingPredicate:predicate];
-    
-    if (existingMember.count > 0)
-    {
-        self.fieldEmail.text = @"";
-        [SVProgressHUD showErrorWithStatus:kMemberAlreadyExistsError maskType:SVProgressHUDMaskTypeBlack];
-    }
-    else if (![Utilities validateEmail:self.fieldEmail.text]|| [self.fieldEmail.text isEqualToString:self.sharedData.user.email])
-    {
-        self.fieldEmail.text = @"";
-        [SVProgressHUD showErrorWithStatus:kInvalidEmailError maskType:SVProgressHUDMaskTypeBlack];
-    }
-    else
-    {
-        [self addMemberToTableView];
-        [self dismissKeyboard];
-    }
-}
-
--(void)actionDeleteMemberFromTableView:(id)sender
-{
-    [self deleteMemberFromTableView:sender];
-}
 
 - (IBAction)actionCreateGroup:(id)sender
 {
@@ -217,15 +198,43 @@
         Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
         [self addMembers:self.members toGroup:groupRef];
         
-        [self groupSavedToastNotification];
         [self.navigationController popViewControllerAnimated:YES];
     }
     else
     {
-        [self groupSavedToastNotification];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
+
+- (IBAction)actionAddMemberToTableView:(id)sender
+{
+    [SVProgressHUD showWithStatus:kAddingMemberProgressMessage maskType:SVProgressHUDMaskTypeBlack];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.email=%@", self.fieldEmail.text];
+    NSArray *existingMember = [self.members filteredArrayUsingPredicate:predicate];
+    
+    if (existingMember.count > 0)
+    {
+        self.fieldEmail.text = @"";
+        [SVProgressHUD showErrorWithStatus:kMemberAlreadyExistsError maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else if (![Utilities validateEmail:self.fieldEmail.text]|| [self.fieldEmail.text isEqualToString:self.sharedData.user.email])
+    {
+        self.fieldEmail.text = @"";
+        [SVProgressHUD showErrorWithStatus:kInvalidEmailError maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else
+    {
+        [self addMemberToTableView];
+        [self dismissKeyboard];
+    }
+}
+
+-(void)actionDeleteMemberFromTableView:(id)sender
+{
+    [self deleteMemberFromTableView:sender];
+}
+
 
 //*****************************************************************************/
 #pragma mark - Add member to table view
@@ -351,8 +360,7 @@
             Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
             [self addMembers:self.members toGroup:groupRef];
         }
-        
-        [self groupSavedToastNotification];
+
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -361,23 +369,6 @@
 //*****************************************************************************/
 #pragma mark - Helper methods
 //*****************************************************************************/
-
--(void)groupSavedToastNotification
-{
-    NSDictionary *options = @{
-                              kCRToastTextKey : kGroupSavedSuccessMessage,
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor greenColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
-}
 
 - (BOOL)enableSave
 {
@@ -424,7 +415,6 @@
             Group *newGroup = notification.object;
             if ([newGroup.groupID isEqualToString:self.groupID])
             {
-                [[NSNotificationCenter defaultCenter] removeObserver:self];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
             
@@ -432,13 +422,23 @@
     }
     else if ([[notification name] isEqualToString:kNewGroupMemberNotification])
     {
-        self.members = [NSMutableArray arrayWithArray:self.group.members];
-        [self.memberTableView reloadData];
+        NSArray *newMemberData = notification.object;
+        if ([[newMemberData objectAtIndex:0] isEqual:self.group])
+        {
+            self.members = [NSMutableArray arrayWithArray:self.group.members];
+            [self.memberTableView reloadData];
+
+        }
+        
     }
     else if ([[notification name] isEqualToString:kGroupMemberRemovedNotification])
     {
-        self.members = [NSMutableArray arrayWithArray:self.group.members];
-        [self.memberTableView reloadData];
+        NSArray *removedMemberData = notification.object;
+        if ([[removedMemberData objectAtIndex:0] isEqual:self.group])
+        {
+            self.members = [NSMutableArray arrayWithArray:self.group.members];
+            [self.memberTableView reloadData];
+        }
     }
 }
 

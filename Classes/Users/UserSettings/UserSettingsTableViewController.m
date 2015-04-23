@@ -108,19 +108,7 @@
         
         [userRef updateChildValues:updatedValues];
         
-        NSDictionary *options = @{
-                                  kCRToastTextKey : kUserDataSavedSuccessMessage,
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
+        [Utilities greenToastMessage:kUserDataSavedSuccessMessage];
     }
     else
     {
@@ -189,20 +177,7 @@
                 
                 [self performSegueWithIdentifier:kDeleteAccountSegueIdentifier sender:nil];
                 
-                NSDictionary *options = @{
-                                          kCRToastTextKey : kAccountDeletedSuccessMessage,
-                                          kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                          kCRToastBackgroundColorKey : [UIColor redColor],
-                                          kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                          kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                          kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                          kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                          };
-                
-                [NSThread sleepForTimeInterval:.5];
-                [CRToastManager showNotificationWithOptions:options
-                                            completionBlock:^{
-                                            }];
+                [Utilities redToastMessage:kAccountDeletedSuccessMessage];
             }
         }];
     }

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class Firebase;
+@class Group;
 
 @interface Task : NSObject
 
@@ -23,5 +24,6 @@
 
 //Constructor
 - (Task *)initWithRef: (Firebase *)taskRef;
+- (Task *)initWithRef: (Firebase *)taskRef andGroup:(Group *)group;
 
 @end

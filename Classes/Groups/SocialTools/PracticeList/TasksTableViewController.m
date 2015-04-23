@@ -90,17 +90,17 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"New Task"
+                                                 name:kNewTaskNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Task Removed"
+                                                 name:kTaskRemovedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Task Data Updated"
+                                                 name:kTaskDataUpdatedNotification
                                                object:nil];
     
     
@@ -138,7 +138,7 @@
     
     if (self.group)
     {
-        self.tabBarController.title = @"Practice List";
+        self.tabBarController.title = kPracticeListTitle;
         self.tabBarController.navigationItem.rightBarButtonItem = newTaskButton;
         
         if (!self.inset)
@@ -189,7 +189,7 @@
         }
         else
         {
-            task = [self.incompleteTasks objectAtIndex:indexPath.row];\
+            task = [self.incompleteTasks objectAtIndex:indexPath.row];
         }
     }
     else if (indexPath.section == 1)
@@ -197,10 +197,10 @@
         task = [self.completedTasks objectAtIndex:indexPath.row];
     }
     
-    Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", task.taskID]];
+    Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, task.taskID]];
     
     task.completed = !task.completed;
-    task.completed ? [taskRef updateChildValues:@{@"completed":@YES}] : [taskRef updateChildValues:@{@"completed":@NO}];
+    task.completed ? [taskRef updateChildValues:@{kTaskCompletedFirebaseField:@YES}] : [taskRef updateChildValues:@{kTaskCompletedFirebaseField:@NO}];
     
     if (task.completed)
     {
@@ -219,7 +219,7 @@
 - (void)actionAddTask
 {
     self.selectedTask = nil;
-    [self performSegueWithIdentifier:@"taskDetail" sender:nil];
+    [self performSegueWithIdentifier:kTaskDetailSegueIdentifier sender:nil];
 }
 
 
@@ -229,45 +229,57 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Task Data Updated"])
+    if ([[notification name] isEqualToString:kTaskDataUpdatedNotification])
     {
         [self.tableView reloadData];
-        
     }
-    else if ([[notification name] isEqualToString:@"New Task"])
+    else if ([[notification name] isEqualToString:kNewTaskNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-            [self.incompleteTasks addObject:notification.object];
-            [self.tableView reloadData];
             
-            NSDictionary *options = @{
-                                      kCRToastTextKey : @"Task Created!",
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
+            if (self.group)
+            {
+                NSArray *newTaskData = notification.object;
+                if ([[newTaskData objectAtIndex:0] isEqual:self.group])
+                {
+                    Task *newTask = [newTaskData objectAtIndex:1];
+                    [self.incompleteTasks addObject:newTask];
+                    [self.tableView reloadData];
+                }
+            }
+            else
+            {
+                //TODO: User Tasks
+            }
             
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
         });
     }
-    else if ([[notification name] isEqualToString:@"Task Removed"])
+    else if ([[notification name] isEqualToString:kTaskRemovedNotification])
     {
-        Task *removedTask = notification.object;
-        
-        if (removedTask.completed)
+        if (self.group)
         {
-            [self.completedTasks removeObject:removedTask];
+            NSArray *removedTaskData = notification.object;
+            if ([[removedTaskData objectAtIndex:0] isEqual:self.group])
+            {
+                Task *removedTask = [removedTaskData objectAtIndex:1];
+                
+                if (removedTask.completed)
+                {
+                    [self.completedTasks removeObject:removedTask];
+                }
+                else
+                {
+                    [self.incompleteTasks removeObject:removedTask];
+                }
+                [self.tableView reloadData];
+            }
         }
         else
         {
-            [self.incompleteTasks removeObject:removedTask];
+            //TODO: User Tasks
         }
-        [self.tableView reloadData];
+        
+        
     }
 }
 
@@ -318,16 +330,16 @@
     {
         if (self.incompleteTasks.count == 0)
         {
-            return @"Complete";
+            return kCompletedTasksSectionHeader;
         }
         else
         {
-            return @"Incomplete";
+            return kIncompleteTasksSectionHeader;
         }
     }
     else if (section == 1)
     {
-        return @"Complete";
+        return kCompletedTasksSectionHeader;
     }
     
     return nil;
@@ -335,7 +347,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TaskCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kTaskCellIdentifier];
     
     Task *task;
     if (indexPath.section == 0)
@@ -359,12 +371,12 @@
     
     if (!task.completed)
     {
-        [checkbox setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
+        [checkbox setImage:[UIImage imageNamed:kCheckboxImage] forState:UIControlStateNormal];
         cell.backgroundColor = [UIColor clearColor];
     }
     else
     {
-        [checkbox setImage:[UIImage imageNamed:@"checkbox_completed"] forState:UIControlStateNormal];
+        [checkbox setImage:[UIImage imageNamed:kCompletedCheckboxImage] forState:UIControlStateNormal];
         cell.backgroundColor = [UIColor lightGrayColor];
     }
     
@@ -372,57 +384,6 @@
     
     return cell;
 }
-
-/*
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        Task *taskToDelete = [self.tasks objectAtIndex:indexPath.row];
-        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", taskToDelete.taskID]];
-        
-        Firebase *ownerTaskRef;
-        
-        if (self.group) {
-            ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/tasks/%@", self.group.groupID, taskToDelete.taskID]];
-        } else {
-            ownerTaskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/tasks/%@", self.ref.authData.uid, taskToDelete.taskID]];
-        }
-        
-        [taskRef removeValue];
-        [ownerTaskRef removeValue];
-        
-        [self.tasks removeObject:taskToDelete];
-        
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-    Task *taskToMove = [self.tasks objectAtIndex:fromIndexPath.row];
-    
-    [self.tasks removeObjectAtIndex:fromIndexPath.row];
-    [self.tasks insertObject:taskToMove atIndex:toIndexPath.row];
-    
-    if (self.group) {
-        [self.group.tasks removeAllObjects];
-        self.group.tasks = [NSMutableArray arrayWithArray:self.tasks];
-    } else {
-        [self.user.tasks removeAllObjects];
-        self.user.tasks = [NSMutableArray arrayWithArray:self.tasks];
-    }
-}
-*/
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -442,7 +403,7 @@
         self.selectedTask = [self.completedTasks objectAtIndex:indexPath.row];
     }
     
-    [self performSegueWithIdentifier:@"taskDetail" sender:nil];
+    [self performSegueWithIdentifier:kTaskDetailSegueIdentifier sender:nil];
 }
 
 
@@ -452,7 +413,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
-    if ([segue.identifier isEqualToString:@"taskDetail"]) {
+    if ([segue.identifier isEqualToString:kTaskDetailSegueIdentifier]) {
         TaskViewController *destViewController = segue.destinationViewController;
         destViewController.task = self.selectedTask;
         

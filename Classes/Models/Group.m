@@ -246,7 +246,9 @@
         if (member.count > 0)
         {
             [self removeMember:removedMember];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Member Removed" object:removedMember];
+            
+            NSArray *removedMemberData = @[self, removedMember];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Member Removed" object:removedMemberData];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -320,7 +322,7 @@
         
         Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
         
-        Task *newTask = [[Task alloc] initWithRef:taskRef];
+        Task *newTask = [[Task alloc] initWithRef:taskRef andGroup:self];
         
         [self addTask:newTask];
         
@@ -342,7 +344,10 @@
         {
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTask];
+            
+            NSArray *removedTaskData = @[self, removedTask];
+            NSLog(@"notification sent");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTaskData];
         }
         
     } withCancelBlock:^(NSError *error) {

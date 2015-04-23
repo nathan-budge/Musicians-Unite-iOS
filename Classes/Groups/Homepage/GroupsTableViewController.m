@@ -14,6 +14,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "GroupsTableViewController.h"
 #import "GroupTabBarController.h"
@@ -89,17 +90,17 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:kGroupDataUpdatedNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
                                                  name:kNewGroupNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
                                                  name:kGroupRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupDataUpdatedNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -178,19 +179,7 @@
             }
             else
             {
-                NSDictionary *options = @{
-                                          kCRToastTextKey : kNewGroupSuccessMessage,
-                                          kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                          kCRToastBackgroundColorKey : [UIColor greenColor],
-                                          kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                          kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                          kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                          kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                          };
-                
-                [CRToastManager showNotificationWithOptions:options
-                                            completionBlock:^{
-                                            }];
+                [Utilities greenToastMessage:kNewGroupSuccessMessage];
             }
             
         });
@@ -200,19 +189,7 @@
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];
         
-        NSDictionary *options = @{
-                                  kCRToastTextKey : kGroupRemovedSuccessMessage,
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor redColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
+        [Utilities redToastMessage:kGroupRemovedSuccessMessage];
     }
     else if ([[notification name] isEqualToString:kNoGroupsNotification])
     {

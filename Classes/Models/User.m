@@ -307,7 +307,9 @@
         {
             Task *removedTask = [task objectAtIndex:0];
             [self removeTask:removedTask];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTask];
+            
+            NSArray *removedTaskData = @[self, removedTask];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Task Removed" object:removedTaskData];
         }
         
     } withCancelBlock:^(NSError *error) {

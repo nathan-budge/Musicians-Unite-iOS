@@ -11,9 +11,13 @@
 
 #import "SharedData.h"
 
+#import "Group.h"
+
 @interface Task ()
 
 @property (weak, nonatomic) SharedData *sharedData;
+
+@property (nonatomic) Group *group;
 
 @end
 
@@ -61,6 +65,24 @@
     return nil;
 }
 
+- (Task *)initWithRef: (Firebase *)taskRef andGroup:(Group *)group
+{
+    if (self = [super init]) {
+        self.taskRef = taskRef;
+        
+        self.group = group;
+        
+        [self.sharedData addChildObserver:self.taskRef];
+        
+        [self loadTaskData];
+        
+        [self attachListenerForChanges];
+        
+        return self;
+    }
+    return nil;
+}
+
 
 //*****************************************************************************/
 #pragma mark - Load task data
@@ -88,7 +110,17 @@
             self.completed = NO;
         }
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Task" object:self];
+        NSArray *newTaskData;
+        if (self.group)
+        {
+            newTaskData = @[self.group, self];
+        }
+        else
+        {
+            newTaskData = @[self.sharedData.user, self];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Task" object:newTaskData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

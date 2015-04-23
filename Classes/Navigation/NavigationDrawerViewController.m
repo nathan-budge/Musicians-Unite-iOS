@@ -13,6 +13,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "NavigationDrawerViewController.h"
 
@@ -110,20 +111,7 @@
     [SVProgressHUD dismiss];
     [self performSegueWithIdentifier:kLogoutSegueIdentifier sender:sender];
     
-    NSDictionary *options = @{
-                              kCRToastTextKey : kLoggedOutSuccessMessage,
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor redColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
-    
+    [Utilities redToastMessage:kLoggedOutSuccessMessage];    
 }
 
 @end

@@ -77,6 +77,8 @@
         [self.buttonConfirm setTitle:kLeaveGroupButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
+        //Group removed notification handled in GroupTabarController
+        
         [self.fieldGroupName addTarget:self
                                 action:@selector(textFieldDidChange)
                       forControlEvents:UIControlEventEditingChanged];
@@ -85,11 +87,6 @@
     {
         [self.buttonConfirm setTitle:kCreateButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kNewGroupNotification
-                                                   object:nil];
     }
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
@@ -106,11 +103,19 @@
         self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
         self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupNotification
+                                                   object:nil];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self dismissKeyboard];
 }
 
@@ -119,57 +124,24 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionProfileImage:(id)sender
-{
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                              delegate:self
-                                     cancelButtonTitle:kCancelButtonTitle
-                                destructiveButtonTitle:kRemovePhotoButtonTitle
-                                     otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
-
-    [actionSheet showInView:self.view];
-}
-
-- (IBAction)actionMemberManagement:(id)sender
-{
-    
-    if ([self.fieldGroupName.text isEqualToString:@""])
-    {
-        [SVProgressHUD showErrorWithStatus:kGroupNameError maskType:SVProgressHUDMaskTypeBlack];
-    }
-    else
-    {
-        [self performSegueWithIdentifier:kMemberManagementSegueIdentifier sender:self];
-    }
-}
-
 - (IBAction)actionCreateOrLeaveGroup:(id)sender
 {
     self.group ? [self actionLeaveGroup] : [self actionCreateGroup];
-}
-
--(void)actionLeaveGroup
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                    message:kLeaveGroupAlertMessage
-                                                   delegate:self
-                                          cancelButtonTitle:kCancelButtonTitle
-                                          otherButtonTitles:kConfirmButtonTitle, nil];
-    [alert show];
 }
 
 -(void)actionCreateGroup
 {
     if ([self.fieldGroupName.text isEqualToString:@""])
     {
-        [SVProgressHUD showErrorWithStatus:kGroupNameError maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoGroupNameError maskType:SVProgressHUDMaskTypeBlack];
     }
     else
     {
         Firebase *groupRef = [[self.ref childByAppendingPath:kGroupsFirebaseNode] childByAutoId];
-        Firebase *userRef = [self.ref childByAppendingPath:kUsersFirebaseNode];
         
         self.groupID = groupRef.key;
+        
+        Firebase *userRef = [self.ref childByAppendingPath:kUsersFirebaseNode];
         
         NSDictionary *newGroup = @{
                                    kGroupNameFirebaseField:self.fieldGroupName.text,
@@ -181,6 +153,16 @@
         [[[userRef childByAppendingPath:self.sharedData.user.userID] childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
         [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.sharedData.user.userID:@YES}];
     }
+}
+
+-(void)actionLeaveGroup
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:kLeaveGroupAlertMessage
+                                                   delegate:self
+                                          cancelButtonTitle:kCancelButtonTitle
+                                          otherButtonTitles:kConfirmButtonTitle, nil];
+    [alert show];
 }
 
 -(void)actionSaveGroup
@@ -198,21 +180,33 @@
     
     [self dismissKeyboard];
     
-    NSDictionary *options = @{
-                              kCRToastTextKey : kGroupSavedSuccessMessage,
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor greenColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
+    [Utilities greenToastMessage:kGroupSavedSuccessMessage];
     
     self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
+}
+
+- (IBAction)actionProfileImage:(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                              delegate:self
+                                     cancelButtonTitle:kCancelButtonTitle
+                                destructiveButtonTitle:kRemovePhotoButtonTitle
+                                     otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
+
+    [actionSheet showInView:self.view];
+}
+
+- (IBAction)actionMemberManagement:(id)sender
+{
+    
+    if ([self.fieldGroupName.text isEqualToString:@""])
+    {
+        [SVProgressHUD showErrorWithStatus:kNoGroupNameError maskType:SVProgressHUDMaskTypeBlack];
+    }
+    else
+    {
+        [self performSegueWithIdentifier:kMemberManagementSegueIdentifier sender:self];
+    }
 }
 
 
@@ -246,7 +240,6 @@
             Group *newGroup = notification.object;
             if ([newGroup.groupID isEqualToString:self.groupID])
             {
-                [[NSNotificationCenter defaultCenter] removeObserver:self];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
             

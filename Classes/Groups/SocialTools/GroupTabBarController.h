@@ -13,6 +13,5 @@
 @interface GroupTabBarController : UITabBarController
 
 @property (nonatomic) Group *group;
-@property (nonatomic) User *user;
 
 @end
