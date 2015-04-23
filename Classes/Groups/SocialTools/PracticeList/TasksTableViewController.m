@@ -88,21 +88,6 @@
         self.user = self.sharedData.user;
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kNewTaskNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kTaskRemovedNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:kTaskDataUpdatedNotification
-                                               object:nil];
-    
     
     NSMutableArray *tasks;
     if (self.group)
@@ -127,6 +112,21 @@
     }
     
     [self.tableView reloadData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewTaskNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kTaskRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kTaskDataUpdatedNotification
+                                               object:nil];
     
 }
 
@@ -417,7 +417,8 @@
         TaskViewController *destViewController = segue.destinationViewController;
         destViewController.task = self.selectedTask;
         
-        if (self.group) {
+        if (self.group)
+        {
             destViewController.group = self.group;
         }
     }

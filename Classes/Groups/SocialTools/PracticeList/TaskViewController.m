@@ -91,8 +91,9 @@
         [self.buttonCreateOrSave setTitle:kCreateButtonTitle forState:UIControlStateNormal];
         self.buttonDelete.hidden = YES;
         self.buttonMetronome.hidden = YES;
-        self.groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
     }
+    
+    self.groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
