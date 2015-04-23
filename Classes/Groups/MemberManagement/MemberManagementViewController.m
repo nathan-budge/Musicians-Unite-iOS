@@ -30,6 +30,8 @@
 @property (nonatomic) NSMutableArray *members;
 @property (nonatomic) NSMutableArray *membersToRemove;
 
+@property (assign) NSString *groupID; //Keep track of id for new groups
+
 @property (nonatomic, weak) SharedData *sharedData;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonConfirm;
@@ -111,12 +113,28 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
     
     self.memberTableView.contentInset = UIEdgeInsetsMake(-35.0f, 0.0f, 0.0f, 0.0f);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupMemberRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupMemberNotification
+                                               object:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -148,58 +166,16 @@
     }
 }
 
--(void)addMemberToTableView
+-(void)actionDeleteMemberFromTableView:(id)sender
 {
-    [[[self.userRef queryOrderedByChild:kUserEmailFirebaseField] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        
-        User *newMember = [[User alloc] init];
-        
-        if ([snapshot.value isEqual:[NSNull null]])
-        {
-            newMember.completedRegistration = NO;
-            newMember.email = self.fieldEmail.text;
-        }
-        else
-        {
-            NSDictionary *userData = snapshot.value;
-            NSString *userID = [userData allKeys][0];
-            
-            newMember.userID = userID;
-            newMember.email = userData[userID][kUserEmailFirebaseField];
-            
-            if ([userData[userID][kUserCompletedRegistrationFirebaseField] isEqual:@YES])
-            {
-                newMember.completedRegistration = YES;
-                newMember.firstName = userData[userID][kUserFirstNameFirebaseField];
-                newMember.lastName = userData[userID][kUserLastNameFirebaseField];
-                newMember.profileImage = [Utilities decodeBase64ToImage:userData[userID][kProfileImageFirebaseField]];
-            }
-            else
-            {
-                newMember.completedRegistration = NO;
-                newMember.email = self.fieldEmail.text;
-            }
-        }
-        
-        [self.members addObject:newMember];
-        
-        self.fieldEmail.text = @"";
-        [SVProgressHUD dismiss];
-        [self.memberTableView reloadData];
-        
-        if (self.group.groupID)
-        {
-            self.navigationItem.rightBarButtonItem.enabled = [self enableSave];
-        }
-        
-    } withCancelBlock:^(NSError *error) {
-        NSLog(@"ERROR: %@", error.description);
-    }];
+    [self deleteMemberFromTableView:sender];
 }
 
 - (IBAction)actionCreateGroup:(id)sender
 {
     Firebase *groupRef = [[self.ref childByAppendingPath:kGroupsFirebaseNode] childByAutoId];
+    
+    self.groupID = groupRef.key;
     
     NSDictionary *newGroup = @{
                                kGroupNameFirebaseField:self.group.name,
@@ -212,11 +188,6 @@
     [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.sharedData.user.userID:@YES}];
     
     [self addMembers:self.members toGroup:groupRef];
-    
-    dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        [self dismissKeyboard];
-    });
 }
 
 -(void)actionSaveGroup
@@ -246,38 +217,89 @@
         Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
         [self addMembers:self.members toGroup:groupRef];
         
-        [self groupSavedNotification];
+        [self groupSavedToastNotification];
+        [self.navigationController popViewControllerAnimated:YES];
     }
     else
     {
-        [self groupSavedNotification];
+        [self groupSavedToastNotification];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//*****************************************************************************/
+#pragma mark - Add member to table view
+//*****************************************************************************/
+
+-(void)addMemberToTableView
 {
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        for (User *member in self.membersToRemove) {
+    [[[self.userRef queryOrderedByChild:kUserEmailFirebaseField] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, member.userID]] removeValue];
-            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", member.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
+        User *newMember = [[User alloc] init];
+        
+        if ([snapshot.value isEqual:[NSNull null]])
+        {
+            newMember.completedRegistration = NO;
+            newMember.email = self.fieldEmail.text;
+        }
+        else
+        {
+            NSDictionary *userData = snapshot.value;
+            NSString *userID = [userData allKeys][0];
             
-            if (!member.completedRegistration) //Remove temp users that do not belong to any group
+            newMember.userID = userID;
+            newMember.email = userData[userID][kUserEmailFirebaseField];
+            
+            if ([userData[userID][kUserCompletedRegistrationFirebaseField] isEqual:@YES])
             {
-                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+                newMember.completedRegistration = YES;
+                newMember.firstName = userData[userID][kUserFirstNameFirebaseField];
+                newMember.lastName = userData[userID][kUserLastNameFirebaseField];
+                newMember.profileImage = [Utilities decodeBase64ToImage:userData[userID][kProfileImageFirebaseField]];
+            }
+            else
+            {
+                newMember.completedRegistration = NO;
             }
         }
         
-        if (self.members.count > 0) //User was added to a group
+        [self.members addObject:newMember];
+        
+        self.fieldEmail.text = @"";
+        [SVProgressHUD dismiss];
+        [self.memberTableView reloadData];
+        
+        if (self.group.groupID)
         {
-            Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
-            [self addMembers:self.members toGroup:groupRef];
+            self.navigationItem.rightBarButtonItem.enabled = [self enableSave];
         }
         
-        [self groupSavedNotification];
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"ERROR: %@", error.description);
+    }];
+}
+
+
+//*****************************************************************************/
+#pragma mark - Delete member from table view
+//*****************************************************************************/
+
+- (void)deleteMemberFromTableView:(id)sender
+{
+    UIButton *btn =(UIButton*)sender;
+    [self.members removeObjectAtIndex:btn.tag];
+    [self.memberTableView reloadData];
+    
+    if (self.group.groupID)
+    {
+        self.navigationItem.rightBarButtonItem.enabled = [self enableSave];
     }
 }
+
+
+//*****************************************************************************/
+#pragma mark - Add members to group
+//*****************************************************************************/
 
 - (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef
 {
@@ -304,19 +326,43 @@
     }
 }
 
--(void)actionDeleteMember:(id)sender
+
+//*****************************************************************************/
+#pragma mark - Remove members from group alert view
+//*****************************************************************************/
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    UIButton *btn =(UIButton*)sender;
-    [self.members removeObjectAtIndex:btn.tag];
-    [self.memberTableView reloadData];
-    
-    if (self.group.groupID)
+    if (buttonIndex != alertView.cancelButtonIndex)
     {
-        self.navigationItem.rightBarButtonItem.enabled = [self enableSave];
+        for (User *member in self.membersToRemove) {
+            
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, member.userID]] removeValue];
+            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", member.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
+            
+            if (!member.completedRegistration) //Remove temp users that do not belong to any group
+            {
+                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+            }
+        }
+        
+        if (self.members.count > 0) //User was added to a group
+        {
+            Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
+            [self addMembers:self.members toGroup:groupRef];
+        }
+        
+        [self groupSavedToastNotification];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
--(void)groupSavedNotification
+
+//*****************************************************************************/
+#pragma mark - Helper methods
+//*****************************************************************************/
+
+-(void)groupSavedToastNotification
 {
     NSDictionary *options = @{
                               kCRToastTextKey : kGroupSavedSuccessMessage,
@@ -331,9 +377,6 @@
     [CRToastManager showNotificationWithOptions:options
                                 completionBlock:^{
                                 }];
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    [self dismissKeyboard];
 }
 
 - (BOOL)enableSave
@@ -365,6 +408,38 @@
     }
     
     return NO;
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:kNewGroupNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            Group *newGroup = notification.object;
+            if ([newGroup.groupID isEqualToString:self.groupID])
+            {
+                [[NSNotificationCenter defaultCenter] removeObserver:self];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+            
+        });
+    }
+    else if ([[notification name] isEqualToString:kNewGroupMemberNotification])
+    {
+        self.members = [NSMutableArray arrayWithArray:self.group.members];
+        [self.memberTableView reloadData];
+    }
+    else if ([[notification name] isEqualToString:kGroupMemberRemovedNotification])
+    {
+        self.members = [NSMutableArray arrayWithArray:self.group.members];
+        [self.memberTableView reloadData];
+    }
 }
 
 
@@ -432,7 +507,7 @@
     
     UIButton *deleteButton = (UIButton *)[cell viewWithTag:3];
     [deleteButton setTag:indexPath.row];
-    [deleteButton addTarget:self action:@selector(actionDeleteMember:) forControlEvents:UIControlEventTouchUpInside];
+    [deleteButton addTarget:self action:@selector(actionDeleteMemberFromTableView:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }

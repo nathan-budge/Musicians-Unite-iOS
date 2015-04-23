@@ -103,3 +103,5 @@
 #define kNewGroupNotification                       @"New Group"
 #define kGroupRemovedNotification                   @"Group Removed"
 #define kNoGroupsNotification                       @"No Groups"
+#define kGroupMemberRemovedNotification             @"Group Member Removed"
+#define kNewGroupMemberNotification                 @"New Group Member"

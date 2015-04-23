@@ -93,8 +93,6 @@
     }
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
-    
-    [self.sharedData addNotificationCenterObserver:self];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -248,7 +246,6 @@
             Group *newGroup = notification.object;
             if ([newGroup.groupID isEqualToString:self.groupID])
             {
-                [self dismissKeyboard];
                 [[NSNotificationCenter defaultCenter] removeObserver:self];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
