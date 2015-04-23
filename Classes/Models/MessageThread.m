@@ -119,7 +119,8 @@
         
         self.messageThreadID = snapshot.key;
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread" object:self];
+         NSArray *newThreadData = @[self.group, self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread" object:newThreadData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

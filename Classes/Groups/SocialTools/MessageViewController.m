@@ -11,6 +11,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
@@ -20,8 +21,6 @@
 #import "MessageThread.h"
 #import "User.h"
 
-
-static NSString *MessengerCellIdentifier = @"MessengerCell";
 
 @interface MessageViewController ()
 
@@ -52,7 +51,7 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 -(Firebase *)messageThreadRef
 {
     if (!_messageThreadRef) {
-        _messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages", self.messageThread.messageThreadID]];
+        _messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kMessageThreadsFirebaseNode, self.messageThread.messageThreadID, kMessagesFirebaseNode]];
     }
     return _messageThreadRef;
 }
@@ -82,7 +81,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 {
     self = [super initWithTableViewStyle:UITableViewStylePlain];
     if (self) {
-        // Register a subclass of SLKTextView, if you need any special appearance and/or behavior customisation.
         [self registerClassForTextView:[MessageTextView class]];
     }
     return self;
@@ -109,9 +107,9 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     self.inverted = YES;
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:MessengerCellIdentifier];
+    [self.tableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:kMessageCellIdentifier];
     
-    [self.rightButton setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
+    [self.rightButton setTitle:kSendButtonTitle forState:UIControlStateNormal];
     
     self.textInputbar.autoHideRightButton = YES;
     self.textInputbar.maxCharCount = 256;
@@ -120,21 +118,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     
     self.navigationItem.title = self.messageThread.title;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"New Message"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Message Removed"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Thread Removed"
-                                               object:nil];
-    
     for (Message *message in self.messageThread.messages) {
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -142,16 +125,31 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
         UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
         
         [self.tableView beginUpdates];
+        
         [self.messages insertObject:message atIndex:0];
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
+        
         [self.tableView endUpdates];
         
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
         
-        // Fixes the cell from blinking (because of the transform, when using translucent cells)
-        // See https://github.com/slackhq/SlackTextViewController/issues/94#issuecomment-69929927
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewMessageNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kMessageRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kMessageThreadRemovedNotification
+                                               object:nil];
 }
 
 
@@ -161,33 +159,38 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"New Message"])
+    if ([[notification name] isEqualToString:kNewMessageNotification])
     {
-        NSArray *newMessageData = notification.object;
-        
-        if ([[newMessageData objectAtIndex:0] isEqual:self.messageThread])
-        {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-            UITableViewRowAnimation rowAnimation = UITableViewRowAnimationBottom;
-            UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
-            [self.tableView beginUpdates];
-            Message *newMessage = [newMessageData objectAtIndex:1];
-            [self.messages insertObject:newMessage atIndex:0];
-            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
-            [self.tableView endUpdates];
+            NSArray *newMessageData = notification.object;
+            if ([[newMessageData objectAtIndex:0] isEqual:self.messageThread])
+            {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                UITableViewRowAnimation rowAnimation = UITableViewRowAnimationBottom;
+                UITableViewScrollPosition scrollPosition = UITableViewScrollPositionBottom;
+                
+                [self.tableView beginUpdates];
+                
+                Message *newMessage = [newMessageData objectAtIndex:1];
+                [self.messages insertObject:newMessage atIndex:0];
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
+                
+                [self.tableView endUpdates];
+                
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
             
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
+        });
     }
-    else if ([[notification name] isEqualToString:@"Message Removed"])
+    else if ([[notification name] isEqualToString:kMessageRemovedNotification])
     {
         Message *removedMessage = notification.object;
         [self.messages removeObject:removedMessage];
         [self.tableView reloadData];
     }
-    else if ([[notification name] isEqualToString:@"Thread Removed"])
+    else if ([[notification name] isEqualToString:kMessageThreadRemovedNotification])
     {
         if ([notification.object isEqual:self.messageThread])
         {
@@ -206,8 +209,8 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateBegan) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                  delegate:self
-                                                        cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:@"Delete"
+                                                        cancelButtonTitle:kCancelButtonTitle
+                                                   destructiveButtonTitle:kDeleteButtonTitle
                                                         otherButtonTitles: nil];
         
         MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
@@ -235,22 +238,10 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 - (void)removeMessage:(NSInteger)row
 {
     Message *removedMessage = [self.messages objectAtIndex:row];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", self.messageThread.messageThreadID, removedMessage.messageID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessagesFirebaseNode, removedMessage.messageID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kMessageThreadsFirebaseNode, self.messageThread.messageThreadID, kMessagesFirebaseNode, removedMessage.messageID]] removeValue];
     
-    NSDictionary *options = @{
-                              kCRToastTextKey : @"Message Removed!",
-                              kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                              kCRToastBackgroundColorKey : [UIColor redColor],
-                              kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                              kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                              kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                              };
-    
-    [CRToastManager showNotificationWithOptions:options
-                                completionBlock:^{
-                                }];
+    [Utilities redToastMessage:kMessageRemovedSuccessMessage];
 }
 
 
@@ -263,11 +254,11 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
     
-    Firebase *newMessage = [[self.ref childByAppendingPath:@"messages"] childByAutoId];
+    Firebase *newMessage = [[self.ref childByAppendingPath:kMessagesFirebaseNode] childByAutoId];
     
     NSDictionary *messageData = @{
-                                  @"sender":self.sharedData.user.userID,
-                                  @"text":[self.textView.text copy],
+                                  kMessageSenderFirebaseField:self.sharedData.user.userID,
+                                  kMessageTextFirebaseField:[self.textView.text copy],
                                   };
     
     [newMessage setValue:messageData];
@@ -294,32 +285,26 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:MessengerCellIdentifier];
+    MessageTableViewCell *cell = (MessageTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:kMessageCellIdentifier];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteMessage:)];
     [cell addGestureRecognizer:longPress];
     
-    dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-        
-        Message *message = [self.messages objectAtIndex:indexPath.row];
-        
-        User *sender = message.sender;
-        
-        cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", sender.firstName, sender.lastName];
-        cell.bodyLabel.text = message.text;
-        
-        cell.thumbnailView.image = sender.profileImage;
-        cell.thumbnailView.layer.shouldRasterize = YES;
-        cell.thumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-        
-        cell.indexPath = indexPath;
-        cell.usedForMessage = YES;
-        
-        // Cells must inherit the table view's transform
-        // This is very important, since the main table view may be inverted
-        cell.transform = self.tableView.transform;
-        
-    });
+    Message *message = [self.messages objectAtIndex:indexPath.row];
+    
+    User *sender = message.sender;
+    
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", sender.firstName, sender.lastName];
+    cell.bodyLabel.text = message.text;
+    
+    cell.thumbnailView.image = sender.profileImage;
+    cell.thumbnailView.layer.shouldRasterize = YES;
+    cell.thumbnailView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    
+    cell.indexPath = indexPath;
+    cell.usedForMessage = YES;
+    
+    cell.transform = self.tableView.transform;
     
     return cell;
 }
@@ -376,7 +361,6 @@ static NSString *MessengerCellIdentifier = @"MessengerCell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    // Since SLKTextViewController uses UIScrollViewDelegate to update a few things, it is important that if you ovveride this method, to call super.
     [super scrollViewDidScroll:scrollView];
 }
 

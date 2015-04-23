@@ -72,12 +72,17 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"New Thread"
+                                                 name:kNewMessageThreadNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Thread Removed"
+                                                 name:kMessageThreadRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewMessageNotification
                                                object:nil];
 }
 
@@ -163,6 +168,32 @@
         if ([[completedTaskData objectAtIndex:0] isEqual:self.group])
         {
             [Utilities greenToastMessage:kTaskCompletedSuccessMessage];
+        }
+    }
+    else if ([[notification name] isEqualToString:kNewMessageThreadNotification])
+    {
+        NSArray *newThreadData = notification.object;
+        if ([[newThreadData objectAtIndex:0] isEqual:self.group])
+        {
+            [Utilities greenToastMessage:kNewMessageThreadSuccessMessage];
+        }
+        
+    }
+    else if ([[notification name] isEqualToString:kMessageThreadRemovedNotification])
+    {
+        NSArray *removedThreadData = notification.object;
+        if ([[removedThreadData objectAtIndex:0] isEqual:self.group])
+        {
+            [Utilities redToastMessage:kMessageThreadRemovedSuccessMessage];
+        }
+        
+    }
+    else if ([[notification name] isEqualToString:kNewMessageNotification])
+    {
+        NSArray *newMessageData = notification.object;
+        if ([[newMessageData objectAtIndex:2] isEqual:self.group])
+        {
+            [Utilities greenToastMessage:kNewMessageSuccessMessage];
         }
     }
 }

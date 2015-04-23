@@ -305,7 +305,8 @@
                 [message.messageRef removeAllObservers];
             }
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Removed" object:removedMessageThread];
+            NSArray *removedThreadData = @[self, removedMessageThread];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Removed" object:removedThreadData];
         }
         
     } withCancelBlock:^(NSError *error) {

@@ -163,8 +163,8 @@
 		9444BD4E1ADEC9560076C8D5 /* SLKTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTextViewController.m; sourceTree = "<group>"; };
 		9444BD4F1ADEC9560076C8D5 /* SLKTypingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLKTypingIndicatorView.h; sourceTree = "<group>"; };
 		9444BD501ADEC9560076C8D5 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
-		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupTabBarController.h; sourceTree = "<group>"; };
-		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupTabBarController.m; sourceTree = "<group>"; };
+		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupTabBarController.h; path = SocialTools/GroupTabBarController.h; sourceTree = "<group>"; };
+		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupTabBarController.m; path = SocialTools/GroupTabBarController.m; sourceTree = "<group>"; };
 		947429B61ABF1B88002D81E7 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TasksTableViewController.h; path = PracticeList/TasksTableViewController.h; sourceTree = "<group>"; };
 		947429B71ABF1B88002D81E7 /* TasksTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TasksTableViewController.m; path = PracticeList/TasksTableViewController.m; sourceTree = "<group>"; };
 		9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagingTableViewController.h; path = Messaging/MessagingTableViewController.h; sourceTree = "<group>"; };
@@ -380,10 +380,7 @@
 		9428E37E1A9A5F1000A36900 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
-				949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */,
-				949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */,
-				949B04261A9D0EB10029B4E3 /* MessageTextView.h */,
-				949B04271A9D0EB10029B4E3 /* MessageTextView.m */,
+				94A377ED1AE9732F00B7ACBE /* MessageCell */,
 				949B04281A9D0EB10029B4E3 /* MessageViewController.h */,
 				949B04291A9D0EB10029B4E3 /* MessageViewController.m */,
 				9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */,
@@ -512,6 +509,26 @@
 			name = PracticeList;
 			sourceTree = "<group>";
 		};
+		94A377ED1AE9732F00B7ACBE /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */,
+				949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */,
+				949B04261A9D0EB10029B4E3 /* MessageTextView.h */,
+				949B04271A9D0EB10029B4E3 /* MessageTextView.m */,
+			);
+			name = MessageCell;
+			sourceTree = "<group>";
+		};
+		94A377EE1AE9736000B7ACBE /* GroupTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				945958F21A97B000002CF4EF /* GroupTabBarController.h */,
+				945958F31A97B000002CF4EF /* GroupTabBarController.m */,
+			);
+			name = GroupTabBar;
+			sourceTree = "<group>";
+		};
 		94C6DE491A93DDD800562CE9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -531,6 +548,7 @@
 				94C6DE511A93DDD800562CE9 /* GroupDetail */,
 				94C6DE4E1A93DDD800562CE9 /* MemberManagement */,
 				94C6DE541A93DDD800562CE9 /* SocialTools */,
+				94A377EE1AE9736000B7ACBE /* GroupTabBar */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -568,8 +586,6 @@
 			children = (
 				94A35B1A1AB75A76001DC1F2 /* PracticeList */,
 				9428E37E1A9A5F1000A36900 /* Messaging */,
-				945958F21A97B000002CF4EF /* GroupTabBarController.h */,
-				945958F31A97B000002CF4EF /* GroupTabBarController.m */,
 			);
 			path = SocialTools;
 			sourceTree = "<group>";

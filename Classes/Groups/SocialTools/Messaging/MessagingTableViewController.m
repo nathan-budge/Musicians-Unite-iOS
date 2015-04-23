@@ -174,43 +174,22 @@
     if ([[notification name] isEqualToString:@"New Thread"])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-            [self.messageThreads addObject:notification.object];
+            
+            NSArray *newThreadData = notification.object;
+            MessageThread *newThread = [newThreadData objectAtIndex:1];
+            
+            [self.messageThreads addObject:newThread];
             [self.tableView reloadData];
-            
-            NSDictionary *options = @{
-                                      kCRToastTextKey : @"Thread Created!",
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
-            
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
+        
         });
     }
     else if ([[notification name] isEqualToString:@"Thread Removed"])
     {
-        MessageThread *removedMessageThread = notification.object;
+        NSArray *removedThreadData = notification.object;
+        MessageThread *removedMessageThread = [removedThreadData objectAtIndex:1];
         [self.messageThreads removeObject:removedMessageThread];
         [self.tableView reloadData];
-        
-        NSDictionary *options = @{
-                                  kCRToastTextKey : @"Thread Removed!",
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor redColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
+    
     }
     else if ([[notification name] isEqualToString:@"New Message"] || [[notification name] isEqualToString:@"Message Removed"])
     {
@@ -341,13 +320,11 @@
     {
         NewMessageTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
-        destViewController.user = self.user;
     }
     else if ([segue.identifier isEqualToString:@"viewThread"])
     {
         MessageViewController *destViewController = segue.destinationViewController;
         destViewController.messageThread = self.selectedMessageThread;
-        destViewController.user = self.user;
     }
 }
 

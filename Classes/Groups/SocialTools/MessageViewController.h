@@ -17,6 +17,5 @@
 @interface MessageViewController : SLKTextViewController <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) MessageThread *messageThread;
-@property (nonatomic) User *user;
 
 @end

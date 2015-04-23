@@ -39,6 +39,7 @@
 #define kGroupCellIdentifier                        @"GroupCell"
 #define kUserCellIdentifier                         @"UserCell"
 #define kTaskCellIdentifier                         @"TaskCell"
+#define kMessageCellIdentifier                      @"MessengerCell"
 
 //Error Messages
 #define kError                                      @"Error"
@@ -71,6 +72,10 @@
 #define kTaskRemovedSuccessMessage                  @"Task Removed!"
 #define kNewTaskSuccessMessage                      @"New Task!"
 #define kTaskCompletedSuccessMessage                @"Task Completed!"
+#define kNewMessageSuccessMessage                   @"New Message!"
+#define kMessageRemovedSuccessMessage               @"Message Removed!"
+#define kNewMessageThreadSuccessMessage             @"New Thread!"
+#define kMessageThreadRemovedSuccessMessage         @"Thread Removed!"
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
@@ -87,6 +92,8 @@
 #define kLeaveGroupButtonTitle                      @"Leave Group"
 #define kCreateButtonTitle                          @"Create"
 #define kSaveButtonTitle                            @"Save"
+#define kSendButtonTitle                            @"Send"
+#define kDeleteButtonTitle                          @"Delete"
 
 //View Titles
 #define kGroupSettingsTitle                         @"Group Settings"
@@ -102,6 +109,8 @@
 #define kMembersFirebaseNode                        @"members"
 #define kNetworkConnectionNode                      @".info/connected"
 #define kTasksFirebaseNode                          @"tasks"
+#define kMessageThreadsFirebaseNode                 @"message_threads"
+#define kMessagesFirebaseNode                       @"messages"
 
 //Firebase Fields
 #define kUserEmailFirebaseField                     @"email"
@@ -114,6 +123,8 @@
 #define kTaskTempoFirebaseField                     @"tempo"
 #define kTaskNotesFirebaseField                     @"notes"
 #define kTaskCompletedFirebaseField                 @"completed"
+#define kMessageSenderFirebaseField                 @"sender"
+#define kMessageTextFirebaseField                   @"text"
 
 //Image Assets
 #define kProfileLogoImage                           @"profile_logo"
@@ -135,3 +146,7 @@
 #define kGroupTaskDataUpdatedNotification           @"Group Task Data Updated"
 #define kUserTaskCompletedNotification              @"User Task Completed"
 #define kGroupTaskCompletedNotification             @"Group Task Completed"
+#define kNewMessageNotification                     @"New Message"
+#define kMessageRemovedNotification                 @"Message Removed"
+#define kNewMessageThreadNotification               @"New Thread"
+#define kMessageThreadRemovedNotification           @"Thread Removed"

@@ -111,7 +111,7 @@
         });
         
         
-        NSArray *newMessageData = @[self.thread, self];
+        NSArray *newMessageData = @[self.thread, self, self.group];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:newMessageData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
