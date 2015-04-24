@@ -212,6 +212,13 @@
             NSArray *newMessageData = notification.object;
             if ([[newMessageData objectAtIndex:2] isEqual:self.group])
             {
+                MessageThread *updatedMessageThread = [newMessageData objectAtIndex:0];
+                [self.messageThreads removeObject:updatedMessageThread];
+                [self.messageThreads insertObject:updatedMessageThread atIndex:0];
+                
+                [self.group.messageThreads removeObject:updatedMessageThread];
+                [self.group.messageThreads insertObject:updatedMessageThread atIndex:0];
+                
                 [self.tableView reloadData];
             }
             
