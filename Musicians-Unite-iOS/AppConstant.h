@@ -275,6 +275,22 @@
 #define kCheckboxImage                              @"checkbox"
 #define kCompletedCheckboxImage                     @"checkbox_completed"
 
+//*****************************************************************************/
+#pragma mark - Pitch Constants
+//*****************************************************************************/
+
+#define FREQ_C0  16.35;
+#define FREQ_DB0 17.32;
+#define FREQ_D0  18.35;
+#define FREQ_EB0 19.45;
+#define FREQ_E0  20.60;
+#define FREQ_F0  21.83;
+#define FREQ_GB0 23.12;
+#define FREQ_G0  24.50;
+#define FREQ_AB0 25.96;
+#define FREQ_A0  27.50;
+#define FREQ_BB0 29.14;
+#define FREQ_B0  30.87;
 
 
 //*****************************************************************************/
@@ -286,6 +302,4 @@
 
 #define kGroupPickerIndex 2
 #define kGroupPickerCellHeight 164
-
-
 

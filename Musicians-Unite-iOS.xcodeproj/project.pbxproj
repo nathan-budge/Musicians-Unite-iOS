@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0418799D1AEAC1A100138E2C /* AudioController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0418799C1AEAC1A100138E2C /* AudioController.mm */; };
+		041879A91AEAC8E000138E2C /* doc in Resources */ = {isa = PBXBuildFile; fileRef = 041879A61AEAC8E000138E2C /* doc */; };
+		041879AA1AEAC8E000138E2C /* include in Resources */ = {isa = PBXBuildFile; fileRef = 041879A71AEAC8E000138E2C /* include */; };
+		041879AB1AEAC8E000138E2C /* libs in Resources */ = {isa = PBXBuildFile; fileRef = 041879A81AEAC8E000138E2C /* libs */; };
+		0485B00F1AEA9A1800C02E7C /* PitchDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485B00E1AEA9A1800C02E7C /* PitchDetector.m */; };
 		04E6E4EF1A99661800254638 /* CircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6E4EE1A99661800254638 /* CircularButton.m */; };
 		04E87F431AE9F75200DDC488 /* Ping Hi.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E87F421AE9F75200DDC488 /* Ping Hi.wav */; };
 		04E87F451AE9F75A00DDC488 /* Ping Low.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E87F441AE9F75A00DDC488 /* Ping Low.wav */; };
@@ -94,6 +99,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0418799B1AEAC1A100138E2C /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		0418799C1AEAC1A100138E2C /* AudioController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioController.mm; sourceTree = "<group>"; };
+		041879A61AEAC8E000138E2C /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = doc; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/doc; sourceTree = "<group>"; };
+		041879A71AEAC8E000138E2C /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include; sourceTree = "<group>"; };
+		041879A81AEAC8E000138E2C /* libs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libs; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs; sourceTree = "<group>"; };
+		0485B00D1AEA9A1800C02E7C /* PitchDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitchDetector.h; sourceTree = "<group>"; };
+		0485B00E1AEA9A1800C02E7C /* PitchDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitchDetector.m; sourceTree = "<group>"; };
 		04E6E4ED1A99661700254638 /* CircularButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularButton.h; sourceTree = "<group>"; };
 		04E6E4EE1A99661800254638 /* CircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularButton.m; sourceTree = "<group>"; };
 		04E87F421AE9F75200DDC488 /* Ping Hi.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ping Hi.wav"; sourceTree = "<group>"; };
@@ -263,6 +275,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		041879A51AEAC89E00138E2C /* Pitch-Detection */ = {
+			isa = PBXGroup;
+			children = (
+				041879AC1AEAC98800138E2C /* doc */,
+				041879A71AEAC8E000138E2C /* include */,
+				041879A81AEAC8E000138E2C /* libs */,
+			);
+			name = "Pitch-Detection";
+			sourceTree = "<group>";
+		};
+		041879AC1AEAC98800138E2C /* doc */ = {
+			isa = PBXGroup;
+			children = (
+				041879A61AEAC8E000138E2C /* doc */,
+			);
+			name = doc;
+			sourceTree = "<group>";
+		};
 		04E87F411AE9F72400DDC488 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -279,6 +309,7 @@
 				9405B90D1A8EF7AC00EEDE19 /* Musicians-Unite-iOS */,
 				9405B9271A8EF7AC00EEDE19 /* Musicians-Unite-iOSTests */,
 				9405B90C1A8EF7AC00EEDE19 /* Products */,
+				041879A51AEAC89E00138E2C /* Pitch-Detection */,
 				9405B9891A8F97AA00EEDE19 /* Frameworks */,
 				9405B9481A8F08F900EEDE19 /* ECSlidingViewController */,
 				9479A2811A9A693A00C668D0 /* SlackTextViewController */,
@@ -446,12 +477,14 @@
 				9444BD441ADEC9560076C8D5 /* UIView+SLKAdditions.h */,
 				9444BD451ADEC9560076C8D5 /* UIView+SLKAdditions.m */,
 			);
-			path = Additions;
+			name = Additions;
+			path = ../Additions;
 			sourceTree = "<group>";
 		};
 		9444BD461ADEC9560076C8D5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9444BD3E1ADEC9560076C8D5 /* Additions */,
 				9444BD471ADEC9560076C8D5 /* SLKInputAccessoryView.h */,
 				9444BD481ADEC9560076C8D5 /* SLKInputAccessoryView.m */,
 				9444BD491ADEC9560076C8D5 /* SLKTextInputbar.h */,
@@ -469,7 +502,6 @@
 		9479A2811A9A693A00C668D0 /* SlackTextViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9444BD3E1ADEC9560076C8D5 /* Additions */,
 				9444BD461ADEC9560076C8D5 /* Classes */,
 			);
 			path = SlackTextViewController;
@@ -683,10 +715,14 @@
 		94F498DE1AD597DE00F2760C /* Tuner */ = {
 			isa = PBXGroup;
 			children = (
+				0418799B1AEAC1A100138E2C /* AudioController.h */,
+				0418799C1AEAC1A100138E2C /* AudioController.mm */,
 				94F498DF1AD5988400F2760C /* FaceView.h */,
 				94F498E01AD5988400F2760C /* FaceView.m */,
 				94F498E21AD5A36400F2760C /* TunerViewController.h */,
 				94F498E31AD5A36400F2760C /* TunerViewController.m */,
+				0485B00D1AEA9A1800C02E7C /* PitchDetector.h */,
+				0485B00E1AEA9A1800C02E7C /* PitchDetector.m */,
 			);
 			name = Tuner;
 			sourceTree = "<group>";
@@ -773,7 +809,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				04E87F431AE9F75200DDC488 /* Ping Hi.wav in Resources */,
+				041879AB1AEAC8E000138E2C /* libs in Resources */,
 				9431B8921A93FDEE0074818F /* LaunchScreen.xib in Resources */,
+				041879A91AEAC8E000138E2C /* doc in Resources */,
+				041879AA1AEAC8E000138E2C /* include in Resources */,
 				9431B8911A93FDE60074818F /* Main.storyboard in Resources */,
 				9405B91C1A8EF7AC00EEDE19 /* Images.xcassets in Resources */,
 				04E87F451AE9F75A00DDC488 /* Ping Low.wav in Resources */,
@@ -826,11 +865,13 @@
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
 				9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
+				0418799D1AEAC1A100138E2C /* AudioController.mm in Sources */,
 				949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */,
 				940CDBC41AC352BD0006F099 /* MusicToolsTabBarController.m in Sources */,
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
 				9442D8831ACADFB500B47996 /* MetronomeDots.m in Sources */,
+				0485B00F1AEA9A1800C02E7C /* PitchDetector.m in Sources */,
 				940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */,
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
@@ -929,7 +970,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LIBRARY_SEARCH_PATHS = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs/development;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -964,7 +1011,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LIBRARY_SEARCH_PATHS = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs/development;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -984,6 +1037,11 @@
 				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jack/Documents/School/Senior,
+					Project/LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs/development,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1003,6 +1061,11 @@
 				);
 				INFOPLIST_FILE = "Musicians-Unite-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jack/Documents/School/Senior,
+					Project/LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs/development,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
