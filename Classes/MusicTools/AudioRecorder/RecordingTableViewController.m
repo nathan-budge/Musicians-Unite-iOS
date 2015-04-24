@@ -14,37 +14,26 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "Recording.h"
 #import "User.h"
 #import "Group.h"
 
 
-#define kUnassignedRecordingTitle   @"Unassigned"
-
-#define kTitleError                 @"Title Required"
-#define kRecordingSaved             @"Recording Saved"
-#define kRecordingDeleted           @"Recording Deleted"
-
-#define kRecordingNameKey           @"name"
-#define kRecordingOwnerKey          @"owner"
-
-#define kDatePickerIndex 2
-#define kDatePickerCellHeight 164
-
-
 @interface RecordingTableViewController ()
 
 @property (nonatomic) Firebase *ref;
 
+@property (nonatomic) SharedData *sharedData;
+
 @property (assign) BOOL groupPickerIsShowing;
+
 @property (assign) NSString *ownerID;
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldRecordingName;
 @property (weak, nonatomic) IBOutlet UILabel *labelGroupName;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerGroups;
-
-@property (nonatomic) SharedData *sharedData;
 
 @end
 
@@ -81,42 +70,60 @@
     
     self.fieldRecordingName.text = self.recording.name;
     
-    if (self.user)
+    if (self.group)
     {
-        if ([self.recording.ownerID isEqualToString:self.user.userID])
+        self.labelGroupName.text = self.group.name;
+        self.ownerID = self.group.groupID;
+    }
+    else
+    {
+        if ([self.recording.ownerID isEqualToString:self.sharedData.user.userID])
         {
             self.labelGroupName.text = kUnassignedRecordingTitle;
-            self.ownerID = self.user.userID;
+            self.ownerID = self.sharedData.user.userID;
             
             [self.pickerGroups selectRow:0 inComponent:0 animated:YES];
         }
         else
         {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.groupID=%@", self.recording.ownerID];
-            NSArray *group = [self.user.groups filteredArrayUsingPredicate:predicate];
+            NSArray *group = [self.sharedData.user.groups filteredArrayUsingPredicate:predicate];
             
             Group *foundGroup = [group objectAtIndex:0];
             self.labelGroupName.text = foundGroup.name;
             self.ownerID = foundGroup.groupID;
             
-            [self.pickerGroups selectRow:[self.user.groups indexOfObject:foundGroup] + 1 inComponent:0 animated:YES];
+            [self.pickerGroups selectRow:[self.sharedData.user.groups indexOfObject:foundGroup] + 1 inComponent:0 animated:YES];
         }
     }
-    else if (self.group)
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.group)
     {
-        self.labelGroupName.text = self.group.name;
-        self.ownerID = self.group.groupID;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupRecordingRemovedNotification
+                                                   object:nil];
     }
+    else
+    {        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kUserRecordingRemovedNotification
+                                                   object:nil];
+    }
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Recording Data Updated"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Recording Removed"
-                                               object:nil];
+    [self dismissKeyboard];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -128,63 +135,55 @@
 {
     if ([self.fieldRecordingName.text isEqualToString:@""])
     {
-        [SVProgressHUD showErrorWithStatus:kTitleError maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoRecordingNameError maskType:SVProgressHUDMaskTypeBlack];
     }
     else
     {
-        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
         NSDictionary *updatedRecording = @{
-                                           kRecordingNameKey: self.fieldRecordingName.text,
-                                           kRecordingOwnerKey: self.ownerID ? self.ownerID : self.recording.ownerID,
+                                           kRecordingNameFirebaseField: self.fieldRecordingName.text,
+                                           kRecordingOwnerFirebaseField: self.ownerID ? self.ownerID : self.recording.ownerID,
                                            };
         [recordingRef updateChildValues:updatedRecording];
         
-        if (self.user)
+        if (!self.group)
         {
             Firebase *groupRecordingsRef;
             NSString *oldOwnerID = self.recording.ownerID;
             
-            if ([oldOwnerID isEqualToString:self.user.userID] && ![self.ownerID isEqualToString:self.user.userID])
+            if ([oldOwnerID isEqualToString:self.sharedData.user.userID] && ![self.ownerID isEqualToString:self.sharedData.user.userID])
             {
-                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings", self.ownerID]];
+                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.ownerID, kRecordingsFirebaseNode]];
                 [groupRecordingsRef updateChildValues:@{self.recording.recordingID:@YES}];
             }
-            else if (![oldOwnerID isEqualToString:self.user.userID] && [self.ownerID isEqualToString:self.user.userID])
+            else if (![oldOwnerID isEqualToString:self.sharedData.user.userID] && [self.ownerID isEqualToString:self.sharedData.user.userID])
             {
-                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings/%@", oldOwnerID, self.recording.recordingID]];
+                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, oldOwnerID, kRecordingsFirebaseNode, self.recording.recordingID]];
                 [groupRecordingsRef removeValue];
             }
-            else if  (![oldOwnerID isEqualToString:self.user.userID] && ![self.ownerID isEqualToString:self.user.userID])
+            else if  (![oldOwnerID isEqualToString:self.sharedData.user.userID] && ![self.ownerID isEqualToString:self.sharedData.user.userID])
             {
-                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings/%@", oldOwnerID, self.recording.recordingID]];
+                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, oldOwnerID, kRecordingsFirebaseNode, self.recording.recordingID]];
                 [groupRecordingsRef removeValue];
                 
-                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings", self.ownerID]];
+                groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.ownerID, kRecordingsFirebaseNode]];
                 [groupRecordingsRef updateChildValues:@{self.recording.recordingID:@YES}];
             }
         }
+        
+        [Utilities greenToastMessage:kRecordingSavedSuccessMessage];
     }
 }
 
 - (IBAction)actionDelete:(id)sender
 {
-    if (self.user)
-    {
-        if ([self.recording.ownerID isEqualToString:self.user.userID])
-        {
-            Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
-            [recordingRef removeValue];
-        }
-        
-        Firebase *userRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings/%@", self.user.userID, self.recording.recordingID]];
-        [userRecordingRef removeValue];
-    }
-    else if (self.group)
+    if (self.group)
     {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", self.recording.recordingID];
         NSArray *recording = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
         
-        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", self.recording.recordingID]];
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
+        
         if (recording.count == 0)
         {
             [recordingRef removeValue];
@@ -194,8 +193,19 @@
             [recordingRef updateChildValues:@{@"owner":self.sharedData.user.userID}];
         }
         
-        Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings/%@", self.group.groupID, self.recording.recordingID]];
+        Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode, self.recording.recordingID]];
         [groupRecordingRef removeValue];
+    }
+    else
+    {
+        if ([self.recording.ownerID isEqualToString:self.sharedData.user.userID])
+        {
+            Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
+            [recordingRef removeValue];
+        }
+        
+        Firebase *userRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode, self.recording.recordingID]];
+        [userRecordingRef removeValue];
     }
 }
 
@@ -206,30 +216,20 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Recording Removed"])
+    if ([[notification name] isEqualToString:kUserRecordingRemovedNotification])
     {
-        [self dismissKeyboard];
-        [self.navigationController popViewControllerAnimated:YES];
+        if ([notification.object isEqual:self.recording])
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
-    else if ([[notification name] isEqualToString:@"Recording Data Updated"])
+    else if ([[notification name] isEqualToString:kGroupRecordingRemovedNotification])
     {
-        NSDictionary *options = @{
-                                  kCRToastTextKey : @"Recording Saved!",
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor greenColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
-        
-        [self dismissKeyboard];
-        
-        [self.navigationController popViewControllerAnimated:YES];
+        NSArray *removedRecordingData = notification.object;
+        if ([[removedRecordingData objectAtIndex:1] isEqual:self.recording])
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -244,7 +244,7 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return self.user.groups.count + 1;
+    return self.sharedData.user.groups.count + 1;
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
@@ -253,7 +253,7 @@
     {
         return kUnassignedRecordingTitle;
     }
-    Group *group = [self.user.groups objectAtIndex:row - 1];
+    Group *group = [self.sharedData.user.groups objectAtIndex:row - 1];
     return group.name;
 }
 
@@ -262,16 +262,14 @@
     if (row == 0)
     {
         self.labelGroupName.text = kUnassignedRecordingTitle;
-        self.ownerID = self.user.userID;
+        self.ownerID = self.sharedData.user.userID;
     }
     else
     {
-        Group *group = [self.user.groups objectAtIndex:row - 1];
+        Group *group = [self.sharedData.user.groups objectAtIndex:row - 1];
         self.labelGroupName.text = group.name;
         self.ownerID = group.groupID;
     }
-    
-    NSLog(@"%@", self.ownerID);
 }
 
 
@@ -296,13 +294,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.row == 1 && self.user){
+    if (indexPath.row == 1 && !self.group){
         
-        if (self.groupPickerIsShowing){
-            
+        if (self.groupPickerIsShowing)
+        {
             [self hideDatePickerCell];
-            
-        }else {
+        }
+        else
+        {
             [self showDatePickerCell];
         }
     }
