@@ -188,10 +188,10 @@
 #pragma mark - Firebase Nodes
 //*****************************************************************************/
 
+#define kNetworkConnectionNode                      @".info/connected"
 #define kUsersFirebaseNode                          @"users"
 #define kGroupsFirebaseNode                         @"groups"
 #define kMembersFirebaseNode                        @"members"
-#define kNetworkConnectionNode                      @".info/connected"
 #define kTasksFirebaseNode                          @"tasks"
 #define kMessageThreadsFirebaseNode                 @"message_threads"
 #define kMessagesFirebaseNode                       @"messages"

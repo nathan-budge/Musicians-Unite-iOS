@@ -21,7 +21,6 @@
 
 @interface Group ()
 
-//Shared data singleton
 @property (weak, nonatomic) SharedData *sharedData;
 
 @end
@@ -88,7 +87,8 @@
 
 - (Group *)init
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
         return self;
     }
     return nil;
@@ -96,7 +96,8 @@
 
 - (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
         self.name = name;
         self.profileImage = [Utilities decodeBase64ToImage:profileImageString];
         return self;
@@ -106,12 +107,13 @@
 
 - (Group *)initWithRef: (Firebase *)groupRef
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
         self.groupRef = groupRef;
-        self.groupMembersRef = [self.groupRef childByAppendingPath:@"members"];
-        self.groupMessageThreadsRef = [self.groupRef childByAppendingPath:@"message_threads"];
-        self.groupTasksRef = [self.groupRef childByAppendingPath:@"tasks"];
-        self.groupRecordingsRef = [self.groupRef childByAppendingPath:@"recordings"];
+        self.groupMembersRef = [self.groupRef childByAppendingPath:kMembersFirebaseNode];
+        self.groupMessageThreadsRef = [self.groupRef childByAppendingPath:kMessageThreadsFirebaseNode];
+        self.groupTasksRef = [self.groupRef childByAppendingPath:kTasksFirebaseNode];
+        self.groupRecordingsRef = [self.groupRef childByAppendingPath:kRecordingsFirebaseNode];
         
         [self.sharedData addChildObserver:self.groupRef];
         [self.sharedData addChildObserver:self.groupMembersRef];
@@ -151,15 +153,15 @@
         NSDictionary *groupData = snapshot.value;
         
         self.groupID = snapshot.key;
-        self.name = groupData[@"name"];
-        self.profileImage = [Utilities decodeBase64ToImage:groupData[@"profile_image"]];
+        self.name = groupData[kGroupNameFirebaseField];
+        self.profileImage = [Utilities decodeBase64ToImage:groupData[kProfileImageFirebaseField]];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Group" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNewGroupNotification object:self];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error.description);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -172,15 +174,15 @@
 {
     [self.groupRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"name"])
+        if ([snapshot.key isEqualToString:kGroupNameFirebaseField])
         {
             self.name = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Data Updated" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGroupDataUpdatedNotification object:self];
         }
-        else if ([snapshot.key isEqualToString:@"profile_image"])
+        else if ([snapshot.key isEqualToString:kProfileImageFirebaseField])
         {
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Data Updated" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGroupDataUpdatedNotification object:self];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -196,13 +198,13 @@
         
         if (![newMemberID isEqualToString:self.ref.authData.uid])
         {
-            Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@", newMemberID]];
+            Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, newMemberID]];
             User *newUser = [[User alloc] initWithRef:userRef andGroup:self];
             [self addMember:newUser];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error.description);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -227,7 +229,7 @@
             userID = self.ref.authData.uid;
         }
         
-        //Remove user from group message threads
+        //TODO: Revise this  - Remove user from group message threads
         for (MessageThread *messageThread in self.messageThreads) {
             
             Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", messageThread.messageThreadID]];
@@ -251,7 +253,7 @@
             {
                 Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, recording.recordingID]];
                 [recordingRef updateChildValues:@{kRecordingCreatorFirebaseField:self.groupID}];
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings/%@", userID, recording.recordingID]] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, userID, kRecordingsFirebaseNode, recording.recordingID]] removeValue];
             }
             
         }
@@ -262,11 +264,11 @@
             [self removeMember:removedMember];
             
             NSArray *removedMemberData = @[self, removedMember];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Group Member Removed" object:removedMemberData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGroupMemberRemovedNotification object:removedMemberData];
         }
         
     } withCancelBlock:^(NSError *error) {
-        NSLog(@"%@", error.description);
+        NSLog(@"ERROR: %@", error.description);
     }];
 }
 
@@ -276,9 +278,9 @@
         
         NSString *newMessageThreadID = snapshot.key;
         
-        Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", newMessageThreadID]];
+        Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessageThreadsFirebaseNode, newMessageThreadID]];
         
-        [[messageThreadRef childByAppendingPath:@"members"] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        [[messageThreadRef childByAppendingPath:kMembersFirebaseNode] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
            
             NSString *userID = snapshot.key;
         
@@ -320,7 +322,7 @@
             }
             
             NSArray *removedThreadData = @[self, removedMessageThread];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Thread Removed" object:removedThreadData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageThreadRemovedNotification object:removedThreadData];
         }
         
     } withCancelBlock:^(NSError *error) {
@@ -335,7 +337,7 @@
         
         NSString *newTaskID = snapshot.key;
         
-        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, newTaskID]];
         
         Task *newTask = [[Task alloc] initWithRef:taskRef andGroup:self];
         
@@ -375,7 +377,7 @@
         
         NSString *newRecordingID = snapshot.key;
         
-        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", newRecordingID]];
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, newRecordingID]];
         
         Recording *newRecording = [[Recording alloc] initWithRef:recordingRef andGroup:self];
         
