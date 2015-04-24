@@ -14,6 +14,5 @@
 @interface NewMessageTableViewController : UITableViewController
 
 @property (nonatomic) Group *group;
-@property (nonatomic) User *user;
 
 @end

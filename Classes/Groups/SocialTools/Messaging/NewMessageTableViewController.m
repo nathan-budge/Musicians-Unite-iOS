@@ -10,12 +10,13 @@
 #import "SVProgressHUD.h"
 #import "CRToast.h"
 
+#import "Utilities.h"
+#import "AppConstant.h"
+#import "SharedData.h"
+
 #import "NewMessageTableViewController.h"
 #import "MessageViewController.h"
 #import "MessagingTableViewController.h"
-
-#import "Utilities.h"
-#import "AppConstant.h"
 
 #import "Group.h"
 #import "User.h"
@@ -25,6 +26,10 @@
 @interface NewMessageTableViewController ()
 
 @property (nonatomic) Firebase *ref;
+
+@property (nonatomic) SharedData *sharedData;
+
+@property (nonatomic) NSString *threadID; //Keep track of new thread ID
 
 @property (nonatomic) NSMutableArray *registeredMembers;
 
@@ -53,6 +58,13 @@
     return _registeredMembers;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -63,6 +75,7 @@
     [super viewDidLoad];
     
     for (User *member in self.group.members) {
+        
         if (member.completedRegistration)
         {
             member.selected = NO;
@@ -72,21 +85,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"New Thread"
+                                                 name:kNewMessageThreadNotification
                                                object:nil];
-}
-
-
-//*****************************************************************************/
-#pragma mark - Notification Center
-//*****************************************************************************/
-
-- (void)receivedNotification: (NSNotification *)notification
-{
-    if ([[notification name] isEqualToString:@"New Thread"])
-    {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
 }
 
 
@@ -97,11 +97,14 @@
 - (IBAction)actionCreateChat:(id)sender
 {
     NSMutableArray *newThreadMembers = [[NSMutableArray alloc] init];
+    
     for (User *member in self.registeredMembers) {
+        
         if (member.selected)
         {
             [newThreadMembers addObject:member];
         }
+        
     }
     
     BOOL matchingGroup = NO;
@@ -134,23 +137,50 @@
     
     if (matchingGroup)
     {
-        [SVProgressHUD showErrorWithStatus:@"Thread already exists" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kThreadAlreadyExistsError maskType:SVProgressHUDMaskTypeBlack];
     }
     else if (newThreadMembers.count == 0)
     {
-        [SVProgressHUD showErrorWithStatus:@"No members selected" maskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showErrorWithStatus:kNoThreadMembersSelectedError maskType:SVProgressHUDMaskTypeBlack];
     }
     else
     {
-        Firebase* newMessageThread = [[self.ref childByAppendingPath:@"message_threads"] childByAutoId];
+        Firebase* newMessageThread = [[self.ref childByAppendingPath:kMessageThreadsFirebaseNode] childByAutoId];
         
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads", self.group.groupID]] updateChildValues:@{newMessageThread.key:@YES}];
+        self.threadID = newMessageThread.key;
+        
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMessageThreadsFirebaseNode]] updateChildValues:@{newMessageThread.key:@YES}];
         
         for (User *member in newThreadMembers) {
-            [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{member.userID:@YES}];
+            [[newMessageThread childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{member.userID:@YES}];
         }
         
-        [[newMessageThread childByAppendingPath:@"members"] updateChildValues:@{self.ref.authData.uid:@YES}];
+        [[newMessageThread childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{self.sharedData.user.userID:@YES}];
+    }
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:kNewMessageThreadNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            NSArray *newThreadData = notification.object;
+            if ([[newThreadData objectAtIndex:0] isEqual:self.group])
+            {
+                MessageThread *newMessageThread = [newThreadData objectAtIndex:1];
+                if ([newMessageThread.messageThreadID isEqualToString:self.threadID])
+                {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            }
+            
+        });
     }
 }
 
@@ -173,15 +203,15 @@
 {
     if (self.registeredMembers.count > 0)
     {
-        return @"Select Members";
+        return kSelectMembersSectionHeader;
     }
     
-    return @"No Registered Members";
+    return kNoRegisterdMembersSectionHeader;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kUserCellIdentifier];
     
     User *member = [self.registeredMembers objectAtIndex:indexPath.row];
     

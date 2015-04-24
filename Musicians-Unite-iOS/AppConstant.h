@@ -55,6 +55,8 @@
 #define kNoGroupNameError                           @"Group name is required"
 #define kNoTaskTitleError                           @"Task title is required"
 #define kMemberAlreadyExistsError                   @"Member already exists"
+#define kThreadAlreadyExistsError                   @"Thread already exists"
+#define kNoThreadMembersSelectedError               @"No members selected"
 
 //Success Messages
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
@@ -102,6 +104,8 @@
 //Table section headers
 #define kCompletedTasksSectionHeader                @"Completed"
 #define kIncompleteTasksSectionHeader               @"Incomplete"
+#define kSelectMembersSectionHeader                 @"Select Members"
+#define kNoRegisterdMembersSectionHeader            @"No Registered Members"
 
 //Firebase Nodes
 #define kUsersFirebaseNode                          @"users"
