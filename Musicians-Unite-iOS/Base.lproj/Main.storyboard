@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -852,7 +852,7 @@
                                 <action selector="actionDrawerToggle:" destination="Tyx-wd-4Ol" id="0OF-Hh-Fio"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="2Be-OO-HPs">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="2Be-OO-HPs">
                             <connections>
                                 <action selector="actionSave:" destination="Tyx-wd-4Ol" id="SEf-Bb-Vzs"/>
                             </connections>
@@ -1088,25 +1088,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="Cdy-xM-bDB">
-                            <rect key="frame" x="0.0" y="174" width="320" height="80"/>
+                            <rect key="frame" x="0.0" y="316" width="320" height="58"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sc5-FX-i2r">
-                                    <rect key="frame" x="8" y="38" width="304" height="30"/>
+                                    <rect key="frame" x="8" y="11" width="304" height="36"/>
+                                    <color key="backgroundColor" red="0.94901960780000005" green="0.14901960780000001" blue="0.074509803920000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" title="Delete">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
                                         <action selector="actionDelete:" destination="IEv-dn-3Lp" eventType="touchUpInside" id="un4-y2-EVD"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vzU-IX-FBe">
-                                    <rect key="frame" x="8" y="0.0" width="304" height="30"/>
-                                    <state key="normal" title="Save">
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="actionSave:" destination="IEv-dn-3Lp" eventType="touchUpInside" id="7US-Dg-8y4"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -1120,7 +1113,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vGK-w9-iAm" id="59Q-xH-EdI">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Recording Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KjX-t8-lpq">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Recording Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KjX-t8-lpq">
                                                     <rect key="frame" x="8" y="7" width="304" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -1168,8 +1161,15 @@
                             <outlet property="delegate" destination="IEv-dn-3Lp" id="b2b-A6-clR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eBX-Bk-p4M"/>
+                    <navigationItem key="navigationItem" id="eBX-Bk-p4M">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="5mB-vN-xg9">
+                            <connections>
+                                <action selector="actionSave:" destination="IEv-dn-3Lp" id="NAe-C9-LCW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="buttonSave" destination="5mB-vN-xg9" id="8Ob-jA-sDq"/>
                         <outlet property="fieldRecordingName" destination="KjX-t8-lpq" id="uIi-o8-JQ1"/>
                         <outlet property="labelGroupName" destination="ieP-j6-zAe" id="ySB-sr-YKT"/>
                         <outlet property="pickerGroups" destination="n5s-v1-fjn" id="6ek-bV-scD"/>

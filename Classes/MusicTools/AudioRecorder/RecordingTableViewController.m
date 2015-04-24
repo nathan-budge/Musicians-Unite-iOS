@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *fieldRecordingName;
 @property (weak, nonatomic) IBOutlet UILabel *labelGroupName;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerGroups;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
 
 @end
 
@@ -69,6 +70,11 @@
     [super viewDidLoad];
     
     self.fieldRecordingName.text = self.recording.name;
+    self.buttonSave.enabled = NO;
+    
+    [self.fieldRecordingName addTarget:self
+                            action:@selector(textFieldDidChange)
+                  forControlEvents:UIControlEventEditingChanged];
     
     if (self.group)
     {
@@ -172,6 +178,8 @@
         }
         
         [Utilities greenToastMessage:kRecordingSavedSuccessMessage];
+        
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -270,6 +278,15 @@
         self.labelGroupName.text = group.name;
         self.ownerID = group.groupID;
     }
+    
+    if (![self.recording.ownerID isEqualToString:self.ownerID])
+    {
+        self.buttonSave.enabled = YES;
+    }
+    else
+    {
+        self.buttonSave.enabled = NO;
+    }
 }
 
 
@@ -283,9 +300,9 @@
     
     CGFloat height = self.tableView.rowHeight;
     
-    if (indexPath.row == kDatePickerIndex){
+    if (indexPath.row == kGroupPickerIndex){
         
-        height = self.groupPickerIsShowing ? kDatePickerCellHeight : 0.0f;
+        height = self.groupPickerIsShowing ? kGroupPickerCellHeight : 0.0f;
         
     }
     
@@ -298,18 +315,18 @@
         
         if (self.groupPickerIsShowing)
         {
-            [self hideDatePickerCell];
+            [self hideGroupPickerCell];
         }
         else
         {
-            [self showDatePickerCell];
+            [self showGroupPickerCell];
         }
     }
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)showDatePickerCell {
+- (void)showGroupPickerCell {
     
     self.groupPickerIsShowing = YES;
     
@@ -327,7 +344,7 @@
     }];
 }
 
-- (void)hideDatePickerCell {
+- (void)hideGroupPickerCell {
     
     self.groupPickerIsShowing = NO;
     
@@ -359,5 +376,16 @@
     return YES;
 }
 
+- (void)textFieldDidChange
+{
+    if ([self.fieldRecordingName.text isEqualToString:self.recording.name])
+    {
+        self.buttonSave.enabled = NO;
+    }
+    else
+    {
+        self.buttonSave.enabled = YES;
+    }
+}
 
 @end

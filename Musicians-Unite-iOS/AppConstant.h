@@ -284,8 +284,8 @@
 #define kDefaultRecordingName                       @"MusicAudioRecording.m4a"
 #define kUnassignedRecordingTitle                   @"Unassigned"
 
-#define kDatePickerIndex 2
-#define kDatePickerCellHeight 164
+#define kGroupPickerIndex 2
+#define kGroupPickerCellHeight 164
 
 
 
