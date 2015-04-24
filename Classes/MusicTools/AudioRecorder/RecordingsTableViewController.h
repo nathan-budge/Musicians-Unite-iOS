@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class User;
 @class Group;
 
 @interface RecordingsTableViewController : UITableViewController
 
-@property (nonatomic) User *user;
 @property (nonatomic) Group *group;
 
 @end

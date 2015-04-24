@@ -108,11 +108,11 @@
         if (self.group)
         {
             NSArray *newRecordingData = @[self.group, self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNewGroupAudioRecordingNotification object:newRecordingData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewGroupRecordingNotification object:newRecordingData];
         }
         else
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNewUserAudioRecordingNotification object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewUserRecordingNotification object:self];
         }
         
         dispatch_group_leave(self.sharedData.downloadGroup);
@@ -134,12 +134,32 @@
         if ([snapshot.key isEqualToString:@"name"])
         {
             self.name = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
+            
+            if (self.group)
+            {
+                NSArray *updatedRecordingData = @[self.group, self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupRecordingDataUpdatedNotification object:updatedRecordingData];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserRecordingDataUpdatedNotification object:self];
+            }
         }
         else if ([snapshot.key isEqualToString:@"owner"])
         {
             self.ownerID = snapshot.value;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Data Updated" object:self];
+            
+            if (self.group)
+            {
+                NSArray *updatedRecordingData = @[self.group, self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupRecordingDataUpdatedNotification object:updatedRecordingData];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserRecordingDataUpdatedNotification object:self];
+            }
         }
         
     } withCancelBlock:^(NSError *error) {

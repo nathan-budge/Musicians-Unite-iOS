@@ -117,7 +117,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:kNewGroupAudioRecordingNotification
+                                                 name:kNewGroupRecordingNotification
                                                object:nil];
     
 }
@@ -315,7 +315,7 @@
         }
         
     }
-    else if ([[notification name] isEqualToString:kNewGroupAudioRecordingNotification])
+    else if ([[notification name] isEqualToString:kNewGroupRecordingNotification])
     {
         if (!self.initialLoad)
         {

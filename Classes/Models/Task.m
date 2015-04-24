@@ -137,7 +137,8 @@
 {
     [self.taskRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"title"]) {
+        if ([snapshot.key isEqualToString:@"title"])
+        {
             self.title = snapshot.value;
             
             if (self.group)

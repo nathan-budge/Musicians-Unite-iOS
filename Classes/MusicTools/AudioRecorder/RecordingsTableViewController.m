@@ -8,6 +8,10 @@
 
 #import "CRToast.h"
 
+#import "AppConstant.h"
+#import "SharedData.h"
+#import "Utilities.h"
+
 #import "RecordingsTableViewController.h"
 #import "RecordingTableViewController.h"
 
@@ -15,17 +19,18 @@
 #import "Group.h"
 #import "Recording.h"
 
-#define kUnassignedRecording    @"Unassigned"
 
 @interface RecordingsTableViewController ()
 
+@property (nonatomic) SharedData *sharedData;
+
 @property (nonatomic) Recording *selectedRecording;
-@property (nonatomic) User *selectedRecordingUser;
 @property (nonatomic) Group *selectedRecordingGroup;
 
 @property (nonatomic) NSMutableArray *groupNames;
 
 @end
+
 
 @implementation RecordingsTableViewController
 
@@ -41,6 +46,14 @@
     return _groupNames;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
+
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -50,26 +63,51 @@
 {
     [super viewDidLoad];
     
-    for (Group *group in self.user.groups) {
-        [self.groupNames addObject:group.name];
+    if (self.group)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewGroupRecordingNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupRecordingDataUpdatedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kGroupRecordingRemovedNotification
+                                                   object:nil];
     }
-    
-    [self.groupNames insertObject:kUnassignedRecording atIndex:0];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Recording Data Updated"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"New Recording"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Recording Removed"
-                                               object:nil];
+    else
+    {
+        for (Group *group in self.sharedData.user.groups) {
+            [self.groupNames addObject:group.name];
+        }
+        
+        [self.groupNames insertObject:kUnassignedRecordingSectionHeader atIndex:0];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kNewUserRecordingNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kUserRecordingDataUpdatedNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receivedNotification:)
+                                                     name:kUserRecordingRemovedNotification
+                                                   object:nil];
+    }
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -79,31 +117,53 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Recording Data Updated"])
+    if ([[notification name] isEqualToString:kNewUserRecordingNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            [self.tableView reloadData];
+            
+        });
+    }
+    else if ([[notification name] isEqualToString:kNewGroupRecordingNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            NSArray *newRecordingData = notification.object;
+            if ([[newRecordingData objectAtIndex:0] isEqual:self.group])
+            {
+                [self.tableView reloadData];
+            }
+            
+        });
+    }
+    else if ([[notification name] isEqualToString:kUserRecordingDataUpdatedNotification])
     {
         [self.tableView reloadData];
     }
-    else if ([[notification name] isEqualToString:@"Recording Removed"])
+    else if ([[notification name] isEqualToString:kGroupRecordingDataUpdatedNotification])
     {
-        [self.tableView reloadData];
-        
-        NSDictionary *options = @{
-                                  kCRToastTextKey : @"Recording Deleted!",
-                                  kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                  kCRToastBackgroundColorKey : [UIColor redColor],
-                                  kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                  kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                  kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                  };
-        
-        [CRToastManager showNotificationWithOptions:options
-                                    completionBlock:^{
-                                    }];
+        NSArray *updatedRecordingData = notification.object;
+        if ([[updatedRecordingData objectAtIndex:0] isEqual:self.group])
+        {
+            [self.tableView reloadData];
+        }
     }
-    else if ([[notification name] isEqualToString:@"New Recording"])
+    else if ([[notification name] isEqualToString:kUserRecordingRemovedNotification])
     {
         [self.tableView reloadData];
+        
+        [Utilities redToastMessage:kRecordingRemovedSuccessMessage];
+    }
+    else if ([[notification name] isEqualToString:kGroupRecordingRemovedNotification])
+    {
+        NSArray *removedRecordingData = notification.object;
+        if ([[removedRecordingData objectAtIndex:0] isEqual:self.group])
+        {
+            [self.tableView reloadData];
+            
+            [Utilities redToastMessage:kRecordingRemovedSuccessMessage];
+        }
     }
 }
 
@@ -114,30 +174,29 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.user)
-    {
-        return self.user.groups.count + 1;
-    }
-    else if (self.group)
+    if (self.group)
     {
         return 1;
+    }
+    else
+    {
+        return self.sharedData.user.groups.count + 1;
     }
     return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (self.user)
+    if (!self.group)
     {
         if (section == 0)
         {
-            return kUnassignedRecording;
+            return kUnassignedRecordingSectionHeader;
         }
         else
         {
-            Group *group = [self.user.groups objectAtIndex:section - 1];
+            Group *group = [self.sharedData.user.groups objectAtIndex:section - 1];
             return group.name;
-            
         }
     }
     return nil;
@@ -145,23 +204,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.group) {
+    if (self.group)
+    {
         return self.group.recordings.count;
-    } else if (self.user) {
-        
+    }
+    else
+    {
         if (section == 0)
         {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
-            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.sharedData.user.userID];
+            NSArray *recordings = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
             
             return recordings.count;
         }
         else
         {
-            Group *group = [self.user.groups objectAtIndex:section - 1];
+            Group *group = [self.sharedData.user.groups objectAtIndex:section - 1];
             
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", group.groupID];
-            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            NSArray *recordings = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
             
             return recordings.count;
         }
@@ -172,11 +233,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kGenericCellIdentifier];
     
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kGenericCellIdentifier];
     }
     
     Recording *recording;
@@ -185,21 +246,21 @@
     {
         recording = [self.group.recordings objectAtIndex:indexPath.row];
     }
-    else if (self.user)
+    else
     {
         if (indexPath.section == 0)
         {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
-            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.sharedData.user.userID];
+            NSArray *recordings = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
             
             recording = [recordings objectAtIndex:indexPath.row];
         }
         else
         {
-            Group *group = [self.user.groups objectAtIndex:indexPath.section - 1];
+            Group *group = [self.sharedData.user.groups objectAtIndex:indexPath.section - 1];
             
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", group.groupID];
-            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            NSArray *recordings = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
             
             recording = [recordings objectAtIndex:indexPath.row];
         }
@@ -211,38 +272,35 @@
     return cell;
 }
 
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.group)
     {
         self.selectedRecording = [self.group.recordings objectAtIndex:indexPath.row];
         self.selectedRecordingGroup = self.group;
-        self.selectedRecordingUser = nil;
     }
-    else if (self.user)
+    else
     {
-        self.selectedRecordingUser = self.user;
         self.selectedRecordingGroup = nil;
         if (indexPath.section == 0)
         {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.user.userID];
-            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", self.sharedData.user.userID];
+            NSArray *recordings = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
             
             self.selectedRecording = [recordings objectAtIndex:indexPath.row];
         }
         else
         {
-            Group *group = [self.user.groups objectAtIndex:indexPath.section - 1];
+            Group *group = [self.sharedData.user.groups objectAtIndex:indexPath.section - 1];
             
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.ownerID=%@", group.groupID];
-            NSArray *recordings = [self.user.recordings filteredArrayUsingPredicate:predicate];
+            NSArray *recordings = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
             
             self.selectedRecording = [recordings objectAtIndex:indexPath.row];
         }
     }
     
-    [self performSegueWithIdentifier:@"viewRecording" sender:self];
+    [self performSegueWithIdentifier:kRecordingSegueIdentifier sender:self];
 }
 
 
@@ -252,13 +310,11 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"viewRecording"])
+    if ([segue.identifier isEqualToString:kRecordingSegueIdentifier])
     {
         RecordingTableViewController *destViewController = segue.destinationViewController;
         destViewController.recording = self.selectedRecording;
-        
         destViewController.group = self.selectedRecordingGroup;
-        destViewController.user = self.selectedRecordingUser;
     }
 }
 
