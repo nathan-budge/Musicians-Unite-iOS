@@ -28,9 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"Inside View Did Load.");
     audioManager = [AudioController sharedAudioManager];
-    NSLog(@"Loaded Audio Manager.");
     audioManager.delegate = self;
     autoCorrelator = [[PitchDetector alloc] initWithSampleRate:audioManager.audioFormat.mSampleRate lowBoundFreq:30 hiBoundFreq:4500 andDelegate:self];
     medianPitchFollow = [[NSMutableArray alloc] initWithCapacity:22];
@@ -121,6 +119,7 @@
         tempSort = nil;
     }
     
+    NSLog(@"SETTING LABEL");
     self.labelPitch.text = [NSString stringWithFormat:@"%3.1f Hz", value];
     
 }

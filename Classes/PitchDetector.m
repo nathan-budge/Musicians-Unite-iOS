@@ -47,7 +47,6 @@
 #pragma  mark Insert Samples
 
 - (void) addSamples:(SInt16 *)samples inNumberFrames:(int)frames {
-    //NSLog(@"ADD SAMPLE CALLED");
     int newLength = frames;
     if(samplesInSampleBuffer>0) {
         newLength += samplesInSampleBuffer;
