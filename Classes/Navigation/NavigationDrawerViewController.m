@@ -169,6 +169,7 @@
     [self.ref unauth];
     
     sharedData.user = nil;
+    self.initialLoad = YES;
 
     [SVProgressHUD dismiss];
     [self performSegueWithIdentifier:kLogoutSegueIdentifier sender:sender];
