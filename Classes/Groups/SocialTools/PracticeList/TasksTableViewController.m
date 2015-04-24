@@ -81,34 +81,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
+
     NSMutableArray *tasks;
+    
     if (self.group)
     {
         tasks = [NSMutableArray arrayWithArray:self.group.tasks];
-    }
-    else
-    {
-        tasks = [NSMutableArray arrayWithArray:self.sharedData.user.tasks];
-    }
-    
-    for (Task *task in tasks)
-    {
-        if (task.completed)
-        {
-            [self.completedTasks addObject:task];
-        }
-        else
-        {
-            [self.incompleteTasks addObject:task];
-        }
-    }
-    
-    [self.tableView reloadData];
-    
-    if (self.group)
-    {
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receivedNotification:)
                                                      name:kNewGroupTaskNotification
@@ -127,6 +106,8 @@
     }
     else
     {
+        tasks = [NSMutableArray arrayWithArray:self.sharedData.user.tasks];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receivedNotification:)
                                                      name:kNewUserTaskNotification
@@ -147,6 +128,20 @@
                                                      name:kUserTaskCompletedNotification
                                                    object:nil];
     }
+    
+    for (Task *task in tasks)
+    {
+        if (task.completed)
+        {
+            [self.completedTasks addObject:task];
+        }
+        else
+        {
+            [self.incompleteTasks addObject:task];
+        }
+    }
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated

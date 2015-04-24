@@ -22,6 +22,7 @@
 #import "Group.h"
 #import "Recording.h"
 
+
 @interface RecorderViewController ()
 
 @property (nonatomic) Firebase *ref;
@@ -105,12 +106,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:kNewUserAudioRecordingNotification
+                                                 name:kNewUserRecordingNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:kNewGroupAudioRecordingNotification
+                                                 name:kNewGroupRecordingNotification
                                                object:nil];
 }
 
@@ -241,7 +242,7 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:kNewUserAudioRecordingNotification])
+    if ([[notification name] isEqualToString:kNewUserRecordingNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
@@ -255,7 +256,7 @@
             
         });
     }
-    else if ([[notification name] isEqualToString:kNewGroupAudioRecordingNotification])
+    else if ([[notification name] isEqualToString:kNewGroupRecordingNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             

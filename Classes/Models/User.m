@@ -340,11 +340,12 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", snapshot.key];
         NSArray *recording = [self.recordings filteredArrayUsingPredicate:predicate];
         
-        if (recording.count > 0) {
+        if (recording.count > 0)
+        {
             Recording *removedRecording = [recording objectAtIndex:0];
             [self removeRecording:removedRecording];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Recording Removed" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserRecordingRemovedNotification object:removedRecording];
         }
         
     } withCancelBlock:^(NSError *error) {

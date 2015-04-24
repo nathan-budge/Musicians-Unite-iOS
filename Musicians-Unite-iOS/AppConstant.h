@@ -42,6 +42,7 @@
 #define kThreadDetailSegueIdentifier                @"viewThread"
 #define kUserRecordingsSegueIdentifier              @"viewUserRecordings"
 #define kGroupRecordingsSegueIdentifier             @"viewGroupRecordings"
+#define kRecordingSegueIdentifier                   @"viewRecording"
 
 
 //*****************************************************************************/
@@ -118,7 +119,6 @@
 #define kAccountCreatedSuccessMessage               @"Account Created!"
 #define kAccountDeletedSuccessMessage               @"Account Deleted!"
 
-
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
 #define kPasswordChangedSuccessMessage              @"Password Changed!"
 
@@ -173,6 +173,7 @@
 #define kIncompleteTasksSectionHeader               @"Incomplete"
 #define kSelectMembersSectionHeader                 @"Select Members"
 #define kNoRegisterdMembersSectionHeader            @"No Registered Members"
+#define kUnassignedRecordingSectionHeader           @"Unassigned"
 
 
 //*****************************************************************************/
@@ -224,6 +225,12 @@
 #define kNewGroupMemberNotification                 @"New Group Member"
 #define kGroupMemberRemovedNotification             @"Group Member Removed"
 
+#define kNewMessageThreadNotification               @"New Thread"
+#define kMessageThreadRemovedNotification           @"Thread Removed"
+
+#define kNewMessageNotification                     @"New Message"
+#define kMessageRemovedNotification                 @"Message Removed"
+
 #define kNewUserTaskNotification                    @"New User Task"
 #define kUserTaskRemovedNotification                @"User Task Removed"
 #define kUserTaskDataUpdatedNotification            @"User Task Data Updated"
@@ -234,15 +241,13 @@
 #define kGroupTaskDataUpdatedNotification           @"Group Task Data Updated"
 #define kGroupTaskCompletedNotification             @"Group Task Completed"
 
-#define kNewMessageThreadNotification               @"New Thread"
-#define kMessageThreadRemovedNotification           @"Thread Removed"
+#define kNewUserRecordingNotification               @"New User Recording"
+#define kUserRecordingRemovedNotification           @"User Recording Removed"
+#define kUserRecordingDataUpdatedNotification       @"User Recording Data Updated"
 
-#define kNewMessageNotification                     @"New Message"
-#define kMessageRemovedNotification                 @"Message Removed"
-
-#define kNewUserAudioRecordingNotification          @"New User Recording"
-
-#define kNewGroupAudioRecordingNotification         @"New Group Recording"
+#define kNewGroupRecordingNotification              @"New Group Recording"
+#define kGroupRecordingRemovedNotification          @"Group Recording Removed"
+#define kGroupRecordingDataUpdatedNotification      @"Group Recording Data Updated"
 
 
 //*****************************************************************************/
