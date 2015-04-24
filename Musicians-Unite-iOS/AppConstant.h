@@ -219,6 +219,7 @@
 
 #define kMessageSenderFirebaseField                 @"sender"
 #define kMessageTextFirebaseField                   @"text"
+#define kThreadForMessageFirebaseField              @"thread"
 
 #define kRecordingNameFirebaseField                 @"name"
 #define kRecordingDataFirebaseField                 @"data"

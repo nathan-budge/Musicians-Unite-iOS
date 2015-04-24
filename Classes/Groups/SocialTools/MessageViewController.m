@@ -264,6 +264,7 @@
     NSDictionary *messageData = @{
                                   kMessageSenderFirebaseField:self.sharedData.user.userID,
                                   kMessageTextFirebaseField:[self.textView.text copy],
+                                  kThreadForMessageFirebaseField:self.messageThread.messageThreadID,
                                   };
     
     [newMessage setValue:messageData];
