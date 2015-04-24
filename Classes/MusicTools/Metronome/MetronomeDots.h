@@ -11,5 +11,6 @@
 @interface MetronomeDots : UIView
 
 @property (nonatomic) double timeSignature;
+@property (nonatomic) int highlightedBeat;
 
 @end
