@@ -11,6 +11,7 @@
 
 #import "SharedData.h"
 #import "AppConstant.h"
+#import "Utilities.h"
 
 #import "MessagingTableViewController.h"
 #import "NewMessageTableViewController.h"
@@ -186,6 +187,8 @@
                 MessageThread *newThread = [newThreadData objectAtIndex:1];
                 [self.messageThreads addObject:newThread];
                 [self.tableView reloadData];
+                
+                [Utilities greenToastMessage:kNewMessageThreadSuccessMessage];
             }
 
         });
@@ -198,6 +201,8 @@
             MessageThread *removedMessageThread = [removedThreadData objectAtIndex:1];
             [self.messageThreads removeObject:removedMessageThread];
             [self.tableView reloadData];
+            
+            [Utilities redToastMessage:kMessageThreadRemovedSuccessMessage];
         }
     }
     else if ([[notification name] isEqualToString:kNewMessageNotification])

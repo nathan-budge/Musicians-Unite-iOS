@@ -313,6 +313,8 @@
             }
             
             [self.tableView reloadData];
+            
+            [Utilities redToastMessage:kTaskRemovedSuccessMessage];
         }
     }
     else if ([[notification name] isEqualToString:kUserTaskDataUpdatedNotification])
@@ -329,7 +331,11 @@
     }
     else if ([[notification name] isEqualToString:kUserTaskCompletedNotification])
     {
-        [Utilities greenToastMessage:kTaskCompletedSuccessMessage];
+        Task *completedTask = notification.object;
+        
+        NSString *message = [NSString stringWithFormat:@"%@ was completed", completedTask.title];
+        
+        [Utilities greenToastMessage:message];
     }
 }
 

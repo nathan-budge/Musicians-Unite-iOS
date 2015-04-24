@@ -61,9 +61,19 @@
 #define kThreadAlreadyExistsError                   @"Thread already exists"
 #define kNoThreadMembersSelectedError               @"No members selected"
 
+
 //Success Messages
 #define kNewGroupSuccessMessage                     @"New Group:"
 #define kGroupRemovedSuccessMessage                 @"Group Removed:"
+#define kGroupSavedSuccessMessage                   @"Group Saved!"
+
+#define kNewTaskSuccessMessage                      @"New Task"
+#define kTaskRemovedSuccessMessage                  @"Task Removed"
+#define kTaskSavedSuccessMessage                    @"Task Saved"
+
+#define kMessageRemovedSuccessMessage               @"Message Removed!"
+#define kNewMessageThreadSuccessMessage             @"New Thread!"
+#define kMessageThreadRemovedSuccessMessage         @"Thread Removed!"
 
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
 #define kUserDataSavedSuccessMessage                @"User Saved!"
@@ -72,16 +82,7 @@
 #define kPasswordChangedSuccessMessage              @"Password Changed!"
 #define kLoggedOutSuccessMessage                    @"Logged Out!"
 #define kLoggedInSuccessMessage                     @"Logged In!"
-#define kGroupSavedSuccessMessage                   @"Group Saved!"
-#define kMemberAddedSuccessMessage                  @"Member Added!"
-#define kTaskSavedSuccessMessage                    @"Task Saved!"
-#define kTaskRemovedSuccessMessage                  @"Task Removed!"
-#define kNewTaskSuccessMessage                      @"New Task!"
-#define kTaskCompletedSuccessMessage                @"Task Completed!"
-#define kNewMessageSuccessMessage                   @"New Message!"
-#define kMessageRemovedSuccessMessage               @"Message Removed!"
-#define kNewMessageThreadSuccessMessage             @"New Thread!"
-#define kMessageThreadRemovedSuccessMessage         @"Thread Removed!"
+
 
 //Alert Messages
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"

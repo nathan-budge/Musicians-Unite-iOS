@@ -19,6 +19,8 @@
 
 #import "User.h"
 #import "Group.h"
+#import "Task.h"
+#import "Message.h"
 
 
 @interface NavigationDrawerViewController ()
@@ -85,6 +87,31 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
                                                  name:kGroupRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupMemberNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupMemberRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupTaskNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupTaskCompletedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewMessageNotification
                                                object:nil];
 }
 
@@ -173,6 +200,112 @@
         NSString *message = [NSString stringWithFormat:@"%@ %@", kGroupRemovedSuccessMessage, removedGroup.name];
         
         [Utilities redToastMessage:message];
+    }
+    else if ([[notification name] isEqualToString:kNewGroupMemberNotification])
+    {
+        if (!self.initialLoad)
+        {
+            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+                
+                
+                    NSArray *newMemberData = notification.object;
+                    Group *group = [newMemberData objectAtIndex:0];
+                    User *newMember = [newMemberData objectAtIndex:1];
+                    
+                    NSString *message;
+                    
+                    if (newMember.completedRegistration)
+                    {
+                        message = [NSString stringWithFormat:@"%@: %@ was added",group.name, newMember.firstName];
+                    }
+                    else
+                    {
+                        message = [NSString stringWithFormat:@"%@: %@ was added", group.name, newMember.email];
+                    }
+                    
+                    [Utilities greenToastMessage:message];
+                
+            });
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupMemberRemovedNotification])
+    {
+        NSArray *removedMemberData = notification.object;
+        Group *group = [removedMemberData objectAtIndex:0];
+        User *removedMember = [removedMemberData objectAtIndex:1];
+        
+        NSString *message;
+        
+        if (removedMember.completedRegistration)
+        {
+            message = [NSString stringWithFormat:@"%@: %@ was removed",group.name, removedMember.firstName];
+        }
+        else
+        {
+            message = [NSString stringWithFormat:@"%@: %@ was removed", group.name, removedMember.email];
+        }
+        
+        [Utilities redToastMessage:message];
+    }
+    else if ([[notification name] isEqualToString:kNewGroupTaskNotification])
+    {
+        if (!self.initialLoad)
+        {
+            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+                
+                NSArray *newTaskData = notification.object;
+                Group *group = [newTaskData objectAtIndex:0];
+                
+                NSString *message = [NSString stringWithFormat:@"%@: %@", group.name, kNewTaskSuccessMessage];
+                
+                [Utilities greenToastMessage:message];
+                
+            });
+        }
+    }
+    else if ([[notification name] isEqualToString:kGroupTaskCompletedNotification])
+    {
+        NSArray *completedTaskData = notification.object;
+        Group *group = [completedTaskData objectAtIndex:0];
+        Task *completedTask = [completedTaskData objectAtIndex:1];
+        
+        NSString *message = [NSString stringWithFormat:@"%@: %@ was completed", group.name, completedTask.title];
+        
+        [Utilities greenToastMessage:message];
+    }
+    else if ([[notification name] isEqualToString:kNewMessageNotification])
+    {
+        if (!self.initialLoad)
+        {
+            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+                
+                NSArray *newMessageData = notification.object;
+                Message *newMessage = [newMessageData objectAtIndex:1];
+                Group *group = [newMessageData objectAtIndex:2];
+                
+                if (![newMessage.senderID isEqual:self.sharedData.user.userID])
+                {
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", newMessage.senderID];
+                    NSArray *member = [group.members filteredArrayUsingPredicate:predicate];
+                    
+                    User *sender;
+                    if (member.count > 0)
+                    {
+                        sender = [member objectAtIndex:0];
+                    }
+                    else
+                    {
+                        sender = self.sharedData.user;
+                    }
+                    
+                    NSString *message = [NSString stringWithFormat:@"%@: New message from %@", group.name, sender.firstName];
+                    
+                    [Utilities greenToastMessage:message];
+                }
+                
+            });
+        }
+        
     }
 }
 
