@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0485B00F1AEA9A1800C02E7C /* PitchDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485B00E1AEA9A1800C02E7C /* PitchDetector.m */; };
+		0485B0121AEA9CD800C02E7C /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485B0111AEA9CD800C02E7C /* AudioController.m */; };
 		04E6E4EF1A99661800254638 /* CircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6E4EE1A99661800254638 /* CircularButton.m */; };
 		04E87F431AE9F75200DDC488 /* Ping Hi.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E87F421AE9F75200DDC488 /* Ping Hi.wav */; };
 		04E87F451AE9F75A00DDC488 /* Ping Low.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E87F441AE9F75A00DDC488 /* Ping Low.wav */; };
@@ -94,6 +96,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0485B00D1AEA9A1800C02E7C /* PitchDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitchDetector.h; sourceTree = "<group>"; };
+		0485B00E1AEA9A1800C02E7C /* PitchDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitchDetector.m; sourceTree = "<group>"; };
+		0485B0101AEA9CD800C02E7C /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		0485B0111AEA9CD800C02E7C /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
 		04E6E4ED1A99661700254638 /* CircularButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularButton.h; sourceTree = "<group>"; };
 		04E6E4EE1A99661800254638 /* CircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularButton.m; sourceTree = "<group>"; };
 		04E87F421AE9F75200DDC488 /* Ping Hi.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ping Hi.wav"; sourceTree = "<group>"; };
@@ -683,10 +689,14 @@
 		94F498DE1AD597DE00F2760C /* Tuner */ = {
 			isa = PBXGroup;
 			children = (
+				0485B0101AEA9CD800C02E7C /* AudioController.h */,
+				0485B0111AEA9CD800C02E7C /* AudioController.m */,
 				94F498DF1AD5988400F2760C /* FaceView.h */,
 				94F498E01AD5988400F2760C /* FaceView.m */,
 				94F498E21AD5A36400F2760C /* TunerViewController.h */,
 				94F498E31AD5A36400F2760C /* TunerViewController.m */,
+				0485B00D1AEA9A1800C02E7C /* PitchDetector.h */,
+				0485B00E1AEA9A1800C02E7C /* PitchDetector.m */,
 			);
 			name = Tuner;
 			sourceTree = "<group>";
@@ -831,6 +841,7 @@
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
 				9442D8831ACADFB500B47996 /* MetronomeDots.m in Sources */,
+				0485B00F1AEA9A1800C02E7C /* PitchDetector.m in Sources */,
 				940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */,
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
@@ -839,6 +850,7 @@
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9479A2B11A9B68A400C668D0 /* Message.m in Sources */,
 				9444BD531ADEC9560076C8D5 /* UIView+SLKAdditions.m in Sources */,
+				0485B0121AEA9CD800C02E7C /* AudioController.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
 				949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */,
 				942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */,

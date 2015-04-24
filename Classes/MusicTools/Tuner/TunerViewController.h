@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import "PitchDetector.h"
+#import "AudioController.h"
 
-@interface TunerViewController : UIViewController
-
+@interface TunerViewController : UIViewController <PitchDetectorDelegate, AudioControllerDelegate>
+{
+    AudioController *audioManager;
+    PitchDetector *autoCorrelator;
+    NSMutableArray *medianPitchFollow;
+}
 @end

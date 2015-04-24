@@ -379,7 +379,6 @@
         
         
         for (int i = 0; i < numBeats && self.isPlaying; i++) {
-            self.viewDots.highlightedBeat = i+1;
             if (i == 0) {
                 [hiClick play];
                 self.viewDots.highlightedBeat = 1;
@@ -389,6 +388,7 @@
                 [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
                 [NSThread sleepForTimeInterval:beatTime/10];
             } else {
+                //TODO: Only play a note for small beats on x/8 if subdivision == 3
                 [lowClick play];
                 if (i % self.subdivision == 0) {
                     self.viewDots.highlightedBeat = i / self.subdivision + 1;
