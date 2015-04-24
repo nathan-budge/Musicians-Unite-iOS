@@ -28,9 +28,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    audioManager = [AudioController sharedAudioManager];
-    audioManager.delegate = self;
-    autoCorrelator = [[PitchDetector alloc] initWithSampleRate:audioManager.audioFormat.mSampleRate lowBoundFreq:30 hiBoundFreq:4500 andDelegate:self];
+    //audioManager = [AudioController sharedAudioManager];
+    //audioManager.delegate = self;
+    //autoCorrelator = [[PitchDetector alloc] initWithSampleRate:audioManager.audioFormat.mSampleRate lowBoundFreq:30 hiBoundFreq:4500 andDelegate:self];
     medianPitchFollow = [[NSMutableArray alloc] initWithCapacity:22];
     self.happiness = 50;
 }

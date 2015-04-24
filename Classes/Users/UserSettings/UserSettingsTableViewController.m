@@ -116,6 +116,8 @@
         [userRef updateChildValues:updatedValues];
         
         [Utilities greenToastMessage:kUserDataSavedSuccessMessage];
+        
+        self.buttonSave.enabled = NO;
     }
     else
     {

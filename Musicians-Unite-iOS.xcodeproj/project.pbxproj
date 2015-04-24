@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0418799D1AEAC1A100138E2C /* AudioController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0418799C1AEAC1A100138E2C /* AudioController.mm */; };
 		041879A91AEAC8E000138E2C /* doc in Resources */ = {isa = PBXBuildFile; fileRef = 041879A61AEAC8E000138E2C /* doc */; };
 		041879AA1AEAC8E000138E2C /* include in Resources */ = {isa = PBXBuildFile; fileRef = 041879A71AEAC8E000138E2C /* include */; };
 		041879AB1AEAC8E000138E2C /* libs in Resources */ = {isa = PBXBuildFile; fileRef = 041879A81AEAC8E000138E2C /* libs */; };
@@ -99,8 +98,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0418799B1AEAC1A100138E2C /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
-		0418799C1AEAC1A100138E2C /* AudioController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioController.mm; sourceTree = "<group>"; };
 		041879A61AEAC8E000138E2C /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = doc; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/doc; sourceTree = "<group>"; };
 		041879A71AEAC8E000138E2C /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include; sourceTree = "<group>"; };
 		041879A81AEAC8E000138E2C /* libs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libs; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs; sourceTree = "<group>"; };
@@ -715,8 +712,6 @@
 		94F498DE1AD597DE00F2760C /* Tuner */ = {
 			isa = PBXGroup;
 			children = (
-				0418799B1AEAC1A100138E2C /* AudioController.h */,
-				0418799C1AEAC1A100138E2C /* AudioController.mm */,
 				94F498DF1AD5988400F2760C /* FaceView.h */,
 				94F498E01AD5988400F2760C /* FaceView.m */,
 				94F498E21AD5A36400F2760C /* TunerViewController.h */,
@@ -865,7 +860,6 @@
 				9405B9591A8F08F900EEDE19 /* ECSlidingSegue.m in Sources */,
 				9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */,
 				9405B9111A8EF7AC00EEDE19 /* main.m in Sources */,
-				0418799D1AEAC1A100138E2C /* AudioController.mm in Sources */,
 				949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */,
 				940CDBC41AC352BD0006F099 /* MusicToolsTabBarController.m in Sources */,
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,

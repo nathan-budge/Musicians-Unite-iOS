@@ -9,9 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "PitchDetector.h"
-#import "AudioController.h"
 
-@interface TunerViewController : UIViewController <PitchDetectorDelegate, AudioControllerDelegate>
+@interface TunerViewController : UIViewController <PitchDetectorDelegate>
 {
     AudioController *audioManager;
     PitchDetector *autoCorrelator;

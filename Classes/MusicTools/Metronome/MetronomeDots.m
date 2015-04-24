@@ -36,11 +36,11 @@
         
         [self checkBeatAndFill:1 withShape:shape];
         
-        shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 75, 25, 50, 50)];
+        shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 25, 25, 50, 50)];
         
         [self checkBeatAndFill:2 withShape:shape];
         
-        shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 25, 25, 50, 50)];
+        shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 75, 25, 50, 50)];
         
         [self checkBeatAndFill:3 withShape:shape];
         
