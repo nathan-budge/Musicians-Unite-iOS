@@ -114,24 +114,16 @@
         {
             for (User *member in newThreadMembers) {
                 
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.userID=%@", member.userID];
-                NSArray *user = [messageThread.members filteredArrayUsingPredicate:predicate];
-                
-                if (user.count > 0)
+                if ([messageThread.members containsObject:member.userID])
                 {
                     matchingGroup = YES;
                 }
                 else
                 {
                     matchingGroup = NO;
+                    break;
                 }
-            
             }
-        }
-        
-        if (matchingGroup)
-        {
-            break;
         }
     }
     
