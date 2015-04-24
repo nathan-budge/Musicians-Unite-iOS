@@ -299,6 +299,7 @@
 
 #define kDefaultRecordingName                       @"MusicAudioRecording.m4a"
 #define kUnassignedRecordingTitle                   @"Unassigned"
+#define kAudioPlayerInitialTimeElapsed              @"0:00"    
 
 #define kGroupPickerIndex 2
 #define kGroupPickerCellHeight 164

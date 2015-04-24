@@ -25,7 +25,7 @@
     [super viewDidLoad];
     
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
-    [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
+    //[self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
     NSArray *viewControllers = self.viewControllers;
     

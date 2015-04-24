@@ -74,6 +74,7 @@
 		94A377FD1AE97DA700B7ACBE /* CRToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F61AE97DA700B7ACBE /* CRToastView.m */; };
 		94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F81AE97DA700B7ACBE /* CRToastViewController.m */; };
 		94A377FF1AE97DA700B7ACBE /* CRToastWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */; };
+		94A378051AEAD3EC00B7ACBE /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A378041AEAD3EC00B7ACBE /* AudioPlayer.m */; };
 		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
 		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
 		94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */; };
@@ -222,6 +223,8 @@
 		94A377F81AE97DA700B7ACBE /* CRToastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastViewController.m; sourceTree = "<group>"; };
 		94A377F91AE97DA700B7ACBE /* CRToastWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToastWindow.h; sourceTree = "<group>"; };
 		94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastWindow.m; sourceTree = "<group>"; };
+		94A378031AEAD3EC00B7ACBE /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPlayer.h; path = MusicTools/AudioRecorder/AudioPlayer.h; sourceTree = "<group>"; };
+		94A378041AEAD3EC00B7ACBE /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioPlayer.m; path = MusicTools/AudioRecorder/AudioPlayer.m; sourceTree = "<group>"; };
 		94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
@@ -414,6 +417,8 @@
 				940CDBC61AC442870006F099 /* RecordingsTableViewController.m */,
 				9434D5531ACF351C002462C6 /* RecordingTableViewController.h */,
 				9434D5541ACF351C002462C6 /* RecordingTableViewController.m */,
+				94A378031AEAD3EC00B7ACBE /* AudioPlayer.h */,
+				94A378041AEAD3EC00B7ACBE /* AudioPlayer.m */,
 			);
 			name = "Audio Recorder";
 			sourceTree = "<group>";
@@ -888,6 +893,7 @@
 				947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */,
 				940CDBD01AC6E8190006F099 /* DronesTableViewController.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
+				94A378051AEAD3EC00B7ACBE /* AudioPlayer.m in Sources */,
 				94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

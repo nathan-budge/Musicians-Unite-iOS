@@ -1107,7 +1107,7 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <sections>
-                            <tableViewSection id="yJd-Cl-ymj">
+                            <tableViewSection id="fsF-YV-0Rf">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="vGK-w9-iAm" userLabel="nameCell">
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1154,6 +1154,69 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="0Za-9Z-4kN" userLabel="audioScrubberCell">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Za-9Z-4kN" id="qwu-PT-ro2">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tz9-RN-k2B">
+                                                    <rect key="frame" x="3" y="5" width="314" height="50"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-WD-fcO">
+                                                            <rect key="frame" x="8" y="5" width="40" height="40"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="40" id="R2f-HK-bEj"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Play">
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="actionPlay:" destination="IEv-dn-3Lp" eventType="touchUpInside" id="gtk-pA-ecP"/>
+                                                            </connections>
+                                                        </button>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="-0:37" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pNM-D2-Wq8">
+                                                            <rect key="frame" x="262" y="15" width="44" height="20"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="TCZ-JC-ugb">
+                                                            <rect key="frame" x="84" y="10" width="172" height="31"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="168" id="9La-6g-Fu0"/>
+                                                            </constraints>
+                                                            <connections>
+                                                                <action selector="setCurrentTime:" destination="IEv-dn-3Lp" eventType="touchUpInside" id="1YW-vT-m2a"/>
+                                                                <action selector="userIsScrubbing:" destination="IEv-dn-3Lp" eventType="touchDragInside" id="1Nu-9Y-DBb"/>
+                                                            </connections>
+                                                        </slider>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="2:56" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kb7-qr-z64">
+                                                            <rect key="frame" x="48" y="15" width="30" height="20"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstItem="TCZ-JC-ugb" firstAttribute="centerY" secondItem="pNM-D2-Wq8" secondAttribute="centerY" id="1Ay-ui-Ese"/>
+                                                        <constraint firstItem="gxj-WD-fcO" firstAttribute="centerY" secondItem="TCZ-JC-ugb" secondAttribute="centerY" id="5HG-yO-HAH"/>
+                                                        <constraint firstItem="gxj-WD-fcO" firstAttribute="top" secondItem="tz9-RN-k2B" secondAttribute="top" constant="5" id="JwO-Sh-Rqo"/>
+                                                        <constraint firstItem="gxj-WD-fcO" firstAttribute="leading" secondItem="tz9-RN-k2B" secondAttribute="leadingMargin" id="KRI-2f-zUE"/>
+                                                        <constraint firstItem="gxj-WD-fcO" firstAttribute="centerY" secondItem="tz9-RN-k2B" secondAttribute="centerY" id="Nc1-bd-Dmb"/>
+                                                        <constraint firstItem="Kb7-qr-z64" firstAttribute="centerY" secondItem="TCZ-JC-ugb" secondAttribute="centerY" id="W9y-gc-KEc"/>
+                                                        <constraint firstItem="TCZ-JC-ugb" firstAttribute="leading" secondItem="tz9-RN-k2B" secondAttribute="leading" constant="86" id="zkf-rY-lrM"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tz9-RN-k2B" firstAttribute="centerX" secondItem="qwu-PT-ro2" secondAttribute="centerX" id="41J-Qc-uUa"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="tz9-RN-k2B" secondAttribute="bottom" constant="-4" id="c2Y-Xy-ygy"/>
+                                                <constraint firstItem="tz9-RN-k2B" firstAttribute="top" secondItem="qwu-PT-ro2" secondAttribute="topMargin" constant="-3" id="jx7-hF-ELL"/>
+                                                <constraint firstItem="tz9-RN-k2B" firstAttribute="leading" secondItem="qwu-PT-ro2" secondAttribute="leadingMargin" constant="-5" id="o7P-aM-71e"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1170,10 +1233,14 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="buttonPlay" destination="gxj-WD-fcO" id="X4r-Tc-b7I"/>
                         <outlet property="buttonSave" destination="5mB-vN-xg9" id="8Ob-jA-sDq"/>
                         <outlet property="fieldRecordingName" destination="KjX-t8-lpq" id="uIi-o8-JQ1"/>
+                        <outlet property="labelDuration" destination="Kb7-qr-z64" id="cJE-Mc-Wtn"/>
                         <outlet property="labelGroupName" destination="ieP-j6-zAe" id="ySB-sr-YKT"/>
+                        <outlet property="labelTimeElapsed" destination="pNM-D2-Wq8" id="o5s-BH-ds7"/>
                         <outlet property="pickerGroups" destination="n5s-v1-fjn" id="6ek-bV-scD"/>
+                        <outlet property="sliderCurrentTime" destination="TCZ-JC-ugb" id="7a1-y6-HId"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bnS-8p-NRI" userLabel="First Responder" sceneMemberID="firstResponder"/>

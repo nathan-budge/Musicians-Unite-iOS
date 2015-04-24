@@ -11,6 +11,7 @@
 #import "CRToast.h"
 
 #import "RecordingTableViewController.h"
+#import "AudioPlayer.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
@@ -31,10 +32,20 @@
 
 @property (assign) NSString *ownerID;
 
+@property (nonatomic, strong) AudioPlayer *audioPlayer;
+@property BOOL isPaused;
+@property BOOL scrubbing;
+@property NSTimer *timer;
+
 @property (weak, nonatomic) IBOutlet UITextField *fieldRecordingName;
 @property (weak, nonatomic) IBOutlet UILabel *labelGroupName;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerGroups;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
+
+@property (weak, nonatomic) IBOutlet UIButton *buttonPlay;
+@property (weak, nonatomic) IBOutlet UILabel *labelDuration;
+@property (weak, nonatomic) IBOutlet UILabel *labelTimeElapsed;
+@property (weak, nonatomic) IBOutlet UISlider *sliderCurrentTime;
 
 @end
 
@@ -51,6 +62,14 @@
         _ref =[[Firebase alloc] initWithUrl:FIREBASE_URL];
     }
     return _ref;
+}
+
+-(AudioPlayer *)audioPlayer
+{
+    if (!_audioPlayer) {
+        _audioPlayer = [[AudioPlayer alloc] init];
+    }
+    return _audioPlayer;
 }
 
 -(SharedData *)sharedData
@@ -75,6 +94,8 @@
     [self.fieldRecordingName addTarget:self
                             action:@selector(textFieldDidChange)
                   forControlEvents:UIControlEventEditingChanged];
+    
+    [self setupAudioPlayer:self.recording.data];
     
     if (self.group)
     {
@@ -215,6 +236,48 @@
         Firebase *userRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode, self.recording.recordingID]];
         [userRecordingRef removeValue];
     }
+}
+
+- (IBAction)actionPlay:(id)sender
+{
+    [self.timer invalidate];
+    
+    if (!self.isPaused)
+    {
+        [self.buttonPlay setTitle:@"Pause" forState:UIControlStateNormal];
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                      target:self
+                                                    selector:@selector(updateTime:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        
+        [self.audioPlayer playAudio];
+        self.isPaused = YES;
+    }
+    else
+    {
+        [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
+        [self.audioPlayer pauseAudio];
+        self.isPaused = NO;
+    }
+}
+
+- (IBAction)setCurrentTime:(id)sender
+{
+    [NSTimer scheduledTimerWithTimeInterval:0.01
+                                     target:self
+                                   selector:@selector(updateTime:)
+                                   userInfo:nil
+                                    repeats:NO];
+    
+    [self.audioPlayer setCurrentAudioTime:self.sliderCurrentTime.value];
+    self.scrubbing = NO;
+}
+
+- (IBAction)userIsScrubbing:(id)sender
+{
+    self.scrubbing = YES;
 }
 
 
@@ -360,6 +423,35 @@
                      }];
 }
 
+
+//*****************************************************************************/
+#pragma mark - Audio player
+//*****************************************************************************/
+
+- (void)setupAudioPlayer:(NSData *)audioData
+{
+    [self.audioPlayer initPlayer:audioData];
+    
+    self.sliderCurrentTime.maximumValue = [self.audioPlayer getAudioDuration];
+    
+    self.labelTimeElapsed.text = kAudioPlayerInitialTimeElapsed;
+    
+    self.labelDuration.text = [NSString stringWithFormat:@"-%@", [self.audioPlayer timeFormat:[self.audioPlayer getAudioDuration]]];
+}
+
+- (void)updateTime:(NSTimer *)timer
+{
+    if (!self.scrubbing)
+    {
+        self.sliderCurrentTime.value = [self.audioPlayer getCurrentAudioTime];
+    }
+    
+    self.labelTimeElapsed.text = [NSString stringWithFormat:@"%@",
+                             [self.audioPlayer timeFormat:[self.audioPlayer getCurrentAudioTime]]];
+    
+    self.labelDuration.text = [NSString stringWithFormat:@"-%@",
+                          [self.audioPlayer timeFormat:[self.audioPlayer getAudioDuration] - [self.audioPlayer getCurrentAudioTime]]];
+}
 
 //*****************************************************************************/
 #pragma mark - Keyboard Handling
