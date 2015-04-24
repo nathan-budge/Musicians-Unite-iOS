@@ -38,8 +38,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
 @property (weak, nonatomic) IBOutlet UITextView *fieldNotes;
 
-@property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrSave;
-@property (weak, nonatomic) IBOutlet UIButton *buttonDelete;
+@property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrDelete;
 @property (weak, nonatomic) IBOutlet UIButton *buttonMetronome;
 
 @end
@@ -82,14 +81,17 @@
         self.fieldTempo.text = self.task.tempo;
         self.fieldNotes.text = self.task.notes;
         
-        [self.buttonCreateOrSave setTitle:kSaveButtonTitle forState:UIControlStateNormal];
-        self.buttonDelete.hidden = NO;
+        [self.buttonCreateOrDelete setTitle:kDeleteButtonTitle forState:UIControlStateNormal];
+        [self.buttonCreateOrDelete setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSave)];
         self.buttonMetronome.hidden = NO;
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     else
     {
-        [self.buttonCreateOrSave setTitle:kCreateButtonTitle forState:UIControlStateNormal];
-        self.buttonDelete.hidden = YES;
+        [self.buttonCreateOrDelete setTitle:kCreateButtonTitle forState:UIControlStateNormal];
+        [self.buttonCreateOrDelete setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
         self.buttonMetronome.hidden = YES;
     }
     
@@ -113,6 +115,14 @@
                                                  selector:@selector(receivedNotification:)
                                                      name:kGroupTaskRemovedNotification
                                                    object:nil];
+        
+        [self.fieldTitle addTarget:self
+                                action:@selector(textFieldDidChange)
+                      forControlEvents:UIControlEventEditingChanged];
+        
+        [self.fieldTempo addTarget:self
+                            action:@selector(textFieldDidChange)
+                  forControlEvents:UIControlEventEditingChanged];
     }
     else
     {
@@ -147,9 +157,9 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionCreateOrSave:(id)sender
+- (IBAction)actionCreateOrDelete:(id)sender
 {
-    self.task ? [self actionSave] : [self actionCreate];
+    self.task ? [self actionDelete] : [self actionCreate];
 }
 
 - (void)actionCreate
@@ -192,7 +202,7 @@
     }
 }
 
-- (IBAction)actionDelete:(id)sender
+- (void)actionDelete
 {
     Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, self.task.taskID]];
     
@@ -341,6 +351,36 @@
 {
     [self dismissKeyboard];
     return YES;
+}
+
+-(BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    [self dismissKeyboard];
+    return YES;
+}
+
+-(void)textViewDidChange:(UITextView *)textView
+{
+    if ([self.fieldTitle.text isEqualToString:self.task.title] && [self.fieldTempo.text isEqualToString:self.task.tempo] && [self.fieldNotes.text isEqualToString:self.task.notes])
+    {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+}
+
+- (void)textFieldDidChange
+{
+    if ([self.fieldTitle.text isEqualToString:self.task.title] && [self.fieldTempo.text isEqualToString:self.task.tempo] && [self.fieldNotes.text isEqualToString:self.task.notes])
+    {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 @end

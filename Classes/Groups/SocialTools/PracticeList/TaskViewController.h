@@ -12,7 +12,7 @@
 @class Group;
 @class Task;
 
-@interface TaskViewController : UIViewController <UITextFieldDelegate>
+@interface TaskViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate>
 
 @property (nonatomic) Group *group;
 @property (nonatomic) Task *task;

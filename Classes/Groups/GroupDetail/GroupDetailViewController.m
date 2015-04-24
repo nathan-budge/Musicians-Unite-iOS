@@ -263,13 +263,13 @@
 
 - (void)textFieldDidChange
 {
-    if (![self.fieldGroupName.text isEqualToString:self.group.name])
+    if ([self.fieldGroupName.text isEqualToString:self.group.name])
     {
-        self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+        self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     }
     else
     {
-        self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
+        self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
     }
 }
 

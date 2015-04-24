@@ -1686,18 +1686,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="actionCreateOrSave:" destination="cWJ-s9-g3k" eventType="touchUpInside" id="AIQ-Rf-ax4"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AzY-Ze-m3O">
-                                <rect key="frame" x="16" y="440" width="288" height="36"/>
-                                <color key="backgroundColor" red="0.94901960780000005" green="0.14901960780000001" blue="0.074509803920000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Delete">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="actionDelete:" destination="cWJ-s9-g3k" eventType="touchUpInside" id="EbK-9e-nGt"/>
+                                    <action selector="actionCreateOrDelete:" destination="cWJ-s9-g3k" eventType="touchUpInside" id="j5t-RC-4EQ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1705,8 +1694,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="DuE-WT-nUd"/>
                     <connections>
-                        <outlet property="buttonCreateOrSave" destination="YYy-zn-ade" id="PVa-Ru-n0b"/>
-                        <outlet property="buttonDelete" destination="AzY-Ze-m3O" id="cXB-TQ-CXj"/>
+                        <outlet property="buttonCreateOrDelete" destination="YYy-zn-ade" id="yPz-VG-mQu"/>
                         <outlet property="buttonMetronome" destination="gmz-BX-Gqq" id="5NZ-IZ-0Sd"/>
                         <outlet property="fieldNotes" destination="7tb-cd-qg8" id="Ims-mT-Vsh"/>
                         <outlet property="fieldTempo" destination="CTD-6t-F4H" id="Fxt-2K-obj"/>
