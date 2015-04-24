@@ -15,7 +15,6 @@
 @interface RecordingTableViewController : UITableViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic) Recording *recording;
-@property (nonatomic) User *user;
 @property (nonatomic) Group *group;
 
 @end

@@ -86,7 +86,7 @@
             [self.groupNames addObject:group.name];
         }
         
-        [self.groupNames insertObject:kUnassignedRecordingSectionHeader atIndex:0];
+        [self.groupNames insertObject:kUnassignedRecordingTitle atIndex:0];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receivedNotification:)
@@ -191,7 +191,7 @@
     {
         if (section == 0)
         {
-            return kUnassignedRecordingSectionHeader;
+            return kUnassignedRecordingTitle;
         }
         else
         {

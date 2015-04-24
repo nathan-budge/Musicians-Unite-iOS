@@ -15,6 +15,7 @@
 #define FIREBASE_URL @"https://blazing-heat-4549.firebaseio.com"
 
 
+
 //*****************************************************************************/
 #pragma mark - Storyboard ids
 //*****************************************************************************/
@@ -22,6 +23,7 @@
 #define kMusicToolsNavigationController             @"MusicToolsNavigationController"
 #define kPracticeListNavigationController           @"PracticeListNavigationController"
 #define kUserSettingsNavigationController           @"UserSettingsNavigationController"
+
 
 
 //*****************************************************************************/
@@ -56,6 +58,7 @@
 #define kMessageCellIdentifier                      @"MessengerCell"
 
 
+
 //*****************************************************************************/
 #pragma mark - Status messages
 //*****************************************************************************/
@@ -67,6 +70,8 @@
 #define kChangingPasswordProgressMessage            @"Changing password..."
 #define kAddingMemberProgressMessage                @"Adding member..."
 #define kSavingRecordingProgressMessage             @"Saving recording..."
+
+
 
 //*****************************************************************************/
 #pragma mark - Error messages
@@ -109,7 +114,7 @@
 
 #define kNewRecordingSuccessMessage                 @"New Recording"
 #define kRecordingRemovedSuccessMessage             @"Recording Removed"
-#define kRecordingSavesSuccessMessage               @"Recording Saved"
+#define kRecordingSavedSuccessMessage               @"Recording Saved"
 
 #define kUserDataSavedSuccessMessage                @"User Saved!"
 
@@ -137,6 +142,7 @@
 #define kSaveRecordingAlertMessage                  @"Enter a recording name"
 
 
+
 //*****************************************************************************/
 #pragma mark - Button titles
 //*****************************************************************************/
@@ -155,6 +161,7 @@
 #define kRecordButtonTitle                          @"Record"
 
 
+
 //*****************************************************************************/
 #pragma mark - Tab titles
 //*****************************************************************************/
@@ -165,6 +172,7 @@
 #define kAudioRecorderTitle                         @"Audio Recorder"
 
 
+
 //*****************************************************************************/
 #pragma mark - Table view section headers
 //*****************************************************************************/
@@ -173,7 +181,7 @@
 #define kIncompleteTasksSectionHeader               @"Incomplete"
 #define kSelectMembersSectionHeader                 @"Select Members"
 #define kNoRegisterdMembersSectionHeader            @"No Registered Members"
-#define kUnassignedRecordingSectionHeader           @"Unassigned"
+
 
 
 //*****************************************************************************/
@@ -190,25 +198,32 @@
 #define kRecordingsFirebaseNode                     @"recordings"
 
 
+
 //*****************************************************************************/
 #pragma mark - Firebase Fields
 //*****************************************************************************/
+
+#define kProfileImageFirebaseField                  @"profile_image"
 
 #define kUserEmailFirebaseField                     @"email"
 #define kUserFirstNameFirebaseField                 @"first_name"
 #define kUserLastNameFirebaseField                  @"last_name"
 #define kUserCompletedRegistrationFirebaseField     @"completed_registration"
-#define kProfileImageFirebaseField                  @"profile_image"
+
 #define kGroupNameFirebaseField                     @"name"
+
 #define kTaskTitleFirebaseField                     @"title"
 #define kTaskTempoFirebaseField                     @"tempo"
 #define kTaskNotesFirebaseField                     @"notes"
 #define kTaskCompletedFirebaseField                 @"completed"
+
 #define kMessageSenderFirebaseField                 @"sender"
 #define kMessageTextFirebaseField                   @"text"
+
 #define kRecordingNameFirebaseField                 @"name"
 #define kRecordingDataFirebaseField                 @"data"
 #define kRecordingOwnerFirebaseField                @"owner"
+
 
 
 //*****************************************************************************/
@@ -250,6 +265,7 @@
 #define kGroupRecordingDataUpdatedNotification      @"Group Recording Data Updated"
 
 
+
 //*****************************************************************************/
 #pragma mark - Image Assets
 //*****************************************************************************/
@@ -259,11 +275,16 @@
 #define kCompletedCheckboxImage                     @"checkbox_completed"
 
 
+
 //*****************************************************************************/
 #pragma mark - Misc
 //*****************************************************************************/
 
 #define kDefaultRecordingName                       @"MusicAudioRecording.m4a"
+#define kUnassignedRecordingTitle                   @"Unassigned"
+
+#define kDatePickerIndex 2
+#define kDatePickerCellHeight 164
 
 
 
