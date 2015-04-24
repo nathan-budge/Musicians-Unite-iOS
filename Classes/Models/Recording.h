@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class Firebase;
+@class Group;
 
 @interface Recording : NSObject
 
@@ -22,5 +23,6 @@
 
 //Constructor
 - (Recording *)initWithRef: (Firebase *)recordingRef;
+- (Recording *)initWithRef: (Firebase *)recordingRef andGroup:(Group *)group;
 
 @end

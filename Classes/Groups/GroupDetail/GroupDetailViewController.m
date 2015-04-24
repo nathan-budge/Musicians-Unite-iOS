@@ -238,6 +238,7 @@
             Group *newGroup = notification.object;
             if ([newGroup.groupID isEqualToString:self.groupID])
             {
+                self.groupID = nil;
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
             

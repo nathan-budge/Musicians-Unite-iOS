@@ -2602,10 +2602,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="wf2-jZ-7i2"/>
-        <segue reference="2ZW-Oq-Jzn"/>
         <segue reference="jSx-mn-aV4"/>
         <segue reference="LUN-Gh-Rit"/>
+        <segue reference="2ZW-Oq-Jzn"/>
+        <segue reference="wf2-jZ-7i2"/>
         <segue reference="zaQ-AW-62G"/>
         <segue reference="b05-xO-KrZ"/>
     </inferredMetricsTieBreakers>

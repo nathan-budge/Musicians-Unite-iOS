@@ -13,6 +13,7 @@
 
 #import "AppConstant.h"
 #import "SharedData.h"
+#import "Utilities.h"
 
 #import "RecorderViewController.h"
 #import "RecordingsTableViewController.h"
@@ -25,9 +26,9 @@
 
 @property (nonatomic) Firebase *ref;
 
-@property (nonatomic) User *user;
-
 @property (nonatomic) SharedData *sharedData;
+
+@property (assign) NSString *recordingID;
 
 @property (strong, nonatomic) AVAudioRecorder *recorder;
 @property (strong, nonatomic) AVAudioPlayer *player;
@@ -35,8 +36,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonRecord;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPlay;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSave;
-
-@property (assign) NSString *recordingID;
 
 @end
 
@@ -73,17 +72,12 @@
 {
     [super viewDidLoad];
     
-    if (!self.group)
-    {
-        self.user = self.sharedData.user;
-    }
-    
     [self.buttonPlay setEnabled:NO];
     [self.buttonSave setEnabled:NO];
     
     NSArray *pathComponents = [NSArray arrayWithObjects:
                                [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
-                               @"MusicAudioRecording.m4a",
+                               kDefaultRecordingName,
                                nil];
     
     NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
@@ -101,18 +95,28 @@
     self.recorder.delegate = self;
     self.recorder.meteringEnabled = YES;
     [self.recorder prepareToRecord];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"New Recording"
-                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     self.tabBarController.navigationItem.rightBarButtonItems = nil;
-    self.tabBarController.title = @"Audio Recorder";
+    self.tabBarController.title = kAudioRecorderTitle;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewUserAudioRecordingNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupAudioRecordingNotification
+                                               object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -122,76 +126,35 @@
 
 - (IBAction)actionSave:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Save Recording" message:@"Enter a recording name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kSaveRecordingAlertMessageTitle message:kSaveRecordingAlertMessage delegate:self cancelButtonTitle:kCancelButtonTitle otherButtonTitles: kSaveButtonTitle, nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert addButtonWithTitle:@"Save"];
     [alert show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex) {
-        
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        
-        if ([textField.text isEqualToString:@""] == NO) {
-            
-            [SVProgressHUD showWithStatus:@"Saving..." maskType:SVProgressHUDMaskTypeBlack];
-            
-            NSData *data = [NSData dataWithContentsOfFile:self.recorder.url.path];
-            NSString *dataString = [data base64EncodedStringWithOptions:0];
-            
-            Firebase *recordingRef = [[self.ref childByAppendingPath:@"recordings"] childByAutoId];
-            self.recordingID = recordingRef.key;
-            Firebase *ownerRef;
-            NSString *ownerID;
-            
-            if (self.group) {
-                ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/recordings", self.group.groupID]];
-                ownerID = self.group.groupID;
-            } else {
-                ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings", self.user.userID]];
-                ownerID = self.user.userID;
-            }
-            
-            NSDictionary *newRecording = @{
-                                           @"name": textField.text,
-                                           @"data": dataString,
-                                           @"owner": ownerID,
-                                           };
-            
-            [recordingRef setValue:newRecording];
-            [ownerRef updateChildValues:@{recordingRef.key:@YES}];
-        }
-        else
-        {
-            [SVProgressHUD showErrorWithStatus:@"No name" maskType:SVProgressHUDMaskTypeBlack];
-        }
-    }
 }
 
 - (IBAction)actionRecord:(id)sender
 {
-    if (self.player.playing) {
+    if (self.player.playing)
+    {
         [self.player stop];
     }
     
-    if (!self.recorder.recording) {
+    if (!self.recorder.recording)
+    {
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:YES error:nil];
         
         [self.recorder record];
-        [self.buttonRecord setTitle:@"Stop" forState:UIControlStateNormal];
+        [self.buttonRecord setTitle:kStopButtonTitle forState:UIControlStateNormal];
         [self.buttonPlay setEnabled:NO];
         [self.buttonSave setEnabled:NO];
-        
-    } else {
-        
+    }
+    else
+    {
         [self.recorder stop];
         
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:NO error:nil];
-        [self.buttonRecord setTitle:@"Record" forState:UIControlStateNormal];
+        [self.buttonRecord setTitle:kRecordButtonTitle forState:UIControlStateNormal];
         
         [self.buttonPlay setEnabled:YES];
         [self.buttonSave setEnabled:YES];
@@ -205,7 +168,6 @@
         self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
         [self.player setDelegate:self];
         [self.player play];
-        
     }
 }
 
@@ -213,11 +175,62 @@
 {
     if (self.group)
     {
-        [self performSegueWithIdentifier:@"viewGroupRecordings" sender:self];
+        [self performSegueWithIdentifier:kGroupRecordingsSegueIdentifier sender:self];
     }
     else
     {
-        [self performSegueWithIdentifier:@"viewUserRecordings" sender:self];
+        [self performSegueWithIdentifier:kUserRecordingsSegueIdentifier sender:self];
+    }
+}
+
+
+//*****************************************************************************/
+#pragma mark - Save recording alert view
+//*****************************************************************************/
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        
+        if ([textField.text isEqualToString:@""] == NO) {
+            
+            [SVProgressHUD showWithStatus:kSavingRecordingProgressMessage maskType:SVProgressHUDMaskTypeBlack];
+            
+            NSData *data = [NSData dataWithContentsOfFile:self.recorder.url.path];
+            NSString *dataString = [data base64EncodedStringWithOptions:0];
+            
+            Firebase *recordingRef = [[self.ref childByAppendingPath:kRecordingsFirebaseNode] childByAutoId];
+            self.recordingID = recordingRef.key;
+            
+            Firebase *ownerRef;
+            NSString *ownerID;
+            
+            if (self.group)
+            {
+                ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode]];
+                ownerID = self.group.groupID;
+            }
+            else
+            {
+                ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode]];
+                ownerID = self.sharedData.user.userID;
+            }
+            
+            NSDictionary *newRecording = @{
+                                           kRecordingNameFirebaseField: textField.text,
+                                           kRecordingDataFirebaseField: dataString,
+                                           kRecordingOwnerFirebaseField: ownerID,
+                                           };
+            
+            [recordingRef setValue:newRecording];
+            [ownerRef updateChildValues:@{recordingRef.key:@YES}];
+        }
+        else
+        {
+            [SVProgressHUD showErrorWithStatus:kNoRecordingNameError maskType:SVProgressHUDMaskTypeBlack];
+        }
     }
 }
 
@@ -228,29 +241,33 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"New Recording"])
+    if ([[notification name] isEqualToString:kNewUserAudioRecordingNotification])
     {
-        Recording *newRecording = notification.object;
-        if ([newRecording.recordingID isEqualToString:self.recordingID])
-        {
-            [SVProgressHUD dismiss];
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
-            NSDictionary *options = @{
-                                      kCRToastTextKey : @"Recording Created!",
-                                      kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
-                                      kCRToastBackgroundColorKey : [UIColor greenColor],
-                                      kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationOutTypeKey : @(CRToastAnimationTypeSpring),
-                                      kCRToastAnimationInDirectionKey : @(CRToastAnimationDirectionTop),
-                                      kCRToastAnimationOutDirectionKey : @(CRToastAnimationDirectionTop)
-                                      };
+            Recording *newRecording = notification.object;
+            if ([newRecording.recordingID isEqualToString:self.recordingID])
+            {
+                self.recordingID = nil;
+                [SVProgressHUD dismiss];
+                [Utilities greenToastMessage:kNewRecordingSuccessMessage];
+            }
             
-            [CRToastManager showNotificationWithOptions:options
-                                        completionBlock:^{
-                                        }];
-        }
-        
-        self.recordingID = nil;
+        });
+    }
+    else if ([[notification name] isEqualToString:kNewGroupAudioRecordingNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            NSArray *newRecordingData = notification.object;
+            Recording *newRecording = [newRecordingData objectAtIndex:1];
+            if ([newRecording.recordingID isEqualToString:self.recordingID])
+            {
+                self.recordingID = nil;
+                [SVProgressHUD dismiss];
+            }
+            
+        });
     }
 }
 
@@ -260,14 +277,10 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"viewUserRecordings"]) {
-        RecordingsTableViewController *destViewController = segue.destinationViewController;
-        destViewController.user = self.user;
-
-    } else if ([segue.identifier isEqualToString:@"viewGroupRecordings"]) {
+    if ([segue.identifier isEqualToString:kGroupRecordingsSegueIdentifier])
+    {
         RecordingsTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
-        
     }
 }
 

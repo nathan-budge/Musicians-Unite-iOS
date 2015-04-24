@@ -9,13 +9,17 @@
 #import <Firebase/Firebase.h>
 
 #import "SharedData.h"
+#import "AppConstant.h"
 
 #import "Recording.h"
+#import "Group.h"
 
 
 @interface Recording ()
 
 @property (weak, nonatomic) SharedData *sharedData;
+
+@property (nonatomic) Group *group;
 
 @end
 
@@ -64,6 +68,25 @@
     return nil;
 }
 
+- (Recording *)initWithRef: (Firebase *)recordingRef andGroup:(Group *)group
+{
+    if (self = [super init])
+    {
+        self.recordingRef = recordingRef;
+        
+        self.group = group;
+        
+        [self.sharedData addChildObserver:self.recordingRef];
+        
+        [self loadRecordingData];
+        
+        [self attachListenerForChanges];
+        
+        return self;
+    }
+    return nil;
+}
+
 
 //*****************************************************************************/
 #pragma mark - Load recording data
@@ -82,7 +105,15 @@
         self.data = [[NSData alloc] initWithBase64EncodedString:recordingData[@"data"] options:0];
         self.ownerID = recordingData[@"owner"];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Recording" object:self];
+        if (self.group)
+        {
+            NSArray *newRecordingData = @[self.group, self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewGroupAudioRecordingNotification object:newRecordingData];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewUserAudioRecordingNotification object:self];
+        }
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

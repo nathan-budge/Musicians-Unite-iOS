@@ -30,7 +30,8 @@
     NSArray *viewControllers = self.viewControllers;
     
     MetronomeViewController *metronomeViewController = [viewControllers objectAtIndex:0];
-    if (self.tempo) {
+    if (self.tempo)
+    {
         metronomeViewController.tempo = self.tempo;
     }    
 }

@@ -363,7 +363,7 @@
         
         Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", newRecordingID]];
         
-        Recording *newRecording = [[Recording alloc] initWithRef:recordingRef];
+        Recording *newRecording = [[Recording alloc] initWithRef:recordingRef andGroup:self];
         
         [self addRecording:newRecording];
         

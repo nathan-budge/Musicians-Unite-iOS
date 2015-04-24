@@ -21,6 +21,7 @@
 #import "Group.h"
 #import "Task.h"
 #import "Message.h"
+#import "Recording.h"
 
 
 @interface NavigationDrawerViewController ()
@@ -113,6 +114,12 @@
                                              selector:@selector(receivedNotification:)
                                                  name:kNewMessageNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupAudioRecordingNotification
+                                               object:nil];
+    
 }
 
 
@@ -306,6 +313,22 @@
             });
         }
         
+    }
+    else if ([[notification name] isEqualToString:kNewGroupAudioRecordingNotification])
+    {
+        if (!self.initialLoad)
+        {
+            dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+                
+                NSArray *newRecordingData = notification.object;
+                Group *group = [newRecordingData objectAtIndex:0];
+                
+                NSString *message = [NSString stringWithFormat:@"%@: %@", group.name, kNewRecordingSuccessMessage];
+                
+                [Utilities greenToastMessage:message];
+                
+            });
+        }
     }
 }
 

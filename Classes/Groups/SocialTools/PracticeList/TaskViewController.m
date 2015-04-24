@@ -270,6 +270,7 @@
             Task *newTask = notification.object;
             if ([newTask.taskID isEqualToString:self.taskID])
             {
+                self.taskID = nil;
                 [self.navigationController popViewControllerAnimated:YES];
             }
             
@@ -283,11 +284,11 @@
             Task *newTask = [newTaskData objectAtIndex:1];
             if ([newTask.taskID isEqualToString:self.taskID])
             {
+                self.taskID = nil;
                 [self.navigationController popViewControllerAnimated:YES];
             }
             
         });
-        
     }
     else if ([[notification name] isEqualToString:kUserTaskRemovedNotification])
     {

@@ -8,22 +8,26 @@
 
 #import <Firebase/Firebase.h>
 
+//*****************************************************************************/
+#pragma mark - Firebase URL
+//*****************************************************************************/
+
 #define FIREBASE_URL @"https://blazing-heat-4549.firebaseio.com"
 
-//Naviation Controller Storyboard IDs
+
+//*****************************************************************************/
+#pragma mark - Storyboard ids
+//*****************************************************************************/
+
 #define kMusicToolsNavigationController             @"MusicToolsNavigationController"
 #define kPracticeListNavigationController           @"PracticeListNavigationController"
 #define kUserSettingsNavigationController           @"UserSettingsNavigationController"
 
-//Status Messages
-#define kLoggingOutProgressMessage                  @"Logging out..."
-#define kLoggingInProgressMessage                   @"Logging in..."
-#define kRegisteringProgressMessage                 @"Registering..."
-#define kDeletingAccountProgressMessage             @"Deleting account..."
-#define kChangingPasswordProgressMessage            @"Changing password..."
-#define kAddingMemberProgressMessage                @"Adding member..."
 
-//Segue Identifiers
+//*****************************************************************************/
+#pragma mark - Segue identifiers
+//*****************************************************************************/
+
 #define kLogoutSegueIdentifier                      @"Logout"
 #define kLoginToGroupSegueIdentifier                @"LoginToGroups"
 #define kRegisterToGroupSegueIdentifier             @"RegisterToGroups"
@@ -36,15 +40,37 @@
 #define kTaskDetailSegueIdentifier                  @"taskDetail"
 #define kNewMessageSegueIdentifier                  @"newMessage"
 #define kThreadDetailSegueIdentifier                @"viewThread"
+#define kUserRecordingsSegueIdentifier              @"viewUserRecordings"
+#define kGroupRecordingsSegueIdentifier             @"viewGroupRecordings"
 
-//Cell Identifiers
+
+//*****************************************************************************/
+#pragma mark - Cell identifiers
+//*****************************************************************************/
+
 #define kGenericCellIdentifier                      @"cell"
 #define kGroupCellIdentifier                        @"GroupCell"
 #define kUserCellIdentifier                         @"UserCell"
 #define kTaskCellIdentifier                         @"TaskCell"
 #define kMessageCellIdentifier                      @"MessengerCell"
 
-//Error Messages
+
+//*****************************************************************************/
+#pragma mark - Status messages
+//*****************************************************************************/
+
+#define kLoggingOutProgressMessage                  @"Logging out..."
+#define kLoggingInProgressMessage                   @"Logging in..."
+#define kRegisteringProgressMessage                 @"Registering..."
+#define kDeletingAccountProgressMessage             @"Deleting account..."
+#define kChangingPasswordProgressMessage            @"Changing password..."
+#define kAddingMemberProgressMessage                @"Adding member..."
+#define kSavingRecordingProgressMessage             @"Saving recording..."
+
+//*****************************************************************************/
+#pragma mark - Error messages
+//*****************************************************************************/
+
 #define kError                                      @"Error"
 #define kInvalidEmailPasswordError                  @"Invalid email and/or password"
 #define kInvalidEmailError                          @"Invalid Email"
@@ -60,37 +86,61 @@
 #define kMemberAlreadyExistsError                   @"Member already exists"
 #define kThreadAlreadyExistsError                   @"Thread already exists"
 #define kNoThreadMembersSelectedError               @"No members selected"
+#define kNoRecordingNameError                       @"Recording name is required"
 
 
-//Success Messages
+
+//*****************************************************************************/
+#pragma mark - Success messages
+//*****************************************************************************/
+
 #define kNewGroupSuccessMessage                     @"New Group:"
 #define kGroupRemovedSuccessMessage                 @"Group Removed:"
-#define kGroupSavedSuccessMessage                   @"Group Saved!"
+#define kGroupSavedSuccessMessage                   @"Group Saved"
 
 #define kNewTaskSuccessMessage                      @"New Task"
 #define kTaskRemovedSuccessMessage                  @"Task Removed"
 #define kTaskSavedSuccessMessage                    @"Task Saved"
 
-#define kMessageRemovedSuccessMessage               @"Message Removed!"
-#define kNewMessageThreadSuccessMessage             @"New Thread!"
-#define kMessageThreadRemovedSuccessMessage         @"Thread Removed!"
+#define kMessageRemovedSuccessMessage               @"Message Removed"
+#define kNewMessageThreadSuccessMessage             @"New Thread"
+#define kMessageThreadRemovedSuccessMessage         @"Thread Removed"
+
+#define kNewRecordingSuccessMessage                 @"New Recording"
+#define kRecordingRemovedSuccessMessage             @"Recording Removed"
+#define kRecordingSavesSuccessMessage               @"Recording Saved"
+
+#define kUserDataSavedSuccessMessage                @"User Saved!"
+
+#define kLoggedInSuccessMessage                     @"Logged In!"
+#define kLoggedOutSuccessMessage                    @"Logged Out!"
+
+#define kAccountCreatedSuccessMessage               @"Account Created!"
+#define kAccountDeletedSuccessMessage               @"Account Deleted!"
+
 
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
-#define kUserDataSavedSuccessMessage                @"User Saved!"
-#define kAccountDeletedSuccessMessage               @"Account Deleted!"
-#define kAccountCreatedSuccessMessage               @"Account Created!"
 #define kPasswordChangedSuccessMessage              @"Password Changed!"
-#define kLoggedOutSuccessMessage                    @"Logged Out!"
-#define kLoggedInSuccessMessage                     @"Logged In!"
 
 
-//Alert Messages
+
+//*****************************************************************************/
+#pragma mark - Alert messages
+//*****************************************************************************/
+
 #define kForgotPasswordAlertMessage                 @"Please enter your email address"
 #define kDeleteAccountAlertMessage                  @"Please enter your password"
 #define kLeaveGroupAlertMessage                     @"All of your data will be removed from the group. Would you like to continue?"
 #define kDeleteMemberAlertMessage                   @"Removing users will remove their data from the group. Would you like to continue?"
 
-//Button Titles
+#define kSaveRecordingAlertMessageTitle             @"Save Recording"
+#define kSaveRecordingAlertMessage                  @"Enter a recording name"
+
+
+//*****************************************************************************/
+#pragma mark - Button titles
+//*****************************************************************************/
+
 #define kConfirmButtonTitle                         @"OK"
 #define kCancelButtonTitle                          @"Cancel"
 #define kRemovePhotoButtonTitle                     @"Remove Photo"
@@ -101,19 +151,34 @@
 #define kSaveButtonTitle                            @"Save"
 #define kSendButtonTitle                            @"Send"
 #define kDeleteButtonTitle                          @"Delete"
+#define kStopButtonTitle                            @"Stop"
+#define kRecordButtonTitle                          @"Record"
 
-//View Titles
+
+//*****************************************************************************/
+#pragma mark - Tab titles
+//*****************************************************************************/
+
 #define kGroupSettingsTitle                         @"Group Settings"
 #define kPracticeListTitle                          @"Practice List"
 #define kMessagesTitle                              @"Messages"
+#define kAudioRecorderTitle                         @"Audio Recorder"
 
-//Table section headers
+
+//*****************************************************************************/
+#pragma mark - Table view section headers
+//*****************************************************************************/
+
 #define kCompletedTasksSectionHeader                @"Completed"
 #define kIncompleteTasksSectionHeader               @"Incomplete"
 #define kSelectMembersSectionHeader                 @"Select Members"
 #define kNoRegisterdMembersSectionHeader            @"No Registered Members"
 
-//Firebase Nodes
+
+//*****************************************************************************/
+#pragma mark - Firebase Nodes
+//*****************************************************************************/
+
 #define kUsersFirebaseNode                          @"users"
 #define kGroupsFirebaseNode                         @"groups"
 #define kMembersFirebaseNode                        @"members"
@@ -121,8 +186,13 @@
 #define kTasksFirebaseNode                          @"tasks"
 #define kMessageThreadsFirebaseNode                 @"message_threads"
 #define kMessagesFirebaseNode                       @"messages"
+#define kRecordingsFirebaseNode                     @"recordings"
 
-//Firebase Fields
+
+//*****************************************************************************/
+#pragma mark - Firebase Fields
+//*****************************************************************************/
+
 #define kUserEmailFirebaseField                     @"email"
 #define kUserFirstNameFirebaseField                 @"first_name"
 #define kUserLastNameFirebaseField                  @"last_name"
@@ -135,14 +205,15 @@
 #define kTaskCompletedFirebaseField                 @"completed"
 #define kMessageSenderFirebaseField                 @"sender"
 #define kMessageTextFirebaseField                   @"text"
-
-//Image Assets
-#define kProfileLogoImage                           @"profile_logo"
-#define kCheckboxImage                              @"checkbox"
-#define kCompletedCheckboxImage                     @"checkbox_completed"
+#define kRecordingNameFirebaseField                 @"name"
+#define kRecordingDataFirebaseField                 @"data"
+#define kRecordingOwnerFirebaseField                @"owner"
 
 
-//Notifications
+//*****************************************************************************/
+#pragma mark - Notifications
+//*****************************************************************************/
+
 #define kInitialLoadCompletedNotification           @"Initial Load Completed"
 
 #define kNewGroupNotification                       @"New Group"
@@ -168,5 +239,26 @@
 
 #define kNewMessageNotification                     @"New Message"
 #define kMessageRemovedNotification                 @"Message Removed"
+
+#define kNewUserAudioRecordingNotification          @"New User Recording"
+
+#define kNewGroupAudioRecordingNotification         @"New Group Recording"
+
+
+//*****************************************************************************/
+#pragma mark - Image Assets
+//*****************************************************************************/
+
+#define kProfileLogoImage                           @"profile_logo"
+#define kCheckboxImage                              @"checkbox"
+#define kCompletedCheckboxImage                     @"checkbox_completed"
+
+
+//*****************************************************************************/
+#pragma mark - Misc
+//*****************************************************************************/
+
+#define kDefaultRecordingName                       @"MusicAudioRecording.m4a"
+
 
 

@@ -168,6 +168,7 @@
                 MessageThread *newMessageThread = [newThreadData objectAtIndex:1];
                 if ([newMessageThread.messageThreadID isEqualToString:self.threadID])
                 {
+                    self.threadID = nil;
                     [self.navigationController popViewControllerAnimated:YES];
                 }
             }
