@@ -316,7 +316,7 @@
         
         User *threadMember = [member objectAtIndex:0];
         
-        [title appendString:[NSString stringWithFormat:@"%@ %@", threadMember.firstName, threadMember.lastName]];
+        [title appendString:[NSString stringWithFormat:@"%@", threadMember.firstName]];
     }
     else if ([messageThread.members count] == 2)
     {
@@ -329,11 +329,11 @@
             
             if (i == ([messageThread.members count] - 1))
             {
-                [title appendString:[NSString stringWithFormat:@"and %@ %@", threadMember.firstName, threadMember.lastName]];
+                [title appendString:[NSString stringWithFormat:@"and %@", threadMember.firstName]];
             }
             else
             {
-                [title appendString:[NSString stringWithFormat:@"%@ %@ ", threadMember.firstName, threadMember.lastName]];
+                [title appendString:[NSString stringWithFormat:@"%@ ", threadMember.firstName]];
             }
         }
     }
@@ -348,11 +348,11 @@
             
             if (i == ([messageThread.members count] - 1))
             {
-                [title appendString:[NSString stringWithFormat:@"and %@ %@", threadMember.firstName, threadMember.lastName]];
+                [title appendString:[NSString stringWithFormat:@"and %@", threadMember.firstName]];
             }
             else
             {
-                [title appendString:[NSString stringWithFormat:@"%@ %@, ", threadMember.firstName, threadMember.lastName]];
+                [title appendString:[NSString stringWithFormat:@"%@, ", threadMember.firstName]];
             }
         }
     }
