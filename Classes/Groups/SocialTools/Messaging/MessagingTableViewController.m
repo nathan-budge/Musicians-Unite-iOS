@@ -26,10 +26,10 @@
 
 @property (nonatomic) Firebase *ref;
 
+@property (nonatomic) SharedData *sharedData;
+
 @property (nonatomic) MessageThread *selectedMessageThread;
 @property (nonatomic) NSMutableArray *messageThreads;
-
-@property (nonatomic) SharedData *sharedData;
 
 @end
 
@@ -73,40 +73,44 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"New Thread"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Thread Removed"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"New Message"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receivedNotification:)
-                                                 name:@"Message Removed"
-                                               object:nil];
-    
     self.messageThreads = [NSMutableArray arrayWithArray:self.group.messageThreads];
     
     [self.tableView reloadData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewMessageThreadNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kMessageThreadRemovedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewMessageNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kMessageRemovedNotification
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    self.tabBarController.title = @"Messages";
+    self.tabBarController.title = kMessagesTitle;
     self.tabBarController.navigationItem.rightBarButtonItems = nil;
     self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionNewGroup)];
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 //*****************************************************************************/
 #pragma mark - Buttons
@@ -114,7 +118,7 @@
 
 -(void)actionNewGroup
 {
-    [self performSegueWithIdentifier:@"newMessage" sender:self];
+    [self performSegueWithIdentifier:kNewMessageSegueIdentifier sender:self];
 }
 
 
@@ -124,11 +128,12 @@
 
 - (void)deleteThread:(UIGestureRecognizer *)gesture
 {
-    if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateBegan) {
+    if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateBegan)
+    {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                  delegate:self
-                                                        cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:@"Delete"
+                                                        cancelButtonTitle:kCancelButtonTitle
+                                                   destructiveButtonTitle:kDeleteButtonTitle
                                                         otherButtonTitles: nil];
         
         
@@ -155,12 +160,12 @@
 - (void)removeMessageThread:(NSInteger)row
 {
     MessageThread *removedMessageThread = [self.messageThreads objectAtIndex:row];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads/%@", self.group.groupID, removedMessageThread.messageThreadID]] removeValue];
-    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", removedMessageThread.messageThreadID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMessageThreadsFirebaseNode, removedMessageThread.messageThreadID]] removeValue];
+    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessageThreadsFirebaseNode, removedMessageThread.messageThreadID]] removeValue];
     
     for (Message *removedMessage in removedMessageThread.messages) {
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/messages/%@", removedMessageThread.messageThreadID, removedMessage.messageID]] removeValue];
-        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", removedMessage.messageID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kMessageThreadsFirebaseNode, removedMessageThread.messageThreadID, kMessagesFirebaseNode, removedMessage.messageID]] removeValue];
+        [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessagesFirebaseNode, removedMessage.messageID]] removeValue];
     }
 }
 
@@ -171,31 +176,49 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"New Thread"])
+    if ([[notification name] isEqualToString:kNewMessageThreadNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
             NSArray *newThreadData = notification.object;
-            MessageThread *newThread = [newThreadData objectAtIndex:1];
-            
-            [self.messageThreads addObject:newThread];
-            [self.tableView reloadData];
-        
+            if ([[newThreadData objectAtIndex:0] isEqual:self.group])
+            {
+                MessageThread *newThread = [newThreadData objectAtIndex:1];
+                [self.messageThreads addObject:newThread];
+                [self.tableView reloadData];
+            }
+
         });
     }
-    else if ([[notification name] isEqualToString:@"Thread Removed"])
+    else if ([[notification name] isEqualToString:kMessageThreadRemovedNotification])
     {
         NSArray *removedThreadData = notification.object;
-        MessageThread *removedMessageThread = [removedThreadData objectAtIndex:1];
-        [self.messageThreads removeObject:removedMessageThread];
-        [self.tableView reloadData];
-    
+        if ([[removedThreadData objectAtIndex:0] isEqual:self.group])
+        {
+            MessageThread *removedMessageThread = [removedThreadData objectAtIndex:1];
+            [self.messageThreads removeObject:removedMessageThread];
+            [self.tableView reloadData];
+        }
     }
-    else if ([[notification name] isEqualToString:@"New Message"] || [[notification name] isEqualToString:@"Message Removed"])
+    else if ([[notification name] isEqualToString:kNewMessageNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
+            
+            NSArray *newMessageData = notification.object;
+            if ([[newMessageData objectAtIndex:2] isEqual:self.group])
+            {
+                [self.tableView reloadData];
+            }
+            
         });
+    }
+    else if ([[notification name] isEqualToString:kMessageRemovedNotification])
+    {
+        NSArray *newMessageData = notification.object;
+        if ([[newMessageData objectAtIndex:2] isEqual:self.group])
+        {
+            [self.tableView reloadData];
+        }
     }
 }
 
@@ -217,11 +240,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kGenericCellIdentifier];
     
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kGenericCellIdentifier];
     }
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteThread:)];
@@ -262,7 +285,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedMessageThread = [self.group.messageThreads objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:@"viewThread" sender:nil];
+    [self performSegueWithIdentifier:kThreadDetailSegueIdentifier sender:nil];
 }
 
 
@@ -332,12 +355,12 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"newMessage"])
+    if ([segue.identifier isEqualToString:kNewMessageSegueIdentifier])
     {
         NewMessageTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
     }
-    else if ([segue.identifier isEqualToString:@"viewThread"])
+    else if ([segue.identifier isEqualToString:kThreadDetailSegueIdentifier])
     {
         MessageViewController *destViewController = segue.destinationViewController;
         destViewController.messageThread = self.selectedMessageThread;

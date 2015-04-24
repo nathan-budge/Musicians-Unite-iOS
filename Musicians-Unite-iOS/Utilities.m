@@ -134,6 +134,7 @@
 {
     NSDictionary *options = @{
                               kCRToastTextKey : message,
+                              kCRToastTextColorKey: [UIColor blackColor],
                               kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                               kCRToastBackgroundColorKey : [UIColor greenColor],
                               kCRToastAnimationInTypeKey : @(CRToastAnimationTypeSpring),

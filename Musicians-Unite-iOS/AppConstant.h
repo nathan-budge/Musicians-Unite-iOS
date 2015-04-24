@@ -34,8 +34,11 @@
 #define kMemberManagementSegueIdentifier            @"viewMemberManagement"
 #define kMetronomeSegueIdentifier                   @"viewMetronome"
 #define kTaskDetailSegueIdentifier                  @"taskDetail"
+#define kNewMessageSegueIdentifier                  @"newMessage"
+#define kThreadDetailSegueIdentifier                @"viewThread"
 
 //Cell Identifiers
+#define kGenericCellIdentifier                      @"cell"
 #define kGroupCellIdentifier                        @"GroupCell"
 #define kUserCellIdentifier                         @"UserCell"
 #define kTaskCellIdentifier                         @"TaskCell"
@@ -59,13 +62,14 @@
 #define kNoThreadMembersSelectedError               @"No members selected"
 
 //Success Messages
+#define kNewGroupSuccessMessage                     @"New Group:"
+#define kGroupRemovedSuccessMessage                 @"Group Removed:"
+
 #define kResetPasswordSuccessMessage                @"Password reset email sent!"
 #define kUserDataSavedSuccessMessage                @"User Saved!"
 #define kAccountDeletedSuccessMessage               @"Account Deleted!"
 #define kAccountCreatedSuccessMessage               @"Account Created!"
 #define kPasswordChangedSuccessMessage              @"Password Changed!"
-#define kNewGroupSuccessMessage                     @"New Group!"
-#define kGroupRemovedSuccessMessage                 @"Group Removed!"
 #define kLoggedOutSuccessMessage                    @"Logged Out!"
 #define kLoggedInSuccessMessage                     @"Logged In!"
 #define kGroupSavedSuccessMessage                   @"Group Saved!"
@@ -100,6 +104,7 @@
 //View Titles
 #define kGroupSettingsTitle                         @"Group Settings"
 #define kPracticeListTitle                          @"Practice List"
+#define kMessagesTitle                              @"Messages"
 
 //Table section headers
 #define kCompletedTasksSectionHeader                @"Completed"
@@ -135,22 +140,32 @@
 #define kCheckboxImage                              @"checkbox"
 #define kCompletedCheckboxImage                     @"checkbox_completed"
 
+
 //Notifications
-#define kGroupDataUpdatedNotification               @"Group Data Updated"
+#define kInitialLoadCompletedNotification           @"Initial Load Completed"
+
 #define kNewGroupNotification                       @"New Group"
 #define kGroupRemovedNotification                   @"Group Removed"
+#define kGroupDataUpdatedNotification               @"Group Data Updated"
 #define kNoGroupsNotification                       @"No Groups"
-#define kGroupMemberRemovedNotification             @"Group Member Removed"
+
 #define kNewGroupMemberNotification                 @"New Group Member"
+#define kGroupMemberRemovedNotification             @"Group Member Removed"
+
 #define kNewUserTaskNotification                    @"New User Task"
-#define kNewGroupTaskNotification                   @"New Group Task"
 #define kUserTaskRemovedNotification                @"User Task Removed"
-#define kGroupTaskRemovedNotification               @"Group Task Removed"
 #define kUserTaskDataUpdatedNotification            @"User Task Data Updated"
-#define kGroupTaskDataUpdatedNotification           @"Group Task Data Updated"
 #define kUserTaskCompletedNotification              @"User Task Completed"
+
+#define kNewGroupTaskNotification                   @"New Group Task"
+#define kGroupTaskRemovedNotification               @"Group Task Removed"
+#define kGroupTaskDataUpdatedNotification           @"Group Task Data Updated"
 #define kGroupTaskCompletedNotification             @"Group Task Completed"
-#define kNewMessageNotification                     @"New Message"
-#define kMessageRemovedNotification                 @"Message Removed"
+
 #define kNewMessageThreadNotification               @"New Thread"
 #define kMessageThreadRemovedNotification           @"Thread Removed"
+
+#define kNewMessageNotification                     @"New Message"
+#define kMessageRemovedNotification                 @"Message Removed"
+
+

@@ -77,8 +77,6 @@
         [self.buttonConfirm setTitle:kLeaveGroupButtonTitle forState:UIControlStateNormal];
         [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
-        //Group removed notification handled in GroupTabarController
-        
         [self.fieldGroupName addTarget:self
                                 action:@selector(textFieldDidChange)
                       forControlEvents:UIControlEventEditingChanged];

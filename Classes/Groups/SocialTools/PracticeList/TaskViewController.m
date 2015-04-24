@@ -100,7 +100,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewWillAppear:animated];
     
     if (self.task)
     {
@@ -281,19 +281,15 @@
     }
     else if ([[notification name] isEqualToString:kUserTaskRemovedNotification])
     {
-
-        Task *removedTask = notification.object;
-        if ([removedTask isEqual:self.task])
+        if ([notification.object isEqual:self.task])
         {
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
     else if ([[notification name] isEqualToString:kGroupTaskRemovedNotification])
     {
-
-        NSArray *newTaskData = notification.object;
-        Task *removedTask = [newTaskData objectAtIndex:1];
-        if ([removedTask isEqual:self.task])
+        NSArray *removedTaskData = notification.object;
+        if ([[removedTaskData objectAtIndex:1] isEqual:self.task])
         {
             [self.navigationController popViewControllerAnimated:YES];
         }

@@ -25,6 +25,10 @@
 
 @property (nonatomic) Firebase *ref;
 
+@property (nonatomic) SharedData *sharedData;
+
+@property (nonatomic) BOOL initialLoad;
+
 @property (nonatomic, strong) UINavigationController *transitionsNavigationController;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonHome;
@@ -49,6 +53,13 @@
     return _ref;
 }
 
+-(SharedData *)sharedData
+{
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    return _sharedData;
+}
 
 //*****************************************************************************/
 #pragma mark - View Lifecycle
@@ -58,6 +69,23 @@
 {
     [super viewDidLoad];
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
+    
+    self.initialLoad = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kInitialLoadCompletedNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kNewGroupNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receivedNotification:)
+                                                 name:kGroupRemovedNotification
+                                               object:nil];
 }
 
 
@@ -112,6 +140,40 @@
     [self performSegueWithIdentifier:kLogoutSegueIdentifier sender:sender];
     
     [Utilities redToastMessage:kLoggedOutSuccessMessage];    
+}
+
+
+//*****************************************************************************/
+#pragma mark - Notification Center
+//*****************************************************************************/
+
+- (void)receivedNotification: (NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:kInitialLoadCompletedNotification])
+    {
+        self.initialLoad = NO;
+    }
+    else if ([[notification name] isEqualToString:kNewGroupNotification])
+    {
+        dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
+            
+            if (!self.initialLoad)
+            {
+                Group *newGroup = notification.object;
+                NSString *message = [NSString stringWithFormat:@"%@ %@", kNewGroupSuccessMessage, newGroup.name];
+                
+                [Utilities greenToastMessage:message];
+            }
+            
+        });
+    }
+    else if ([[notification name] isEqualToString:kGroupRemovedNotification])
+    {
+        Group *removedGroup = notification.object;
+        NSString *message = [NSString stringWithFormat:@"%@ %@", kGroupRemovedSuccessMessage, removedGroup.name];
+        
+        [Utilities redToastMessage:message];
+    }
 }
 
 @end

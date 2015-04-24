@@ -187,13 +187,18 @@
     }
     else if ([[notification name] isEqualToString:kMessageRemovedNotification])
     {
-        Message *removedMessage = notification.object;
-        [self.messages removeObject:removedMessage];
-        [self.tableView reloadData];
+        NSArray *removedMessageData = notification.object;
+        if ([[removedMessageData objectAtIndex:0] isEqual:self.messageThread])
+        {
+            Message *removedMessage = [removedMessageData objectAtIndex:1];
+            [self.messages removeObject:removedMessage];
+            [self.tableView reloadData];
+        }
     }
     else if ([[notification name] isEqualToString:kMessageThreadRemovedNotification])
     {
-        if ([notification.object isEqual:self.messageThread])
+        NSArray *removedThreadData = notification.object;
+        if ([[removedThreadData objectAtIndex:1] isEqual:self.messageThread])
         {
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -252,7 +257,6 @@
 
 - (void)didPressRightButton:(id)sender
 {
-    // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
     
     Firebase *newMessage = [[self.ref childByAppendingPath:kMessagesFirebaseNode] childByAutoId];

@@ -146,8 +146,6 @@
                                                  selector:@selector(receivedNotification:)
                                                      name:kUserTaskCompletedNotification
                                                    object:nil];
-        
-        
     }
 }
 
@@ -233,14 +231,14 @@
     {
         [self.incompleteTasks removeObject:task];
         [self.completedTasks addObject:task];
-        [self.tableView reloadData];
     }
     else
     {
         [self.completedTasks removeObject:task];
         [self.incompleteTasks addObject:task];
-        [self.tableView reloadData];
     }
+    
+    [self.tableView reloadData];
 }
 
 - (IBAction)actionDrawerToggle:(id)sender
@@ -272,7 +270,6 @@
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
 
             NSArray *newTaskData = notification.object;
-            NSLog(@"MADE IT%@", newTaskData);
             if ([[newTaskData objectAtIndex:0] isEqual:self.group])
             {
                 Task *newTask = [newTaskData objectAtIndex:1];
@@ -284,7 +281,6 @@
     }
     else if ([[notification name] isEqualToString:kUserTaskRemovedNotification])
     {
-
         Task *removedTask = notification.object;
             
         if (removedTask.completed)
@@ -295,6 +291,7 @@
         {
             [self.incompleteTasks removeObject:removedTask];
         }
+        
         [self.tableView reloadData];
             
         [Utilities redToastMessage:kTaskRemovedSuccessMessage];
@@ -314,6 +311,7 @@
             {
                 [self.incompleteTasks removeObject:removedTask];
             }
+            
             [self.tableView reloadData];
         }
     }
@@ -328,7 +326,6 @@
         {
             [self.tableView reloadData];
         }
-        
     }
     else if ([[notification name] isEqualToString:kUserTaskCompletedNotification])
     {

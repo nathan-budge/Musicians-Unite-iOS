@@ -229,7 +229,9 @@
         {
             Message *removedMessage = [message objectAtIndex:0];
             [self removeMessage:removedMessage];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Removed" object:removedMessage];
+            
+            NSArray *removedMessageData = @[self, removedMessage, self.group];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Removed" object:removedMessageData];
         }
         
     } withCancelBlock:^(NSError *error) {

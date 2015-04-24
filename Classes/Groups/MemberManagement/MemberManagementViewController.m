@@ -237,6 +237,66 @@
 
 
 //*****************************************************************************/
+#pragma mark - Add members to group
+//*****************************************************************************/
+
+- (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef
+{
+    for (User *member in members) {
+        
+        if (member.userID)
+        {
+            [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{member.userID:@YES}];
+            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@", member.userID, kGroupsFirebaseNode]] updateChildValues:@{groupRef.key:@YES}];
+        }
+        else
+        {
+            NSDictionary *newTempMember = @{
+                                            kUserEmailFirebaseField:member.email,
+                                            kUserCompletedRegistrationFirebaseField:@NO
+                                            };
+            
+            Firebase *tempMemberRef = [self.userRef childByAutoId];
+            
+            [tempMemberRef setValue:newTempMember];
+            [[tempMemberRef childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
+            [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{tempMemberRef.key:@YES}];
+        }
+    }
+}
+
+
+//*****************************************************************************/
+#pragma mark - Remove members from group alert view
+//*****************************************************************************/
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        for (User *member in self.membersToRemove) {
+            
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, member.userID]] removeValue];
+            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", member.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
+            
+            if (!member.completedRegistration) //Remove temp users that do not belong to any group
+            {
+                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
+            }
+        }
+        
+        if (self.members.count > 0) //User was added to a group
+        {
+            Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
+            [self addMembers:self.members toGroup:groupRef];
+        }
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+
+//*****************************************************************************/
 #pragma mark - Add member to table view
 //*****************************************************************************/
 
@@ -307,67 +367,7 @@
 
 
 //*****************************************************************************/
-#pragma mark - Add members to group
-//*****************************************************************************/
-
-- (void) addMembers: (NSMutableArray *)members toGroup:(Firebase *)groupRef
-{
-    for (User *member in members) {
-        
-        if (member.userID)
-        {
-            [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{member.userID:@YES}];
-            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@", member.userID, kGroupsFirebaseNode]] updateChildValues:@{groupRef.key:@YES}];
-        }
-        else
-        {
-            NSDictionary *newTempMember = @{
-                                            kUserEmailFirebaseField:member.email,
-                                            kUserCompletedRegistrationFirebaseField:@NO
-                                            };
-            
-            Firebase *tempMemberRef = [self.userRef childByAutoId];
-            
-            [tempMemberRef setValue:newTempMember];
-            [[tempMemberRef childByAppendingPath:kGroupsFirebaseNode] updateChildValues:@{groupRef.key:@YES}];
-            [[groupRef childByAppendingPath:kMembersFirebaseNode] updateChildValues:@{tempMemberRef.key:@YES}];
-        }
-    }
-}
-
-
-//*****************************************************************************/
-#pragma mark - Remove members from group alert view
-//*****************************************************************************/
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        for (User *member in self.membersToRemove) {
-            
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, member.userID]] removeValue];
-            [[self.userRef childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", member.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
-            
-            if (!member.completedRegistration) //Remove temp users that do not belong to any group
-            {
-                [Utilities removeEmptyTempUsers:member.userID withRef:self.ref];
-            }
-        }
-        
-        if (self.members.count > 0) //User was added to a group
-        {
-            Firebase *groupRef =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
-            [self addMembers:self.members toGroup:groupRef];
-        }
-
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-
-//*****************************************************************************/
-#pragma mark - Helper methods
+#pragma mark - Enable save button method
 //*****************************************************************************/
 
 - (BOOL)enableSave

@@ -175,11 +175,8 @@
                 {
                     [self.activityIndicator stopAnimating];
                     self.initialLoad = NO;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kInitialLoadCompletedNotification object:nil];
                 }
-            }
-            else
-            {
-                [Utilities greenToastMessage:kNewGroupSuccessMessage];
             }
             
         });
@@ -188,8 +185,6 @@
     {
         [self.groups removeObject:notification.object];
         [self.tableView reloadData];
-        
-        [Utilities redToastMessage:kGroupRemovedSuccessMessage];
     }
     else if ([[notification name] isEqualToString:kNoGroupsNotification])
     {
