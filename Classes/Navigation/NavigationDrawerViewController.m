@@ -120,6 +120,7 @@
                                                  name:kNewGroupRecordingNotification
                                                object:nil];
     
+    [self.sharedData addNotificationCenterObserver:self];
 }
 
 

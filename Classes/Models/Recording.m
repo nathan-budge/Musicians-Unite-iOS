@@ -104,6 +104,7 @@
         self.name = recordingData[@"name"];
         self.data = [[NSData alloc] initWithBase64EncodedString:recordingData[@"data"] options:0];
         self.ownerID = recordingData[@"owner"];
+        self.creatorID = recordingData[@"creator"];
         
         if (self.group)
         {
@@ -160,6 +161,11 @@
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kUserRecordingDataUpdatedNotification object:self];
             }
+        }
+        else if ([snapshot.key isEqualToString:@"creator"])
+        {
+            self.creatorID = snapshot.value;
+            
         }
         
     } withCancelBlock:^(NSError *error) {

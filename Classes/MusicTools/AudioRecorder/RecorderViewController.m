@@ -205,28 +205,29 @@
             Firebase *recordingRef = [[self.ref childByAppendingPath:kRecordingsFirebaseNode] childByAutoId];
             self.recordingID = recordingRef.key;
             
-            Firebase *ownerRef;
-            NSString *ownerID;
+            Firebase *creatorRef;
+            NSString *creatorID;
             
             if (self.group)
             {
-                ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode]];
-                ownerID = self.group.groupID;
+                creatorRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode]];
+                creatorID = self.group.groupID;
             }
             else
             {
-                ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode]];
-                ownerID = self.sharedData.user.userID;
+                creatorRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode]];
+                creatorID = self.sharedData.user.userID;
             }
             
             NSDictionary *newRecording = @{
                                            kRecordingNameFirebaseField: textField.text,
                                            kRecordingDataFirebaseField: dataString,
-                                           kRecordingOwnerFirebaseField: ownerID,
+                                           kRecordingOwnerFirebaseField: creatorID,
+                                           kRecordingCreatorFirebaseField: creatorID,
                                            };
             
             [recordingRef setValue:newRecording];
-            [ownerRef updateChildValues:@{recordingRef.key:@YES}];
+            [creatorRef updateChildValues:@{recordingRef.key:@YES}];
         }
         else
         {

@@ -177,31 +177,31 @@
 
 - (IBAction)actionDelete:(id)sender
 {
+    Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
+    
     if (self.group)
     {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.recordingID=%@", self.recording.recordingID];
-        NSArray *recording = [self.sharedData.user.recordings filteredArrayUsingPredicate:predicate];
-        
-        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
-        
-        if (recording.count == 0)
+        if ([self.recording.creatorID isEqualToString:self.group.groupID]) //If creator is group, remove recording
         {
             [recordingRef removeValue];
         }
-        else
+        else //Otherwise, assign creator as owner
         {
-            [recordingRef updateChildValues:@{@"owner":self.sharedData.user.userID}];
+            [recordingRef updateChildValues:@{kRecordingOwnerFirebaseField:self.recording.creatorID}];
         }
-        
+
         Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode, self.recording.recordingID]];
         [groupRecordingRef removeValue];
     }
     else
     {
-        if ([self.recording.ownerID isEqualToString:self.sharedData.user.userID])
+        if ([self.recording.ownerID isEqualToString:self.sharedData.user.userID]) //If recoding is owner by the user, delete the recording
         {
-            Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
             [recordingRef removeValue];
+        }
+        else //Otherwise, "give" the recording to the group by assigning creator as group
+        {
+            [recordingRef updateChildValues:@{kRecordingCreatorFirebaseField:self.recording.ownerID}];
         }
         
         Firebase *userRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode, self.recording.recordingID]];
