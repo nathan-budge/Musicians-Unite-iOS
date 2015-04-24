@@ -105,6 +105,7 @@
     
     self.beatValue = 2;
     self.bpm = 2;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"2/2" forState:UIControlStateNormal];
@@ -118,6 +119,7 @@
     
     self.beatValue = 2;
     self.bpm = 3;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"3/2" forState:UIControlStateNormal];
@@ -131,6 +133,7 @@
     
     self.beatValue = 2;
     self.bpm = 4;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"4/2" forState:UIControlStateNormal];
@@ -145,6 +148,7 @@
     
     self.beatValue = 4;
     self.bpm = 1;
+    self.subdivision = 1;
     
     [self.buttonMeters setTitle:@"1/4" forState:UIControlStateNormal];
     [self.buttonBeats setTitle:@"1" forState:UIControlStateNormal];
@@ -157,6 +161,7 @@
     
     self.beatValue = 4;
     self.bpm = 2;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"2/4" forState:UIControlStateNormal];
@@ -170,6 +175,7 @@
     
     self.beatValue = 4;
     self.bpm = 3;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"3/4" forState:UIControlStateNormal];
@@ -183,6 +189,7 @@
     
     self.beatValue = 4;
     self.bpm = 4;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"4/4" forState:UIControlStateNormal];
@@ -197,6 +204,7 @@
     
     self.beatValue = 8;
     self.bpm = 3;
+    self.subdivision = 1;
     
     [self.buttonMeters setTitle:@"3/8" forState:UIControlStateNormal];
     [self.buttonBeats setTitle:@"1" forState:UIControlStateNormal];
@@ -209,6 +217,7 @@
     
     self.beatValue = 8;
     self.bpm = 6;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"6/8" forState:UIControlStateNormal];
@@ -220,8 +229,9 @@
 {
     self.viewDots.timeSignature = 9.8;
     
-    self.beatValue = 9;
-    self.bpm = 8;
+    self.beatValue = 8;
+    self.bpm = 9;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"9/8" forState:UIControlStateNormal];
@@ -233,8 +243,9 @@
 {
     self.viewDots.timeSignature = 12.8;
     
-    self.beatValue = 12;
-    self.bpm = 8;
+    self.beatValue = 8;
+    self.bpm = 12;
+    self.subdivision = 1;
     
     [self.viewDots setNeedsDisplay];
     [self.buttonMeters setTitle:@"12/8" forState:UIControlStateNormal];
@@ -305,9 +316,6 @@
 
 - (IBAction)actionPlay:(id)sender
 {
-    [hiClick play];
-    [hiClick play];
-    [hiClick play];
     if (!self.isPlaying) {
         [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
         NSThread *metronomeThread = [[NSThread alloc] initWithTarget:self selector:@selector(playMetronome) object:nil];
@@ -363,6 +371,7 @@
 }
 
 - (void)playMetronome {
+    [self.viewDots setNeedsDisplay];
     while(self.isPlaying) {
         double beatTime = 60.0 / self.tempo / self.subdivision;
         int numBeats = self.bpm * self.subdivision;
@@ -370,15 +379,34 @@
         
         
         for (int i = 0; i < numBeats && self.isPlaying; i++) {
+            self.viewDots.highlightedBeat = i+1;
             if (i == 0) {
                 [hiClick play];
-                [NSThread sleepForTimeInterval:beatTime];
+                self.viewDots.highlightedBeat = 1;
+                [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
+                [NSThread sleepForTimeInterval:9*beatTime/10];
+                self.viewDots.highlightedBeat = 0;
+                [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
+                [NSThread sleepForTimeInterval:beatTime/10];
             } else {
                 [lowClick play];
-                [NSThread sleepForTimeInterval:beatTime];
+                if (i % self.subdivision == 0) {
+                    self.viewDots.highlightedBeat = i / self.subdivision + 1;
+                } else {
+                    self.viewDots.highlightedBeat = 0;
+                }
+                [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
+                [NSThread sleepForTimeInterval:9*beatTime/10];
+                self.viewDots.highlightedBeat = 0;
+                [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
+                [NSThread sleepForTimeInterval:beatTime/10];
             }
         }
     }
+}
+
+-(void)highlightCurrentBeat:(int)beatNumber {
+    [self.viewDots setNeedsDisplay];
 }
 
 

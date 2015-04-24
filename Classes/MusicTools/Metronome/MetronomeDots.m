@@ -19,11 +19,8 @@
     
     if (self.timeSignature == 1.4) {
         UIBezierPath *shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 25, 25, 50, 50)];
-        
-        [[UIColor blackColor] setStroke];
-        [[UIColor grayColor] setFill];
-        
-        [shape fill];
+
+        [self checkBeatAndFill:1 withShape:shape];
         
         /*
         UIBezierPath *path = [UIBezierPath bezierPath];
@@ -37,11 +34,11 @@
     } else if (self.timeSignature == 2.2 || self.timeSignature == 2.4) {
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 100, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 50, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:2 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -62,15 +59,15 @@
     } else if (self.timeSignature == 3.2 || self.timeSignature == 3.4) {
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 125, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
+        
+        shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 75, 25, 50, 50)];
+        
+        [self checkBeatAndFill:2 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 25, 25, 50, 50)];
         
-        [shape fill];
-        
-        shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 75, 25, 50, 50)];
-        
-        [shape fill];
+        [self checkBeatAndFill:3 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -98,19 +95,19 @@
     } else if (self.timeSignature == 4.2 || self.timeSignature == 4.4) {
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 140, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 65, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:2 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 10, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:3 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 85, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:4 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -146,15 +143,15 @@
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 75, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2, 35, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:2 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 50, 35, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:3 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -170,27 +167,27 @@
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 150, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 85, 35, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:2 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 40, 35, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:3 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 15, 25, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:4 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 80, 35, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:5 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 125, 35, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:6 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -213,15 +210,15 @@
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 75, 5, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2, 15, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:2 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 50, 15, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:3 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -236,27 +233,27 @@
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 150, 65, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:4 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 85, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:5 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 40, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:6 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 15, 65, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:7 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 80, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:8 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 125, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:9 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -279,27 +276,27 @@
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 150, 5, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:1 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 85, 15, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:2 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 40, 15, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:3 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 15, 5, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:4 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 80, 15, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:5 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 125, 15, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:6 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -320,27 +317,27 @@
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 150, 65, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:7 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 85, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:8 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 - 40, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:9 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 15, 65, 50, 50)];
         
-        [shape fill];
+        [self checkBeatAndFill:10 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 80, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:11 withShape:shape];
         
         shape = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width/2 + 125, 75, 30, 30)];
         
-        [shape fill];
+        [self checkBeatAndFill:12 withShape:shape];
         
         /*
         path = [UIBezierPath bezierPath];
@@ -359,6 +356,17 @@
          */
     }
     
+}
+
+-(void)checkBeatAndFill:(int)beatNumber withShape:(UIBezierPath*)shape {
+    if (self.highlightedBeat == beatNumber) {
+        [[UIColor blueColor] setFill];
+        [[UIColor blueColor] setStroke];
+    }
+    
+    [shape fill];
+    [[UIColor blackColor] setStroke];
+    [[UIColor grayColor] setFill];
 }
 
 
