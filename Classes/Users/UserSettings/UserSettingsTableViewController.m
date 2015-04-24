@@ -31,8 +31,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *fieldLastName;
 @property (weak, nonatomic) IBOutlet UILabel *labelEmail;
 @property (weak, nonatomic) IBOutlet UIButton *buttonProfileImage;
-
-@property (nonatomic) User *user;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
 
 @end
 
@@ -68,16 +67,24 @@
 {
     [super viewDidLoad];
     
-    self.user = self.sharedData.user;
+    self.fieldFirstName.text = self.sharedData.user.firstName;
+    self.fieldLastName.text = self.sharedData.user.lastName;
+    self.labelEmail.text = self.sharedData.user.email;
     
-    self.fieldFirstName.text = self.user.firstName;
-    self.fieldLastName.text = self.user.lastName;
-    self.labelEmail.text = self.user.email;
-    
-    UIImage *profileImage = self.user.profileImage;
+    UIImage *profileImage = self.sharedData.user.profileImage;
     [self.buttonProfileImage setImage:profileImage forState:UIControlStateNormal];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
+    
+    self.buttonSave.enabled = NO;
+    
+    [self.fieldFirstName addTarget:self
+                            action:@selector(textFieldDidChange)
+                  forControlEvents:UIControlEventEditingChanged];
+    
+    [self.fieldLastName addTarget:self
+                            action:@selector(textFieldDidChange)
+                  forControlEvents:UIControlEventEditingChanged];
 }
 
 
@@ -96,7 +103,7 @@
     
     if (self.fieldFirstName.text.length > 0)
     {
-        Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.user.userID]];
+        Firebase *userRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.sharedData.user.userID]];
         
         NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
         
@@ -149,7 +156,7 @@
         
         UITextField *textField = [alertView textFieldAtIndex:0];
         
-        [self.ref removeUser:self.user.email password:textField.text withCompletionBlock:^(NSError *error) {
+        [self.ref removeUser:self.sharedData.user.email password:textField.text withCompletionBlock:^(NSError *error) {
             
             if (error)
             {
@@ -164,15 +171,18 @@
             }
             else
             {
-                for (Group *group in self.user.groups) {
-                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, group.groupID, kMembersFirebaseNode, self.user.userID]] removeValue];
+                for (Group *group in self.sharedData.user.groups) {
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, group.groupID, kMembersFirebaseNode, self.sharedData.user.userID]] removeValue];
                     [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
                 }
             
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.user.userID]] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.sharedData.user.userID]] removeValue];
                 
                 [self.ref unauth];
                 self.sharedData.user = nil;
+                
+                //Set initial Load
+                
                 [SVProgressHUD dismiss];
                 
                 [self performSegueWithIdentifier:kDeleteAccountSegueIdentifier sender:nil];
@@ -197,6 +207,18 @@
 {
     [self dismissKeyboard];
     return YES;
+}
+
+- (void)textFieldDidChange
+{
+    if ([self.fieldFirstName.text isEqualToString:self.sharedData.user.firstName] && [self.fieldLastName.text isEqualToString:self.sharedData.user.lastName])
+    {
+        self.buttonSave.enabled = NO;
+    }
+    else
+    {
+        self.buttonSave.enabled = YES;
+    }
 }
 
 
@@ -258,13 +280,16 @@
 -(void)removePhoto
 {
     [self.buttonProfileImage setImage:[UIImage imageNamed:kProfileLogoImage] forState:UIControlStateNormal];
+    self.buttonSave.enabled = YES;
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = info[UIImagePickerControllerEditedImage];
     [self.buttonProfileImage setImage:image forState:UIControlStateNormal];
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        self.buttonSave.enabled = YES;
+    }];
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

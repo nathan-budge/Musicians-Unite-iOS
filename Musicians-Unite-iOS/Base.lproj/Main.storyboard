@@ -860,6 +860,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="buttonProfileImage" destination="fX7-Yp-ftu" id="ji3-CJ-gCe"/>
+                        <outlet property="buttonSave" destination="2Be-OO-HPs" id="CJs-UK-oFL"/>
                         <outlet property="fieldFirstName" destination="DlN-WU-Fpl" id="RFY-zj-JSW"/>
                         <outlet property="fieldLastName" destination="kwE-mJ-dZA" id="g7n-lf-PfG"/>
                         <outlet property="labelEmail" destination="ZzP-Sb-hGs" id="fLV-Ke-lA6"/>
