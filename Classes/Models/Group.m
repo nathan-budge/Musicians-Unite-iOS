@@ -241,8 +241,22 @@
             } withCancelBlock:^(NSError *error) {
                 NSLog(@"ERROR: %@", error.description);
             }];
+            
         }
         
+        //Deal with audio recordings
+        for (Recording *recording in self.recordings) {
+            
+            if ([recording.creatorID isEqualToString:userID])
+            {
+                Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, recording.recordingID]];
+                [recordingRef updateChildValues:@{kRecordingCreatorFirebaseField:self.groupID}];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/recordings/%@", userID, recording.recordingID]] removeValue];
+            }
+            
+        }
+        
+        //Remove member from group
         if (member.count > 0)
         {
             [self removeMember:removedMember];

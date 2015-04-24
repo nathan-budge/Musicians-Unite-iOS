@@ -223,6 +223,7 @@
 #define kRecordingNameFirebaseField                 @"name"
 #define kRecordingDataFirebaseField                 @"data"
 #define kRecordingOwnerFirebaseField                @"owner"
+#define kRecordingCreatorFirebaseField              @"creator"
 
 
 

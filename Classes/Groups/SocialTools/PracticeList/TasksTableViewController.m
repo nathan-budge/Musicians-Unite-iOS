@@ -221,19 +221,6 @@
     
     task.completed = !task.completed;
     task.completed ? [taskRef updateChildValues:@{kTaskCompletedFirebaseField:@YES}] : [taskRef updateChildValues:@{kTaskCompletedFirebaseField:@NO}];
-    
-    if (task.completed)
-    {
-        [self.incompleteTasks removeObject:task];
-        [self.completedTasks addObject:task];
-    }
-    else
-    {
-        [self.completedTasks removeObject:task];
-        [self.incompleteTasks addObject:task];
-    }
-    
-    [self.tableView reloadData];
 }
 
 - (IBAction)actionDrawerToggle:(id)sender
@@ -314,6 +301,25 @@
     }
     else if ([[notification name] isEqualToString:kUserTaskDataUpdatedNotification])
     {
+        Task *updatedTask = notification.object;
+        
+        if ([self.completedTasks containsObject:updatedTask]) //Was task completed?
+        {
+            if (!updatedTask.completed) //Is it still complete?  If not, move to incomplete tasks
+            {
+                [self.completedTasks removeObject:updatedTask];
+                [self.incompleteTasks addObject:updatedTask];
+            }
+        }
+        else if ([self.incompleteTasks containsObject:updatedTask]) //Was task incomplete?
+        {
+            if (updatedTask.completed) //Is it still incomplete? If not, move to completed tasks.
+            {
+                [self.incompleteTasks removeObject:updatedTask];
+                [self.completedTasks addObject:updatedTask];
+            }
+        }
+        
         [self.tableView reloadData];
     }
     else if ([[notification name] isEqualToString:kGroupTaskDataUpdatedNotification])
@@ -321,6 +327,25 @@
         NSArray *updatedTaskData = notification.object;
         if ([[updatedTaskData objectAtIndex:0] isEqual:self.group])
         {
+            Task *updatedTask = [updatedTaskData objectAtIndex:1];
+            
+            if ([self.completedTasks containsObject:updatedTask]) //Was task completed?
+            {
+                if (!updatedTask.completed) //Is it still complete?  If not, move to incomplete tasks.
+                {
+                    [self.completedTasks removeObject:updatedTask];
+                    [self.incompleteTasks addObject:updatedTask];
+                }
+            }
+            else if ([self.incompleteTasks containsObject:updatedTask]) //Was task incomplete?
+            {
+                if (updatedTask.completed)//Is it still incomplete? If not, move to completed tasks.
+                {
+                    [self.incompleteTasks removeObject:updatedTask];
+                    [self.completedTasks addObject:updatedTask];
+                }
+            }
+            
             [self.tableView reloadData];
         }
     }
