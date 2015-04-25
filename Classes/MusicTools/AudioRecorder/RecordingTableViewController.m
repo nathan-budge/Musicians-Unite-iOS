@@ -252,7 +252,7 @@
     
     if (!self.isPaused)
     {
-        [self.buttonPlay setTitle:@"Pause" forState:UIControlStateNormal];
+        [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"audioplayer_pause"] forState:UIControlStateNormal];
         
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self
@@ -265,7 +265,7 @@
     }
     else
     {
-        [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
+        [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"audioplayer_play"] forState:UIControlStateNormal];
         [self.audioPlayer pauseAudio];
         self.isPaused = NO;
     }

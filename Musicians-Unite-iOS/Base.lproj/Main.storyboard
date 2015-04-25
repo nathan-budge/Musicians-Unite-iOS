@@ -1162,12 +1162,12 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tz9-RN-k2B">
                                                     <rect key="frame" x="3" y="5" width="314" height="50"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-WD-fcO">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-WD-fcO">
                                                             <rect key="frame" x="8" y="5" width="40" height="40"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="40" id="R2f-HK-bEj"/>
                                                             </constraints>
-                                                            <state key="normal" title="Play">
+                                                            <state key="normal" backgroundImage="audioplayer_play">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
                                                             <connections>
@@ -1180,8 +1180,8 @@
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="TCZ-JC-ugb">
-                                                            <rect key="frame" x="84" y="10" width="172" height="31"/>
+                                                        <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="TCZ-JC-ugb">
+                                                            <rect key="frame" x="84" y="23" width="172" height="31"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="168" id="9La-6g-Fu0"/>
                                                             </constraints>
@@ -2648,6 +2648,7 @@
     </scenes>
     <resources>
         <image name="audio_wave" width="35" height="29"/>
+        <image name="audioplayer_play" width="66" height="65"/>
         <image name="chat_bubble" width="34" height="34"/>
         <image name="checkbox" width="60" height="60"/>
         <image name="eye_inactive" width="46" height="28"/>

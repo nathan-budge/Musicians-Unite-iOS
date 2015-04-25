@@ -278,7 +278,7 @@
 
 - (IBAction)actionBeat2:(id)sender
 {
-    self.subdivision = 2;
+    self.subdivision = self.beatValue == 8 ? 3 : 2;
     [self.buttonBeats setTitle:self.buttonBeat2.titleLabel.text forState:UIControlStateNormal];
     [self dismissSubview:self.viewBeats];
 }
@@ -374,7 +374,9 @@
     [self.viewDots setNeedsDisplay];
     while(self.isPlaying) {
         double beatTime = 60.0 / self.tempo / self.subdivision;
+        if (self.beatValue == 8 && self.subdivision == 1) beatTime /= 3;
         int numBeats = self.bpm * self.subdivision;
+        if (self.beatValue == 8 && self.subdivision == 3) numBeats /= 3;
         
         
         
@@ -388,10 +390,10 @@
                 [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
                 [NSThread sleepForTimeInterval:beatTime/10];
             } else {
-                //TODO: Only play a note for small beats on x/8 if subdivision == 3
-                [lowClick play];
-                if (i % self.subdivision == 0) {
-                    self.viewDots.highlightedBeat = i / self.subdivision + 1;
+                NSLog(@"%d, %d", self.beatValue, self.subdivision);
+                if (self.beatValue != 8 || self.subdivision == 3 || i % 3 == 0)[lowClick play];
+                if (self.beatValue == 8 || i % self.subdivision == 0) {
+                    self.viewDots.highlightedBeat = self.beatValue == 8 ? i+1 : i / self.subdivision + 1;
                 } else {
                     self.viewDots.highlightedBeat = 0;
                 }
