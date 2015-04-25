@@ -212,6 +212,8 @@
             {
                 creatorRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode]];
                 creatorID = self.group.groupID;
+                
+                [recordingRef updateChildValues:@{kRecordingGroupFirebaseField:self.group.groupID}];
             }
             else
             {
@@ -227,6 +229,7 @@
                                            };
             
             [recordingRef setValue:newRecording];
+            
             [creatorRef updateChildValues:@{recordingRef.key:@YES}];
         }
         else

@@ -216,6 +216,7 @@
 #define kTaskTempoFirebaseField                     @"tempo"
 #define kTaskNotesFirebaseField                     @"notes"
 #define kTaskCompletedFirebaseField                 @"completed"
+#define kTaskGroupFirebaseField                     @"group"
 
 #define kMessageSenderFirebaseField                 @"sender"
 #define kMessageTextFirebaseField                   @"text"
@@ -225,6 +226,7 @@
 #define kRecordingDataFirebaseField                 @"data"
 #define kRecordingOwnerFirebaseField                @"owner"
 #define kRecordingCreatorFirebaseField              @"creator"
+#define kRecordingGroupFirebaseField                @"group"
 
 
 

@@ -302,10 +302,6 @@
                     {
                         sender = [member objectAtIndex:0];
                     }
-                    else
-                    {
-                        sender = self.sharedData.user;
-                    }
                     
                     NSString *message = [NSString stringWithFormat:@"%@: New message from %@", group.name, sender.firstName];
                     

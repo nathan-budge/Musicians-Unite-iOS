@@ -182,19 +182,27 @@
             {
                 groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.ownerID, kRecordingsFirebaseNode]];
                 [groupRecordingsRef updateChildValues:@{self.recording.recordingID:@YES}];
+                
+                [recordingRef updateChildValues:@{kRecordingGroupFirebaseField:self.ownerID}];
             }
             else if (![oldOwnerID isEqualToString:self.sharedData.user.userID] && [self.ownerID isEqualToString:self.sharedData.user.userID])
             {
                 groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, oldOwnerID, kRecordingsFirebaseNode, self.recording.recordingID]];
                 [groupRecordingsRef removeValue];
+                
+                [[recordingRef childByAppendingPath:kRecordingGroupFirebaseField] removeValue];
             }
             else if  (![oldOwnerID isEqualToString:self.sharedData.user.userID] && ![self.ownerID isEqualToString:self.sharedData.user.userID])
             {
                 groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, oldOwnerID, kRecordingsFirebaseNode, self.recording.recordingID]];
                 [groupRecordingsRef removeValue];
                 
+                [[recordingRef childByAppendingPath:kRecordingGroupFirebaseField] removeValue];
+                
                 groupRecordingsRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.ownerID, kRecordingsFirebaseNode]];
                 [groupRecordingsRef updateChildValues:@{self.recording.recordingID:@YES}];
+                
+                [recordingRef updateChildValues:@{kRecordingGroupFirebaseField:self.ownerID}];
             }
         }
         

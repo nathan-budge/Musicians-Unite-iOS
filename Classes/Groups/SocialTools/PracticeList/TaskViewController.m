@@ -180,15 +180,6 @@
         
         Firebase *ownerRef;
         
-        if (self.group)
-        {
-            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode]];
-        }
-        else
-        {
-            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode]];
-        }
-        
         NSDictionary *newTask = @{
                                   kTaskTitleFirebaseField:self.fieldTitle.text,
                                   kTaskTempoFirebaseField:self.fieldTempo.text,
@@ -197,6 +188,17 @@
                                   };
         
         [taskRef setValue:newTask];
+        
+        if (self.group)
+        {
+            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode]];
+            
+            [taskRef updateChildValues:@{kTaskGroupFirebaseField:self.group.groupID}];
+        }
+        else
+        {
+            ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode]];
+        }
         
         [ownerRef updateChildValues:@{taskRef.key:@YES}];
     }
