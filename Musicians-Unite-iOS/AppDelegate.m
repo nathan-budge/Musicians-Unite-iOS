@@ -41,6 +41,14 @@
     
     UIViewController *rootViewController = [[UIViewController alloc] init];
     
+    NSDictionary *userInfo = [launchOptions valueForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    NSDictionary *apsInfo = [userInfo objectForKey:@"aps"];
+    
+    if(apsInfo) {
+        //there is some pending push notification, so do something
+        //in your case, show the desired viewController in this if block
+    }
+    
     if (self.ref.authData) {
         rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SlidingViewController"];
     } else {

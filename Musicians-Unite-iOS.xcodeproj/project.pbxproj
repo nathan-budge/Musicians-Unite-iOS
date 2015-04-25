@@ -973,10 +973,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
-				LIBRARY_SEARCH_PATHS = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs/development;
+				LIBRARY_SEARCH_PATHS = "";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1014,10 +1013,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
-				LIBRARY_SEARCH_PATHS = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs/development;
+				LIBRARY_SEARCH_PATHS = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

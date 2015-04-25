@@ -207,26 +207,35 @@
             
             Firebase *creatorRef;
             NSString *creatorID;
+            NSDictionary *newRecording;
             
             if (self.group)
             {
                 creatorRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode]];
                 creatorID = self.group.groupID;
                 
-                [recordingRef updateChildValues:@{kRecordingGroupFirebaseField:self.group.groupID}];
+                newRecording = @{
+                                   kRecordingNameFirebaseField: textField.text,
+                                   kRecordingDataFirebaseField: dataString,
+                                   kRecordingOwnerFirebaseField: creatorID,
+                                   kRecordingCreatorFirebaseField: creatorID,
+                                   kRecordingGroupFirebaseField:self.group.groupID,
+                                   };
             }
             else
             {
                 creatorRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kRecordingsFirebaseNode]];
                 creatorID = self.sharedData.user.userID;
+                
+                newRecording = @{
+                                   kRecordingNameFirebaseField: textField.text,
+                                   kRecordingDataFirebaseField: dataString,
+                                   kRecordingOwnerFirebaseField: creatorID,
+                                   kRecordingCreatorFirebaseField: creatorID,
+                                   };
             }
             
-            NSDictionary *newRecording = @{
-                                           kRecordingNameFirebaseField: textField.text,
-                                           kRecordingDataFirebaseField: dataString,
-                                           kRecordingOwnerFirebaseField: creatorID,
-                                           kRecordingCreatorFirebaseField: creatorID,
-                                           };
+            
             
             [recordingRef setValue:newRecording];
             

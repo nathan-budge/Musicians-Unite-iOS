@@ -180,26 +180,32 @@
         
         Firebase *ownerRef;
         
-        NSDictionary *newTask = @{
-                                  kTaskTitleFirebaseField:self.fieldTitle.text,
-                                  kTaskTempoFirebaseField:self.fieldTempo.text,
-                                  kTaskNotesFirebaseField:self.fieldNotes.text,
-                                  kTaskCompletedFirebaseField:@NO,
-                                  };
-        
-        [taskRef setValue:newTask];
-        
+        NSDictionary *newTask;
         if (self.group)
         {
             ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode]];
             
-            [taskRef updateChildValues:@{kTaskGroupFirebaseField:self.group.groupID}];
+            newTask = @{
+                          kTaskTitleFirebaseField:self.fieldTitle.text,
+                          kTaskTempoFirebaseField:self.fieldTempo.text,
+                          kTaskNotesFirebaseField:self.fieldNotes.text,
+                          kTaskCompletedFirebaseField:@NO,
+                          kTaskGroupFirebaseField:self.group.groupID,
+                          };
         }
         else
         {
             ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode]];
+            
+            newTask = @{
+                          kTaskTitleFirebaseField:self.fieldTitle.text,
+                          kTaskTempoFirebaseField:self.fieldTempo.text,
+                          kTaskNotesFirebaseField:self.fieldNotes.text,
+                          kTaskCompletedFirebaseField:@NO,
+                          };
         }
         
+        [taskRef setValue:newTask];
         [ownerRef updateChildValues:@{taskRef.key:@YES}];
     }
 }
