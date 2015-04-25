@@ -10,7 +10,8 @@
 		041879A91AEAC8E000138E2C /* doc in Resources */ = {isa = PBXBuildFile; fileRef = 041879A61AEAC8E000138E2C /* doc */; };
 		041879AA1AEAC8E000138E2C /* include in Resources */ = {isa = PBXBuildFile; fileRef = 041879A71AEAC8E000138E2C /* include */; };
 		041879AB1AEAC8E000138E2C /* libs in Resources */ = {isa = PBXBuildFile; fileRef = 041879A81AEAC8E000138E2C /* libs */; };
-		0485B00F1AEA9A1800C02E7C /* PitchDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 0485B00E1AEA9A1800C02E7C /* PitchDetector.m */; };
+		041879B11AEB2E7A00138E2C /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 041879B01AEB2E7A00138E2C /* Recorder.m */; };
+		041879B41AEB362800138E2C /* fft.c in Sources */ = {isa = PBXBuildFile; fileRef = 041879B21AEB362800138E2C /* fft.c */; };
 		04E6E4EF1A99661800254638 /* CircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6E4EE1A99661800254638 /* CircularButton.m */; };
 		04E87F431AE9F75200DDC488 /* Ping Hi.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E87F421AE9F75200DDC488 /* Ping Hi.wav */; };
 		04E87F451AE9F75A00DDC488 /* Ping Low.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E87F441AE9F75A00DDC488 /* Ping Low.wav */; };
@@ -102,8 +103,10 @@
 		041879A61AEAC8E000138E2C /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = doc; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/doc; sourceTree = "<group>"; };
 		041879A71AEAC8E000138E2C /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/include; sourceTree = "<group>"; };
 		041879A81AEAC8E000138E2C /* libs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libs; path = LE_MeterWorxPitchDetectorSDK_1.1.0_iOS_demo/libs; sourceTree = "<group>"; };
-		0485B00D1AEA9A1800C02E7C /* PitchDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitchDetector.h; sourceTree = "<group>"; };
-		0485B00E1AEA9A1800C02E7C /* PitchDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitchDetector.m; sourceTree = "<group>"; };
+		041879AF1AEB2E7A00138E2C /* Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
+		041879B01AEB2E7A00138E2C /* Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recorder.m; sourceTree = "<group>"; };
+		041879B21AEB362800138E2C /* fft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fft.c; sourceTree = "<group>"; };
+		041879B31AEB362800138E2C /* fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fft.h; sourceTree = "<group>"; };
 		04E6E4ED1A99661700254638 /* CircularButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularButton.h; sourceTree = "<group>"; };
 		04E6E4EE1A99661800254638 /* CircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularButton.m; sourceTree = "<group>"; };
 		04E87F421AE9F75200DDC488 /* Ping Hi.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ping Hi.wav"; sourceTree = "<group>"; };
@@ -717,12 +720,14 @@
 		94F498DE1AD597DE00F2760C /* Tuner */ = {
 			isa = PBXGroup;
 			children = (
+				041879B21AEB362800138E2C /* fft.c */,
+				041879B31AEB362800138E2C /* fft.h */,
 				94F498DF1AD5988400F2760C /* FaceView.h */,
 				94F498E01AD5988400F2760C /* FaceView.m */,
 				94F498E21AD5A36400F2760C /* TunerViewController.h */,
 				94F498E31AD5A36400F2760C /* TunerViewController.m */,
-				0485B00D1AEA9A1800C02E7C /* PitchDetector.h */,
-				0485B00E1AEA9A1800C02E7C /* PitchDetector.m */,
+				041879AF1AEB2E7A00138E2C /* Recorder.h */,
+				041879B01AEB2E7A00138E2C /* Recorder.m */,
 			);
 			name = Tuner;
 			sourceTree = "<group>";
@@ -854,6 +859,7 @@
 				04E6E4EF1A99661800254638 /* CircularButton.m in Sources */,
 				9405B9141A8EF7AC00EEDE19 /* AppDelegate.m in Sources */,
 				9479A2A81A9A72C000C668D0 /* MessagingTableViewController.m in Sources */,
+				041879B41AEB362800138E2C /* fft.c in Sources */,
 				94C6DE731A93DDD800562CE9 /* WelcomeViewController.m in Sources */,
 				94A377FF1AE97DA700B7ACBE /* CRToastWindow.m in Sources */,
 				947429B81ABF1B88002D81E7 /* TasksTableViewController.m in Sources */,
@@ -870,7 +876,6 @@
 				94F882151A97E2D6008F4AD8 /* Group.m in Sources */,
 				94F882181A97E39E008F4AD8 /* User.m in Sources */,
 				9442D8831ACADFB500B47996 /* MetronomeDots.m in Sources */,
-				0485B00F1AEA9A1800C02E7C /* PitchDetector.m in Sources */,
 				940CDBC11AC348CE0006F099 /* RecorderViewController.m in Sources */,
 				94C6DE6F1A93DDD800562CE9 /* LoginViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
@@ -892,6 +897,7 @@
 				9444BD581ADEC9560076C8D5 /* SLKTypingIndicatorView.m in Sources */,
 				947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */,
 				940CDBD01AC6E8190006F099 /* DronesTableViewController.m in Sources */,
+				041879B11AEB2E7A00138E2C /* Recorder.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
 				94A378051AEAD3EC00B7ACBE /* AudioPlayer.m in Sources */,
 				94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */,

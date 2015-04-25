@@ -66,6 +66,7 @@
                                                  name:@"Remote Notifications"
                                                object:nil];
     
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     self.application = application;
 
     return YES;

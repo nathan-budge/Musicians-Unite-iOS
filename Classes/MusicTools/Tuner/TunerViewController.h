@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "PitchDetector.h"
+#import "Recorder.h"
 
-@interface TunerViewController : UIViewController <PitchDetectorDelegate>
+@interface TunerViewController : UIViewController <RecorderDelegate>
 {
-    AudioController *audioManager;
-    PitchDetector *autoCorrelator;
-    NSMutableArray *medianPitchFollow;
+    Recorder* recorder;
+    
+    float detectedFreq;           // the frequency we detected
+    float deltaFreq;              // for calculating how sharp/flat user is
 }
+
+- (void)beginInterruption;
+- (void)endInterruption;
 @end

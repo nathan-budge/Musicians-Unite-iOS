@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 //  Adapted from Happiness L6 http://web.stanford.edu/class/cs193p/cgi-bin/drupal/
+//  and from Simon Sings https://sites.google.com/site/musicandspecialeducation/home/resources/related-website/music-skill-games/simon-sings
 
 #import "TunerViewController.h"
 #import "FaceView.h"
@@ -13,26 +14,42 @@
 
 @interface TunerViewController () <FaceViewDataSource>
 
-@property (nonatomic) int happiness; // 0 is out of tune; 100 is in tune
+@property (nonatomic) double happiness; // 0 is out of tune; 100 is in tune
 @property (weak, nonatomic) IBOutlet UILabel *labelPitch;
 @property (weak, nonatomic) IBOutlet UILabel *labelCents;
 
 @property (weak, nonatomic) IBOutlet FaceView *faceView;
 
-//@property (nonatomic) AVAudioRecorder
-
+- (void)startAudio;
+- (void)stopAudio;
 @end
 
 @implementation TunerViewController
 
+void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
+{
+    TunerViewController* controller = (__bridge TunerViewController*) inUserData;
+    if (interruptionState == kAudioSessionBeginInterruption)
+        [controller beginInterruption];
+    else if (interruptionState == kAudioSessionEndInterruption)
+        [controller endInterruption];
+}
+
+- (void)beginInterruption
+{
+    [self stopAudio];
+}
+
+- (void)endInterruption
+{
+    [self startAudio];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //audioManager = [AudioController sharedAudioManager];
-    //audioManager.delegate = self;
-    //autoCorrelator = [[PitchDetector alloc] initWithSampleRate:audioManager.audioFormat.mSampleRate lowBoundFreq:30 hiBoundFreq:4500 andDelegate:self];
-    medianPitchFollow = [[NSMutableArray alloc] initWithCapacity:22];
-    self.happiness = 50;
+    self.happiness = 0;
+    [self startAudio];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -41,24 +58,14 @@
     self.tabBarController.title = @"Tuner";
 }
 
--(void)setHappiness:(int)happiness
-{
-    _happiness = MIN(MAX(happiness, 0), 100);
-    
-    self.labelCents.text = [NSString stringWithFormat:@"%d",happiness]; //USED FOR TESTING -- REMOVE WHEN IMPLEMENTING TUNER
-    
-    [self.faceView setNeedsDisplay];
-}
-
 - (void)setFaceView:(FaceView *)faceView
 {
     _faceView = faceView;
     
     self.faceView.dataSource = self;
-    
-    //USED FOR TESTING -- REMOVE WHEN IMPLEMENTING TUNER
-    [self.faceView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(handleHappinessGesture:)]];
 }
+
+
 
 //USED FOR TESTING -- REMOVE WHEN IMPLEMENTING TUNER
 - (void) handleHappinessGesture: (UIPanGestureRecognizer *) gesture
@@ -76,57 +83,122 @@
     return (self.happiness - 50.0) / 50.0;
 }
 
-//The 
-- (void) updatedPitch:(float)frequency {
-    
-    double value = frequency;
-    
-    
-    
-    //############ DATA SMOOTHING ###############
-    //###     The following code averages previous values  ##
-    //###  received by the pitch follower by using a             ##
-    //###  median filter. Provides sub cent precision!          ##
-    //#############################################
-    
-    NSNumber *nsnum = [NSNumber numberWithDouble:value];
-    [medianPitchFollow insertObject:nsnum atIndex:0];
-    
-    if(medianPitchFollow.count>22) {
-        [medianPitchFollow removeObjectAtIndex:medianPitchFollow.count-1];
-    }
-    double median = 0;
-    
-    
-    
-    if(medianPitchFollow.count>=2) {
-        NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
-        NSMutableArray *tempSort = [NSMutableArray arrayWithArray:medianPitchFollow];
-        [tempSort sortUsingDescriptors:[NSArray arrayWithObject:highestToLowest]];
+- (void)startAudio
+{
+    if (recorder == nil)  // should always be the case
+    {
+        AudioSessionInitialize(
+                               NULL,
+                               NULL,
+                               interruptionListenerCallback,
+                               (__bridge void *)(self)
+                               );
         
-        if(tempSort.count%2==0) {
-            double first = 0, second = 0;
-            first = [[tempSort objectAtIndex:tempSort.count/2-1] doubleValue];
-            second = [[tempSort objectAtIndex:tempSort.count/2] doubleValue];
-            median = (first+second)/2;
-            value = median;
-        } else {
-            median = [[tempSort objectAtIndex:tempSort.count/2] doubleValue];
-            value = median;
+        UInt32 sessionCategory = kAudioSessionCategory_PlayAndRecord;
+        AudioSessionSetProperty(
+                                kAudioSessionProperty_AudioCategory,
+                                sizeof(sessionCategory),
+                                &sessionCategory
+                                );
+        
+        AudioSessionSetActive(true);
+        
+        recorder = [[Recorder alloc] init];
+        recorder.delegate = self;
+        [recorder startRecording];
+    }
+}
+
+- (void)stopAudio
+{
+    if (recorder != nil)
+    {
+        [recorder stopRecording];
+        recorder = nil;
+        AudioSessionSetActive(false);
+    }
+}
+
+- (void)recordedFreq:(float)freq;
+{
+    detectedFreq = freq;
+    deltaFreq = 0.0f;
+    
+    if (freq > 100.0f)  // to avoid environmental noise
+    {
+        double cents = [self convertToCents:detectedFreq];
+        self.happiness = 100 - fabs(cents);
+        NSLog(@"%f", self.happiness);
+        self.labelCents.text = [NSString stringWithFormat:@"%.2f", cents ];
+        [self.faceView setNeedsDisplay];
+    }
+}
+
+-(double) convertToCents:(double)hertz {
+    double closestFreq= 0.0;
+    NSString *closestPitch = @"";
+    double minDistance = INFINITY;
+    int range = 0;
+    
+    double a0 = FREQ_A0;
+    double b0 = FREQ_B0;
+    double c0 = FREQ_C0;
+    double d0 = FREQ_D0;
+    double e0 = FREQ_E0;
+    double f0 = FREQ_F0;
+    double g0 = FREQ_G0;
+    
+    NSMutableDictionary *octaveZeroValues = [NSMutableDictionary dictionary];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:a0] forKey:@"A"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:b0] forKey:@"B"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:c0] forKey:@"C"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:d0] forKey:@"D"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:e0] forKey:@"E"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:f0] forKey:@"F"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:g0] forKey:@"G"];
+    
+    //    NSDictionary *octaveZeroValues = [NSDictionary dictionaryWithObjectsAndKeys:
+    //                                      [NSNumber numberWithDouble:a0], @"A",
+    //                                      [NSNumber numberWithDouble:b0], @"B",
+    //                                      [NSNumber numberWithDouble:c0], @"C",
+    //                                      [NSNumber numberWithDouble:d0], @"D",
+    //                                      [NSNumber numberWithDouble:e0], @"E",
+    //                                      [NSNumber numberWithDouble:f0], @"F",
+    //                                      [NSNumber numberWithDouble:g0], @"G",
+    //                                      nil];
+    
+    //    NSArray *octaveZeroValues = [NSArray arrayWithObjects:
+    //                           [NSNumber numberWithFloat:a0], "A0",
+    //                           [NSNumber numberWithFloat:b0],
+    //                           [NSNumber numberWithFloat:c0],
+    //                           [NSNumber numberWithFloat:d0],
+    //                           [NSNumber numberWithFloat:e0],
+    //                           [NSNumber numberWithFloat:f0],
+    //                           [NSNumber numberWithFloat:g0],
+    //                           nil];
+    
+    BOOL octaveFound = NO;
+    int octave = 0;
+    while (!octaveFound && octave < 8) {
+        if (hertz < (b0 * pow(2, octave) + (c0 * pow(2, octave + 1))) / 2) {
+            octaveFound = YES;
         }
-        
-        [tempSort removeAllObjects];
-        tempSort = nil;
+        octave++;
     }
+    range = octaveFound ? octave - 1 : 8;
+    for (NSString *octaveZeroPitch in octaveZeroValues) {
+        double octaveZeroValue = [[octaveZeroValues objectForKey:octaveZeroPitch] doubleValue];
+        double actualOctaveValue = octaveZeroValue * pow(2, range);
+        double distanceToHertzValue = ABS(hertz - actualOctaveValue);
+        if (distanceToHertzValue < minDistance) {
+            minDistance = distanceToHertzValue;
+            closestFreq = actualOctaveValue;
+            closestPitch = octaveZeroPitch;
+        }
+    }
+    self.labelPitch.text = hertz < 0 ? @"--" : [NSString stringWithFormat:@"%@%d", closestPitch, range];
     
-    NSLog(@"SETTING LABEL");
-    self.labelPitch.text = [NSString stringWithFormat:@"%3.1f Hz", value];
-    
+    return 1200 * 3.322038403 * log10(hertz / closestFreq);
 }
-
--(void) receivedAudioSamples:(SInt16 *)samples length:(int)len {
-    [autoCorrelator addSamples:samples inNumberFrames:len];
-}
-
 
 @end
