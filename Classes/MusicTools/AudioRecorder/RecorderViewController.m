@@ -37,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonRecord;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPlay;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSave;
+@property (weak, nonatomic) IBOutlet UIButton *buttonRecordings;
 
 @end
 
@@ -148,17 +149,17 @@
         [self.buttonRecord setTitle:kStopButtonTitle forState:UIControlStateNormal];
         [self.buttonPlay setEnabled:NO];
         [self.buttonSave setEnabled:NO];
+        [self.buttonRecordings setEnabled:NO];
     }
     else
     {
         [self.recorder stop];
         
-        AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setActive:NO error:nil];
         [self.buttonRecord setTitle:kRecordButtonTitle forState:UIControlStateNormal];
         
         [self.buttonPlay setEnabled:YES];
         [self.buttonSave setEnabled:YES];
+        [self.buttonRecordings setEnabled:YES];
     }
 }
 

@@ -1037,6 +1037,7 @@
                     <connections>
                         <outlet property="buttonPlay" destination="Bkh-Pe-ZpN" id="N8f-Kh-WHZ"/>
                         <outlet property="buttonRecord" destination="TME-7Z-RiF" id="ld3-7H-zoj"/>
+                        <outlet property="buttonRecordings" destination="NvJ-SZ-Spf" id="K0b-Qk-45Y"/>
                         <outlet property="buttonSave" destination="D0K-6b-t0C" id="jDx-pA-wfj"/>
                         <segue destination="itO-Au-4mD" kind="push" identifier="viewUserRecordings" id="ZpQ-JQ-6qK"/>
                     </connections>
@@ -2441,6 +2442,7 @@
                     <connections>
                         <outlet property="buttonPlay" destination="pCQ-P0-89A" id="OkA-lc-NfL"/>
                         <outlet property="buttonRecord" destination="XsH-VZ-uCv" id="JQt-jH-ZaN"/>
+                        <outlet property="buttonRecordings" destination="eB4-Ul-WT4" id="iek-51-kFG"/>
                         <outlet property="buttonSave" destination="SMK-yo-Eue" id="Dm9-qA-YuD"/>
                         <segue destination="itO-Au-4mD" kind="push" identifier="viewGroupRecordings" id="wf2-jZ-7i2"/>
                     </connections>
@@ -3019,11 +3021,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Sk3-MG-YQs"/>
-        <segue reference="duR-l8-iAG"/>
-        <segue reference="wf2-jZ-7i2"/>
-        <segue reference="VaP-66-gNb"/>
         <segue reference="b05-xO-KrZ"/>
         <segue reference="1ND-ac-1UZ"/>
+        <segue reference="Sk3-MG-YQs"/>
+        <segue reference="duR-l8-iAG"/>
+        <segue reference="VaP-66-gNb"/>
+        <segue reference="ZpQ-JQ-6qK"/>
     </inferredMetricsTieBreakers>
 </document>
