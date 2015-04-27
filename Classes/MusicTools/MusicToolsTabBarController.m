@@ -8,6 +8,8 @@
 
 #import "UIViewController+ECSlidingViewController.h"
 
+#import "AppConstant.h"
+
 #import "MusicToolsTabBarController.h"
 #import "MetronomeViewController.h"
 #import "DronesTableViewController.h"
@@ -53,6 +55,7 @@
 
 - (IBAction)actionDrawerToggle:(id)sender
 {
+    [self dismissViewControllerAnimated:NO completion:nil];
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 

@@ -35,7 +35,7 @@
 #define kRegisterToGroupSegueIdentifier             @"RegisterToGroups"
 #define kChangePasswordSegueIdentifier              @"changePassword"
 #define kDeleteAccountSegueIdentifier               @"deleteAccount"
-#define kNewGroupSegueIdentifier                    @"newGroup"
+#define kNewGroupSegueIdentifier                    @"viewNewGroup"
 #define kGroupTabsSegueIdentifier                   @"showGroupTabs"
 #define kMemberManagementSegueIdentifier            @"viewMemberManagement"
 #define kMetronomeSegueIdentifier                   @"viewMetronome"

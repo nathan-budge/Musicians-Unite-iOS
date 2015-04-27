@@ -59,13 +59,11 @@
 		9479A2B41A9B68C000C668D0 /* MessageThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 9479A2B31A9B68C000C668D0 /* MessageThread.m */; };
 		947A47271ABB418E007B3878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 947A47261ABB418E007B3878 /* AVFoundation.framework */; };
 		947A472A1ABDF62E007B3878 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 947A47291ABDF62E007B3878 /* Task.m */; };
-		947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 947A472C1ABE17B8007B3878 /* TaskViewController.m */; };
 		94833EEA1A94018A00CC2930 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */; };
 		94833EEB1A94018A00CC2930 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 94833EE71A94018A00CC2930 /* SVProgressHUD.bundle */; };
 		94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 94833EE91A94018A00CC2930 /* SVProgressHUD.m */; };
 		9486FA451AA1F2EA005568E9 /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9486FA441AA1F2EA005568E9 /* SharedData.m */; };
 		9491FB101A940346003FE08E /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491FB0F1A940346003FE08E /* Firebase.framework */; };
-		949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9494328F1AC83C270013B73F /* GroupDetailViewController.m */; };
 		949B042A1A9D0EB10029B4E3 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */; };
 		949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04271A9D0EB10029B4E3 /* MessageTextView.m */; };
 		949B042C1A9D0EB10029B4E3 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949B04291A9D0EB10029B4E3 /* MessageViewController.m */; };
@@ -76,6 +74,8 @@
 		94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377F81AE97DA700B7ACBE /* CRToastViewController.m */; };
 		94A377FF1AE97DA700B7ACBE /* CRToastWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */; };
 		94A378051AEAD3EC00B7ACBE /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A378041AEAD3EC00B7ACBE /* AudioPlayer.m */; };
+		94A378121AEEB2C400B7ACBE /* GroupDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A378111AEEB2C400B7ACBE /* GroupDetailTableViewController.m */; };
+		94A378151AEECF9B00B7ACBE /* TaskTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A378141AEECF9B00B7ACBE /* TaskTableViewController.m */; };
 		94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */; };
 		94C6DE6B1A93DDD800562CE9 /* MemberManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE501A93DDD800562CE9 /* MemberManagementViewController.m */; };
 		94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6DE5A1A93DDD800562CE9 /* NavigationDrawerViewController.m */; };
@@ -195,8 +195,6 @@
 		947A47261ABB418E007B3878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		947A47281ABDF62E007B3878 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = Models/Task.h; sourceTree = "<group>"; };
 		947A47291ABDF62E007B3878 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Task.m; path = Models/Task.m; sourceTree = "<group>"; };
-		947A472B1ABE17B8007B3878 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskViewController.h; path = Groups/SocialTools/PracticeList/TaskViewController.h; sourceTree = "<group>"; };
-		947A472C1ABE17B8007B3878 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskViewController.m; path = Groups/SocialTools/PracticeList/TaskViewController.m; sourceTree = "<group>"; };
 		94833EE41A94018A00CC2930 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		94833EE61A94018A00CC2930 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -206,8 +204,6 @@
 		9486FA431AA1F2EA005568E9 /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
 		9486FA441AA1F2EA005568E9 /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
 		9491FB0F1A940346003FE08E /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Musicians-Unite-iOS/Firebase.framework"; sourceTree = "<group>"; };
-		9494328F1AC83C270013B73F /* GroupDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupDetailViewController.m; path = Classes/Groups/GroupDetail/GroupDetailViewController.m; sourceTree = SOURCE_ROOT; };
-		949432901AC83C270013B73F /* GroupDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupDetailViewController.h; path = Classes/Groups/GroupDetail/GroupDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		949B04241A9D0EB10029B4E3 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
 		949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		949B04261A9D0EB10029B4E3 /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
@@ -228,6 +224,10 @@
 		94A377FA1AE97DA700B7ACBE /* CRToastWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToastWindow.m; sourceTree = "<group>"; };
 		94A378031AEAD3EC00B7ACBE /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPlayer.h; path = MusicTools/AudioRecorder/AudioPlayer.h; sourceTree = "<group>"; };
 		94A378041AEAD3EC00B7ACBE /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioPlayer.m; path = MusicTools/AudioRecorder/AudioPlayer.m; sourceTree = "<group>"; };
+		94A378101AEEB2C400B7ACBE /* GroupDetailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupDetailTableViewController.h; path = Classes/Groups/GroupDetail/GroupDetailTableViewController.h; sourceTree = SOURCE_ROOT; };
+		94A378111AEEB2C400B7ACBE /* GroupDetailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupDetailTableViewController.m; path = Classes/Groups/GroupDetail/GroupDetailTableViewController.m; sourceTree = SOURCE_ROOT; };
+		94A378131AEECF9B00B7ACBE /* TaskTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskTableViewController.h; path = Groups/TaskTableViewController.h; sourceTree = "<group>"; };
+		94A378141AEECF9B00B7ACBE /* TaskTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskTableViewController.m; path = Groups/TaskTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4C1A93DDD800562CE9 /* GroupsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsTableViewController.h; sourceTree = "<group>"; };
 		94C6DE4D1A93DDD800562CE9 /* GroupsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsTableViewController.m; sourceTree = "<group>"; };
 		94C6DE4F1A93DDD800562CE9 /* MemberManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberManagementViewController.h; sourceTree = "<group>"; };
@@ -642,10 +642,10 @@
 		94A3780E1AEE930A00B7ACBE /* PracticeList */ = {
 			isa = PBXGroup;
 			children = (
-				947A472B1ABE17B8007B3878 /* TaskViewController.h */,
-				947A472C1ABE17B8007B3878 /* TaskViewController.m */,
 				947429B61ABF1B88002D81E7 /* TasksTableViewController.h */,
 				947429B71ABF1B88002D81E7 /* TasksTableViewController.m */,
+				94A378131AEECF9B00B7ACBE /* TaskTableViewController.h */,
+				94A378141AEECF9B00B7ACBE /* TaskTableViewController.m */,
 			);
 			name = PracticeList;
 			sourceTree = "<group>";
@@ -709,8 +709,8 @@
 		94C6DE511A93DDD800562CE9 /* GroupDetail */ = {
 			isa = PBXGroup;
 			children = (
-				949432901AC83C270013B73F /* GroupDetailViewController.h */,
-				9494328F1AC83C270013B73F /* GroupDetailViewController.m */,
+				94A378101AEEB2C400B7ACBE /* GroupDetailTableViewController.h */,
+				94A378111AEEB2C400B7ACBE /* GroupDetailTableViewController.m */,
 			);
 			name = GroupDetail;
 			path = NewGroup;
@@ -941,8 +941,8 @@
 				9405B95A1A8F08F900EEDE19 /* ECSlidingViewController.m in Sources */,
 				9479A2B11A9B68A400C668D0 /* Message.m in Sources */,
 				9444BD531ADEC9560076C8D5 /* UIView+SLKAdditions.m in Sources */,
+				94A378121AEEB2C400B7ACBE /* GroupDetailTableViewController.m in Sources */,
 				9405B9571A8F08F900EEDE19 /* ECSlidingAnimationController.m in Sources */,
-				949432911AC83C270013B73F /* GroupDetailViewController.m in Sources */,
 				942E57CD1AC7029800C957DB /* ToneGenerator.m in Sources */,
 				949B042B1A9D0EB10029B4E3 /* MessageTextView.m in Sources */,
 				94A377FC1AE97DA700B7ACBE /* CRToastManager.m in Sources */,
@@ -952,12 +952,12 @@
 				94833EEC1A94018A00CC2930 /* SVProgressHUD.m in Sources */,
 				94C6DE6A1A93DDD800562CE9 /* GroupsTableViewController.m in Sources */,
 				9444BD581ADEC9560076C8D5 /* SLKTypingIndicatorView.m in Sources */,
-				947A472D1ABE17B8007B3878 /* TaskViewController.m in Sources */,
 				940CDBD01AC6E8190006F099 /* DronesTableViewController.m in Sources */,
 				041879B11AEB2E7A00138E2C /* Recorder.m in Sources */,
 				94C6DE6E1A93DDD800562CE9 /* NavigationDrawerViewController.m in Sources */,
 				94A378051AEAD3EC00B7ACBE /* AudioPlayer.m in Sources */,
 				94A377FE1AE97DA700B7ACBE /* CRToastViewController.m in Sources */,
+				94A378151AEECF9B00B7ACBE /* TaskTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

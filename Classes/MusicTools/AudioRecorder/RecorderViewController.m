@@ -295,6 +295,7 @@
     {
         RecordingsTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
+        destViewController.hidesBottomBarWhenPushed = YES;
     }
 }
 

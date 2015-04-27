@@ -12,4 +12,6 @@
 
 @interface GroupsTableViewController : UITableViewController
 
+-(IBAction)actionUnwindToGroups:(UIStoryboardSegue *)unwindSegue;
+
 @end

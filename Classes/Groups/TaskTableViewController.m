@@ -1,20 +1,21 @@
 //
-//  TaskViewController.m
+//  TaskTableViewController.m
 //  Musicians-Unite-iOS
 //
-//  Created by Nathan Budge on 3/21/15.
+//  Created by Nathan Budge on 4/27/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
 #import <Firebase/Firebase.h>
 #import "SVProgressHUD.h"
 #import "CRToast.h"
+#import "UIViewController+ECSlidingViewController.h"
 
 #import "AppConstant.h"
 #import "SharedData.h"
 #import "Utilities.h"
 
-#import "TaskViewController.h"
+#import "TaskTableViewController.h"
 #import "TasksTableViewController.h"
 #import "GroupTabBarController.h"
 #import "MusicToolsTabBarController.h"
@@ -24,13 +25,13 @@
 #import "Task.h"
 
 
-@interface TaskViewController ()
+@interface TaskTableViewController ()
 
 @property (nonatomic) Firebase *ref;
 
 @property (nonatomic) SharedData *sharedData;
 
-@property (nonatomic) NSString *taskID; //Keep track of new task ID
+@property (nonatomic) NSString *taskID;  //Keep track of id for new task
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldTitle;
 @property (weak, nonatomic) IBOutlet UITextField *fieldTempo;
@@ -41,8 +42,7 @@
 
 @end
 
-
-@implementation TaskViewController
+@implementation TaskTableViewController
 
 //*****************************************************************************/
 #pragma mark - Lazy instantiation
@@ -83,8 +83,8 @@
         [self.buttonCreateOrDelete setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
         
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSave)];
-        self.buttonMetronome.hidden = NO;
         self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.buttonMetronome.hidden = NO;
     }
     else
     {
@@ -93,8 +93,6 @@
         self.buttonMetronome.hidden = YES;
     }
     
-    self.groupTabBarController = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
-    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
 }
 
@@ -102,41 +100,54 @@
 {
     [super viewWillAppear:animated];
     
+    if (self.group)
+    {
+        if (self.task)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedNotification:)
+                                                         name:kGroupTaskRemovedNotification
+                                                       object:nil];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedNotification:)
+                                                         name:kNewGroupTaskNotification
+                                                       object:nil];
+        }
+    }
+    else
+    {
+        if (self.task)
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedNotification:)
+                                                         name:kUserTaskRemovedNotification
+                                                       object:nil];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(receivedNotification:)
+                                                         name:kNewUserTaskNotification
+                                                       object:nil];
+        }
+    }
+    
     if (self.task)
     {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kUserTaskRemovedNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kGroupTaskRemovedNotification
-                                                   object:nil];
-        
         [self.fieldTitle addTarget:self
-                                action:@selector(textFieldDidChange)
-                      forControlEvents:UIControlEventEditingChanged];
+                            action:@selector(textFieldDidChange)
+                  forControlEvents:UIControlEventEditingChanged];
         
         [self.fieldTempo addTarget:self
                             action:@selector(textFieldDidChange)
                   forControlEvents:UIControlEventEditingChanged];
     }
-    else
-    {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kNewUserTaskNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receivedNotification:)
-                                                     name:kNewGroupTaskNotification
-                                                   object:nil];
-    }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+-(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
@@ -144,12 +155,11 @@
     [self dismissKeyboard];
 }
 
-
 //*****************************************************************************/
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (IBAction)actionCreateOrDelete:(id)sender
+- (IBAction)actionCreateOrDeleteTask:(id)sender
 {
     self.task ? [self actionDelete] : [self actionCreate];
 }
@@ -178,23 +188,23 @@
             ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kTasksFirebaseNode]];
             
             newTask = @{
-                          kTaskTitleFirebaseField:self.fieldTitle.text,
-                          kTaskTempoFirebaseField:self.fieldTempo.text,
-                          kTaskNotesFirebaseField:self.fieldNotes.text,
-                          kTaskCompletedFirebaseField:@NO,
-                          kTaskGroupFirebaseField:self.group.groupID,
-                          };
+                        kTaskTitleFirebaseField:self.fieldTitle.text,
+                        kTaskTempoFirebaseField:self.fieldTempo.text,
+                        kTaskNotesFirebaseField:self.fieldNotes.text,
+                        kTaskCompletedFirebaseField:@NO,
+                        kTaskGroupFirebaseField:self.group.groupID,
+                        };
         }
         else
         {
             ownerRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kTasksFirebaseNode]];
             
             newTask = @{
-                          kTaskTitleFirebaseField:self.fieldTitle.text,
-                          kTaskTempoFirebaseField:self.fieldTempo.text,
-                          kTaskNotesFirebaseField:self.fieldNotes.text,
-                          kTaskCompletedFirebaseField:@NO,
-                          };
+                        kTaskTitleFirebaseField:self.fieldTitle.text,
+                        kTaskTempoFirebaseField:self.fieldTempo.text,
+                        kTaskNotesFirebaseField:self.fieldNotes.text,
+                        kTaskCompletedFirebaseField:@NO,
+                        };
         }
         
         [taskRef setValue:newTask];
@@ -249,7 +259,6 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
-
 
 - (IBAction)actionMetronome:(id)sender
 {
@@ -316,8 +325,8 @@
     
     if ([segue.identifier isEqualToString:kMetronomeSegueIdentifier])
     {
-        MusicToolsTabBarController *destViewController = segue.destinationViewController;
-        destViewController.tempo = [self.fieldTempo.text doubleValue];
+        MusicToolsTabBarController *musicToolsTabBarController = segue.destinationViewController;
+        musicToolsTabBarController.tempo = [self.fieldTempo.text doubleValue];
     }
 }
 

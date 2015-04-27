@@ -13,6 +13,5 @@
 @interface TasksTableViewController : UITableViewController
 
 @property (nonatomic) Group *group;
-@property (nonatomic) BOOL inset;
 
 @end

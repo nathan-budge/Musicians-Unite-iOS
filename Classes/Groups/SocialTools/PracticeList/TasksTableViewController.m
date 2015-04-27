@@ -15,7 +15,7 @@
 #import "Utilities.h"
 
 #import "TasksTableViewController.h"
-#import "TaskViewController.h"
+#import "TaskTableViewController.h"
 
 #import "User.h"
 #import "Task.h"
@@ -144,40 +144,6 @@
     [self.tableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    UIBarButtonItem *newTaskButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionAddTask)];
-    
-    if (self.group)
-    {
-        self.tabBarController.title = kPracticeListTitle;
-        self.tabBarController.navigationItem.rightBarButtonItem = newTaskButton;
-        
-        if (!self.inset)
-        {
-            self.tableView.contentInset = UIEdgeInsetsMake(65.0, 0.0, 0.0, 0.0);
-            self.inset = YES;
-        }
-        else
-        {
-            self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        }
-        
-    }
-    else
-    {
-        self.navigationItem.rightBarButtonItem = newTaskButton;
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    self.inset = NO;
-}
-
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -188,7 +154,7 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
-- (void)actionAddTask
+- (IBAction)actionAddTask:(id)sender
 {
     self.selectedTask = nil;
     [self performSegueWithIdentifier:kTaskDetailSegueIdentifier sender:nil];
@@ -490,12 +456,13 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
     if ([segue.identifier isEqualToString:kTaskDetailSegueIdentifier]) {
-        TaskViewController *destViewController = segue.destinationViewController;
+        TaskTableViewController *destViewController = segue.destinationViewController;
         destViewController.task = self.selectedTask;
         
         if (self.group)
         {
             destViewController.group = self.group;
+            destViewController.hidesBottomBarWhenPushed = YES;
         }
     }
 }

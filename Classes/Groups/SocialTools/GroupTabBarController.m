@@ -14,7 +14,7 @@
 #import "SharedData.h"
 
 #import "GroupTabBarController.h"
-#import "GroupDetailViewController.h"
+#import "GroupDetailTableViewController.h"
 #import "MessagingTableViewController.h"
 #import "TasksTableViewController.h"
 #import "RecorderViewController.h"
@@ -46,16 +46,22 @@
     
     NSArray *viewControllers = self.viewControllers;
     
-    MessagingTableViewController *messagingTableViewController = [viewControllers objectAtIndex:0];
+    UINavigationController *navigationController;
+    
+    navigationController = [viewControllers objectAtIndex:0];
+    MessagingTableViewController *messagingTableViewController = [navigationController.viewControllers objectAtIndex:0];
     messagingTableViewController.group = self.group;
     
-    TasksTableViewController *tasksTableViewController = [viewControllers objectAtIndex:1];
+    navigationController = [viewControllers objectAtIndex:1];
+    TasksTableViewController *tasksTableViewController = [navigationController.viewControllers objectAtIndex:0];
     tasksTableViewController.group = self.group;
     
-    RecorderViewController *recorderViewController = [viewControllers objectAtIndex:2];
+    navigationController = [viewControllers objectAtIndex:2];
+    RecorderViewController *recorderViewController = [navigationController.viewControllers objectAtIndex:0];
     recorderViewController.group = self.group;
     
-    GroupDetailViewController *groupDetailTableViewController = [viewControllers objectAtIndex:3];
+    navigationController = [viewControllers objectAtIndex:3];
+    GroupDetailTableViewController *groupDetailTableViewController = [navigationController.viewControllers objectAtIndex:0];
     groupDetailTableViewController.group = self.group;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -80,7 +86,8 @@
         if ([notification.object isEqual:self.group])
         {
             [self dismissKeyboard];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self performSegueWithIdentifier:@"unwindToGroups" sender:self];
+            
         }
     }
 }

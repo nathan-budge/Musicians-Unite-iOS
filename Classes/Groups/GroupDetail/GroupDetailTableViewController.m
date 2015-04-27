@@ -1,8 +1,8 @@
 //
-//  GroupDetailViewController.m
+//  GroupDetailTableViewController.m
 //  Musicians-Unite-iOS
 //
-//  Created by Nathan Budge on 2/14/15.
+//  Created by Nathan Budge on 4/27/15.
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
@@ -14,15 +14,14 @@
 #import "Utilities.h"
 #import "SharedData.h"
 
-#import "GroupDetailViewController.h"
+#import "GroupDetailTableViewController.h"
 #import "MemberManagementViewController.h"
 
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
 
-
-@interface GroupDetailViewController ()
+@interface GroupDetailTableViewController ()
 
 @property (nonatomic) Firebase *ref;
 
@@ -31,13 +30,13 @@
 @property (assign) NSString *groupID; //Keep track of id for new groups
 
 @property (weak, nonatomic) IBOutlet UITextField *fieldGroupName;
-@property (weak, nonatomic) IBOutlet UIButton *buttonConfirm;
 @property (weak, nonatomic) IBOutlet UIButton *buttonProfileImage;
+@property (weak, nonatomic) IBOutlet UIButton *buttonCreateOrLeave;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonSave;
 
 @end
 
-
-@implementation GroupDetailViewController
+@implementation GroupDetailTableViewController
 
 //*****************************************************************************/
 #pragma mark - Lazy Instantiation
@@ -70,21 +69,15 @@
     
     if (self.group)
     {
+        self.buttonSave.enabled = NO;
+        
         self.fieldGroupName.text = self.group.name;
         
         [self.buttonProfileImage setImage:self.group.profileImage forState:UIControlStateNormal];
         
-        [self.buttonConfirm setTitle:kLeaveGroupButtonTitle forState:UIControlStateNormal];
-        [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(242/255.0) green:(38/255.0) blue:(19/255.0) alpha:1]];
-        
         [self.fieldGroupName addTarget:self
                                 action:@selector(textFieldDidChange)
                       forControlEvents:UIControlEventEditingChanged];
-    }
-    else
-    {
-        [self.buttonConfirm setTitle:kCreateButtonTitle forState:UIControlStateNormal];
-        [self.buttonConfirm setBackgroundColor:[UIColor colorWithRed:(95/255.0) green:(200/255.0) blue:(235/255.0) alpha:1]];
     }
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
@@ -94,14 +87,7 @@
 {
     [super viewWillAppear:animated];
     
-    if (self.group)
-    {
-        self.tabBarController.title = kGroupSettingsTitle;
-        self.tabBarController.navigationItem.rightBarButtonItems = nil;
-        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionSaveGroup)];
-        self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
-    }
-    else
+    if (!self.group)
     {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receivedNotification:)
@@ -116,7 +102,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self dismissKeyboard];
 }
-
 
 //*****************************************************************************/
 #pragma mark - Buttons
@@ -163,9 +148,9 @@
     [alert show];
 }
 
--(void)actionSaveGroup
+- (IBAction)actionSaveGroup:(id)sender
 {
-    Firebase *oldGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
+    Firebase *updatedGroup =[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, self.group.groupID]];
     
     NSString * profileImageString = [Utilities encodeImageToBase64:self.buttonProfileImage.imageView.image];
     
@@ -174,29 +159,28 @@
                                     kProfileImageFirebaseField:profileImageString,
                                     };
     
-    [oldGroup updateChildValues:updatedValues];
+    [updatedGroup updateChildValues:updatedValues];
     
     [self dismissKeyboard];
     
     [Utilities greenToastMessage:kGroupSavedSuccessMessage];
     
-    self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
+    self.buttonSave.enabled = NO;
 }
 
 - (IBAction)actionProfileImage:(id)sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                              delegate:self
-                                     cancelButtonTitle:kCancelButtonTitle
-                                destructiveButtonTitle:kRemovePhotoButtonTitle
-                                     otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
-
+                                                             delegate:self
+                                                    cancelButtonTitle:kCancelButtonTitle
+                                               destructiveButtonTitle:kRemovePhotoButtonTitle
+                                                    otherButtonTitles:kTakePhotoButtonTitle, kChooseFromLibraryButtonTitle, nil];
+    
     [actionSheet showInView:self.view];
 }
 
 - (IBAction)actionMemberManagement:(id)sender
 {
-    
     if ([self.fieldGroupName.text isEqualToString:@""])
     {
         [SVProgressHUD showErrorWithStatus:kNoGroupNameError maskType:SVProgressHUDMaskTypeBlack];
@@ -217,6 +201,7 @@
     if (buttonIndex != alertView.cancelButtonIndex)
     {
         [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMembersFirebaseNode, self.sharedData.user.userID]] removeValue];
+        
         [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kUsersFirebaseNode, self.sharedData.user.userID, kGroupsFirebaseNode, self.group.groupID]] removeValue];
         
         //Move this method to attachListenerForRemovedGroups
@@ -266,11 +251,11 @@
 {
     if ([self.fieldGroupName.text isEqualToString:self.group.name])
     {
-        self.tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
+        self.buttonSave.enabled = NO;
     }
     else
     {
-        self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+        self.buttonSave.enabled = YES;
     }
 }
 
@@ -288,6 +273,7 @@
         if (self.group)
         {
             destViewController.group = self.group;
+            destViewController.hidesBottomBarWhenPushed = YES;
         }
         else
         {
@@ -298,12 +284,12 @@
 }
 
 
-//*****************************************************************************/
+/*****************************************************************************/
 #pragma mark - Profile Image Handling
 //*****************************************************************************/
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{    
+{
     switch (buttonIndex) {
         case 0:
             [self removePhoto];
@@ -316,7 +302,7 @@
             break;
         default:
             break;
-    }    
+    }
 }
 
 
@@ -360,7 +346,7 @@
     
     if (self.group)
     {
-        self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+        self.buttonSave.enabled = YES;
     }
 }
 
@@ -372,7 +358,7 @@
     [picker dismissViewControllerAnimated:YES completion:^{
         if (self.group)
         {
-            self.tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
+            self.buttonSave.enabled = YES;
         }
     }];
 }

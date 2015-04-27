@@ -18,7 +18,7 @@
 
 #import "GroupsTableViewController.h"
 #import "GroupTabBarController.h"
-#import "GroupDetailViewController.h"
+#import "GroupDetailTableViewController.h"
 
 #import "User.h"
 #import "Group.h"
@@ -221,9 +221,13 @@
     }
     else if ([segue.identifier isEqualToString:kNewGroupSegueIdentifier])
     {
-        GroupDetailViewController *destViewController = segue.destinationViewController;
+        GroupDetailTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = nil;
     }
+}
+
+-(IBAction)actionUnwindToGroups:(UIStoryboardSegue *)unwindSegue
+{
 }
 
 
@@ -268,6 +272,5 @@
     
     [self performSegueWithIdentifier:kGroupTabsSegueIdentifier sender:nil];
 }
-
 
 @end

@@ -75,7 +75,6 @@
     [super viewDidLoad];
     
     self.messageThreads = [NSMutableArray arrayWithArray:self.group.messageThreads];
-    
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -99,15 +98,6 @@
                                                object:nil];
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    self.tabBarController.title = kMessagesTitle;
-    self.tabBarController.navigationItem.rightBarButtonItems = nil;
-    self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(actionNewGroup)];
-}
-
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -117,7 +107,7 @@
 #pragma mark - Buttons
 //*****************************************************************************/
 
--(void)actionNewGroup
+- (IBAction)actionNewGroup:(id)sender
 {
     [self performSegueWithIdentifier:kNewMessageSegueIdentifier sender:self];
 }
@@ -371,13 +361,16 @@
     {
         NewMessageTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
+        destViewController.hidesBottomBarWhenPushed = YES;
     }
     else if ([segue.identifier isEqualToString:kThreadDetailSegueIdentifier])
     {
         MessageViewController *destViewController = segue.destinationViewController;
         destViewController.messageThread = self.selectedMessageThread;
         destViewController.group = self.group;
+        destViewController.hidesBottomBarWhenPushed = YES;
     }
+    
 }
 
 @end

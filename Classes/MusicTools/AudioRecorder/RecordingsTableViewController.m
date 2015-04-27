@@ -174,7 +174,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.group)
+    if (self.group || self.sharedData.user.recordings.count == 0)
     {
         return 1;
     }
@@ -187,16 +187,30 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (!self.group)
+    if (self.group)
     {
-        if (section == 0)
+        if (self.group.recordings.count == 0)
         {
-            return kUnassignedRecordingTitle;
+            return @"No Recordings";
+        }
+    }
+    else
+    {
+        if (self.sharedData.user.recordings.count == 0 )
+        {
+            return @"No Recordings";
         }
         else
         {
-            Group *group = [self.sharedData.user.groups objectAtIndex:section - 1];
-            return group.name;
+            if (section == 0)
+            {
+                return kUnassignedRecordingTitle;
+            }
+            else
+            {
+                Group *group = [self.sharedData.user.groups objectAtIndex:section - 1];
+                return group.name;
+            }
         }
     }
     return nil;

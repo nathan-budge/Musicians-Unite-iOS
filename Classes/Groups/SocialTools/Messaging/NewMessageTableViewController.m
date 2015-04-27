@@ -33,6 +33,8 @@
 
 @property (nonatomic) NSMutableArray *registeredMembers;
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonCreate;
+
 @end
 
 
@@ -81,6 +83,11 @@
             member.selected = NO;
             [self.registeredMembers addObject:member];
         }
+    }
+    
+    if (self.registeredMembers.count == 0)
+    {
+        self.buttonCreate.hidden = YES;
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
