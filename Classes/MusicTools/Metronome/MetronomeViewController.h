@@ -12,4 +12,7 @@
 
 @property (nonatomic) double tempo;
 
+-(void)play;
+-(void)stop;
+
 @end

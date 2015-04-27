@@ -169,7 +169,7 @@
         Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, self.recording.recordingID]];
         NSDictionary *updatedRecording = @{
                                            kRecordingNameFirebaseField: self.fieldRecordingName.text,
-                                           kRecordingOwnerFirebaseField: self.ownerID ? self.ownerID : self.recording.ownerID,
+                                           kRecordingOwnerFirebaseField: self.ownerID,
                                            };
         [recordingRef updateChildValues:updatedRecording];
         
@@ -225,6 +225,7 @@
         else //Otherwise, assign creator as owner
         {
             [recordingRef updateChildValues:@{kRecordingOwnerFirebaseField:self.recording.creatorID}];
+            [[recordingRef childByAppendingPath:kRecordingGroupFirebaseField] removeValue];
         }
 
         Firebase *groupRecordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kRecordingsFirebaseNode, self.recording.recordingID]];

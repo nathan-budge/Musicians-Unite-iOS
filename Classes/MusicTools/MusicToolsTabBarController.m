@@ -10,6 +10,7 @@
 
 #import "MusicToolsTabBarController.h"
 #import "MetronomeViewController.h"
+#import "DronesTableViewController.h"
 
 @interface MusicToolsTabBarController ()
 
@@ -25,15 +26,24 @@
     [super viewDidLoad];
     
     self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGestureTapping | ECSlidingViewControllerAnchoredGesturePanning;
-    //[self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
     
-    NSArray *viewControllers = self.viewControllers;
-    
-    MetronomeViewController *metronomeViewController = [viewControllers objectAtIndex:0];
+    MetronomeViewController *metronomeViewController = [self.viewControllers objectAtIndex:0];
     if (self.tempo)
     {
         metronomeViewController.tempo = self.tempo;
     }    
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    UINavigationController *dronesNavigationController = [self.viewControllers objectAtIndex:2];
+    DronesTableViewController *dronesTableViewController = [dronesNavigationController.viewControllers objectAtIndex:0];
+    [dronesTableViewController stop];
+    
+    MetronomeViewController *metronomeViewController = [self.viewControllers objectAtIndex:0];
+    [metronomeViewController stop];
 }
 
 

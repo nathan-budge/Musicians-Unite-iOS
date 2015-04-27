@@ -171,20 +171,23 @@
 
 - (IBAction)actionPlay:(id)sender
 {
-    if (self.toneGenerator.toneUnit) {
-        [self.toneGenerator stop];
-        [self.selectedButton sendActionsForControlEvents: UIControlEventTouchUpInside];
-        [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
-        
-    } else {
-        
-        [self.toneGenerator play];
-        
-        [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
-        
-    }
+    self.toneGenerator.toneUnit ? [self stop] : [self play];
 }
 
+
+- (void)play
+{
+    [self.toneGenerator play];
+    [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
+    
+}
+
+- (void)stop
+{
+    [self.toneGenerator stop];
+    [self.selectedButton sendActionsForControlEvents: UIControlEventTouchUpInside];
+    [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
+}
 
 //*****************************************************************************/
 #pragma mark - Helper Methods

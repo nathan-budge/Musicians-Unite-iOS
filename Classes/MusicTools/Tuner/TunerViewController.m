@@ -22,6 +22,7 @@
 
 - (void)startAudio;
 - (void)stopAudio;
+
 @end
 
 @implementation TunerViewController
@@ -30,9 +31,13 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
     TunerViewController* controller = (__bridge TunerViewController*) inUserData;
     if (interruptionState == kAudioSessionBeginInterruption)
+    {
         [controller beginInterruption];
+    }
     else if (interruptionState == kAudioSessionEndInterruption)
+    {
         [controller endInterruption];
+    }
 }
 
 - (void)beginInterruption
@@ -49,13 +54,19 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
     [super viewDidLoad];
     self.happiness = 0;
-    [self startAudio];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     self.tabBarController.title = @"Tuner";
+    [self startAudio];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self stopAudio];
 }
 
 - (void)setFaceView:(FaceView *)faceView
@@ -66,8 +77,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 }
 
 
-
-//USED FOR TESTING -- REMOVE WHEN IMPLEMENTING TUNER
 - (void) handleHappinessGesture: (UIPanGestureRecognizer *) gesture
 {
     if(gesture.state == UIGestureRecognizerStateChanged ||

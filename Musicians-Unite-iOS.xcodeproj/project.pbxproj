@@ -182,12 +182,12 @@
 		9444BD501ADEC9560076C8D5 /* SLKTypingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLKTypingIndicatorView.m; sourceTree = "<group>"; };
 		945958F21A97B000002CF4EF /* GroupTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupTabBarController.h; path = SocialTools/GroupTabBarController.h; sourceTree = "<group>"; };
 		945958F31A97B000002CF4EF /* GroupTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupTabBarController.m; path = SocialTools/GroupTabBarController.m; sourceTree = "<group>"; };
-		947429B61ABF1B88002D81E7 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TasksTableViewController.h; path = PracticeList/TasksTableViewController.h; sourceTree = "<group>"; };
-		947429B71ABF1B88002D81E7 /* TasksTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TasksTableViewController.m; path = PracticeList/TasksTableViewController.m; sourceTree = "<group>"; };
-		9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagingTableViewController.h; path = Messaging/MessagingTableViewController.h; sourceTree = "<group>"; };
-		9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagingTableViewController.m; path = Messaging/MessagingTableViewController.m; sourceTree = "<group>"; };
-		9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewMessageTableViewController.h; path = Messaging/NewMessageTableViewController.h; sourceTree = "<group>"; };
-		9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewMessageTableViewController.m; path = Messaging/NewMessageTableViewController.m; sourceTree = "<group>"; };
+		947429B61ABF1B88002D81E7 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TasksTableViewController.h; path = Groups/SocialTools/PracticeList/TasksTableViewController.h; sourceTree = "<group>"; };
+		947429B71ABF1B88002D81E7 /* TasksTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TasksTableViewController.m; path = Groups/SocialTools/PracticeList/TasksTableViewController.m; sourceTree = "<group>"; };
+		9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagingTableViewController.h; path = Groups/SocialTools/Messaging/MessagingTableViewController.h; sourceTree = "<group>"; };
+		9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagingTableViewController.m; path = Groups/SocialTools/Messaging/MessagingTableViewController.m; sourceTree = "<group>"; };
+		9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewMessageTableViewController.h; path = Groups/SocialTools/Messaging/NewMessageTableViewController.h; sourceTree = "<group>"; };
+		9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewMessageTableViewController.m; path = Groups/SocialTools/Messaging/NewMessageTableViewController.m; sourceTree = "<group>"; };
 		9479A2AF1A9B68A400C668D0 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Models/Message.h; sourceTree = "<group>"; };
 		9479A2B01A9B68A400C668D0 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = Models/Message.m; sourceTree = "<group>"; };
 		9479A2B21A9B68C000C668D0 /* MessageThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageThread.h; path = Models/MessageThread.h; sourceTree = "<group>"; };
@@ -195,8 +195,8 @@
 		947A47261ABB418E007B3878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		947A47281ABDF62E007B3878 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = Models/Task.h; sourceTree = "<group>"; };
 		947A47291ABDF62E007B3878 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Task.m; path = Models/Task.m; sourceTree = "<group>"; };
-		947A472B1ABE17B8007B3878 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskViewController.h; path = PracticeList/TaskViewController.h; sourceTree = "<group>"; };
-		947A472C1ABE17B8007B3878 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskViewController.m; path = PracticeList/TaskViewController.m; sourceTree = "<group>"; };
+		947A472B1ABE17B8007B3878 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskViewController.h; path = Groups/SocialTools/PracticeList/TaskViewController.h; sourceTree = "<group>"; };
+		947A472C1ABE17B8007B3878 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskViewController.m; path = Groups/SocialTools/PracticeList/TaskViewController.m; sourceTree = "<group>"; };
 		94833EE41A94018A00CC2930 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		94833EE51A94018A00CC2930 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		94833EE61A94018A00CC2930 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -212,8 +212,8 @@
 		949B04251A9D0EB10029B4E3 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		949B04261A9D0EB10029B4E3 /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
 		949B04271A9D0EB10029B4E3 /* MessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTextView.m; sourceTree = "<group>"; };
-		949B04281A9D0EB10029B4E3 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
-		949B04291A9D0EB10029B4E3 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		949B04281A9D0EB10029B4E3 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageViewController.h; path = Groups/SocialTools/MessageViewController.h; sourceTree = "<group>"; };
+		949B04291A9D0EB10029B4E3 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageViewController.m; path = Groups/SocialTools/MessageViewController.m; sourceTree = "<group>"; };
 		94A3372A1A93768200E38E97 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94A377F01AE97DA700B7ACBE /* CRToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToast.h; sourceTree = "<group>"; };
 		94A377F11AE97DA700B7ACBE /* CRToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToast.m; sourceTree = "<group>"; };
@@ -426,35 +426,15 @@
 			name = "Audio Recorder";
 			sourceTree = "<group>";
 		};
-		9428E37E1A9A5F1000A36900 /* Messaging */ = {
-			isa = PBXGroup;
-			children = (
-				94A377ED1AE9732F00B7ACBE /* MessageCell */,
-				949B04281A9D0EB10029B4E3 /* MessageViewController.h */,
-				949B04291A9D0EB10029B4E3 /* MessageViewController.m */,
-				9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */,
-				9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */,
-				9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */,
-				9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */,
-			);
-			name = Messaging;
-			sourceTree = "<group>";
-		};
 		942E57CE1AC711EB00C957DB /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				94F882131A97E2D6008F4AD8 /* Group.h */,
-				94F882141A97E2D6008F4AD8 /* Group.m */,
-				94F882161A97E39E008F4AD8 /* User.h */,
-				94F882171A97E39E008F4AD8 /* User.m */,
-				9479A2B21A9B68C000C668D0 /* MessageThread.h */,
-				9479A2B31A9B68C000C668D0 /* MessageThread.m */,
-				9479A2AF1A9B68A400C668D0 /* Message.h */,
-				9479A2B01A9B68A400C668D0 /* Message.m */,
-				947A47281ABDF62E007B3878 /* Task.h */,
-				947A47291ABDF62E007B3878 /* Task.m */,
-				940CDBBB1AC33AD40006F099 /* Recording.h */,
-				940CDBBC1AC33AD40006F099 /* Recording.m */,
+				94A378081AEE928A00B7ACBE /* User */,
+				94A378071AEE928200B7ACBE /* Group */,
+				94A378091AEE929200B7ACBE /* MessageThread */,
+				94A3780A1AEE929900B7ACBE /* Message */,
+				94A3780B1AEE92A000B7ACBE /* Task */,
+				94A3780C1AEE92A600B7ACBE /* Recording */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -519,8 +499,7 @@
 				9442D87D1ACAD7E100B47996 /* Metronome */,
 				940CDBBE1AC3484C0006F099 /* Audio Recorder */,
 				947A47221ABB3FFA007B3878 /* Drones */,
-				940CDBC21AC352BD0006F099 /* MusicToolsTabBarController.h */,
-				940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */,
+				94A378061AEE925700B7ACBE /* MusicTabBarController */,
 			);
 			name = MusicTools;
 			sourceTree = "<group>";
@@ -549,17 +528,6 @@
 			path = SVProgressHUD;
 			sourceTree = SOURCE_ROOT;
 		};
-		94A35B1A1AB75A76001DC1F2 /* PracticeList */ = {
-			isa = PBXGroup;
-			children = (
-				947A472B1ABE17B8007B3878 /* TaskViewController.h */,
-				947A472C1ABE17B8007B3878 /* TaskViewController.m */,
-				947429B61ABF1B88002D81E7 /* TasksTableViewController.h */,
-				947429B71ABF1B88002D81E7 /* TasksTableViewController.m */,
-			);
-			name = PracticeList;
-			sourceTree = "<group>";
-		};
 		94A377ED1AE9732F00B7ACBE /* MessageCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -569,15 +537,16 @@
 				949B04271A9D0EB10029B4E3 /* MessageTextView.m */,
 			);
 			name = MessageCell;
+			path = Groups/SocialTools;
 			sourceTree = "<group>";
 		};
-		94A377EE1AE9736000B7ACBE /* GroupTabBar */ = {
+		94A377EE1AE9736000B7ACBE /* GroupTabBarController */ = {
 			isa = PBXGroup;
 			children = (
 				945958F21A97B000002CF4EF /* GroupTabBarController.h */,
 				945958F31A97B000002CF4EF /* GroupTabBarController.m */,
 			);
-			name = GroupTabBar;
+			name = GroupTabBarController;
 			sourceTree = "<group>";
 		};
 		94A377EF1AE97DA700B7ACBE /* CRToast */ = {
@@ -598,12 +567,110 @@
 			path = CRToast;
 			sourceTree = "<group>";
 		};
+		94A378061AEE925700B7ACBE /* MusicTabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				940CDBC21AC352BD0006F099 /* MusicToolsTabBarController.h */,
+				940CDBC31AC352BD0006F099 /* MusicToolsTabBarController.m */,
+			);
+			name = MusicTabBarController;
+			sourceTree = "<group>";
+		};
+		94A378071AEE928200B7ACBE /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				94F882131A97E2D6008F4AD8 /* Group.h */,
+				94F882141A97E2D6008F4AD8 /* Group.m */,
+			);
+			name = Group;
+			sourceTree = "<group>";
+		};
+		94A378081AEE928A00B7ACBE /* User */ = {
+			isa = PBXGroup;
+			children = (
+				94F882161A97E39E008F4AD8 /* User.h */,
+				94F882171A97E39E008F4AD8 /* User.m */,
+			);
+			name = User;
+			sourceTree = "<group>";
+		};
+		94A378091AEE929200B7ACBE /* MessageThread */ = {
+			isa = PBXGroup;
+			children = (
+				9479A2B21A9B68C000C668D0 /* MessageThread.h */,
+				9479A2B31A9B68C000C668D0 /* MessageThread.m */,
+			);
+			name = MessageThread;
+			sourceTree = "<group>";
+		};
+		94A3780A1AEE929900B7ACBE /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				9479A2AF1A9B68A400C668D0 /* Message.h */,
+				9479A2B01A9B68A400C668D0 /* Message.m */,
+			);
+			name = Message;
+			sourceTree = "<group>";
+		};
+		94A3780B1AEE92A000B7ACBE /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				947A47281ABDF62E007B3878 /* Task.h */,
+				947A47291ABDF62E007B3878 /* Task.m */,
+			);
+			name = Task;
+			sourceTree = "<group>";
+		};
+		94A3780C1AEE92A600B7ACBE /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				940CDBBB1AC33AD40006F099 /* Recording.h */,
+				940CDBBC1AC33AD40006F099 /* Recording.m */,
+			);
+			name = Recording;
+			sourceTree = "<group>";
+		};
+		94A3780D1AEE92FC00B7ACBE /* SocialTools */ = {
+			isa = PBXGroup;
+			children = (
+				94A3780E1AEE930A00B7ACBE /* PracticeList */,
+				94A3780F1AEE931500B7ACBE /* Messaging */,
+			);
+			name = SocialTools;
+			sourceTree = "<group>";
+		};
+		94A3780E1AEE930A00B7ACBE /* PracticeList */ = {
+			isa = PBXGroup;
+			children = (
+				947A472B1ABE17B8007B3878 /* TaskViewController.h */,
+				947A472C1ABE17B8007B3878 /* TaskViewController.m */,
+				947429B61ABF1B88002D81E7 /* TasksTableViewController.h */,
+				947429B71ABF1B88002D81E7 /* TasksTableViewController.m */,
+			);
+			name = PracticeList;
+			sourceTree = "<group>";
+		};
+		94A3780F1AEE931500B7ACBE /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				94A377ED1AE9732F00B7ACBE /* MessageCell */,
+				949B04281A9D0EB10029B4E3 /* MessageViewController.h */,
+				949B04291A9D0EB10029B4E3 /* MessageViewController.m */,
+				9479A2A61A9A72C000C668D0 /* MessagingTableViewController.h */,
+				9479A2A71A9A72C000C668D0 /* MessagingTableViewController.m */,
+				9479A2A91A9A72D100C668D0 /* NewMessageTableViewController.h */,
+				9479A2AA1A9A72D100C668D0 /* NewMessageTableViewController.m */,
+			);
+			name = Messaging;
+			sourceTree = "<group>";
+		};
 		94C6DE491A93DDD800562CE9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				94C6DE581A93DDD800562CE9 /* Navigation */,
 				94C6DE5B1A93DDD800562CE9 /* Users */,
 				94C6DE4A1A93DDD800562CE9 /* Groups */,
+				94A3780D1AEE92FC00B7ACBE /* SocialTools */,
 				947A47211ABB3FF0007B3878 /* MusicTools */,
 				942E57CE1AC711EB00C957DB /* Models */,
 			);
@@ -616,8 +683,7 @@
 				94C6DE4B1A93DDD800562CE9 /* Homepage */,
 				94C6DE511A93DDD800562CE9 /* GroupDetail */,
 				94C6DE4E1A93DDD800562CE9 /* MemberManagement */,
-				94C6DE541A93DDD800562CE9 /* SocialTools */,
-				94A377EE1AE9736000B7ACBE /* GroupTabBar */,
+				94A377EE1AE9736000B7ACBE /* GroupTabBarController */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -648,15 +714,6 @@
 			);
 			name = GroupDetail;
 			path = NewGroup;
-			sourceTree = "<group>";
-		};
-		94C6DE541A93DDD800562CE9 /* SocialTools */ = {
-			isa = PBXGroup;
-			children = (
-				94A35B1A1AB75A76001DC1F2 /* PracticeList */,
-				9428E37E1A9A5F1000A36900 /* Messaging */,
-			);
-			path = SocialTools;
 			sourceTree = "<group>";
 		};
 		94C6DE581A93DDD800562CE9 /* Navigation */ = {

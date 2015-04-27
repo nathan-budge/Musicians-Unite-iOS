@@ -11,4 +11,7 @@
 
 @interface DronesTableViewController : UITableViewController
 
+- (void)play;
+- (void)stop;
+
 @end

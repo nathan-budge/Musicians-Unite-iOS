@@ -8,7 +8,6 @@
 
 #import "MetronomeViewController.h"
 #import "MetronomeDots.h"
-#import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
 @interface MetronomeViewController ()
@@ -43,6 +42,8 @@
 @property int bpm;
 @property int subdivision;
 @property bool isPlaying;
+
+@property (nonatomic) NSThread *metronomeThread;
 
 @end
 
@@ -316,15 +317,22 @@
 
 - (IBAction)actionPlay:(id)sender
 {
-    if (!self.isPlaying) {
-        [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
-        NSThread *metronomeThread = [[NSThread alloc] initWithTarget:self selector:@selector(playMetronome) object:nil];
-        [metronomeThread start];
-        self.isPlaying = YES;
-    } else {
-        [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
-        self.isPlaying = NO;
-    }
+    self.isPlaying ? [self stop] : [self play];
+}
+
+-(void)play
+{
+    [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
+    self.metronomeThread = [[NSThread alloc] initWithTarget:self selector:@selector(playMetronome) object:nil];
+    [self.metronomeThread start];
+    self.isPlaying = YES;
+}
+
+-(void)stop
+{
+    [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
+    self.isPlaying = NO;
+    [self.metronomeThread cancel];
 }
 
 

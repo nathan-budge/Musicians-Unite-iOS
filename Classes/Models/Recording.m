@@ -165,7 +165,6 @@
         else if ([snapshot.key isEqualToString:@"creator"])
         {
             self.creatorID = snapshot.value;
-            
         }
         
     } withCancelBlock:^(NSError *error) {
