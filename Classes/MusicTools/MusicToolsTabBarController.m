@@ -7,12 +7,14 @@
 //
 
 #import "UIViewController+ECSlidingViewController.h"
+#import "SVProgressHUD.h"
 
 #import "AppConstant.h"
 
 #import "MusicToolsTabBarController.h"
 #import "MetronomeViewController.h"
 #import "DronesTableViewController.h"
+#import "TunerViewController.h"
 
 @interface MusicToolsTabBarController ()
 
@@ -40,12 +42,15 @@
 {
     [super viewWillDisappear:animated];
     
+    MetronomeViewController *metronomeViewController = [self.viewControllers objectAtIndex:0];
+    [metronomeViewController stop];
+    
+    TunerViewController *tunerViewController = [self.viewControllers objectAtIndex:1];
+    [tunerViewController beginInterruption];
+    
     UINavigationController *dronesNavigationController = [self.viewControllers objectAtIndex:2];
     DronesTableViewController *dronesTableViewController = [dronesNavigationController.viewControllers objectAtIndex:0];
     [dronesTableViewController stop];
-    
-    MetronomeViewController *metronomeViewController = [self.viewControllers objectAtIndex:0];
-    [metronomeViewController stop];
 }
 
 

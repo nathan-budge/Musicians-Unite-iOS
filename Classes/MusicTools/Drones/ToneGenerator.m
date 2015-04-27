@@ -57,7 +57,7 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState)
         self.toneUnit = nil;
     }
     
-    [self.audioSession setActive:false error:nil];
+    //[self.audioSession setActive:false error:nil];
 }
 
 - (void)createToneUnit

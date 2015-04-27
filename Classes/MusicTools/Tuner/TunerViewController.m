@@ -43,6 +43,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 - (void)beginInterruption
 {
     [self stopAudio];
+    if (recorder == nil) {
+        AudioSessionSetActive(false);
+    }
 }
 
 - (void)endInterruption
@@ -54,6 +57,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
     [super viewDidLoad];
     self.happiness = 0;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -124,7 +128,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
     {
         [recorder stopRecording];
         recorder = nil;
-        AudioSessionSetActive(false);
     }
 }
 
@@ -137,7 +140,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
     {
         double cents = [self convertToCents:detectedFreq];
         self.happiness = 100 - fabs(cents);
-        NSLog(@"%f", self.happiness);
         self.labelCents.text = [NSString stringWithFormat:@"%.2f", cents ];
         [self.faceView setNeedsDisplay];
     }

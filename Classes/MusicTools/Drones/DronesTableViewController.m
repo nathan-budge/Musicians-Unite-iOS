@@ -179,7 +179,6 @@
 {
     [self.toneGenerator play];
     [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
-    
 }
 
 - (void)stop
