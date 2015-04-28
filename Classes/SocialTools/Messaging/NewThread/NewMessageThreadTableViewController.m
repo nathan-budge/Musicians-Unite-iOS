@@ -1,5 +1,5 @@
 //
-//  NewMessageTableViewController.m
+//  NewMessageThreadTableViewController.m
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/22/15.
@@ -14,16 +14,16 @@
 #import "AppConstant.h"
 #import "SharedData.h"
 
-#import "NewMessageTableViewController.h"
+#import "NewMessageThreadTableViewController.h"
 #import "MessageViewController.h"
-#import "MessagingTableViewController.h"
+#import "MessageThreadsTableViewController.h"
 
 #import "Group.h"
 #import "User.h"
 #import "MessageThread.h"
 
 
-@interface NewMessageTableViewController ()
+@interface NewMessageThreadTableViewController ()
 
 @property (nonatomic) Firebase *ref;
 
@@ -38,7 +38,7 @@
 @end
 
 
-@implementation NewMessageTableViewController
+@implementation NewMessageThreadTableViewController
 
 //*****************************************************************************/
 #pragma mark - Lazy Instantiation

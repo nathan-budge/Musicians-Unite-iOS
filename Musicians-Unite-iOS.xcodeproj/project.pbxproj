@@ -73,9 +73,9 @@
 		94CDEF6A1AEEFF9600C0DF69 /* NavigationDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF281AEEFF9600C0DF69 /* NavigationDrawerViewController.m */; };
 		94CDEF6B1AEEFF9600C0DF69 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF2D1AEEFF9600C0DF69 /* MessageTableViewCell.m */; };
 		94CDEF6C1AEEFF9600C0DF69 /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF2F1AEEFF9600C0DF69 /* MessageTextView.m */; };
-		94CDEF6D1AEEFF9600C0DF69 /* NewMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF321AEEFF9600C0DF69 /* NewMessageTableViewController.m */; };
+		94CDEF6D1AEEFF9600C0DF69 /* NewMessageThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF321AEEFF9600C0DF69 /* NewMessageThreadTableViewController.m */; };
 		94CDEF6E1AEEFF9600C0DF69 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF351AEEFF9600C0DF69 /* MessageViewController.m */; };
-		94CDEF6F1AEEFF9600C0DF69 /* MessagingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF381AEEFF9600C0DF69 /* MessagingTableViewController.m */; };
+		94CDEF6F1AEEFF9600C0DF69 /* MessageThreadsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF381AEEFF9600C0DF69 /* MessageThreadsTableViewController.m */; };
 		94CDEF701AEEFF9600C0DF69 /* TaskTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF3C1AEEFF9600C0DF69 /* TaskTableViewController.m */; };
 		94CDEF711AEEFF9600C0DF69 /* TasksTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF3F1AEEFF9600C0DF69 /* TasksTableViewController.m */; };
 		94CDEF721AEEFF9600C0DF69 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CDEF431AEEFF9600C0DF69 /* LoginViewController.m */; };
@@ -222,12 +222,12 @@
 		94CDEF2D1AEEFF9600C0DF69 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		94CDEF2E1AEEFF9600C0DF69 /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
 		94CDEF2F1AEEFF9600C0DF69 /* MessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTextView.m; sourceTree = "<group>"; };
-		94CDEF311AEEFF9600C0DF69 /* NewMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageTableViewController.h; sourceTree = "<group>"; };
-		94CDEF321AEEFF9600C0DF69 /* NewMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageTableViewController.m; sourceTree = "<group>"; };
+		94CDEF311AEEFF9600C0DF69 /* NewMessageThreadTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageThreadTableViewController.h; sourceTree = "<group>"; };
+		94CDEF321AEEFF9600C0DF69 /* NewMessageThreadTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageThreadTableViewController.m; sourceTree = "<group>"; };
 		94CDEF341AEEFF9600C0DF69 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		94CDEF351AEEFF9600C0DF69 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
-		94CDEF371AEEFF9600C0DF69 /* MessagingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagingTableViewController.h; sourceTree = "<group>"; };
-		94CDEF381AEEFF9600C0DF69 /* MessagingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagingTableViewController.m; sourceTree = "<group>"; };
+		94CDEF371AEEFF9600C0DF69 /* MessageThreadsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageThreadsTableViewController.h; sourceTree = "<group>"; };
+		94CDEF381AEEFF9600C0DF69 /* MessageThreadsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageThreadsTableViewController.m; sourceTree = "<group>"; };
 		94CDEF3B1AEEFF9600C0DF69 /* TaskTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskTableViewController.h; sourceTree = "<group>"; };
 		94CDEF3C1AEEFF9600C0DF69 /* TaskTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskTableViewController.m; sourceTree = "<group>"; };
 		94CDEF3E1AEEFF9600C0DF69 /* TasksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TasksTableViewController.h; sourceTree = "<group>"; };
@@ -801,8 +801,8 @@
 		94CDEF301AEEFF9600C0DF69 /* NewThread */ = {
 			isa = PBXGroup;
 			children = (
-				94CDEF311AEEFF9600C0DF69 /* NewMessageTableViewController.h */,
-				94CDEF321AEEFF9600C0DF69 /* NewMessageTableViewController.m */,
+				94CDEF311AEEFF9600C0DF69 /* NewMessageThreadTableViewController.h */,
+				94CDEF321AEEFF9600C0DF69 /* NewMessageThreadTableViewController.m */,
 			);
 			path = NewThread;
 			sourceTree = "<group>";
@@ -819,8 +819,8 @@
 		94CDEF361AEEFF9600C0DF69 /* ThreadList */ = {
 			isa = PBXGroup;
 			children = (
-				94CDEF371AEEFF9600C0DF69 /* MessagingTableViewController.h */,
-				94CDEF381AEEFF9600C0DF69 /* MessagingTableViewController.m */,
+				94CDEF371AEEFF9600C0DF69 /* MessageThreadsTableViewController.h */,
+				94CDEF381AEEFF9600C0DF69 /* MessageThreadsTableViewController.m */,
 			);
 			path = ThreadList;
 			sourceTree = "<group>";
@@ -1071,10 +1071,10 @@
 				94CDEF751AEEFF9600C0DF69 /* UserDetailTableViewController.m in Sources */,
 				94EE0B151A944ECD000F0F19 /* Utilities.m in Sources */,
 				94CDEF581AEEFF9600C0DF69 /* Recording.m in Sources */,
-				94CDEF6D1AEEFF9600C0DF69 /* NewMessageTableViewController.m in Sources */,
+				94CDEF6D1AEEFF9600C0DF69 /* NewMessageThreadTableViewController.m in Sources */,
 				94CDEEAB1AEEFBD200C0DF69 /* ECSlidingAnimationController.m in Sources */,
 				94CDEECB1AEEFBDA00C0DF69 /* SLKTypingIndicatorView.m in Sources */,
-				94CDEF6F1AEEFF9600C0DF69 /* MessagingTableViewController.m in Sources */,
+				94CDEF6F1AEEFF9600C0DF69 /* MessageThreadsTableViewController.m in Sources */,
 				94CDEF731AEEFF9600C0DF69 /* RegisterViewController.m in Sources */,
 				94CDEE981AEEFBC200C0DF69 /* CRToastManager.m in Sources */,
 				94CDEE991AEEFBC200C0DF69 /* CRToastView.m in Sources */,

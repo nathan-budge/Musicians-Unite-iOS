@@ -15,7 +15,7 @@
 
 #import "GroupTabBarController.h"
 #import "GroupDetailTableViewController.h"
-#import "MessagingTableViewController.h"
+#import "MessageThreadsTableViewController.h"
 #import "TasksTableViewController.h"
 #import "RecorderViewController.h"
 
@@ -49,7 +49,7 @@
     UINavigationController *navigationController;
     
     navigationController = [viewControllers objectAtIndex:0];
-    MessagingTableViewController *messagingTableViewController = [navigationController.viewControllers objectAtIndex:0];
+    MessageThreadsTableViewController *messagingTableViewController = [navigationController.viewControllers objectAtIndex:0];
     messagingTableViewController.group = self.group;
     
     navigationController = [viewControllers objectAtIndex:1];

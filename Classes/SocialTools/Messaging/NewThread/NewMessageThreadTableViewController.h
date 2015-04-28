@@ -1,5 +1,5 @@
 //
-//  MessagingTableViewController.h
+//  NewMessageThreadTableViewController.h
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/22/15.
@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @class Group;
+@class User;
 
-@interface MessagingTableViewController : UITableViewController <UIActionSheetDelegate>
+@interface NewMessageThreadTableViewController : UITableViewController
 
 @property (nonatomic) Group *group;
 

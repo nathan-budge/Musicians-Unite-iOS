@@ -1,5 +1,5 @@
 //
-//  MessagingTableViewController.m
+//  MessageThreadsTableViewController.m
 //  Musicians-Unite-iOS
 //
 //  Created by Nathan Budge on 2/22/15.
@@ -13,8 +13,8 @@
 #import "AppConstant.h"
 #import "Utilities.h"
 
-#import "MessagingTableViewController.h"
-#import "NewMessageTableViewController.h"
+#import "MessageThreadsTableViewController.h"
+#import "NewMessageThreadTableViewController.h"
 #import "MessageViewController.h"
 
 #import "Group.h"
@@ -23,7 +23,7 @@
 #import "Message.h"
 
 
-@interface MessagingTableViewController ()
+@interface MessageThreadsTableViewController ()
 
 @property (nonatomic) Firebase *ref;
 
@@ -35,7 +35,7 @@
 @end
 
 
-@implementation MessagingTableViewController
+@implementation MessageThreadsTableViewController
 
 //*****************************************************************************/
 #pragma mark - Lazy instantiation
@@ -359,7 +359,7 @@
 {
     if ([segue.identifier isEqualToString:kNewMessageSegueIdentifier])
     {
-        NewMessageTableViewController *destViewController = segue.destinationViewController;
+        NewMessageThreadTableViewController *destViewController = segue.destinationViewController;
         destViewController.group = self.group;
         destViewController.hidesBottomBarWhenPushed = YES;
     }

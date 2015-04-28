@@ -2166,7 +2166,7 @@
         <!--Messages-->
         <scene sceneID="JBr-Oe-N0p">
             <objects>
-                <tableViewController id="Vb0-j3-dKk" customClass="MessagingTableViewController" sceneMemberID="viewController">
+                <tableViewController id="Vb0-j3-dKk" customClass="MessageThreadsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ytU-3b-T1b">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2209,7 +2209,7 @@
         <!--New Chat-->
         <scene sceneID="guE-02-iMk">
             <objects>
-                <tableViewController id="pLo-1N-97l" customClass="NewMessageTableViewController" sceneMemberID="viewController">
+                <tableViewController id="pLo-1N-97l" customClass="NewMessageThreadTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" id="9Ev-Jr-wpK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
