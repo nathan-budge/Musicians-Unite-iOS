@@ -134,14 +134,14 @@
         NSDictionary *memberData = snapshot.value;
         
         self.userID = snapshot.key;
-        self.email = memberData[@"email"];
+        self.email = memberData[kUserEmailFirebaseField];
         
-        if ([memberData[@"completed_registration"] isEqual:@YES])
+        if ([memberData[kUserCompletedRegistrationFirebaseField] isEqual:@YES])
         {
             self.completedRegistration = YES;
-            self.firstName = memberData[@"first_name"];
-            self.lastName = memberData[@"last_name"];
-            self.profileImage = [Utilities decodeBase64ToImage:memberData[@"profile_image"]];
+            self.firstName = memberData[kUserFirstNameFirebaseField];
+            self.lastName = memberData[kUserLastNameFirebaseField];
+            self.profileImage = [Utilities decodeBase64ToImage:memberData[kProfileImageFirebaseField]];
         }
         else
         {
@@ -150,9 +150,9 @@
         
         if ([self.userID isEqualToString:self.ref.authData.uid])
         {
-            self.userGroupsRef = [self.userRef childByAppendingPath:@"groups"];
-            self.userTasksRef = [self.userRef childByAppendingPath:@"tasks"];
-            self.userRecordingsRef = [self.userRef childByAppendingPath:@"recordings"];
+            self.userGroupsRef = [self.userRef childByAppendingPath:kGroupsFirebaseNode];
+            self.userTasksRef = [self.userRef childByAppendingPath:kTasksFirebaseNode];
+            self.userRecordingsRef = [self.userRef childByAppendingPath:kRecordingsFirebaseNode];
             
             [self.sharedData addChildObserver:self.userGroupsRef];
             [self.sharedData addChildObserver:self.userTasksRef];
@@ -161,14 +161,14 @@
             [self.userGroupsRef observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
                 
                 if ([snapshot.value isEqual:[NSNull null]]) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"No Groups" object:self];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNoGroupsNotification object:self];
                 }
                 
             } withCancelBlock:^(NSError *error) {
                 NSLog(@"%@", error.description);
             }];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Remote Notifications" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kRemoteNotificationsNotification object:self];
             
             [self attachListenerForAddedGroups];
             [self attachListenerForRemovedGroups];
@@ -181,7 +181,7 @@
         if (self.group)
         {
             NSArray *newMemberData = @[self.group, self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"New Group Member" object:newMemberData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewGroupMemberNotification object:newMemberData];
         }
         
         dispatch_group_leave(self.sharedData.downloadGroup);
@@ -200,15 +200,15 @@
 {
     [self.userRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"first_name"])
+        if ([snapshot.key isEqualToString:kUserFirstNameFirebaseField])
         {
             self.firstName = snapshot.value;
         }
-        else if ([snapshot.key isEqualToString:@"last_name"])
+        else if ([snapshot.key isEqualToString:kUserLastNameFirebaseField])
         {
             self.lastName = snapshot.value;
         }
-        else if ([snapshot.key isEqualToString:@"profile_image"])
+        else if ([snapshot.key isEqualToString:kProfileImageFirebaseField])
         {
             self.profileImage = [Utilities decodeBase64ToImage:snapshot.value];
         }
@@ -224,7 +224,7 @@
         
         NSString *newGroupID = snapshot.key;
         
-        Firebase *groupRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", newGroupID]];
+        Firebase *groupRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kGroupsFirebaseNode, newGroupID]];
         
         Group *newGroup = [[Group alloc] initWithRef:groupRef];
         
@@ -266,9 +266,6 @@
             [removedGroup.groupTasksRef removeAllObservers];
             [removedGroup.groupRecordingsRef removeAllObservers];
             
-            
-            //Remove groups with no more members left (currently a utilities method)
-            
             [self removeGroup:removedGroup];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:kGroupRemovedNotification object:removedGroup];
@@ -285,7 +282,7 @@
         
         NSString *newTaskID = snapshot.key;
         
-        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", newTaskID]];
+        Firebase *taskRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kTasksFirebaseNode, newTaskID]];
         
         Task *newTask = [[Task alloc] initWithRef:taskRef];
         
@@ -322,7 +319,7 @@
         
         NSString *newRecordingID = snapshot.key;
         
-        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", newRecordingID]];
+        Firebase *recordingRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kRecordingsFirebaseNode, newRecordingID]];
         
         Recording *newRecording = [[Recording alloc] initWithRef:recordingRef];
         

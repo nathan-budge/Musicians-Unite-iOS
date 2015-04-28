@@ -6,13 +6,14 @@
 //  Copyright (c) 2015 CWRU. All rights reserved.
 //
 
-#import "Task.h"
 #import <Firebase/Firebase.h>
 
 #import "SharedData.h"
 #import "AppConstant.h"
 
+#import "Task.h"
 #import "Group.h"
+
 
 @interface Task ()
 
@@ -98,11 +99,11 @@
         NSDictionary *taskData = snapshot.value;
         
         self.taskID = snapshot.key;
-        self.title = taskData[@"title"];
-        self.tempo = taskData[@"tempo"];
-        self.notes = taskData[@"notes"];
+        self.title = taskData[kTaskTitleFirebaseField];
+        self.tempo = taskData[kTaskTempoFirebaseField];
+        self.notes = taskData[kTaskNotesFirebaseField];
         
-        if ([taskData[@"completed"] isEqual:@YES])
+        if ([taskData[kTaskCompletedFirebaseField] isEqual:@YES])
         {
             self.completed = YES;
         }
@@ -114,11 +115,11 @@
         if (self.group)
         {
             NSArray *newTaskData = @[self.group, self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"New Group Task" object:newTaskData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewGroupTaskNotification object:newTaskData];
         }
         else
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"New User Task" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNewUserTaskNotification object:self];
         }
         
         dispatch_group_leave(self.sharedData.downloadGroup);
@@ -137,7 +138,7 @@
 {
     [self.taskRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"title"])
+        if ([snapshot.key isEqualToString:kTaskTitleFirebaseField])
         {
             self.title = snapshot.value;
             
@@ -153,7 +154,7 @@
             }
             
         }
-        else if ([snapshot.key isEqualToString:@"tempo"])
+        else if ([snapshot.key isEqualToString:kTaskTempoFirebaseField])
         {
             self.tempo = snapshot.value;
             
@@ -169,7 +170,7 @@
             }
             
         }
-        else if ([snapshot.key isEqualToString:@"notes"])
+        else if ([snapshot.key isEqualToString:kTaskNotesFirebaseField])
         {
             self.notes = snapshot.value;
             
@@ -185,7 +186,7 @@
             }
             
         }
-        else if ([snapshot.key isEqualToString:@"completed"])
+        else if ([snapshot.key isEqualToString:kTaskCompletedFirebaseField])
         {
             if ([snapshot.value isEqual:@YES])
             {

@@ -242,12 +242,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kGenericCellIdentifier];
-    
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kGenericCellIdentifier];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMessageThreadCellIdentifier];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteThread:)];
     [cell addGestureRecognizer:longPress];
@@ -258,9 +253,9 @@
     cell.textLabel.text = messageThread.title;
     
     Message *mostRecentMessage = [messageThread.messages lastObject];
-    
+   
     if (mostRecentMessage)
-    {
+    {        
         if ([mostRecentMessage.senderID isEqual:self.sharedData.user.userID])
         {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"You: %@", mostRecentMessage.text];

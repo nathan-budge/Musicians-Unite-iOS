@@ -30,8 +30,6 @@
 
 @property (nonatomic) SharedData *sharedData;
 
-@property (nonatomic) BOOL initialLoad;
-
 @property (nonatomic, strong) UINavigationController *transitionsNavigationController;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonHome;
@@ -64,6 +62,7 @@
     return _sharedData;
 }
 
+
 //*****************************************************************************/
 #pragma mark - View Lifecycle
 //*****************************************************************************/
@@ -73,7 +72,7 @@
     [super viewDidLoad];
     self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
     
-    self.initialLoad = YES;
+    self.sharedData.initialLoad = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
@@ -157,20 +156,18 @@
 {
     [SVProgressHUD showWithStatus:kLoggingOutProgressMessage maskType:SVProgressHUDMaskTypeBlack];
     
-    SharedData *sharedData = [SharedData sharedInstance];
-    
-    for (Firebase *ref in sharedData.childObservers){
+    for (Firebase *ref in self.sharedData.childObservers){
         [ref removeAllObservers];
     }
     
-    for (id controller in sharedData.notificationCenterObservers) {
+    for (id controller in self.sharedData.notificationCenterObservers) {
         [[NSNotificationCenter defaultCenter] removeObserver:controller];
     }
     
     [self.ref unauth];
     
-    sharedData.user = nil;
-    self.initialLoad = YES;
+    self.sharedData.user = nil;
+    self.sharedData.initialLoad = YES;
 
     [SVProgressHUD dismiss];
     [self performSegueWithIdentifier:kLogoutSegueIdentifier sender:sender];
@@ -187,13 +184,13 @@
 {
     if ([[notification name] isEqualToString:kInitialLoadCompletedNotification])
     {
-        self.initialLoad = NO;
+        self.sharedData.initialLoad = NO;
     }
     else if ([[notification name] isEqualToString:kNewGroupNotification])
     {
         dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
             
-            if (!self.initialLoad)
+            if (!self.sharedData.initialLoad)
             {
                 Group *newGroup = notification.object;
                 NSString *message = [NSString stringWithFormat:@"%@ %@", kNewGroupSuccessMessage, newGroup.name];
@@ -212,10 +209,9 @@
     }
     else if ([[notification name] isEqualToString:kNewGroupMemberNotification])
     {
-        if (!self.initialLoad)
+        if (!self.sharedData.initialLoad)
         {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
-                
                 
                     NSArray *newMemberData = notification.object;
                     Group *group = [newMemberData objectAtIndex:0];
@@ -258,7 +254,7 @@
     }
     else if ([[notification name] isEqualToString:kNewGroupTaskNotification])
     {
-        if (!self.initialLoad)
+        if (!self.sharedData.initialLoad)
         {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
                 
@@ -284,7 +280,7 @@
     }
     else if ([[notification name] isEqualToString:kNewMessageNotification])
     {
-        if (!self.initialLoad)
+        if (!self.sharedData.initialLoad)
         {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
                 
@@ -314,7 +310,7 @@
     }
     else if ([[notification name] isEqualToString:kNewGroupRecordingNotification])
     {
-        if (!self.initialLoad)
+        if (!self.sharedData.initialLoad)
         {
             dispatch_group_notify(self.sharedData.downloadGroup, dispatch_get_main_queue(), ^{
                 

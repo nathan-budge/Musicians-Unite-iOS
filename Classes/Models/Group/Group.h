@@ -35,7 +35,7 @@
 - (Group *)initWithName: (NSString *)name andProfileImageString:(NSString *)profileImageString;
 - (Group *)initWithRef: (Firebase *)groupRef;
 
-//Array Method
+//Array Methods
 - (void)addMessageThread: (MessageThread *)messageThread;
 - (void)removeMessageThread:(MessageThread *)messageThread;
 

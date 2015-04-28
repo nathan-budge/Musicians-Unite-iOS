@@ -50,9 +50,9 @@
     }
     
     if (self.ref.authData) {
-        rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"SlidingViewController"];
+        rootViewController = [storyboard instantiateViewControllerWithIdentifier:kSlidingViewController];
     } else {
-        rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"WelcomeViewController"];
+        rootViewController = [storyboard instantiateViewControllerWithIdentifier:kWelcomeViewController];
     }
     
     self.window.rootViewController = rootViewController;
@@ -63,7 +63,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receivedNotification:)
-                                                 name:@"Remote Notifications"
+                                                 name:kRemoteNotificationsNotification
                                                object:nil];
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
@@ -74,7 +74,7 @@
 
 - (void)receivedNotification: (NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:@"Remote Notifications"])
+    if ([[notification name] isEqualToString:kRemoteNotificationsNotification])
     {
         [self.application registerForRemoteNotifications];
         self.user = (User *)notification.object;
@@ -84,21 +84,18 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    NSLog(@"My token is: %@", deviceToken);
-    
     NSString *tokenString = [deviceToken description];
     tokenString = [tokenString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     tokenString = [tokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     NSString *deviceID = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    NSLog(@"My device id is: %@", deviceID);
     
-    Firebase *devicesRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"devices/%@", deviceID]];
-    Firebase *userDevicesRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"users/%@/devices", self.user.userID]];
+    Firebase *devicesRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kDevicesFirebaseNode, deviceID]];
+    Firebase *userDevicesRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@", kUsersFirebaseNode, self.user.userID, kDevicesFirebaseNode]];
     
     NSDictionary *updatedDeviceValues = @{
-                                          @"device_type":@"iOS",
-                                          @"device_token":tokenString,
+                                          kDeviceTypeFirebaseField:kIOSDeviceLabel,
+                                          kDeviceTokenFirebaseField:tokenString,
                                           };
     
     NSDictionary *updatedUserValues = @{

@@ -86,8 +86,7 @@
         if ([notification.object isEqual:self.group])
         {
             [self dismissKeyboard];
-            [self performSegueWithIdentifier:@"unwindToGroups" sender:self];
-            
+            [self performSegueWithIdentifier:kUnwindToGroupsSegueIdentifier sender:self];
         }
     }
 }

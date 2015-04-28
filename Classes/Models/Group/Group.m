@@ -229,16 +229,16 @@
             userID = self.ref.authData.uid;
         }
         
-        
+        //Remove members from message threads
         for (MessageThread *messageThread in self.messageThreads) {
             
-            Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", messageThread.messageThreadID]];
+            Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessageThreadsFirebaseNode, messageThread.messageThreadID]];
             
-            [[[messageThreadRef queryOrderedByChild:@"members"] queryEqualToValue:userID] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+            [[[messageThreadRef queryOrderedByChild:kMembersFirebaseNode] queryEqualToValue:userID] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
                 
                 NSString *messageThreadID = snapshot.key;
                 
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@/members/%@", messageThreadID, userID]] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kMessageThreadsFirebaseNode, messageThreadID, kMembersFirebaseNode, userID]] removeValue];
                 
             } withCancelBlock:^(NSError *error) {
                 NSLog(@"ERROR: %@", error.description);
@@ -246,7 +246,7 @@
             
         }
         
-        //Deal with audio recordings
+        //Reassign audio recordings
         for (Recording *recording in self.recordings) {
             
             if ([recording.creatorID isEqualToString:userID])
@@ -328,7 +328,6 @@
     } withCancelBlock:^(NSError *error) {
         NSLog(@"ERROR: %@", error.description);
     }];
-    
 }
 
 - (void)attachListenerForAddedTasks

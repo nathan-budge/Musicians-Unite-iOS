@@ -39,7 +39,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
 
 @property (nonatomic) UIActivityIndicatorView *activityIndicator;
-@property (assign) BOOL initialLoad;
 
 @end
 
@@ -136,7 +135,7 @@
             
             if (!self.sharedData.user)
             {
-                self.initialLoad = YES;
+                self.sharedData.initialLoad = YES;
                 
                 [self.activityIndicator startAnimating];
                 
@@ -169,12 +168,12 @@
             [self.groups addObject:notification.object];
             [self.tableView reloadData];
             
-            if (self.initialLoad)
+            if (self.sharedData.initialLoad)
             {
                 if (self.groups.count == self.sharedData.user.groups.count)
                 {
                     [self.activityIndicator stopAnimating];
-                    self.initialLoad = NO;
+                    self.sharedData.initialLoad = NO;
                     [[NSNotificationCenter defaultCenter] postNotificationName:kInitialLoadCompletedNotification object:nil];
                 }
             }

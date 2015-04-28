@@ -182,6 +182,7 @@
                 
                 [self.ref unauth];
                 self.sharedData.user = nil;
+                self.sharedData.initialLoad = YES;
                 
                 [SVProgressHUD dismiss];
                 

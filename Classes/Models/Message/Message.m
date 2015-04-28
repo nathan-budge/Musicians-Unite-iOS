@@ -20,10 +20,8 @@
 
 @interface Message ()
 
-//Shared data singleton
 @property (weak, nonatomic) SharedData *sharedData;
 
-//Group object
 @property (nonatomic) Group *group;
 
 @property (nonatomic) MessageThread *thread;
@@ -87,11 +85,11 @@
         NSDictionary *messageData = snapshot.value;
         
         self.messageID = snapshot.key;
-        self.text = messageData[@"text"];
-        self.senderID = messageData[@"sender"];
+        self.text = messageData[kMessageTextFirebaseField];
+        self.senderID = messageData[kMessageSenderFirebaseField];
         
         NSArray *newMessageData = @[self.thread, self, self.group];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Message" object:newMessageData];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageNotification object:newMessageData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         

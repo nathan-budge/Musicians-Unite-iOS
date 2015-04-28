@@ -20,10 +20,8 @@
 
 @interface MessageThread ()
 
-//Shared data 
 @property (weak, nonatomic) SharedData *sharedData;
 
-//Group object
 @property (nonatomic) Group *group;
 
 @end
@@ -86,8 +84,8 @@
     if (self = [super init])
     {
         self.messageThreadRef = messageThreadRef;
-        self.threadMembersRef = [self.messageThreadRef childByAppendingPath:@"members"];
-        self.threadMessagesRef = [self.messageThreadRef childByAppendingPath:@"messages"];
+        self.threadMembersRef = [self.messageThreadRef childByAppendingPath:kMembersFirebaseNode];
+        self.threadMessagesRef = [self.messageThreadRef childByAppendingPath:kMessagesFirebaseNode];
         
         [self.sharedData addChildObserver:self.messageThreadRef];
         [self.sharedData addChildObserver:self.threadMembersRef];
@@ -121,7 +119,7 @@
         self.messageThreadID = snapshot.key;
         
          NSArray *newThreadData = @[self.group, self];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"New Thread" object:newThreadData];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNewMessageThreadNotification object:newThreadData];
         
         dispatch_group_leave(self.sharedData.downloadGroup);
         
@@ -170,12 +168,12 @@
         //Delete necessary threads and messages
         if (self.members.count == 1)
         {
-            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@/message_threads/%@", self.group.groupID, self.messageThreadID]] removeValue];
+            [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, self.group.groupID, kMessageThreadsFirebaseNode, self.messageThreadID]] removeValue];
             [self.messageThreadRef removeValue];
             
             for (Message *message in self.messages) {
                 [[self.threadMessagesRef childByAppendingPath:message.messageID] removeValue];
-                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", message.messageID]] removeValue];
+                [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessagesFirebaseNode, message.messageID]] removeValue];
             }
         }
         else
@@ -185,7 +183,7 @@
                 if ([message.senderID isEqualToString:userID])
                 {
                     [[self.threadMessagesRef childByAppendingPath:message.messageID] removeValue];
-                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", message.messageID]] removeValue];
+                    [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessagesFirebaseNode, message.messageID]] removeValue];
                 }
             }
         }
@@ -207,7 +205,7 @@
         
         NSString *messageID = snapshot.key;
         
-        Firebase *messageRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"messages/%@", messageID]];
+        Firebase *messageRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kMessagesFirebaseNode, messageID]];
         Message *newMessage = [[Message alloc] initWithRef:messageRef andGroup:self.group andThread:self];
         [self addMessage:newMessage];
         
@@ -231,7 +229,7 @@
             [self removeMessage:removedMessage];
             
             NSArray *removedMessageData = @[self, removedMessage, self.group];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Message Removed" object:removedMessageData];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageRemovedNotification object:removedMessageData];
         }
         
     } withCancelBlock:^(NSError *error) {

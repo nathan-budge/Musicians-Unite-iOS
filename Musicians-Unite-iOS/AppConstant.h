@@ -20,6 +20,8 @@
 #pragma mark - Storyboard ids
 //*****************************************************************************/
 
+#define kSlidingViewController                      @"SlidingViewController"
+#define kWelcomeViewController                      @"WelcomeViewController"
 #define kMusicToolsNavigationController             @"MusicToolsNavigationController"
 #define kPracticeListNavigationController           @"PracticeListNavigationController"
 #define kUserSettingsNavigationController           @"UserSettingsNavigationController"
@@ -45,6 +47,8 @@
 #define kUserRecordingsSegueIdentifier              @"viewUserRecordings"
 #define kGroupRecordingsSegueIdentifier             @"viewGroupRecordings"
 #define kRecordingSegueIdentifier                   @"viewRecording"
+#define kUnwindToGroupsSegueIdentifier              @"unwindToGroups"
+
 
 
 //*****************************************************************************/
@@ -56,6 +60,7 @@
 #define kUserCellIdentifier                         @"UserCell"
 #define kTaskCellIdentifier                         @"TaskCell"
 #define kMessageCellIdentifier                      @"MessengerCell"
+#define kMessageThreadCellIdentifier                @"MessageThreadCell"
 
 
 
@@ -189,6 +194,7 @@
 //*****************************************************************************/
 
 #define kNetworkConnectionNode                      @".info/connected"
+#define kDevicesFirebaseNode                        @"devices"
 #define kUsersFirebaseNode                          @"users"
 #define kGroupsFirebaseNode                         @"groups"
 #define kMembersFirebaseNode                        @"members"
@@ -204,6 +210,9 @@
 //*****************************************************************************/
 
 #define kProfileImageFirebaseField                  @"profile_image"
+
+#define kDeviceTypeFirebaseField                    @"device_type"
+#define kDeviceTokenFirebaseField                   @"device_token"
 
 #define kUserEmailFirebaseField                     @"email"
 #define kUserFirstNameFirebaseField                 @"first_name"
@@ -235,6 +244,7 @@
 //*****************************************************************************/
 
 #define kInitialLoadCompletedNotification           @"Initial Load Completed"
+#define kRemoteNotificationsNotification            @"Remote Notifications"
 
 #define kNewGroupNotification                       @"New Group"
 #define kGroupRemovedNotification                   @"Group Removed"
@@ -278,22 +288,25 @@
 #define kCheckboxImage                              @"checkbox"
 #define kCompletedCheckboxImage                     @"checkbox_completed"
 
+
+
 //*****************************************************************************/
 #pragma mark - Pitch Constants
 //*****************************************************************************/
 
-#define FREQ_C0  16.35;
-#define FREQ_DB0 17.32;
-#define FREQ_D0  18.35;
-#define FREQ_EB0 19.45;
-#define FREQ_E0  20.60;
-#define FREQ_F0  21.83;
-#define FREQ_GB0 23.12;
-#define FREQ_G0  24.50;
-#define FREQ_AB0 25.96;
-#define FREQ_A0  27.50;
-#define FREQ_BB0 29.14;
-#define FREQ_B0  30.87;
+#define FREQ_C0                                     16.35;
+#define FREQ_DB0                                    17.32;
+#define FREQ_D0                                     18.35;
+#define FREQ_EB0                                    19.45;
+#define FREQ_E0                                     20.60;
+#define FREQ_F0                                     21.83;
+#define FREQ_GB0                                    23.12;
+#define FREQ_G0                                     24.50;
+#define FREQ_AB0                                    25.96;
+#define FREQ_A0                                     27.50;
+#define FREQ_BB0                                    29.14;
+#define FREQ_B0                                     30.87;
+
 
 
 //*****************************************************************************/
@@ -302,8 +315,9 @@
 
 #define kDefaultRecordingName                       @"MusicAudioRecording.m4a"
 #define kUnassignedRecordingTitle                   @"Unassigned"
-#define kAudioPlayerInitialTimeElapsed              @"0:00"    
+#define kAudioPlayerInitialTimeElapsed              @"0:00" 
+#define kIOSDeviceLabel                             @"iOS"
 
-#define kGroupPickerIndex 2
-#define kGroupPickerCellHeight 164
+#define kGroupPickerIndex                           2
+#define kGroupPickerCellHeight                      164
 

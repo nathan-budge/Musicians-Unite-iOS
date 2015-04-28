@@ -101,10 +101,10 @@
         NSDictionary *recordingData = snapshot.value;
         
         self.recordingID = snapshot.key;
-        self.name = recordingData[@"name"];
-        self.data = [[NSData alloc] initWithBase64EncodedString:recordingData[@"data"] options:0];
-        self.ownerID = recordingData[@"owner"];
-        self.creatorID = recordingData[@"creator"];
+        self.name = recordingData[kRecordingNameFirebaseField];
+        self.data = [[NSData alloc] initWithBase64EncodedString:recordingData[kRecordingDataFirebaseField] options:0];
+        self.ownerID = recordingData[kRecordingOwnerFirebaseField];
+        self.creatorID = recordingData[kRecordingCreatorFirebaseField];
         
         if (self.group)
         {
@@ -132,7 +132,7 @@
 {
     [self.recordingRef observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         
-        if ([snapshot.key isEqualToString:@"name"])
+        if ([snapshot.key isEqualToString:kRecordingNameFirebaseField])
         {
             self.name = snapshot.value;
             
@@ -147,7 +147,7 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:kUserRecordingDataUpdatedNotification object:self];
             }
         }
-        else if ([snapshot.key isEqualToString:@"owner"])
+        else if ([snapshot.key isEqualToString:kRecordingOwnerFirebaseField])
         {
             self.ownerID = snapshot.value;
             
@@ -162,7 +162,7 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:kUserRecordingDataUpdatedNotification object:self];
             }
         }
-        else if ([snapshot.key isEqualToString:@"creator"])
+        else if ([snapshot.key isEqualToString:kRecordingCreatorFirebaseField])
         {
             self.creatorID = snapshot.value;
         }

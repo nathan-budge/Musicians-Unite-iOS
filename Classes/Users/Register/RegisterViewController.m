@@ -57,11 +57,8 @@
 {
     [super viewDidLoad];
     
-    //Add tap gesture for dismissing the keyboard
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)]];
-    
-    
-    //Notifications for keyboard
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardWillShowNotification object:nil];
@@ -69,7 +66,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
