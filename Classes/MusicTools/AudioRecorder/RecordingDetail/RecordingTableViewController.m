@@ -445,7 +445,7 @@
     
     self.labelTimeElapsed.text = kAudioPlayerInitialTimeElapsed;
     
-    self.labelDuration.text = [NSString stringWithFormat:@"-%@", [self.audioPlayer timeFormat:[self.audioPlayer getAudioDuration]]];
+    self.labelDuration.text = [NSString stringWithFormat:@"%@", [self.audioPlayer timeFormat:[self.audioPlayer getAudioDuration]]];
 }
 
 - (void)updateTime:(NSTimer *)timer
@@ -458,7 +458,7 @@
     self.labelTimeElapsed.text = [NSString stringWithFormat:@"%@",
                              [self.audioPlayer timeFormat:[self.audioPlayer getCurrentAudioTime]]];
     
-    self.labelDuration.text = [NSString stringWithFormat:@"-%@",
+    self.labelDuration.text = [NSString stringWithFormat:@"%@",
                           [self.audioPlayer timeFormat:[self.audioPlayer getAudioDuration] - [self.audioPlayer getCurrentAudioTime]]];
 }
 
