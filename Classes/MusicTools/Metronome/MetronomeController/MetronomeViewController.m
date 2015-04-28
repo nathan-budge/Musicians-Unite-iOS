@@ -398,7 +398,6 @@
                 [self performSelectorOnMainThread:@selector(highlightCurrentBeat:) withObject:nil waitUntilDone:NO];
                 [NSThread sleepForTimeInterval:beatTime/10];
             } else {
-                NSLog(@"%d, %d", self.beatValue, self.subdivision);
                 if (self.beatValue != 8 || self.subdivision == 3 || i % 3 == 0)[lowClick play];
                 if (self.beatValue == 8 || i % self.subdivision == 0) {
                     self.viewDots.highlightedBeat = self.beatValue == 8 ? i+1 : i / self.subdivision + 1;
