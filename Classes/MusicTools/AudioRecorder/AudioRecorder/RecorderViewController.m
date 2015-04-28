@@ -31,6 +31,8 @@
 
 @property (assign) NSString *recordingID;
 
+@property (assign) BOOL isPlaying;
+
 @property (strong, nonatomic) AVAudioRecorder *recorder;
 @property (strong, nonatomic) AVAudioPlayer *player;
 
@@ -146,7 +148,11 @@
         [session setActive:YES error:nil];
         
         [self.recorder record];
-        [self.buttonRecord setTitle:kStopButtonTitle forState:UIControlStateNormal];
+        [self.buttonRecord setBackgroundImage:[UIImage imageNamed:@"button_record_active"] forState:UIControlStateNormal];
+        
+        [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_play"] forState:UIControlStateNormal];
+        self.isPlaying = NO;
+        
         [self.buttonPlay setEnabled:NO];
         [self.buttonSave setEnabled:NO];
         [self.buttonRecordings setEnabled:NO];
@@ -155,7 +161,7 @@
     {
         [self.recorder stop];
         
-        [self.buttonRecord setTitle:kRecordButtonTitle forState:UIControlStateNormal];
+        [self.buttonRecord setBackgroundImage:[UIImage imageNamed:@"button_record_inactive"] forState:UIControlStateNormal];
         
         [self.buttonPlay setEnabled:YES];
         [self.buttonSave setEnabled:YES];
@@ -167,10 +173,34 @@
 {
     if (!self.recorder.recording)
     {
-        self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
-        [self.player setDelegate:self];
-        [self.player play];
+        if (self.isPlaying)
+        {
+            [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_play"] forState:UIControlStateNormal];
+            [self.player stop];
+            self.isPlaying = NO;
+        }
+        else
+        {
+            [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_stop"] forState:UIControlStateNormal];
+            self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
+            [self.player setDelegate:self];
+            [self.player play];
+            self.isPlaying = YES;
+            NSThread *playRecording = [[NSThread alloc] initWithTarget:self selector:@selector(playRecording) object:nil];
+            [playRecording start];
+        }
     }
+}
+
+- (void)playRecording
+{
+    [NSThread sleepForTimeInterval:self.player.duration];
+    
+    [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_play"] forState:UIControlStateNormal];
+    [self.player stop];
+    self.isPlaying = NO;
+    
+    [NSThread exit];
 }
 
 - (IBAction)actionRecordings:(id)sender

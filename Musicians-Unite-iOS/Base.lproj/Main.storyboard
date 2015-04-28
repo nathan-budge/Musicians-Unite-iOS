@@ -994,8 +994,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TME-7Z-RiF">
-                                <rect key="frame" x="135" y="147" width="50" height="30"/>
-                                <state key="normal" title="Record">
+                                <rect key="frame" x="40" y="111" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_record_inactive">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1003,8 +1003,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bkh-Pe-ZpN">
-                                <rect key="frame" x="145" y="212" width="30" height="30"/>
-                                <state key="normal" title="Play">
+                                <rect key="frame" x="200" y="111" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_play">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1012,8 +1012,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D0K-6b-t0C">
-                                <rect key="frame" x="143" y="274" width="34" height="30"/>
-                                <state key="normal" title="Save">
+                                <rect key="frame" x="40" y="266" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_save_active">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1021,8 +1021,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NvJ-SZ-Spf">
-                                <rect key="frame" x="121" y="334" width="78" height="30"/>
-                                <state key="normal" title="Recordings">
+                                <rect key="frame" x="200" y="266" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_recordings_active">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2390,8 +2390,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XsH-VZ-uCv">
-                                <rect key="frame" x="135" y="147" width="50" height="30"/>
-                                <state key="normal" title="Record">
+                                <rect key="frame" x="40" y="111" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_record_inactive">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2399,8 +2399,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pCQ-P0-89A">
-                                <rect key="frame" x="145" y="212" width="30" height="30"/>
-                                <state key="normal" title="Play">
+                                <rect key="frame" x="200" y="111" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_play">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2408,8 +2408,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SMK-yo-Eue">
-                                <rect key="frame" x="143" y="274" width="34" height="30"/>
-                                <state key="normal" title="Save">
+                                <rect key="frame" x="40" y="266" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_save_active">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2417,8 +2417,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eB4-Ul-WT4">
-                                <rect key="frame" x="121" y="334" width="78" height="30"/>
-                                <state key="normal" title="Recordings">
+                                <rect key="frame" x="200" y="266" width="80" height="80"/>
+                                <state key="normal" backgroundImage="button_recordings_active">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2984,6 +2984,9 @@
         <image name="audio_wave" width="35" height="29"/>
         <image name="audioplayer_play" width="66" height="65"/>
         <image name="button_play" width="196" height="196"/>
+        <image name="button_record_inactive" width="196" height="196"/>
+        <image name="button_recordings_active" width="196" height="196"/>
+        <image name="button_save_active" width="196" height="196"/>
         <image name="chat_bubble" width="34" height="34"/>
         <image name="checkbox" width="60" height="60"/>
         <image name="eye_inactive" width="46" height="28"/>
@@ -3009,8 +3012,8 @@
         <segue reference="1ND-ac-1UZ"/>
         <segue reference="b05-xO-KrZ"/>
         <segue reference="duR-l8-iAG"/>
-        <segue reference="VaP-66-gNb"/>
         <segue reference="Sk3-MG-YQs"/>
-        <segue reference="ZpQ-JQ-6qK"/>
+        <segue reference="VaP-66-gNb"/>
+        <segue reference="wf2-jZ-7i2"/>
     </inferredMetricsTieBreakers>
 </document>
