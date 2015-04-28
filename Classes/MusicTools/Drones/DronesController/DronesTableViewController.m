@@ -178,14 +178,14 @@
 - (void)play
 {
     [self.toneGenerator play];
-    [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
+    [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_stop"] forState:UIControlStateNormal];
 }
 
 - (void)stop
 {
     [self.toneGenerator stop];
     [self.selectedButton sendActionsForControlEvents: UIControlEventTouchUpInside];
-    [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
+    [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_play"] forState:UIControlStateNormal];
 }
 
 //*****************************************************************************/
