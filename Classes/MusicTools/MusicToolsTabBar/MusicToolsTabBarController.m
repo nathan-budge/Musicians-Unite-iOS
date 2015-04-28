@@ -60,7 +60,12 @@
 
 - (IBAction)actionDrawerToggle:(id)sender
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    if (self.group)
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        self.group = NO;
+    }
+    
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
 }
 

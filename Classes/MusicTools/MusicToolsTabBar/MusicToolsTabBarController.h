@@ -11,5 +11,6 @@
 @interface MusicToolsTabBarController : UITabBarController
 
 @property (nonatomic) double tempo;
+@property (assign) BOOL group;
 
 @end

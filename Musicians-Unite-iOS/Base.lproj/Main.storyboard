@@ -607,6 +607,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="UH9-in-SHO"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="underLeftViewControllerStoryboardId" value="MenuViewController"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="topViewControllerStoryboardId" value="GroupsNavigationController"/>
@@ -3021,11 +3022,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="b05-xO-KrZ"/>
         <segue reference="1ND-ac-1UZ"/>
-        <segue reference="Sk3-MG-YQs"/>
+        <segue reference="b05-xO-KrZ"/>
         <segue reference="duR-l8-iAG"/>
         <segue reference="VaP-66-gNb"/>
+        <segue reference="Sk3-MG-YQs"/>
         <segue reference="ZpQ-JQ-6qK"/>
     </inferredMetricsTieBreakers>
 </document>

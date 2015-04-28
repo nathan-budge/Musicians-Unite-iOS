@@ -327,6 +327,7 @@
     {
         MusicToolsTabBarController *musicToolsTabBarController = segue.destinationViewController;
         musicToolsTabBarController.tempo = [self.fieldTempo.text doubleValue];
+        musicToolsTabBarController.group = YES;
     }
 }
 
