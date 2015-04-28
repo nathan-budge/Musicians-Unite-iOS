@@ -229,7 +229,7 @@
             userID = self.ref.authData.uid;
         }
         
-        //TODO: Revise this  - Remove user from group message threads
+        
         for (MessageThread *messageThread in self.messageThreads) {
             
             Firebase *messageThreadRef = [self.ref childByAppendingPath:[NSString stringWithFormat:@"message_threads/%@", messageThread.messageThreadID]];

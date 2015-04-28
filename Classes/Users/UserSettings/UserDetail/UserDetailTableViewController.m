@@ -20,7 +20,6 @@
 #import "User.h"
 #import "Group.h"
 
-
 @interface UserDetailTableViewController ()
 
 @property (nonatomic) Firebase *ref;
@@ -177,13 +176,12 @@
                     [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@/%@/%@", kGroupsFirebaseNode, group.groupID, kMembersFirebaseNode, self.sharedData.user.userID]] removeValue];
                     [Utilities removeEmptyGroups:group.groupID withRef:self.ref];
                 }
+                
             
                 [[self.ref childByAppendingPath:[NSString stringWithFormat:@"%@/%@", kUsersFirebaseNode, self.sharedData.user.userID]] removeValue];
                 
                 [self.ref unauth];
                 self.sharedData.user = nil;
-                
-                //Set initial Load
                 
                 [SVProgressHUD dismiss];
                 

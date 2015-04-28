@@ -302,7 +302,7 @@
 
 -(void)addMemberToTableView
 {
-    [[[self.userRef queryOrderedByChild:kUserEmailFirebaseField] queryEqualToValue:self.fieldEmail.text] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+    [[[self.userRef queryOrderedByChild:kUserEmailFirebaseField] queryEqualToValue:[self.fieldEmail.text lowercaseString]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         
         User *newMember = [[User alloc] init];
         

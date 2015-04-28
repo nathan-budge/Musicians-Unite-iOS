@@ -101,6 +101,38 @@
                     }
                 }
                 
+                if (![groupData[@"tasks"] isEqual:[NSNull null]])
+                {
+                    for (NSString *taskID in [groupData[@"tasks"] allKeys]) {
+                        
+                        [[ref childByAppendingPath:[NSString stringWithFormat:@"tasks/%@", taskID]] removeValue];
+                        
+                    }
+                }
+                
+                if (![groupData[@"recordings"] isEqual:[NSNull null]])
+                {
+                    for (NSString *recordingID in [groupData[@"recordings"] allKeys]) {
+                        
+                        [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", recordingID]] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                            
+                            NSDictionary *recordingData = snapshot.value;
+                            
+                            if ([recordingData[@"creator"] isEqualToString:groupID])
+                            {
+                                [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", snapshot.key]] removeValue];
+                            }
+                            else
+                            {
+                                [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", snapshot.key]] updateChildValues:@{@"owner":recordingData[@"creator"]}];
+                                [[ref childByAppendingPath:[NSString stringWithFormat:@"recordings/%@", snapshot.key]] removeValue];
+                            }
+                            
+                        }];
+                        
+                    }
+                }
+                
                 [[ref childByAppendingPath:[NSString stringWithFormat:@"groups/%@", groupID]] removeValue];
                 
             }];
