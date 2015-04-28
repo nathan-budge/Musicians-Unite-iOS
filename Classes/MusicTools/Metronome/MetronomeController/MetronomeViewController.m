@@ -322,7 +322,7 @@
 
 -(void)play
 {
-    [self.buttonPlay setTitle:@"Stop" forState:UIControlStateNormal];
+    [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_stop"] forState:UIControlStateNormal];
     self.metronomeThread = [[NSThread alloc] initWithTarget:self selector:@selector(playMetronome) object:nil];
     [self.metronomeThread start];
     self.isPlaying = YES;
@@ -330,7 +330,7 @@
 
 -(void)stop
 {
-    [self.buttonPlay setTitle:@"Play" forState:UIControlStateNormal];
+    [self.buttonPlay setBackgroundImage:[UIImage imageNamed:@"button_play"] forState:UIControlStateNormal];
     self.isPlaying = NO;
     [self.metronomeThread cancel];
 }
