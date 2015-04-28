@@ -151,21 +151,31 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
     double minDistance = INFINITY;
     int range = 0;
     
+    double ab0 = FREQ_AB0;
     double a0 = FREQ_A0;
+    double bb0 = FREQ_BB0;
     double b0 = FREQ_B0;
     double c0 = FREQ_C0;
+    double db0 = FREQ_DB0;
     double d0 = FREQ_D0;
+    double eb0 = FREQ_EB0;
     double e0 = FREQ_E0;
     double f0 = FREQ_F0;
+    double gb0 = FREQ_GB0;
     double g0 = FREQ_G0;
     
     NSMutableDictionary *octaveZeroValues = [NSMutableDictionary dictionary];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:ab0] forKey:@"Ab"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:a0] forKey:@"A"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:bb0] forKey:@"Bb"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:b0] forKey:@"B"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:c0] forKey:@"C"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:db0] forKey:@"Db"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:d0] forKey:@"D"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:eb0] forKey:@"Eb"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:e0] forKey:@"E"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:f0] forKey:@"F"];
+    [octaveZeroValues setValue:[NSNumber numberWithDouble:gb0] forKey:@"Gb"];
     [octaveZeroValues setValue:[NSNumber numberWithDouble:g0] forKey:@"G"];
     
     //    NSDictionary *octaveZeroValues = [NSDictionary dictionaryWithObjectsAndKeys:
